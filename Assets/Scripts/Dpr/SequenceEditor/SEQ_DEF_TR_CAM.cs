@@ -1,0 +1,14 @@
+namespace Dpr.SequenceEditor
+{
+	public enum SEQ_DEF_TR_CAM : int
+	{
+		SEQ_DEF_TR_CAM_FILE = 0,
+		SEQ_DEF_TR_CAM_INTRO = 1,
+		SEQ_DEF_TR_CAM_THROW = 2,
+		SEQ_DEF_TR_CAM_LOSE = 3,
+		SEQ_DEF_TR_CAM_GTHROW_START = 4,
+		SEQ_DEF_TR_CAM_GTHROW_LOOP = 5,
+		SEQ_DEF_TR_CAM_GTHROW_END = 6,
+		SEQ_DEF_TR_CAM_INTRO_THROW = 7,
+	}
+}

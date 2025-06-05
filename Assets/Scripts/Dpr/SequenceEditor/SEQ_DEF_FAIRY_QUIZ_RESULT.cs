@@ -1,0 +1,9 @@
+namespace Dpr.SequenceEditor
+{
+	public enum SEQ_DEF_FAIRY_QUIZ_RESULT : int
+	{
+		SEQ_DEF_FAIRY_QUIZ_RESULT_NONE = 0,
+		SEQ_DEF_FAIRY_QUIZ_RESULT_CORRECT = 1,
+		SEQ_DEF_FAIRY_QUIZ_RESULT_INCORRECT = 2,
+	}
+}

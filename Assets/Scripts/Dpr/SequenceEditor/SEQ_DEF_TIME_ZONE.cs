@@ -1,0 +1,12 @@
+namespace Dpr.SequenceEditor
+{
+	public enum SEQ_DEF_TIME_ZONE : int
+	{
+		SEQ_DEF_TIME_ZONE_MORNING = 0,
+		SEQ_DEF_TIME_ZONE_NOON = 1,
+		SEQ_DEF_TIME_ZONE_EVENING = 2,
+		SEQ_DEF_TIME_ZONE_NIGHT = 3,
+		SEQ_DEF_TIME_ZONE_LATENIGHT = 4,
+		SEQ_DEF_TIME_ZONE_NONE = 5,
+	}
+}

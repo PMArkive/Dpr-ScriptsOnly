@@ -1,0 +1,8 @@
+namespace Dpr.SequenceEditor
+{
+	public enum SEQ_DEF_TRAINER_MOTION_THROW_BALL : int
+	{
+		SEQ_DEF_TRAINER_MOTION_THROW_BALL_ADVENT = 0,
+		SEQ_DEF_TRAINER_MOTION_THROW_BALL_CAPTURE = 1,
+	}
+}

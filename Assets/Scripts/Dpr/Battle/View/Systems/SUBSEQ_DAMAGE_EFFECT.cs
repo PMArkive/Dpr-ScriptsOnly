@@ -1,0 +1,13 @@
+namespace Dpr.Battle.View.Systems
+{
+	public enum SUBSEQ_DAMAGE_EFFECT : int
+	{
+		SEQ_CHECK = 0,
+		SEQ_WAIT_WAZA = 1,
+		SEQ_SKIP_ZENRYOKU_START = 2,
+		SEQ_SKIP_ZENRYOKU_WAIT = 3,
+		SEQ_START_DAMAGE = 4,
+		SEQ_WAIT_DAMAGE = 5,
+		SEQ_REQ_SKIP = 100,
+	}
+}

@@ -1,0 +1,11 @@
+namespace Dpr.Battle.View.Systems
+{
+	public enum SUBSEQ : int
+	{
+		SUBSEQ_DEFAULT = 0,
+		SUBSEQ_SPECIAL_ROOT = 50,
+		SUBSEQ_COMMON_SKIP = 100,
+		SUBSEQ_COMMON_SKIP_FC = 120,
+		SUBSEQ_EXCEPTION_SKIP = 255,
+	}
+}

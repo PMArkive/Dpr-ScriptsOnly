@@ -1,0 +1,12 @@
+namespace Dpr.SequenceEditor
+{
+	public enum SEQ_DEF_GPOKE_EFFECT : int
+	{
+		GPOKE_EFFECT_ALL = 0,
+		GPOKE_EFFECT_UL_THU = 6,
+		GPOKE_EFFECT_CLOUD = 1,
+		GPOKE_EFFECT_UNDERLIGHT = 2,
+		GPOKE_EFFECT_THUNDER = 4,
+		GPOKE_EFFECT_STORM = 8,
+	}
+}

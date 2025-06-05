@@ -1,0 +1,16 @@
+namespace Dpr.SequenceEditor
+{
+	public enum SEQ_DEF_INPUT : int
+	{
+		SEQ_DEF_INPUT_UP = 0,
+		SEQ_DEF_INPUT_RIGHT = 1,
+		SEQ_DEF_INPUT_DOWN = 2,
+		SEQ_DEF_INPUT_LEFT = 3,
+		SEQ_DEF_INPUT_A = 4,
+		SEQ_DEF_INPUT_B = 5,
+		SEQ_DEF_INPUT_X = 6,
+		SEQ_DEF_INPUT_Y = 7,
+		SEQ_DEF_INPUT_DECIDE = 8,
+		SEQ_DEF_INPUT_CANCEL = 9,
+	}
+}

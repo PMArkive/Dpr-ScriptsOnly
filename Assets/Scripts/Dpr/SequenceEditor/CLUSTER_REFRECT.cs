@@ -1,0 +1,10 @@
+namespace Dpr.SequenceEditor
+{
+	public enum CLUSTER_REFRECT : int
+	{
+		CLUSTER_REFRECT_NONE = 0,
+		CLUSTER_REFRECT_NORMAL = 1,
+		CLUSTER_REFRECT_STOP = 2,
+		CLUSTER_REFRECT_DEATH = 3,
+	}
+}

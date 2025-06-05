@@ -1,0 +1,6 @@
+﻿public enum BtlRecordResult2 : int
+{
+    BTL_RECORD_RESULT_2_DEAD = 0,
+    BTL_RECORD_RESULT_2_TIMEOVER = 1,
+    BTL_RECORD_RESULT_2_SURRENDER = 2,
+}

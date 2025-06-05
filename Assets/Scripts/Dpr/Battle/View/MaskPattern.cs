@@ -1,0 +1,16 @@
+namespace Dpr.Battle.View
+{
+	public enum MaskPattern : int
+	{
+		MASK_TEX_PATTERN_01 = 0,
+		MASK_TEX_PATTERN_02 = 1,
+		MASK_TEX_PATTERN_03 = 2,
+		MASK_TEX_PATTERN_04 = 3,
+		MASK_TEX_PATTERN_05 = 4,
+		MASK_TEX_PATTERN_06 = 5,
+		MASK_TEX_PATTERN_07 = 6,
+		MASK_TEX_PATTERN_08 = 7,
+		MASK_TEX_PATTERN_09 = 8,
+		MASK_TEX_PATTERN_10 = 9,
+	}
+}

@@ -1,0 +1,35 @@
+namespace DPData
+{
+	public enum UNKNOWN_NUM : int
+	{
+		UNK_A = 0,
+		UNK_B = 1,
+		UNK_C = 2,
+		UNK_D = 3,
+		UNK_E = 4,
+		UNK_F = 5,
+		UNK_G = 6,
+		UNK_H = 7,
+		UNK_I = 8,
+		UNK_J = 9,
+		UNK_K = 10,
+		UNK_L = 11,
+		UNK_M = 12,
+		UNK_N = 13,
+		UNK_O = 14,
+		UNK_P = 15,
+		UNK_Q = 16,
+		UNK_R = 17,
+		UNK_S = 18,
+		UNK_T = 19,
+		UNK_U = 20,
+		UNK_V = 21,
+		UNK_W = 22,
+		UNK_X = 23,
+		UNK_Y = 24,
+		UNK_Z = 25,
+		UNK_ENC = 26,
+		UNK_QUE = 27,
+		END = 28,
+	}
+}

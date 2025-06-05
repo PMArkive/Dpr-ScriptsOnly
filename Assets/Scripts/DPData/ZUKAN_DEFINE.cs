@@ -1,0 +1,9 @@
+namespace DPData
+{
+	public enum ZUKAN_DEFINE : int
+	{
+		POKEZUKAN_ARRAY_LEN = 493,
+		POKEZUKAN_DEOKISISU_MSK = 15,
+		ZKN_WORLD_TEXT_POKE_NUM = 14,
+	}
+}
