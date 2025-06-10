@@ -56,7 +56,7 @@ namespace Dpr.UI
             if (_itemPrefab.transform.parent == _guideRoot)
                 _itemPrefab.transform.SetParent(transform, false);
 
-            for (int i=_guideRoot.childCount; i>-1; i--)
+            for (int i=_guideRoot.childCount-1; i>-1; i--)
                 Destroy(_guideRoot.GetChild(i).gameObject);
 
             _guideRoot.DetachChildren();

@@ -24,6 +24,9 @@ using Pml.Item;
 using FieldCommon;
 using GameData;
 using System.Runtime.InteropServices;
+using Dpr.FureaiHiroba;
+using AK;
+using SmartPoint.Components;
 
 public class FieldManager
 {
@@ -1305,26 +1308,281 @@ public class FieldManager
     // TODO
     public void ChangePoketchSmall() { }
 
-    // TODO
-    public void MenuOpen(float deltatime, bool isIgnoreGround = false) { }
+    public void MenuOpen(float deltatime, bool isIgnoreGround = false)
+    {
+        if (IsMenuOpen)
+            return;
 
-    // TODO
-    private void LateMenuOpen() { }
+        if (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.SYS_INPUT_OFF))
+            return;
+
+        if (UseShotCut(deltatime))
+            return;
+
+        if (!PlayerWork.isPlayerInputActive)
+            return;
+
+        if (PlayerWork.transitionZoneID != ZoneID.UNKNOWN)
+            return;
+
+        if (OpenUnionRoomWarp(isIgnoreGround))
+            return;
+
+        if (!FieldInput.PushX())
+            return;
+
+        if (!IsEnableSave(isIgnoreGround))
+            return;
+
+        if (IsKariEyeHitCheck())
+            return;
+
+        _isMenuOpenRequest = true;
+    }
+
+    private void LateMenuOpen()
+    {
+        if (!_isMenuOpenRequest)
+            return;
+
+        var eyeCheck = IsKariEyeHitCheck();
+        _isMenuOpenRequest = false;
+
+        if (eyeCheck)
+            return;
+
+        IsMenuOpen = true;
+
+        if (!FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.SYS_INPUT_OFF) &&
+            PlayerWork.isPlayerInputActive &&
+            !EvDataManager.Instanse.IsRunningEvent() &&
+            !UIManager.IsFieldOpenMenu()) // Added in some update, was not in 1.0.0
+        {
+            EvDataManager.Instanse.OnOpenMenu();
+            var window = UIManager.Instance.CreateUIWindow<XMenuTop>(UIWindowID.XMENU);
+            window.onClosed = __ =>
+            {
+                IsMenuOpen = false;
+                EvDataManager.Instanse.OnCloseMenu();
+
+                if (CheckUseItem())
+                {
+                    UseFieldItem();
+                }
+                else if (PlayerWork.UsedFieldWazaNo != WazaNo.NULL)
+                {
+                    UI_SelectWaza(PlayerWork.UsedFieldWazaNo);
+                    PlayerWork.UsedFieldWazaNo = WazaNo.NULL;
+                }
+            };
+
+            var param = new XMenuTop.Param();
+            param.menuType = XMenuTop.Param.MenuType.Normal;
+
+            if (FureaiManager.isInstantiated && FureaiManager.Instance.isInHiroba)
+                param.menuType = XMenuTop.Param.MenuType.Fureai;
+
+            if (UgFieldManager.isInstantiated)
+                param.menuType = XMenuTop.Param.MenuType.UnderGround;
+
+            if (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.SYS_FLAG_SAFARI_MODE))
+            {
+                param.menuType = XMenuTop.Param.MenuType.SafariGame;
+                param.safari = new XMenuTop.Param.Safari()
+                {
+                    ballNum = PlayerWork.SafariBallNum,
+                    onRetire = () => EvDataManager.Instanse.RetireSafari(),
+                };
+            }
+
+            window.Open(param);
+            AudioManager.Instance.PlaySe(EVENTS.UI_TOP_XOPEN, null);
+        }
+        else
+        {
+            IsMenuOpen = false;
+            _isMenuOpenRequest = false;
+        }
+    }
 
     // TODO
     private bool MenuOpenInvalidZone() { return false; }
 
-    // TODO
-    private bool OpenUnionRoomWarp(bool isUnderGround) { return false; }
+    private bool OpenUnionRoomWarp(bool isUnderGround)
+    {
+        if (!FieldInput.Push(GameController.ButtonMask.Y))
+            return false;
+
+        if (PlayerWork.IsSaveSystemBusy())
+            return false;
+
+        if (PlayerWork.IsAutoSaveSystemBusy() || Fader.isBusy)
+            return false;
+
+        if (EvDataManager.Instanse.IsRunningEvent() || !IsEnableUnionRoomWarp(isUnderGround))
+            return false;
+
+        IsMenuOpen = true;
+        EvDataManager.Instanse.OnOpenMenu();
+
+        var window = UIManager.Instance.CreateUIWindow<YunionMenu>(UIWindowID.YUNION);
+        window.onClosed = __ =>
+        {
+            IsMenuOpen = false;
+            EvDataManager.Instanse.OnCloseMenu();
+        };
+
+        window.Open();
+        return true;
+    }
 
     // TODO
     public bool IsEnableUnionRoomWarp(bool isUnderGround) { return false; }
 
-    // TODO
-    private bool UseShotCut(float deltatime) { return false; }
+    private bool UseShotCut(float deltatime)
+    {
+        if (FureaiManager.isInstantiated && FureaiManager.Instance.isInHiroba)
+            return false;
 
-    // TODO
-    private bool IsKariEyeHitCheck() { return false; }
+        if (UIManager.IsUnion())
+            return false;
+
+        switch (_shorCutSeq)
+        {
+            case 0:
+                if (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.SYS_INPUT_OFF))
+                {
+                    StopShortCutData();
+                    return false;
+                }
+
+                if (!PlayerWork.isPlayerInputActive ||
+                    UIRegisterItemShortcut.GetHighPriorityShortcutItemNo() == (ushort)ItemNo.DUMMY_DATA ||
+                    !IsMenuOpen)
+                {
+                    StopShortCutData();
+                    return false;
+                }
+
+                if (EvDataManager.Instanse.IsRunningEvent() ||
+                    IsKariEyeHitCheck())
+                {
+                    StopShortCutData();
+                    return false;
+                }
+
+                if (FieldInput.Push(GameController.ButtonMask.Plus | GameController.ButtonMask.Minus))
+                {
+                    _shortCutPushHoldId = 1;
+                    _shortCutPushTime += deltatime;
+                }
+                else if (FieldInput.ButtonOn(GameController.ButtonMask.Plus | GameController.ButtonMask.Minus))
+                {
+                    if (_shortCutPushHoldId == 1)
+                    {
+                        _shortCutPushTime += deltatime;
+
+                        if (_shortCutPushTime > 0.5f)
+                        {
+                            PlayerWork.isPlayerInputActive = false;
+                            if (UIRegisterItemShortcut.GetRegisteredShortcutItemCount() > 1)
+                                _shorCutSeq = 2;
+                            else
+                                _shorCutSeq = 1;
+                        }
+                    }
+                }
+                else if (FieldInput.ButtonRelease(GameController.ButtonMask.Plus | GameController.ButtonMask.Minus))
+                {
+                    if (_shortCutPushHoldId == 1)
+                    {
+                        if (_shortCutPushTime <= 0.0f)
+                        {
+                            _shorCutSeq = 0;
+                            return false;
+                        }
+
+                        PlayerWork.isPlayerInputActive = false;
+                        _shortCutPushTime = 0.0f;
+
+                        if (UIRegisterItemShortcut.GetRegisteredShortcutItemCount() > 1)
+                            _shorCutSeq = 2;
+                        else
+                            _shorCutSeq = 1;
+                    }
+
+                    _shortCutPushHoldId = 0;
+                }
+                else
+                {
+                    StopShortCutData();
+                }
+                break;
+
+            case 1:
+                if (IsKariEyeHitCheck())
+                {
+                    PlayerWork.isPlayerInputActive = true;
+                    StopShortCutData();
+                    return false;
+                }
+                else
+                {
+                    StopShortCutData();
+                    var itemNo = UIRegisterItemShortcut.GetHighPriorityShortcutItemNo();
+                    var fieldUsability = UI_onUseFieldItem((ItemNo)itemNo);
+                    switch (fieldUsability)
+                    {
+                        case UIManager.FieldUseResult.Available:
+                            UseFieldItem((ItemNo)itemNo);
+                            break;
+
+                        case UIManager.FieldUseResult.Unusable:
+                            if ((ItemNo)itemNo == ItemNo.ZITENSYA && ZoneData.Bicycle)
+                            {
+                                GameManager.GetAttribute(EntityManager.activeFieldPlayer.gridPosition, out int code, out int stop);
+                                if (!PlayerWork.IsFormSwim() &&
+                                   (AttributeID.MATR_IsBridgeV(code) || AttributeID.MATR_IsBridgeH(code) || FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.SYS_FLAG_CYCLINGROAD)))
+                                {
+                                    EvDataManager.Instanse.JumpLabel("ev_no_getoff_bycycle", null);
+                                    break;
+                                }
+                            }
+
+                            EvDataManager.Instanse.JumpLabel("ev_noused_item_talk", null);
+                            break;
+
+                        case UIManager.FieldUseResult.Unusable_PairTrainer:
+                            EvDataManager.Instanse.JumpLabel("ev_unusable_pair_trainer", null);
+                            break;
+                    }
+                }
+                break;
+
+            case 2:
+                StopShortCutData();
+                OpenShortCut();
+                break;
+        }
+
+        return _shorCutSeq != 0;
+    }
+
+    private bool IsKariEyeHitCheck()
+    {
+        var codes = EvDataManager.Instanse.FieldObjectMoveCodes;
+        var moveVector = Vector3.zero;
+        var hitPos = Vector2.zero;
+
+        for (int i=0; i<codes.Count; i++)
+        {
+            var code = codes[i];
+            if (code != null & code.TrainerEyeUpdate(ref moveVector, ref hitPos))
+                return true;
+        }
+
+        return false;
+    }
 
     private void OpenShortCut()
     {
@@ -1379,8 +1637,12 @@ public class FieldManager
         };
     }
 
-    // TODO
-    public void StopShortCutData() { }
+    public void StopShortCutData()
+    {
+        _shorCutSeq = 0;
+        _shortCutPushTime = 0.0f;
+        _shortCutPushHoldId = 0;
+    }
 
     // TODO
     public void LockHolePos(Vector3 pos) { }
@@ -2138,8 +2400,22 @@ public class FieldManager
         return null;
     }
 
-    // TODO
-    public bool IsEnableSave(bool isIgnoreGround = false) { return false; }
+    public bool IsEnableSave(bool isIgnoreGround = false)
+    {
+        var player = EntityManager.activeFieldPlayer;
+
+        if (IsNoEntry(player.gridPosition, player.worldPosition))
+            return false;
+
+        if (IsNoEntrySea(player.gridPosition, player.worldPosition))
+            return false;
+
+        if (isIgnoreGround)
+            return true;
+
+        // Ground BoxCollider check
+        return CollisionUtility.IsCollideGround(player.worldPosition, 1.0f, Layer.Ground);
+    }
 
     // TODO
     public bool IsNoEntry(Vector2Int gridPos, Vector3 worldPos) { return false; }

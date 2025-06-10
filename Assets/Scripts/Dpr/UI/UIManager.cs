@@ -44,7 +44,8 @@ namespace Dpr.UI
         public static int ButtonB = 0;
         public static int ButtonX = 0;
         public static int ButtonY = 0;
-        public static int ButtonPlusMinus = 0xc00;
+        public static int ButtonPlusMinus = GameController.ButtonMask.Plus | GameController.ButtonMask.Minus;
+
         private const int _sortingOrderPoketch = 200;
         private const int _sortingOrderWindow = 400;
         private const int _sortingOrderContextMenu = 9900;
@@ -52,6 +53,7 @@ namespace Dpr.UI
         private const int _sortingOrderFatalErrorDialog = 16484;
         private const int _sortingOrderWindowAdd = 100;
         private const int _sortingOrderIgnore = 9900;
+
         private const string _hpBarSpriteName = "cmn_pl_txt_hpbar_01";
 
         private UIDatabase _mdUis;
@@ -747,7 +749,6 @@ namespace Dpr.UI
                     var exist = GetExistWindow(windowId);
                     bool isNull = exist;
                     // Presumably there is some sort of commented out logging here
-                    //Debug.Log("Existing window: " + isNull);
                     break;
             }
 
@@ -1387,18 +1388,14 @@ namespace Dpr.UI
             if (duplicateImageMaterialParams == null)
                 return;
 
-            if (duplicateImageMaterialParams.Count < 1)
-            {
-                duplicateImageMaterialParams.Clear();
-                return;
-            }
-
             for (int i=0; i<duplicateImageMaterialParams.Count; i++)
             {
                 var param = duplicateImageMaterialParams[i];
                 Destroy(param.image.material);
                 param.image.material = param.material;
             }
+
+            duplicateImageMaterialParams.Clear();
         }
 
         public static void DestroyCanvasRendererMaterials(GameObject gameObj)

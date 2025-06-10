@@ -30,8 +30,8 @@ public class XMenuTopItem : MonoBehaviour
     private XMenuTop.ItemType _itemType = XMenuTop.ItemType.None;
     private List<UIManager.DuplicateImageMaterialParam> _duplicate;
 
-    public XMenuTop.ItemType itemType { get; }
-    public bool isNew { get; }
+    public XMenuTop.ItemType itemType { get => _itemType; }
+    public bool isNew { get => _newIcon.enabled; }
 
     // TODO
     public void Setup(XMenuTop.ItemType itemType, bool isActived, bool isNew, bool enabled) { }

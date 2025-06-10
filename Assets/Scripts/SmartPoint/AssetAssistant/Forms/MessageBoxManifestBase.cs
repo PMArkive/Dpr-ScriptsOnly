@@ -11,10 +11,5 @@ namespace SmartPoint.AssetAssistant.Forms
         public string captionTextObjectName;
         public string messageTextObjectName;
         public string buttonLayoutObjectName;
-
-        protected MessageBoxManifestBase()
-        {
-            // Empty
-        }
     }
 }

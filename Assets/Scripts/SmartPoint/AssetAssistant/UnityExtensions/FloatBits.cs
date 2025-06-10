@@ -31,8 +31,10 @@ namespace SmartPoint.AssetAssistant.UnityExtensions
             ubits = 0;
         }
 		
-		// TODO
-		public static implicit operator float(FloatBits fpBits) { return default; }
+		public static implicit operator float(FloatBits fpBits)
+		{
+			return fpBits.fp;
+		}
 
         // TODO
         public static implicit operator FloatBits(float fp) { return default; }
@@ -55,13 +57,17 @@ namespace SmartPoint.AssetAssistant.UnityExtensions
 		// TODO
 		public static uint ToUInt(float value) { return default; }
 		
-		// TODO
-		public override string ToString() { return default; }
+		public override string ToString()
+		{
+			return fp.ToString();
+		}
 		
 		// TODO
 		public FloatBits Absolute() { return default; }
 		
-		// TODO
-		public bool IsInRange(float low, float high) { return default; }
+		public bool IsInRange(float low, float high)
+		{
+			return (uint)(fp - low) <= (uint)(high - low);
+		}
 	}
 }
