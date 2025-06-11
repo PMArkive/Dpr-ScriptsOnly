@@ -357,7 +357,11 @@ namespace Dpr.UI
             _activeItems.Clear();
 
             for (int i=0; i<_itemRoot.childCount; i++)
-                _activeItems.Add(_itemRoot.GetChild(i).GetComponent<XMenuTopItem>());
+            {
+                var item = _itemRoot.GetChild(i).GetComponent<XMenuTopItem>();
+                if (item.gameObject.activeSelf)
+                    _activeItems.Add(item);
+            }
         }
 
         public static void CloseForce()
@@ -712,48 +716,51 @@ namespace Dpr.UI
 
             if (_input.IsPushButton(UIManager.StickLRight))
             {
-                var a = (uint)(_selectIndex > -1 ? _selectIndex : (_selectIndex + _upperColumnMax - 1)) % _upperColumnMax;
+                var firstIndexOfRow = _selectIndex / _upperColumnMax * _upperColumnMax;
+
                 var size = _activeItems.Count;
-                if (_selectIndex + _upperColumnMax - 1 < 7)
+                if (_selectIndex < _upperColumnMax) // Not 100% sure why this is done, this accomplishes nothing
                     size = Mathf.Min(size, _upperColumnMax);
 
-                var denom = (int)(size - a);
-                var col = _selectIndex % _upperColumnMax + 1;
-                var row = denom == 0 ? 0 : (col / denom);
+                var amountInRow = size - firstIndexOfRow;
+                var indexInRow = _selectIndex % _upperColumnMax;
+                var newIndex = (indexInRow + 1) % amountInRow;
 
-                if (SetSelectIndex(col - row * denom + (int)a))
+                if (SetSelectIndex(firstIndexOfRow + newIndex))
                     AudioManager.Instance.PlaySe(EVENTS.UI_COMMON_SELECT, null);
             }
             else if (_input.IsRepeatButton(UIManager.StickLRight))
             {
                 var size = _activeItems.Count;
-                if (_selectIndex + _upperColumnMax - 1 < 7)
+                if (_selectIndex < _upperColumnMax) // Not 100% sure why this is done, this accomplishes nothing
                     size = Mathf.Min(size, _upperColumnMax);
 
-                var index = Mathf.Min(_selectIndex + 1, size - 1);
+                var newIndex = Mathf.Min(_selectIndex + 1, size - 1);
 
-                if (SetSelectIndex(index))
+                if (SetSelectIndex(newIndex))
                     AudioManager.Instance.PlaySe(EVENTS.UI_COMMON_SELECT, null);
             }
             else if (_input.IsPushButton(UIManager.StickLLeft))
             {
-                var a = (uint)(_selectIndex > -1 ? _selectIndex : (_selectIndex + _upperColumnMax - 1)) % _upperColumnMax;
+                var firstIndexOfRow = _selectIndex / _upperColumnMax * _upperColumnMax;
+
                 var size = _activeItems.Count;
-                if (_selectIndex + _upperColumnMax - 1 < 7)
+                if (_selectIndex < _upperColumnMax) // Not 100% sure why this is done, this accomplishes nothing
                     size = Mathf.Min(size, _upperColumnMax);
 
-                var denom = (int)(size - a);
-                var col = _selectIndex % _upperColumnMax - 1; // Is this right????????
-                var row = denom == 0 ? 0 : (col / denom);
+                var amountInRow = size - firstIndexOfRow;
+                var indexInRow = _selectIndex % _upperColumnMax;
+                var newIndex = indexInRow == 0 ? (amountInRow - 1) : ((indexInRow - 1) % amountInRow); // Handle going to -1 properly. NOTE: This is freestyle code a little bit because the compiler made this overly complex
 
-                if (SetSelectIndex(col - row * denom + (int)a))
+                if (SetSelectIndex(firstIndexOfRow + newIndex))
                     AudioManager.Instance.PlaySe(EVENTS.UI_COMMON_SELECT, null);
             }
             else if (_input.IsRepeatButton(UIManager.StickLLeft))
             {
-                var index = Mathf.Max(_selectIndex - 1, _selectIndex > -1 ? _selectIndex : (_selectIndex + _upperColumnMax - 1) % _upperColumnMax);
+                var firstIndexOfRow = _selectIndex / _upperColumnMax * _upperColumnMax;
+                var newIndex = Mathf.Max(_selectIndex - 1, firstIndexOfRow);
 
-                if (SetSelectIndex(index))
+                if (SetSelectIndex(newIndex))
                     AudioManager.Instance.PlaySe(EVENTS.UI_COMMON_SELECT, null);
             }
 

@@ -1,4 +1,5 @@
-﻿using Audio;
+﻿using AK;
+using Audio;
 using DPData;
 using Dpr.Battle.Logic;
 using Dpr.Battle.View;
@@ -1380,8 +1381,29 @@ namespace Dpr.UI
             return point;
         }
 
-        // TODO
-        public static List<DuplicateImageMaterialParam> DuplicateImageMaterials(Transform trans) { return null; }
+        public static List<DuplicateImageMaterialParam> DuplicateImageMaterials(Transform trans)
+        {
+            var list = new List<DuplicateImageMaterialParam>();
+            var children = trans.GetComponentsInChildren<Image>();
+
+            for (int i=0; i<children.Length; i++)
+            {
+                var image = children[i];
+
+                if (image.material != null && image.material.shader.name != "UI-Default")
+                {
+                    list.Add(new DuplicateImageMaterialParam()
+                    {
+                        image = image,
+                        material = image.material,
+                    });
+
+                    image.material = new Material(image.material);
+                }
+            }
+
+            return list;
+        }
 
         public static void RestoreDuplicateImageMaterials(List<DuplicateImageMaterialParam> duplicateImageMaterialParams)
         {
@@ -1418,13 +1440,8 @@ namespace Dpr.UI
             for (int i=0; i<images.Length; i++)
             {
                 var image = images[i];
-                if (image.material == null)
-                    continue;
-
-                if (image.material.shader.name == "UI-Default")
-                    continue;
-
-                image.material.SetFloat(_id_GrayscaleAmount, value);
+                if (image.material != null && image.material.shader.name != "UI-Default")
+                    image.material.SetFloat(_id_GrayscaleAmount, value);
             }
         }
 
@@ -1433,8 +1450,31 @@ namespace Dpr.UI
             onXMenuClosed = onClosed_;
         }
 
-        // TODO
-        public void CloseXMenu(UnityAction<UnityAction<UIWindow>> onCall) { }
+        public void CloseXMenu(UnityAction<UnityAction<UIWindow>> onCall)
+        {
+            var instance = Instance;
+            if (instance._activeRoot != null)
+            {
+                // Result ignored, likely a commented out log
+                _ = instance._activeRoot.childCount;
+            }
+
+            // Result ignored, likely a commented out log
+            _ = Instance.GetCurrentUIWindow<UIWindow>();
+
+            AudioManager.Instance.PlaySe(EVENTS.UI_TOP_XCLOSE, null);
+            onCall.Invoke(onXMenuClosed);
+
+            _blurBgParam.onComplete?.Invoke();
+            _blurBgParam.fadeType = BlugBgParam.FadeType.Out;
+            _blurBgParam.srcAlpha = _blurBg.color.a;
+            _blurBgParam.destAlpha = 0.0f;
+            _blurBgParam.time = 0.0f;
+            _blurBgParam.maxTime = 0.5f;
+            _blurBgParam.onComplete = null;
+
+            _pokemonParamMappings.Clear();
+        }
 
         public TownMapGuideTable.SheetGuide SetupCurrentTownmapGuideMessage()
         {

@@ -33,27 +33,89 @@ public class XMenuTopItem : MonoBehaviour
     public XMenuTop.ItemType itemType { get => _itemType; }
     public bool isNew { get => _newIcon.enabled; }
 
-    // TODO
-    public void Setup(XMenuTop.ItemType itemType, bool isActived, bool isNew, bool enabled) { }
+    public void Setup(XMenuTop.ItemType itemType, bool isActived, bool isNew, bool enabled)
+    {
+        _itemType = itemType;
 
-    // TODO
-    private void OnDestroy() { }
+        if (itemType == XMenuTop.ItemType.Bag)
+        {
+            var bagdata = UIManager.Instance.GetPlayerCharacterBagData();
 
-    // TODO
-    public void PlayAnimation(int shortNameHash) { }
+            _spriteIcons = new Sprite[]
+            {
+                UIManager.Instance.GetAtlasSprite(SpriteAtlasID.COMMON, bagdata.XMenuDefault),
+                UIManager.Instance.GetAtlasSprite(SpriteAtlasID.COMMON, bagdata.XMenuSelect),
+            };
 
-    // TODO
-    public void EnableSwapMode(bool enabled) { }
+            _imageShadow.sprite = UIManager.Instance.GetAtlasSprite(SpriteAtlasID.COMMON, bagdata.XMenuShadow);
+        }
 
-    // TODO
-    public void Select(bool enabled) { }
+        _animator = GetComponentInChildren<Animator>();
+        gameObject.SetActive(isActived);
 
-    // TODO
-    public void ShowName(bool enabled) { }
+        if (isActived)
+            Select(false);
 
-    // TODO
-    public void Decide(UnityAction<XMenuTopItem> onDecided) { }
+        _duplicate = UIManager.DuplicateImageMaterials(_root);
+        UIManager.Instance.Grayscale(_root, enabled ? 0.0f : 1.0f);
 
-    // TODO
-    private IEnumerator OpDecide(UnityAction<XMenuTopItem> onDecided) { return null; }
+        _newIcon.enabled = isNew;
+    }
+
+    private void OnDestroy()
+    {
+        UIManager.RestoreDuplicateImageMaterials(_duplicate);
+    }
+
+    public void PlayAnimation(int shortNameHash)
+    {
+        _animator.Play(shortNameHash, 0, 0.0f);
+    }
+
+    public void EnableSwapMode(bool enabled)
+    {
+        _root.anchoredPosition = enabled ? new Vector2(17.77778f, 10.0f) : Vector2.zero;
+    }
+
+    public void Select(bool enabled)
+    {
+        _icon.sprite = enabled ? _spriteIcons[1] : _spriteIcons[0];
+
+        if (enabled)
+        {
+            _animator.Play(_animStateSelect);
+            _newIcon.enabled = false;
+        }
+        else
+        {
+            _animator.Play(_animStateNormal);
+        }
+    }
+
+    public void ShowName(bool enabled)
+    {
+        _name.gameObject.SetActive(enabled);
+    }
+
+    public void Decide(UnityAction<XMenuTopItem> onDecided)
+    {
+        StartCoroutine(OpDecide(onDecided));
+    }
+
+    private IEnumerator OpDecide(UnityAction<XMenuTopItem> onDecided)
+    {
+        PlayAnimation(_animStateDecide);
+
+        yield return new WaitWhile(() =>
+        {
+            var state = _animator.GetCurrentAnimatorStateInfo(0);
+
+            if (state.shortNameHash == _animStateDecide)
+                return state.normalizedTime < 1.0f;
+            else
+                return true;
+        });
+
+        onDecided?.Invoke(this);
+    }
 }
