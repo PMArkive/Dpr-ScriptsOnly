@@ -23,6 +23,7 @@ using Dpr.BattleMatching;
 using System.Linq;
 using Dpr.SubContents;
 using System.Runtime.InteropServices;
+using Dpr.FureaiHiroba;
 
 namespace Dpr.EvScript
 {
@@ -3925,8 +3926,12 @@ namespace Dpr.EvScript
         // TODO
         private bool EvMacro_HIDE_ITEM_EVENT() { return false; }
 
-        // TODO
-        private bool EvCmdAddItem() { return false; }
+        private bool EvCmdAddItem()
+        {
+            ItemWork.AddItem(GetArgInt(_evArg[1]), GetArgInt(_evArg[2]));
+            FlagWork.SetWork(_evArg[3].data, _WORK_TRUE);
+            return true;
+        }
 
         // TODO
         private bool EvCmdSubItem() { return false; }
@@ -6205,8 +6210,16 @@ namespace Dpr.EvScript
         // TODO
         private bool EvCmdNaturalParkGetMonohiroiItemNo() { return false; }
 
-        // TODO
-        private bool EvCmdNaturalParkPokeCreate() { return false; }
+        private bool EvCmdNaturalParkPokeCreate()
+        {
+            var manager = FureaiManager.Instance;
+            var obj = FlagWork.GetWork((EvWork.WORK_INDEX)_evArg[1].data);
+
+            if (manager.isCanCreatePoke)
+                manager._EnterHirobaCreate.Invoke((uint)obj);
+
+            return !manager.isCreatingPoke;
+        }
 
         // TODO
         private bool EvCmdNaturalParkPokeKaisan() { return false; }
@@ -7615,6 +7628,9 @@ namespace Dpr.EvScript
                     case EvCmdID.NAME._ADD_GOLD:
                         return EvCmdAddGold();
 
+                    case EvCmdID.NAME._ADD_ITEM:
+                        return EvCmdAddItem();
+
                     case EvCmdID.NAME._POKETCH_ADD:
                         return EvCmdPoketchAppAdd();
 
@@ -7644,6 +7660,9 @@ namespace Dpr.EvScript
 
                     case EvCmdID.NAME._SET_OFFSET:
                         return EvCmd_CAMERA_SET_OFFSET();
+
+                    case EvCmdID.NAME._NATURAL_PARK_POKE_CREATE:
+                        return EvCmdNaturalParkPokeCreate();
 
                     case EvCmdID.NAME._EVENT_CAMERA_INDEX:
                         return EvCmdEventCameraIndex();

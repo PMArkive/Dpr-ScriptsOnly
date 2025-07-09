@@ -11,6 +11,7 @@ public class FieldCamera : MonoBehaviour
 {
     private Transform _target;
     private Camera _camera;
+
     [SerializeField]
     private float _pitch = 45.0f;
     [SerializeField]
@@ -21,6 +22,7 @@ public class FieldCamera : MonoBehaviour
     private float _defocusStart = 0.5f;
     [SerializeField]
     private float _defocusEnd = 2.5f;
+
     private float _start_pitch = 45.0f;
     private float _start_fov = 30.0f;
     private float _start_targetRange = 30.0f;
@@ -111,7 +113,7 @@ public class FieldCamera : MonoBehaviour
             }
         }
 
-        EncountEffectCamera.SetActive(false);
+        EncountEffectCamera.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -321,7 +323,7 @@ public class FieldCamera : MonoBehaviour
     public void InstantiateDarkWindow(GameObject darkWindow)
     {
         DarkWindow = Instantiate(darkWindow, transform);
-        DarkWindow.transform.localPosition = new Vector3(0.0f, 0.0f, DataManager.FieldCommonParam[(int)ParamIndx.FlashDark_DarkCameraOfs].param);
+        DarkWindow.transform.localPosition = new Vector3(0.0f, 0.0f, DataManager.GetFieldCommonParam(ParamIndx.FlashDark_DarkCameraOfs));
         DarkWindow.transform.localEulerAngles = new Vector3(-90.0f, 0.0f, 0.0f);
     }
 

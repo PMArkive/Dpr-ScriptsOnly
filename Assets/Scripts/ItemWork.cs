@@ -29,8 +29,10 @@ public class ItemWork
     // TODO
     public static void DisableDummyWork() { }
 
-    // TODO
-    public static int AddItem(int itemno, int num = 1) { return 0; }
+    public static int AddItem(int itemno, int num = 1)
+    {
+        return _instance._items[itemno].AddItem(num);
+    }
 
     // TODO
     public static int SubItem(int itemno, int num = 1) { return 0; }

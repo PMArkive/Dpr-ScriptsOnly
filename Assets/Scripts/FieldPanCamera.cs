@@ -39,8 +39,73 @@ public class FieldPanCamera : MonoBehaviour
         _initialized = false;
     }
 
-    // TODO
-    public void PanUpdate() { }
+    public void PanUpdate()
+    {
+        if (GameManager.connector == null)
+            return;
+
+        if (GameManager.connector.sceneID != SceneID.Field)
+            return;
+
+        if (PlayerWork.zoneID != ZoneID.UNKNOWN)
+        {
+            if (GameManager.mapInfo[(int)PlayerWork.zoneID].RoomPanCamera)
+            {
+                if (PlayerWork.zoneID != zoneID)
+                {
+                    zoneID = PlayerWork.zoneID;
+                    _initialized = false;
+                }
+            }
+            else
+            {
+                _initialized = false;
+            }
+        }
+
+        if (!_initialized)
+        {
+            _dof = DepthOfField.instance;
+            minPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            maxPosition = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+            SetPanCameraData(PlayerWork.zoneID);
+            _initialized = true;
+        }
+
+        _bounds.SetMinMax(minPosition, maxPosition);
+
+        var tf = EntityManager.activeFieldPlayer == null ? null : EntityManager.activeFieldPlayer.transform;
+
+        if (tf != null)
+        {
+            _dof.target = tf;
+
+            var euler = _camera.transform.eulerAngles;
+            euler.x = _pitch;
+            euler.y = 180.0f;
+            euler.z = FlagWork.GetSysFlag(Dpr.EvScript.EvWork.SYSFLAG_INDEX.SYS_FLAG_CAMERA_REVERSAL) ? 180.0f : 0.0f;
+            _camera.transform.eulerAngles = euler;
+
+            _camera.fieldOfView = _fov;
+
+            var y = ((-_camera.transform.forward) * _distance).y;
+            if (_autoCalculation)
+            {
+                _bottom_offset = y / Mathf.Tan((_pitch + _fov * 0.5f) * Mathf.Deg2Rad) + _bounds.center.z + _bounds.extents.z;
+                _top_offset = (y - (_bounds.center.y + _bounds.extents.y)) / Mathf.Tan((_pitch - _fov * 0.5f) * Mathf.Deg2Rad) + _bounds.center.z - _bounds.extents.z;
+            }
+
+            var z = _bottom_offset;
+            if (_top_offset <= _bottom_offset)
+            {
+                var zBaseOffset = _zOffset + _bounds.center.z + _bounds.extents.z;
+                z = Mathf.Lerp(_bottom_offset, _top_offset, -(tf.position.z - zBaseOffset) / (zBaseOffset - (_bounds.center.z - _bounds.extents.z - _zOffset)));
+            }
+
+            _camera.transform.localPosition = new Vector3(tf.position.x, y, z);
+        }
+    }
 
     public void SetPanCameraData(ZoneID zoneID)
     {
@@ -56,7 +121,7 @@ public class FieldPanCamera : MonoBehaviour
             {
                 minPosition.y = data.panMinposY;
                 maxPosition.y = data.panMaxposY;
-                maxPosition.z = data.panMaxposZ;
+                minPosition.z = data.panMinposZ;
                 maxPosition.z = data.panMaxposZ;
             }
         }

@@ -71,6 +71,7 @@ namespace Dpr.Item
         private int _groupId = -1;
         private int _sortId = -1;
 
+        // TODO: Properties
         public int count
         {
             set
@@ -173,7 +174,16 @@ namespace Dpr.Item
             }
             get => _isDummy ? _dummyIsShowWazaName : PlayerWork.GetItem(_workNo).ShowWazaNameFlag;
         }
-        public int Id { get; }
+        public int Id
+        {
+            get
+            {
+                if (_id == -1)
+                    _id = GetParam(PrmID.ITEMNUMBER);
+
+                return _id;
+            }
+        }
         public string Name { get; }
         public string DescriptionText { get; }
         public int Type { get; }
@@ -246,8 +256,11 @@ namespace Dpr.Item
         // TODO
         public int GetParam(PrmID pid) { return 0; }
 
-        // TODO
-        public int AddItem(int num = 1) { return 0; }
+        public int AddItem(int num = 1)
+        {
+            count = Mathf.Clamp(count + num, 0, ItemMaxCount);
+            return count;
+        }
 
         // TODO
         public int SubItem(int num = 1) { return 0; }

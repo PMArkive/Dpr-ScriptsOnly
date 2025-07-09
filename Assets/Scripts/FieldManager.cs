@@ -2347,11 +2347,17 @@ public class FieldManager
         fwMng.prevArea = ZoneData.AreaID;
     }
 
-    // TODO
-    public void CreateFreaiManager() { }
+    public void CreateFreaiManager()
+    {
+        if (FureaiDataManager.Instance == null)
+            new GameObject("FureaiDataManager").AddComponent<FureaiDataManager>();
+    }
 
-    // TODO
-    public void DeleteFreaiManager() { }
+    public void DeleteFreaiManager()
+    {
+        if (FureaiManager.isInstantiated)
+            FureaiManager.Instance.Destroy();
+    }
 
     private void GetLegendPokeEncountInfo(PokemonParam param, out string encSec, ref ArenaID arenaID, out string bgm, out BattleSetupEffectId setupEffect)
     {
