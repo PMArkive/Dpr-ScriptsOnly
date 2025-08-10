@@ -8,10 +8,10 @@ namespace Dpr
         public Func<float, float> EaseFunc = EaseDefault;
 
         public bool IsBusy { get => TargetTime > 0.0f; }
-        public float CurrentValue { set; get; }
-        public float TargetValue { set; get; }
-        public float CurrentTime { set; get; }
-        public float TargetTime { set; get; }
+        public float CurrentValue { private set; get; }
+        public float TargetValue { private set; get; }
+        public float CurrentTime { private set; get; }
+        public float TargetTime { private set; get; }
 
         private float BaseValue;
 

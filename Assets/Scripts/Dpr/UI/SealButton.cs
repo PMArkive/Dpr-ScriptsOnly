@@ -13,7 +13,7 @@ namespace Dpr.UI
 		private UIText countText;
 		
 		public int SealId { get => Info.SealId; }
-		public SealInfo Info { get; set; }
+		public SealInfo Info { get; private set; }
 		public bool IsEnable { get => Info.GetCount() > 0; }
 		
 		// TODO

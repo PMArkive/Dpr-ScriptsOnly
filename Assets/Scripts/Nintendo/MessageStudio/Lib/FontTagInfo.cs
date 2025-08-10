@@ -6,7 +6,7 @@ namespace Nintendo.MessageStudio.Lib
     {
 	    public ushort Tag { get => 1; }
         public ushort TagGroup { get => 0; }
-        public ushort Index { get; set; }
+        public ushort Index { get; private set; }
 
         public FontTagInfo(byte[] param)
         {

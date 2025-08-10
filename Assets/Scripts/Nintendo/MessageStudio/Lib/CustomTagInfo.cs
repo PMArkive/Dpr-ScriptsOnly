@@ -2,9 +2,9 @@
 {
     public class CustomTagInfo : ITagInfo   
     {
-	    public ushort Tag { get; set; }
-        public ushort TagGroup { get; set; }
-        public byte[] Params { get; set; }
+	    public ushort Tag { get; private set; }
+        public ushort TagGroup { get; private set; }
+        public byte[] Params { get; private set; }
 
         public CustomTagInfo(ushort group, ushort tag, byte[] param)
         {

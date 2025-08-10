@@ -50,7 +50,7 @@ namespace Dpr.Field.Walking
 
         public float SpeedHosei { get => isNeedRun ? 3.0f : 1.5f; }
         public Vector3 moveVec { get => entity.moveVector; set => entity.moveVector = value; }
-        public PokeWalkingActionModel actionModel { get; set; }
+        public PokeWalkingActionModel actionModel { get; private set; }
 
         public int CollidedCount;
         public static readonly float[] HeavyPushSpeed = new float[4] { 1.0f, 0.6f, 0.4f, 0.25f, };

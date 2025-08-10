@@ -4,9 +4,9 @@ namespace Dpr.RouteSearch
 {
     public class NodeData
     {
-        public Node[] Nodes { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public Node[] Nodes { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
         public int[] AttributeCache;
         public Vector2Int[] AddCantEntryObjectsPositions;

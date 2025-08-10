@@ -12,7 +12,7 @@ namespace Dpr.Battle.View.Objects
 		private Action _onComplete;
 		private bool isVoice;
 		
-		public bool IsPlaying { get; set; }
+		public bool IsPlaying { get; private set; }
 		
 		public BtlvSound(string name)
 		{

@@ -77,10 +77,10 @@ namespace Dpr.UI
 		private bool isShowBadge;
 		private bool IsBadgeGet;
 
-		public bool IsReady { get; set; }
-		public bool IsActive { get; set; }
+		public bool IsReady { get; private set; }
+		public bool IsActive { get; private set; }
 		public bool IsOpen { get => animationController.IsOpen; }
-		public bool IsEnd { get; set; }
+		public bool IsEnd { get; private set; }
 		public bool IsAnimation { get => animationController.IsAnimation; }
 		
 		// TODO

@@ -28,7 +28,7 @@ namespace Dpr.SealPreview
 		private SealPreviewViewSystem _sealPreviewViewSystem;
 		private Transform _cluster;
 
-		private SealPreviewState CurrentPreviewState { get; set; }
+		private SealPreviewState CurrentPreviewState { get; private set; }
 		
 		// TODO
 		public static void RequestDispose() { }

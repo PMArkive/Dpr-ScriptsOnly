@@ -21,7 +21,7 @@ namespace Dpr.FureaiHiroba
         private PokemonParam pokeParam;
 
         public FureaiPokeController controller { get => base.controller as FureaiPokeController; }
-        public PokeSanpoModel sanpoModel { get; set; }
+        public PokeSanpoModel sanpoModel { get; private set; }
         public uint TemotiNo { get => PlayerWork.playerParty.GetMemberIndex(pokeParam); }
         public uint nakayoshi { get => pokeParam.GetFriendship(); }
         public uint pokeID { get => pokePara.GetID(); }

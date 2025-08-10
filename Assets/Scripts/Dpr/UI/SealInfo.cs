@@ -10,7 +10,7 @@ namespace Dpr.UI
         private const string InfoMessageFileName = "dp_stickers_info";
         private SealTable.SheetSealData sealData;
 
-	    public int SealId { get; set; }
+	    public int SealId { get; private set; }
         public int CategoryId { get => sealData.Category; }
         public int SortNumber { get => sealData.SortNumber; }
         public string IconAssetName { get => sealData.IconAssetbundleName; }

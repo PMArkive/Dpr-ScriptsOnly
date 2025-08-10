@@ -26,7 +26,7 @@ namespace Dpr.Battle.View.UI
 		private Ease _ease;
 		private float _duration;
 		
-		public bool IsPlaying { get; set; }
+		public bool IsPlaying { get; private set; }
 		
 		// TODO
 		public static HpStatus GetHpStatus(uint currentHP, uint maxHP) { return default; }

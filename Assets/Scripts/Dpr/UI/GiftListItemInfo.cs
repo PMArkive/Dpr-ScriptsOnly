@@ -8,8 +8,8 @@ namespace Dpr.UI
 		private MysteryGiftData giftData;
 		
 		public MysteryGiftData GiftData { get => giftData; }
-		public RecvData RecvData { get; set; }
-		public ConvertResult ConvertResult { get; set; }
+		public RecvData RecvData { get; private set; }
+		public ConvertResult ConvertResult { get; private set; }
 		
 		public GiftListItemInfo(byte[] data)
 		{

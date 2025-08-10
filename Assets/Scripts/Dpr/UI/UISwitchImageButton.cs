@@ -19,7 +19,7 @@ namespace Dpr.UI
 		
 		public int Id { get => id; }
 		
-		public bool IsSelected { get; set; }
+		public bool IsSelected { get; private set; }
 		
 		// TODO
 		public int GetIndex() { return default; }

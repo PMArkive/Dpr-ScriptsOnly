@@ -34,7 +34,7 @@ namespace Dpr.Battle.View.UI
         [SerializeField]
         private List<Sprite> _sprites = new List<Sprite>();
 
-        public ItemNo Result { get; set; }
+        public ItemNo Result { get; private set; }
 
         // TODO
         public bool Initialize(List<ItemInfo> balls, Action callback) { return false; }

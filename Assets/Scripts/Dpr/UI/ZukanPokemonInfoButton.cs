@@ -30,9 +30,9 @@ namespace Dpr.UI
 		private int index;
 		private RectTransform rectTransform;
 		
-		public ZukanInfo Info { get; set; }
+		public ZukanInfo Info { get; private set; }
 		public UIText NameText { get => nameText; }
-		public bool IsAllowShowDescription { get; set; }
+		public bool IsAllowShowDescription { get; private set; }
 		
 		// TODO
 		public int GetIndex() { return default; }

@@ -26,7 +26,7 @@ namespace Dpr.Battle.View.Systems
 			AutoPilotCommand.ResetDumyBag,
         };
 
-        public AutoPilotState State { get; set; }
+        public AutoPilotState State { get; private set; }
 
         private static AutoPilotMode _mode;
 		private BattleViewUISystem _uiSystem;

@@ -23,7 +23,7 @@ namespace Dpr.UI
 		private readonly float[] _boxItemScales = new float[] { 0.86f, 0.86f, 0.86f, 0.78f, 0.7f };
 		
 		public BoxListNavigate CurrentNavigates { get => _naviSteps[_step]; }
-		public int SelectedIndex { get; set; } = -1;
+		public int SelectedIndex { get; private set; } = -1;
 		public CanvasGroup BoxCcanvasGroup { get => _canvasGroup; }
 		
 		// TODO

@@ -20,7 +20,7 @@ namespace Dpr.Battle.View.UI
         [SerializeField]
         private UIText _effectiveText;
 
-	    public BTLV_WAZA_INFO? Info { get; set; }
+	    public BTLV_WAZA_INFO? Info { get; private set; }
         public float AnchorY { get => _ppText.transform.position.y; }
 
         // TODO

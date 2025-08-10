@@ -7,7 +7,7 @@ namespace Dpr.RouteSearch
         private Vector3[] Route;
         private int CurrentRouteIndex;
 
-	    public bool IsBusy { get; set; }
+	    public bool IsBusy { get; private set; }
         public float MoveSpeed { get; set; } = 5.0f;
 
         // TODO

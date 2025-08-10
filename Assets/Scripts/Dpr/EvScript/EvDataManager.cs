@@ -24,6 +24,7 @@ using System.Linq;
 using Dpr.SubContents;
 using System.Runtime.InteropServices;
 using Dpr.FureaiHiroba;
+using Dpr.Field;
 
 namespace Dpr.EvScript
 {
@@ -77,7 +78,7 @@ namespace Dpr.EvScript
         private GameObject _stopRoot;
         private bool _isInitFirstMap;
 
-        public FieldObjectEntity _dummyPlayer { get; set; }
+        public FieldObjectEntity _dummyPlayer { get; private set; }
 
         private UpdateDelegate _updateDelegate;
         private EventEndDelegate _eventEndDelegate;
@@ -96,19 +97,19 @@ namespace Dpr.EvScript
         private FieldEmbankmentEntity _embankmentEntity;
         private FieldMistPlate _mistPlate = new FieldMistPlate();
 
-        public FieldPokemonCenter PokemonCenter { get; set; }
-        public Telescope Telescope { get; set; } = new Telescope();
-        public TelescopeNagisa TelescopeNagisa { get; set; } = new TelescopeNagisa();
+        public FieldPokemonCenter PokemonCenter { get; private set; }
+        public Telescope Telescope { get; private set; } = new Telescope();
+        public TelescopeNagisa TelescopeNagisa { get; private set; } = new TelescopeNagisa();
 
         private bool AzukariyaInitEventFlag;
 
-        public FieldWazaCutIn FieldWazaCutIn { get; set; } = new FieldWazaCutIn();
-        public InterviewWork InterviewWork { get; set; } = new InterviewWork();
+        public FieldWazaCutIn FieldWazaCutIn { get; private set; } = new FieldWazaCutIn();
+        public InterviewWork InterviewWork { get; private set; } = new InterviewWork();
 
         private int[] TvCommercials;
         private int TvCommercialsCurrentIndex;
 
-        public FieldShip FieldShip { get; set; } = new FieldShip();
+        public FieldShip FieldShip { get; private set; } = new FieldShip();
 
         private string _callLabel_SceneChange = "";
         private string _callLabel_UpdateSP = "";
@@ -1048,10 +1049,39 @@ namespace Dpr.EvScript
         // TODO
         public bool IsRunningEvent() { return false; }
 
-        // TODO
         public bool CheckPosEvent(out Vector3 outWorldPos, FieldPlayerEntity player)
         {
             outWorldPos = Vector3.zero;
+
+            if (_eventListIndex >= 0)
+                return false;
+
+            if (_battleReturnData.EventListIndex >= 0)
+                return false;
+
+            if (PlayerWork.IsToUg)
+                return false;
+
+            if (PlayerWork.IsFromUg)
+                return false;
+
+            if (_posEventLabelReserve != null)
+                return false;
+
+            if (_eventEndPosition == FieldObjectEntity.PositionToGrid(player.worldPosition + player.moveVector))
+                return false;
+
+            _eventEndPosition = Vector2Int.zero;
+
+            var entityParam = FieldGridCollision.CheckGridEventMoveEntity(out outWorldPos, player);
+            if (entityParam != null)
+            {
+                PlayerInputActive(false, false);
+                _heroMoveGridCenterFrontDir = SetupHeroMoveGridCenterFrontDir(entityParam.StopGridArea, FieldObjectEntity.PositionToGrid(outWorldPos), player.oldGridPosition);
+                _posEventLabelReserve = entityParam.ContactLabel;
+                return true;
+            }
+
             return false;
         }
 
@@ -1084,12 +1114,20 @@ namespace Dpr.EvScript
 
         private void CloudScaleReset()
         {
-            _cloudTime = 5.0f;
+            _cloudTime = _const_cloudTime;
             EnvironmentController.global.callback -= EnvironmentControllerCallBack;
         }
 
-        // TODO
-        private void SetCloudScaleStart() { }
+        private void SetCloudScaleStart()
+        {
+            if (EnvironmentController.global == null)
+                return;
+
+            _cloudSpeed = -1.0f;
+
+            EnvironmentController.global.callback -= EnvironmentControllerCallBack;
+            EnvironmentController.global.callback += EnvironmentControllerCallBack;
+        }
 
         private void SetCloudScaleEnd()
         {
@@ -1102,8 +1140,30 @@ namespace Dpr.EvScript
             EnvironmentController.global.callback += EnvironmentControllerCallBack;
         }
 
-        // TODO
-        private void EnvironmentControllerCallBack(EnvironmentController controller, float deltaTime) { }
+        private void EnvironmentControllerCallBack(EnvironmentController controller, float deltaTime)
+        {
+            _cloudTime += _cloudSpeed * deltaTime;
+
+            float scale;
+
+            if (_cloudTime <= 0.0f)
+            {
+                _cloudTime = 0.0f;
+                scale = 0.0f;
+            }
+            else if (_cloudTime >= _const_cloudTime)
+            {
+                _cloudTime = _const_cloudTime;
+                EnvironmentController.global.callback -= EnvironmentControllerCallBack;
+                scale = 1.0f;
+            }
+            else
+            {
+                scale = _cloudTime / _const_cloudTime;
+            }
+
+            controller._CloudShadowScale = scale * controller.latestParameters.CloudShadowScale;
+        }
 
         public bool JumpLabel(string label, [Optional] EventEndDelegate callback)
         {
@@ -1325,10 +1385,7 @@ namespace Dpr.EvScript
                 }
 
                 var pokemonEntity = _fieldObjectEntity[idx] as FieldPokemonEntity;
-                if (pokemonEntity == null ||
-                    FieldManager.fwMng == null ||
-                    FieldManager.fwMng.GetPartnerPokeController() == null ||
-                    FieldManager.fwMng.GetPartnerPokeController().IsEventTalkOK(pokemonEntity))
+                if (pokemonEntity == null || (FieldManager.fwMng?.GetPartnerPokeController()?.IsEventTalkOK(pokemonEntity) ?? true))
                 {
                     if (RunObjectEvent(idx, _fieldObjectEntity[idx], label))
                         return true;
@@ -1368,8 +1425,10 @@ namespace Dpr.EvScript
         // TODO
         public bool CanContact2(FieldObjectEntity obj, Vector3 playerpos) { return false; }
 
-        // TODO
-        public void ClearPlayerMoveVector() { }
+        public void ClearPlayerMoveVector()
+        {
+            EntityManager.activeFieldPlayer.moveVector = Vector3.zero;
+        }
 
         // TODO
         public bool RunObjectEvent(int idx, FieldObjectEntity obj, string label) { return false; }
@@ -1394,7 +1453,46 @@ namespace Dpr.EvScript
         private bool IsCircleHit(ref Vector2 v1, ref Vector2 v2, float range) { return false; }
 
         // TODO
-        private bool WarpListCheck() { return false; }
+        private bool WarpListCheck()
+        {
+            if (PlayerWork.IsToUg)
+                return false;
+            
+            if (PlayerWork.IsFromUg)
+                return false;
+
+            var doors = EntityManager.fieldDoorObjects;
+            for (int i=0; i<doors.Length; i++)
+            {
+                var door = doors[i];
+
+                if (door != null && door.doorEnable)
+                {
+                    if (door.EventParams.WorkValue > -1)
+                    {
+                        var flagIndex = _warpData.Data[door.EventParams.WorkValue].FlagIndex;
+                        if (flagIndex != EvWork.FLAG_INDEX.FLAG_END_SAVE_SIZE && FlagWork.GetFlag(flagIndex))
+                            continue;
+                    }
+
+                    // TODO: Collision math
+                    if (true)
+                    {
+                        if (WarpSegmentHitCheck(door, out Vector3 resultPosition, out float subAngle, out float lineDist, DataManager.GetFieldCommonParam(ParamIndx.WarpSegmentRadius)))
+                        {
+                            var player = EntityManager.activeFieldPlayer;
+                            if (player.InputMoveVector.z != 0.0f || player.InputMoveVector.z != 0.0f)
+                            {
+                                // TODO
+                            }
+                        }
+                    }
+                }
+            }
+
+            // TODO
+            return false;
+        }
 
         private void EvCmdCmpMain(EvWork.WORK_INDEX r1, EvWork.WORK_INDEX r2)
         {
@@ -1409,17 +1507,55 @@ namespace Dpr.EvScript
             _cmp_flag = CmpResult.PLUS; // BUG: Will always be returning work1 as greater
         }
 
-        // TODO
-        public void OnEventEnter(float deltaTime, FieldEventEntity eventEntity) { }
+        public void OnEventEnter(float deltaTime, FieldEventEntity eventEntity)
+        {
+            if (EntityManager.activeFieldPlayer.currentSequence != FieldPlayerEntity.SequenceID.Active)
+                return;
 
-        // TODO
-        public void OnEventStay(float deltaTime, FieldEventEntity eventEntity) { }
+            if (_liftEntity == null)
+                _liftEntity = eventEntity as FieldEventLiftEntity;
 
-        // TODO
-        public void OnEventLeave(float deltaTime, FieldEventEntity eventEntity) { }
+            _nagisaGymGearEntity = eventEntity as FieldNagisaGymGearEntity;
+            _nomoseGymSwitchEntity = eventEntity as FieldNomoseGymSwitchEntity;
+            _eyePaintingEntity = eventEntity as FieldEyePaintingEntity;
+            _embankmentEntity = eventEntity as FieldEmbankmentEntity;
+            _doorEntity = eventEntity as FieldEventDoorEntity;
+        }
 
-        // TODO
-        public void ResetGimmickEntityRef() { }
+        public void OnEventStay(float deltaTime, FieldEventEntity eventEntity)
+        {
+            if (EntityManager.activeFieldPlayer.currentSequence != FieldPlayerEntity.SequenceID.Active)
+                return;
+
+            if (_liftEntity == null)
+                _liftEntity = eventEntity as FieldEventLiftEntity;
+
+            _nagisaGymGearEntity = eventEntity as FieldNagisaGymGearEntity;
+            _nomoseGymSwitchEntity = eventEntity as FieldNomoseGymSwitchEntity;
+            _eyePaintingEntity = eventEntity as FieldEyePaintingEntity;
+            _embankmentEntity = eventEntity as FieldEmbankmentEntity;
+            _doorEntity = eventEntity as FieldEventDoorEntity;
+        }
+
+        public void OnEventLeave(float deltaTime, FieldEventEntity eventEntity)
+        {
+            _doorEntity = null;
+            _liftEntity = null;
+            _nagisaGymGearEntity = null;
+            _nomoseGymSwitchEntity = null;
+            _eyePaintingEntity = null;
+            _embankmentEntity = null;
+        }
+
+        public void ResetGimmickEntityRef()
+        {
+            _liftEntity = null;
+            _tobariGymWallEntity = null;
+            _nagisaGymGearEntity = null;
+            _nomoseGymSwitchEntity = null;
+            _eyePaintingEntity = null;
+            _embankmentEntity = null;
+        }
 
         // TODO
         public bool IsDowsingEnable(FieldObjectEntity entity) { return false; }
@@ -1461,14 +1597,57 @@ namespace Dpr.EvScript
         // TODO
         private bool IsEventHit(FieldEventEntity eventEntity) { return false; }
 
-        // TODO
-        private bool IsWorpHit(FieldEventEntity eventEntity) { return false; }
+        private bool IsWorpHit(FieldEventEntity eventEntity)
+        {
+            if (eventEntity == null)
+                return false;
+
+            if (!eventEntity.gameObject.activeInHierarchy)
+                return false;
+
+            var vanishFlag = (EvWork.FLAG_INDEX)eventEntity.EventParams.VanishFlagIndex;
+            if ((int)vanishFlag > -1 && vanishFlag != EvWork.FLAG_INDEX.FLAG_END_SAVE_SIZE && FlagWork.GetFlag(vanishFlag))
+                return false;
+
+            var workIndex = eventEntity.EventParams.WorkIndex;
+            if (workIndex == EvWork.WORK_INDEX.SCWK_WK_SAVE_SIZE || FlagWork.GetWork(workIndex) == eventEntity.EventParams.WorkValue)
+                return true;
+
+            return false;
+        }
+
+        private void WarpUpdate(float time)
+        {
+            if (_worpEventData.Entity.callLabel == FieldDoor.CallLabel.none)
+            {
+                Cmd_ObjPauseAll();
+                WarpUpdateEnd();
+            }
+            else
+            {
+                if (_worpEventData.State != 0)
+                    return;
+
+                Cmd_ObjPauseAll();
+
+                if (JumpLabel(_worpEventData.Entity.callLabel.ToString(), WarpUpdateEnd))
+                {
+                    _updateDelegate = null;
+                    _worpEventData.State++;
+                }
+                else
+                {
+                    WarpUpdateEnd();
+                }
+            }
+        }
 
         // TODO
-        private void WarpUpdate(float time) { }
-
-        // TODO
-        private void WarpUpdateEnd() { }
+        private void WarpUpdateEnd()
+        {
+            PlayerWork.FieldWorpLabel = _worpEventData.Entity.exitLabel == FieldDoor.ExitLabel.none ? "" : _worpEventData.Entity.exitLabel.ToString();
+            PlayerWork.FieldWorpLinkName = _worpEventData.Entity.connectionName;
+        }
 
         // TODO
         private void EqualZoneWarp(float time) { }
@@ -1771,14 +1950,34 @@ namespace Dpr.EvScript
         // TODO
         private void UG_From(float time) { }
 
-        // TODO
-        private void StartAdjustHeroPos(float deltaTime, string label) { }
+        private void StartAdjustHeroPos(float deltaTime, string label)
+        {
+            ClearPlayerMoveVector();
+            _callLabel_AdjustHeroPos = label;
 
-        // TODO
-        private bool CheckUpdateAdjustHeroPos(float deltaTime) { return false; }
+            if (!CheckUpdateAdjustHeroPos(deltaTime))
+                _updateDelegate = UpdateAdjustHeroPos;
+        }
 
-        // TODO
-        private void UpdateAdjustHeroPos(float deltaTime) { }
+        private bool CheckUpdateAdjustHeroPos(float deltaTime)
+        {
+            if (HeroMoveGridCenterFront(deltaTime))
+                return false;
+
+            var label = _callLabel_AdjustHeroPos = null;
+
+            if (FieldManager.Instance.StopSwayGrass_NextArea())
+                FieldManager.Instance.SetBgmEvent(FieldManager.Instance.GetNowBgmState());
+
+            JumpLabel(label, null);
+            return true;
+        }
+
+        private void UpdateAdjustHeroPos(float deltaTime)
+        {
+            if (CheckUpdateAdjustHeroPos(deltaTime))
+                _updateDelegate = null;
+        }
 
         // TODO
         public bool CheckEventObjectGrid(int x, int y, float height) { return false; }
@@ -6239,8 +6438,82 @@ namespace Dpr.EvScript
         // TODO
         private FieldEventEntity FindEventDoorEntity(string name) { return null; }
 
-        // TODO
-        private bool HeroMoveGridCenterFront(float deltaTime) { return false; }
+        private bool HeroMoveGridCenterFront(float deltaTime)
+        {
+            var player = EntityManager.activeFieldPlayer;
+
+            _fieldObjectMove.Update(deltaTime);
+            _fieldObjectRotateYaw.Update(deltaTime);
+
+            if (!_heroMoveGridCenterFrontStat)
+            {
+                if (_heroMoveGridCenterFrontDir == DIR.DIR_NOT)
+                    _heroMoveGridCenterFrontDir = player.GetDir();
+
+                var tilePos = FieldObjectEntity.GridToPosition(player.gridPosition);
+
+                var x = player.worldPosition.x;
+                var y = player.worldPosition.y;
+                var z = player.worldPosition.z;
+
+                var vec = new Vector3();
+                float angle = 0.0f;
+
+                switch (_heroMoveGridCenterFrontDir)
+                {
+                    case DIR.DIR_UP:
+                        vec.x = x;
+                        vec.y = y;
+                        vec.z = tilePos.y;
+                        angle = 180.0f;
+                        break;
+
+                    case DIR.DIR_DOWN:
+                    default:
+                        vec.x = x;
+                        vec.y = y;
+                        vec.z = tilePos.y;
+                        angle = 0.0f;
+                        break;
+
+                    case DIR.DIR_LEFT:
+                        vec.x = tilePos.x;
+                        vec.y = y;
+                        vec.z = z;
+                        angle = 90.0f;
+                        break;
+
+                    case DIR.DIR_RIGHT:
+                        vec.x = tilePos.x;
+                        vec.y = y;
+                        vec.z = z;
+                        angle = 270.0f;
+                        break;
+                }
+
+                _fieldObjectMove.SetObjectEntity(player);
+                _fieldObjectMove.MoveSpeed(vec, DataManager.GetFieldCommonParam(ParamIndx.WalkSpd));
+                _fieldObjectMove.Update(deltaTime);
+
+                _fieldObjectRotateYaw.SetObjectEntity(player);
+                _fieldObjectRotateYaw.MoveTime(angle, 0.1f);
+                _fieldObjectRotateYaw.Update(deltaTime);
+
+                player.PlayWalk();
+
+                _heroMoveGridCenterFrontStat = true;
+            }
+
+            if (!_fieldObjectMove.IsBusy && !_fieldObjectRotateYaw.IsBusy)
+            {
+                player.PlayIdle();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         private bool BoardReq()
         {
@@ -6439,11 +6712,31 @@ namespace Dpr.EvScript
         // TODO
         private bool NeckRotateTarget(bool isTurnNotFlag) { return false; }
 
-        // TODO
         private bool CalcNeckRotateAngle(FieldCharacterEntity player, ref Vector3 tPos, out float angle)
         {
-            angle = 0.0f;
-            return false;
+            var playerAngle = player.yawAngle;
+            var playerWorld = player.worldPosition;
+
+            _ = player.transform.forward;
+
+            var diff = tPos - playerWorld;
+            diff.Normalize();
+
+            angle = FieldCalc.DiffAngle(playerAngle, Quaternion.LookRotation(diff).eulerAngles.y);
+
+            if (angle <= -45.0f)
+            {
+                angle = -45.0f;
+                return false;
+            }
+
+            if (angle >= 45.0f)
+            {
+                angle = 45.0f;
+                return false;
+            }
+
+            return true;
         }
 
         // TODO

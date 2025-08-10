@@ -123,7 +123,7 @@ namespace Dpr.DigFossil
 				}
 			}
 			
-			public StatueEffectRawData.Sheettable Info { get; set; }
+			public StatueEffectRawData.Sheettable Info { get; private set; }
 			public float Ratio { get; set; }
 		}
 

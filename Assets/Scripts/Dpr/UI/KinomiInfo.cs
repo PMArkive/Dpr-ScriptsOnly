@@ -21,8 +21,8 @@ namespace Dpr.UI
         };
 		
 		public int Id { get => data.TagNo; }
-		public int ItemId { get; set; }
-		public int Index { get; set; }
+		public int ItemId { get; private set; }
+		public int Index { get; private set; }
 
         private KinomiData.SheetData data;
 

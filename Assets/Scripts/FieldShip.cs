@@ -19,8 +19,8 @@ public class FieldShip
     private bool IsAttachPlayer;
     private MapType Type;
 
-    public MovePhase Phase { get; set; }
-    public MoveSeaPhase SeaPhase { get; set; }
+    public MovePhase Phase { get; private set; }
+    public MoveSeaPhase SeaPhase { get; private set; }
 
     // TODO
     public void Terminate() { }

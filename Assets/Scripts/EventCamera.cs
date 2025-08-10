@@ -7,17 +7,17 @@ public class EventCamera
     private FieldCamera camera;
     private EventCameraData cameraData;
 
-    public Vector3 defaultPosition { set; get; }
-    public Vector3 defaultRotate { set; get; }
-    public Vector3 beforePosition { set; get; }
-    public Vector3 beforeRotate { set; get; }
+    public Vector3 defaultPosition { private set; get; }
+    public Vector3 defaultRotate { private set; get; }
+    public Vector3 beforePosition { private set; get; }
+    public Vector3 beforeRotate { private set; get; }
 
     private Vector3 workPosition;
     private Vector3 workRotate;
     private Vector3 retrunDefaultPosition;
     private Vector3 returnDefaultRotate;
 
-    public bool IsEnd { set; get; } = true;
+    public bool IsEnd { private set; get; } = true;
 
     private DepthOfField _dof;
     private float[] default_dof = new float[3];

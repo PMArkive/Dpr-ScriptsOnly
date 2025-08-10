@@ -27,7 +27,7 @@ namespace Dpr.DigFossil
 		private Text debugText;
 
         public OnClicked onClicked { get; set; }
-        public bool IsOnTouchModeChanged { get; set; }
+        public bool IsOnTouchModeChanged { get; private set; }
         public bool IsUse { get; set; }
 
         private Coroutine animationWaitCoroutine;

@@ -15,7 +15,7 @@ namespace Dpr.UI
 		private Action _onDecide;
 		private int _maxCount;
 		
-		public int CurrentIndex { get; set; }
+		public int CurrentIndex { get; private set; }
 		
 		// TODO
 		public void Initialize(Action onCancel, Action onDecide, Action onChange) { }

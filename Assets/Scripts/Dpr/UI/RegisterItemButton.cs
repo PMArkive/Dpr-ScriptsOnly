@@ -10,8 +10,8 @@ namespace Dpr.UI
 		[SerializeField]
 		private Image itemIconImage;
 		
-		public ushort ItemNo { get; set; }
-		public bool IsSet { get; set; }
+		public ushort ItemNo { get; private set; }
+		public bool IsSet { get; private set; }
 		
 		// TODO
 		public void Setup(ushort itemNo) { }

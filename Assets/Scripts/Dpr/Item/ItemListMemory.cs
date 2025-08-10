@@ -2,9 +2,9 @@
 {
     public class ItemListMemory
     {
-        public int CategoryIndex { get; set; }
-        public int[] Indexes { get; set; }
-        public float[] ScrollPositions { get; set; }
+        public int CategoryIndex { get; private set; }
+        public int[] Indexes { get; private set; }
+        public float[] ScrollPositions { get; private set; }
         public int CurrentIndex { get => Indexes[CategoryIndex]; }
         public float CurrentScrollPosition { get => ScrollPositions[CategoryIndex]; }
 

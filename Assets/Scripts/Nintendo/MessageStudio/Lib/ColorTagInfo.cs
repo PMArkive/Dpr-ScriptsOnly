@@ -6,8 +6,8 @@ namespace Nintendo.MessageStudio.Lib
     {
 	    public ushort Tag { get => 3; }
         public ushort TagGroup { get => 0; }
-        public LMSColor Color { get; set; }
-        public ushort Index { get; set; }
+        public LMSColor Color { get; private set; }
+        public ushort Index { get; private set; }
 
         public ColorTagInfo(byte[] param)
         {

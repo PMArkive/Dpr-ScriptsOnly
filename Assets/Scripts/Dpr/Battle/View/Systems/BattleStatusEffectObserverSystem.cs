@@ -21,8 +21,8 @@ namespace Dpr.Battle.View.Systems
 		private BattleDataTable.SheetBattleStatusEffectObserverData[] _observerDatas;
 		private BOPokemon targetPokemon;
 		
-		public bool IsPlaying { get; set; }
-		public bool IsUnInitialized { get; set; }
+		public bool IsPlaying { get; private set; }
+		public bool IsUnInitialized { get; private set; }
 		public bool IsFinish { get => _sequence == Sequence.WAIT; }
 		
 		public BattleStatusEffectObserverSystem(BattleViewSystem pViewSystem)

@@ -7,7 +7,7 @@ namespace nn.irsensor
 		private ImageTransferProcessorState state;
 
 		public ImageTransferProcessorState State => state;
-        public byte[] ImageBuffer { get; set; }
+        public byte[] ImageBuffer { get; private set; }
 
         private IntPtr pWorkBuffer = IntPtr.Zero;
 		private long workBufferSize;

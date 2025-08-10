@@ -13,7 +13,7 @@ namespace Dpr.UI
 		private bool isShowSoftwareKeyboard;
 		private bool isEnableUpdate;
 		
-		public string InputSerialCode { get; set; }
+		public string InputSerialCode { get; private set; }
 		
 		// TODO
 		protected override void OnInitialize() { }

@@ -41,14 +41,14 @@ namespace Dpr.UI
 		private List<LearnWazaResult> newLearnWazaResultList = new List<LearnWazaResult>();
 
 		public PokemonParam PokemonParam { get; set; }
-		public UILevelUp.PokemonStatus CurrentPokemonStatus { get; set; }
-		public UILevelUp.PokemonStatus BeforePokemonStatus { get; set; }
+		public UILevelUp.PokemonStatus CurrentPokemonStatus { get; private set; }
+		public UILevelUp.PokemonStatus BeforePokemonStatus { get; private set; }
 		public Action OnGaugeUp { get; set; }
 		public Action OnLevelUp { get; set; }
-		public bool IsLevelUp { get; set; }
+		public bool IsLevelUp { get; private set; }
 		public bool IsLearnWaza { get => newLearnWazaResultList.Count > 0; }
-		public bool IsAnimation { get; set; }
-		public bool IsActive { get; set; }
+		public bool IsAnimation { get; private set; }
+		public bool IsActive { get; private set; }
 		
 		// TODO
 		public void SetActive(bool isActive) { }

@@ -52,8 +52,8 @@ public class UnmanagedMemoryManager
 
 	public class AllocInfo
 	{		
-		public IntPtr ptr { get; set; }
-		public int size { get; set; }
+		public IntPtr ptr { get; private set; }
+		public int size { get; private set; }
 		
 		public AllocInfo(IntPtr _ptr, int _size)
 		{

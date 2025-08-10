@@ -23,7 +23,7 @@ namespace Dpr.Battle.View.UI
 		[SerializeField]
 		private Image[] _boardImage;
 
-        public BtlPokePos Result { get; set; }
+        public BtlPokePos Result { get; private set; }
 
         private BTL_ACTION_PARAM_OBJ _destActionParam;
 		private BtlvPos _actionVPos = BtlvPos.BTL_VPOS_NUM;

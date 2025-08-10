@@ -4,7 +4,7 @@ namespace Dpr.UnderGround.UgFather
 {
 	public class UgFatherBase : MonoBehaviour
 	{
-		public FieldCharacterEntity FieldCharacterEntity { get; set; }
+		public FieldCharacterEntity FieldCharacterEntity { get; private set; }
 
         protected OnEventEnd onEventEndCallback;
 

@@ -267,15 +267,15 @@ namespace Dpr.SequenceEditor
 			private SequenceCameraObject _sequenceCameraObject;
 			private CommandBuffer _colorFilterBuffer;
 
-			public BattlePostProcessFilter PostProcessFilter { get; set; }
-			public PostEffect<Bloom> Bloom { get; set; }
-			public PostEffect<DepthOfField> DepthOfField { get; set; }
-			public PostEffect<Fxaa> Fxaa { get; set; }
-			public PostEffect<RadialBlur> RadialBlur { get; set; }
-			public PostEffect<ColorFilter> ColorFilter { get; set; }
-			public PostEffect<ChromaticAberration> ChromaticAberration { get; set; }
-			public PostEffect<FeedbackBlur> FeedBackBlur { get; set; }
-			public PostEffect<BtlvPfx> BtlvPfx { get; set; }
+			public BattlePostProcessFilter PostProcessFilter { get; private set; }
+			public PostEffect<Bloom> Bloom { get; private set; }
+			public PostEffect<DepthOfField> DepthOfField { get; private set; }
+			public PostEffect<Fxaa> Fxaa { get; private set; }
+			public PostEffect<RadialBlur> RadialBlur { get; private set; }
+			public PostEffect<ColorFilter> ColorFilter { get; private set; }
+			public PostEffect<ChromaticAberration> ChromaticAberration { get; private set; }
+			public PostEffect<FeedbackBlur> FeedBackBlur { get; private set; }
+			public PostEffect<BtlvPfx> BtlvPfx { get; private set; }
 			
 			public PostEffects(BattlePostProcessFilter filter, [Optional] PfxParam? initialParam)
 			{

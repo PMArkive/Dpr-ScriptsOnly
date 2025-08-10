@@ -12,7 +12,7 @@ public class EncEffectSequenceController
     private Vector3 _cameraPositionOffset = Vector3.zero;
     private Vector3 _cameraRotationOffset = Vector3.zero;
 
-    public ePlayState PlayState { set; get; }
+    public ePlayState PlayState { private set; get; }
 
     public EncEffectSequenceController(string assetname, FieldManager field)
     {

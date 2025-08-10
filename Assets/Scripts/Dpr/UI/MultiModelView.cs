@@ -27,7 +27,7 @@ namespace Dpr.UI
 		private float modelViewPortSpace = 1.0f;
 		private int modelViewCount;
 		
-		public bool bIsInitialize { get; set; }
+		public bool bIsInitialize { get; private set; }
 		
 		// TODO
 		private void Start() { }

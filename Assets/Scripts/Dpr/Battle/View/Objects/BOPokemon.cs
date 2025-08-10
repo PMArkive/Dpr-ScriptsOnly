@@ -28,7 +28,7 @@ namespace Dpr.Battle.View.Objects
 		
 		public BattlePokemonEntity Entity { get => this.GetComponentThis(ref _entity); }
 		public PokemonParam Param { get => _param; }
-		public bool IsEnableFloat { get; set; }
+		public bool IsEnableFloat { get; private set; }
 		public bool IsVisibleDigudaStone { get; set; }
 		public bool HitBackFlg { get; set; }
 		public bool IsVisibleMigawari { get; set; }

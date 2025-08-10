@@ -15,8 +15,8 @@ namespace Dpr.Battle.View.Objects
 		private bool _autoRotate;
 		private BattleScreenObject _screenObject;
 
-		public EffectInstance Effect { get => _effect; set => _effect = value; }
-		public bool IsStop { get; set; }
+		public EffectInstance Effect { get => _effect; private set => _effect = value; }
+		public bool IsStop { get; private set; }
 		public bool IsScreenEffect
 		{
 			get
@@ -26,7 +26,7 @@ namespace Dpr.Battle.View.Objects
 			}
 		}
 		public bool AutoRotate { set => _autoRotate = value; }
-		public AffixSealData SealData { get; set; }
+		public AffixSealData SealData { get; private set; }
 		
 		public BtlvEffectInstance(EffectData effectData, SEQ_DEF_EFF_DRAWTYPE drawType = SEQ_DEF_EFF_DRAWTYPE.SEQ_DEF_EFF_DRAWTYPE_NORAML)
 		{

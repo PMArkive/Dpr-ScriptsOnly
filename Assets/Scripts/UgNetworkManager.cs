@@ -54,7 +54,7 @@ public class UgNetworkManager : NetUseManager<UgNetworkManager>
     // TODO
     private bool IsKousekiFull { get; }
 
-    public int DigTonariMemberCount { set; get; }
+    public int DigTonariMemberCount { private set; get; }
 
     public Action<NetSecretBaseData> OnSecretBaseEnter;
 	public List<(int, Vector2Int)> tonarihoriList = new List<(int, Vector2Int)>();

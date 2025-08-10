@@ -7,8 +7,8 @@ namespace Dpr.UI
 		[SerializeField]
 		private SealIconButon sealIconButon;
 		
-		public int CategoryId { get; set; }
-		public bool IsEnable { get; set; }
+		public int CategoryId { get; private set; }
+		public bool IsEnable { get; private set; }
 		public bool IsNoneCategory { get => CategoryId == 0; }
 		
 		// TODO

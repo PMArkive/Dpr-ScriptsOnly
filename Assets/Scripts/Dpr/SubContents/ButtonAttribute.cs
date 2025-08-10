@@ -6,9 +6,9 @@ namespace Dpr.SubContents
     [AttributeUsage(validOn: AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
     public sealed class ButtonAttribute : PropertyAttribute
     {
-	    public string Function { get; set; }
-        public string Name { get; set; }
-        public object[] Parameters { get; set; }
+	    public string Function { get; private set; }
+        public string Name { get; private set; }
+        public object[] Parameters { get; private set; }
 
         public ButtonAttribute(string function, string name, object[] parameters)
         {

@@ -40,8 +40,8 @@ public class UgMiniMapComponent : MonoBehaviour
     private static readonly Vector2 MapMiniSize = new Vector2(132.0f, -100.0f);
     private bool prevMode;
 
-    public bool isOverAllMode { get; set; }
-    public bool isLargeMode { get; set; }
+    public bool isOverAllMode { get; private set; }
+    public bool isLargeMode { get; private set; }
 
     private Image[] _randMarkIcon;
     private Image _nowRandMarkIcon;

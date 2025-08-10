@@ -96,11 +96,11 @@ namespace Dpr.UI
 		private IndexSelector zukanInfoIndexSelector;
 		private AudioInstance currentVoiceInstance;
 
-		public ZukanInfo CurrentZukanInfo { get; set; }
-		public bool IsTweening { get; set; }
-		public bool IsShow { get; set; }
-		public bool IsModelViewOnly { get; set; }
-		public bool CanSwitchLanguage { get; set; }
+		public ZukanInfo CurrentZukanInfo { get; private set; }
+		public bool IsTweening { get; private set; }
+		public bool IsShow { get; private set; }
+		public bool IsModelViewOnly { get; private set; }
+		public bool CanSwitchLanguage { get; private set; }
 		public bool CanShowMoving { get => CurrentZukanInfo.GetStatus == DPData.GET_STATUS.GET; }
 		public bool CanShowCompare { get => CurrentZukanInfo.GetStatus == DPData.GET_STATUS.GET; }
 		

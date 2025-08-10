@@ -5,7 +5,7 @@ namespace Dpr.Field.Walking
 {
     public class AI
     {
-        public AIModel aiModel { get; set; }
+        public AIModel aiModel { get; private set; }
 
         private List<AIStateBase> AIStates = new List<AIStateBase>();
         private AIStateBase nowState;

@@ -19,7 +19,7 @@ namespace Dpr.UI
 		private int _maxCount;
 		private int _currentDepth;
 
-		public int CurrentIndex { get; set; }
+		public int CurrentIndex { get; private set; }
 		
 		// TODO
 		public void Initialize(Action onCancel, Action onDecide, Action onChange) { }

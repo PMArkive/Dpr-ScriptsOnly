@@ -8,8 +8,8 @@ namespace Dpr.UI
 
 		private float longTouchTime;
 		
-		public TouchInfo[] Touches { get; set; }
-		public int TouchCount { get; set; }
+		public TouchInfo[] Touches { get; private set; }
+		public int TouchCount { get; private set; }
 		
 		public UITouchInputController(float longTouchTime = 1.0f)
 		{

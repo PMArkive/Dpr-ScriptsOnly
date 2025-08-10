@@ -28,8 +28,8 @@ namespace Dpr.UI
 		[SerializeField]
 		private bool _sunday;
 		
-		public int Day { get; set; }
-		public bool IsSelect { get; set; }
+		public int Day { get; private set; }
+		public bool IsSelect { get; private set; }
 		
 		// TODO
 		public void SetDay(int day) { }

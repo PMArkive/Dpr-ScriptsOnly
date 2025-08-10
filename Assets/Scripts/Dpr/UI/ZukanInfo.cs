@@ -2,7 +2,6 @@ using DPData;
 using Pml;
 using Pml.PokePara;
 using XLSXContent;
-using static Dpr.UI.ZukanInfo;
 
 namespace Dpr.UI
 {
@@ -18,16 +17,16 @@ namespace Dpr.UI
 		private const string HeightMessageLabelNameFormat = "ZKN_HEIGHT_{0:D3}_{1:D3}";
 		private const string WeightMessageLabelNameFormat = "ZKN_WEIGHT_{0:D3}_{1:D3}";
 		
-		public MonsNo MonsNo { get; set; }
-		public int ZukanNo { get; set; }
-		public string Name { get; set; }
-		public ushort Height { get; set; }
-		public ushort Weight { get; set; }
-		public string HeightText { get; set; }
-		public string WeightText { get; set; }
-		public PokeType Type1 { get; set; }
-		public PokeType Type2 { get; set; }
-		public GET_STATUS GetStatus { get; set; }
+		public MonsNo MonsNo { get; private set; }
+		public int ZukanNo { get; private set; }
+		public string Name { get; private set; }
+		public ushort Height { get; private set; }
+		public ushort Weight { get; private set; }
+		public string HeightText { get; private set; }
+		public string WeightText { get; private set; }
+		public PokeType Type1 { get; private set; }
+		public PokeType Type2 { get; private set; }
+		public GET_STATUS GetStatus { get; private set; }
 
         private ModelParam[] modelParams;
         private int formIndex;

@@ -12,8 +12,8 @@ namespace Dpr.UI
 		[SerializeField]
 		private LevelUpStatusText[] levelUpStatusTexts;
 
-        public bool IsAnimation { get; set; }
-        public bool IsShow { get; set; }
+        public bool IsAnimation { get; private set; }
+        public bool IsShow { get; private set; }
 
         private int state;
 		

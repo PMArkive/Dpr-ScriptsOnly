@@ -46,8 +46,8 @@ namespace Dpr.UI
 		private RectTransform sealIconRectTransform;
 		private RectTransform infoTextRectTransform;
 
-		public bool IsSelected { get; set; }
-		public int SelectedSealId { get; set; }
+		public bool IsSelected { get; private set; }
+		public int SelectedSealId { get; private set; }
 		
 		// TODO
 		public void Initialize() { }

@@ -10,8 +10,8 @@ namespace Dpr.DigFossil
 		private Image image;
 		private Tween tweenHandler;
 		
-		public int LabelID { get; set; }
-		public int UgItemId { get; set; }
+		public int LabelID { get; private set; }
+		public int UgItemId { get; private set; }
 		
 		// TODO
 		public void Initialize(Sprite sprite, DigMasterDataManager.DepositItemData data) { }

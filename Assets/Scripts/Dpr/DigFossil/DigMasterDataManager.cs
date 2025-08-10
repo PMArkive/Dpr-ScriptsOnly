@@ -18,7 +18,7 @@ namespace Dpr.DigFossil
 		public List<StoneBoxData> StoneBoxDatas { get; } = new List<StoneBoxData>();
 		public List<DepositItemData> DepositItemDatas { get; } = new List<DepositItemData>();
 		public List<HardStoneData> HardStoneDatas { get; } = new List<HardStoneData>();
-        public List<StatueEffectRawData.Sheettable> StatueEffectData { get; set; }
+        public List<StatueEffectRawData.Sheettable> StatueEffectData { get; private set; }
 
         public const short ITEM_ID_STONE_BOX = -10;
 		public const short ITEM_ID_HARD_STONE = -100;

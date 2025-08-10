@@ -17,8 +17,8 @@ namespace Dpr.UI
 		private int needCleanupCount;
 		private byte cleanupValue;
 		
-		public bool IsVisible { get; set; }
-		public bool IsAutoRotate { get; set; }
+		public bool IsVisible { get; private set; }
+		public bool IsAutoRotate { get; private set; }
 		
 		public BadgeObject(int id, GameObject gameObject, Transform transform)
 		{

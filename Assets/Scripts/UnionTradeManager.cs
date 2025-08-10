@@ -9,7 +9,7 @@ public class UnionTradeManager
 	private OnlinePlayerCharacter myPlayer;
 	public TradeSecurityController securityController;
 
-    public int tradeTargetIndex { get; set; }
+    public int tradeTargetIndex { get; private set; }
 
     public TradeSelectPokeModel tradeSelectModel;
 	private BoxPokeData boxMyPokeData;
@@ -20,7 +20,7 @@ public class UnionTradeManager
 	private TradeFlowMsgWindow msgWindow;
 	public bool isError;
 
-    public bool isLoadingBox { get; set; }
+    public bool isLoadingBox { get; private set; }
 
     private Action _LeaveUnion;
 	public TradeFlowState currentState;

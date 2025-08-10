@@ -17,10 +17,10 @@ namespace Dpr.UI
         private bool IsLoop = true;
         private MoveState moveState;
 
-        public int CurrentIndex { get; set; }
-        public int MinCount { get; set; }
-        public int MaxCount { get; set; }
-        public bool IsLooping { get; set; }
+        public int CurrentIndex { get; private set; }
+        public int MinCount { get; private set; }
+        public int MaxCount { get; private set; }
+        public bool IsLooping { get; private set; }
 
         public IndexSelector(bool isStopInEnd, bool isStopRepeatMovingWhenOutOfRange, bool isLoop)
         {

@@ -12,7 +12,7 @@ namespace Dpr.SecretBase
 		[SerializeField]
 		private GameObject _body;
 
-        public string ItemTextxt { get; set; }
+        public string ItemTextxt { get; private set; }
 
         private int _index;
 		private RectTransform _rectTransform;

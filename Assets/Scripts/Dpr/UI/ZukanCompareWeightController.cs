@@ -28,7 +28,7 @@ namespace Dpr.UI
 		private ZukanInfo currentZukanInfo;
 		private bool isSetupEnd;
 		
-		public bool IsLoadEnd { get; set; }
+		public bool IsLoadEnd { get; private set; }
 		
 		// TODO
 		public void Initialize(ushort playerWeight) { }

@@ -15,7 +15,7 @@ namespace Dpr.UI
 
 		private int index;
 		
-		public PoffinData Data { get; set; }
+		public PoffinData Data { get; private set; }
 		
 		// TODO
 		public int GetIndex() { return default; }

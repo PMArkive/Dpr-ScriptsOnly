@@ -19,7 +19,7 @@ namespace Dpr.UnderGround.LightStone
 		private FieldPokemonEntity entity;
 		private EffectInstance lightStoneEffect;
 		
-		public Vector2Int Pos { get; set; }
+		public Vector2Int Pos { get; private set; }
 		
 		// TODO
 		public void Init(Vector2Int pos) { }

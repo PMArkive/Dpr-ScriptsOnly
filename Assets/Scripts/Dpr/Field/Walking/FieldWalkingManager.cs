@@ -15,7 +15,7 @@ namespace Dpr.Field.Walking
         public AreaID prevArea = AreaID.NOTHING;
 
         public bool isLoaded { get => prevArea == AreaID.NOTHING; }
-        public PokemonParam PartnerPokeParam { get; set; }
+        public PokemonParam PartnerPokeParam { get; private set; }
 
         public string PartnerNPC_ObjectName = "";
         public static Dictionary<int, string> PartnerNPC_Dic = new Dictionary<int, string>()
@@ -37,7 +37,7 @@ namespace Dpr.Field.Walking
             { "PAIR_D21R0101_SEVEN5", "DLP_SPEAKERS_NAME_030" },
         };
 
-        public Vector3 EntryPoint { get; set; }
+        public Vector3 EntryPoint { get; private set; }
 
         private Dictionary<int, Object> PokeAssets = new Dictionary<int, Object>();
         private WalkingCharacterController Controller;

@@ -9,8 +9,8 @@ namespace Dpr.FureaiHiroba
         public bool isNoneActionMember;
         public bool isNoneStrayMember;
 
-        public int StopThreshold { get; set; }
-        public int KyoroThreshold { get; set; }
+        public int StopThreshold { get; private set; }
+        public int KyoroThreshold { get; private set; }
 
         public PokeWalkingActionModel(PokeWalkingActionNakayoshi.SheetSheet1 nakayoshi, PokeWalkingActionSeikaku.SheetSheet1 seikaku)
         {

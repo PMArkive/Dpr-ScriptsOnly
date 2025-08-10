@@ -12,7 +12,7 @@ namespace Dpr.RouteSearch
         public ObjectType ObjectType { get; set; }
         public float MoveSpeed { get => RouteMove.MoveSpeed; set => RouteMove.MoveSpeed = value; }
         public float RotateSpeed { get; set; } = 720.0f;
-        public bool IsBusy { get; set; }
+        public bool IsBusy { get; private set; }
 
         private AnimationType CurrentAnimType;
         private Action<RouteMoveResult> OnCompletedEvent;

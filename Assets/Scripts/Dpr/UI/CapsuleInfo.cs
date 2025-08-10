@@ -9,15 +9,15 @@ namespace Dpr.UI
 	{
 		private int capsuleId;
 		
-		public CapsuleData Data { get; set; }
-		public PokemonParam AttachPokemonParam { get; set; }
+		public CapsuleData Data { get; private set; }
+		public PokemonParam AttachPokemonParam { get; private set; }
 		public PokemonParam PreviewPokemonParam { get; set; }
 		public bool Is3DEditMode { get => Data.Is3DEditMode; }
 		public bool IsAppliedTemplate { get => Data.IsAppliedTemplate; }
 		public bool IsAffixedSeal { get => Data.AffixSealCount != 0; }
 		public bool IsAffixSealMaxCount { get => Data.AffixSealCount == BallDecoWork.AffixSealMaxCount; }
-		public int AttachTray { get; set; }
-		public int AttachPosition { get; set; }
+		public int AttachTray { get; private set; }
+		public int AttachPosition { get; private set; }
 		
 		public CapsuleInfo(int id)
 		{

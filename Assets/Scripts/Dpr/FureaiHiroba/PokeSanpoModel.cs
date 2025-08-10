@@ -21,8 +21,8 @@ namespace Dpr.FureaiHiroba
         public bool isPairMode { get => PairModel != null; }
         public bool isPairPosition { get => PositionNo > 9; }
         public PokeSanpoPairModel PairModel { get; set; }
-        public Vector3 defaultDirection { get; set; }
-        public PokeSanpoActionModel actionModel { get; set; }
+        public Vector3 defaultDirection { get; private set; }
+        public PokeSanpoActionModel actionModel { get; private set; }
 
         private static List<Vector3> AngleToDirection = new List<Vector3>()
         {

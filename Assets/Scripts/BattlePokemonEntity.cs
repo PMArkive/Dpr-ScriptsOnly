@@ -50,7 +50,7 @@ public sealed class BattlePokemonEntity : BattleObjectEntity
     public override string entityType { get => "BattlePokemon"; }
     public Size Size { get => _size; }
     public LandingType LandingType { get => _landingType; }
-    public AnimationState CurrentAnimationState { get => _animationState; set => _animationState = value; }
+    public AnimationState CurrentAnimationState { get => _animationState; private set => _animationState = value; }
     public bool PokeAnimSoundEnable
     {
         get => _isPokeAnimSoundEnable;
@@ -62,7 +62,7 @@ public sealed class BattlePokemonEntity : BattleObjectEntity
     }
     public Color FixMultiplierColor { get => _fixMultiplierColor; set => _fixMultiplierColor = value; }
     private PokemonVariation PokemonVariation { get; set; }
-    public PokemonCustomNodeAnim PokemonCustomNodeAnim { get; set; }
+    public PokemonCustomNodeAnim PokemonCustomNodeAnim { get; private set; }
     private PokemonAnime PokemonAnime { get; set; }
     private PokemonPrefabInfo PokemonPrefabInfo { get; set; }
     private PatcheelPattern patcheelPattern { get; set; }

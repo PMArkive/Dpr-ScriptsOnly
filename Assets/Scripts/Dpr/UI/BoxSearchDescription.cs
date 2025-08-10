@@ -13,7 +13,7 @@ namespace Dpr.UI
 		[SerializeField]
 		private GameObject _subObject;
 
-        public BoxWindow.SEARCH_DATA SearchData { get; set; }
+        public BoxWindow.SEARCH_DATA SearchData { get; private set; }
 
         private float _openPosX;
 		private float _closePosX;

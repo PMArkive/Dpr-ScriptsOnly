@@ -16,10 +16,10 @@ namespace Dpr.UI
 		private Color clearColor = Color.clear;
 		private Color affixedSealColor = Color.clear;
 
-		public Vector2 GridPosition { get; set; }
-		public int AffixSealId { get; set; }
-		public int SealId { get; set; }
-		public bool IsSetSeal { get; set; }
+		public Vector2 GridPosition { get; private set; }
+		public int AffixSealId { get; private set; }
+		public int SealId { get; private set; }
+		public bool IsSetSeal { get; private set; }
 		
 		// TODO
 		public void Initialize(int x, int y) { }

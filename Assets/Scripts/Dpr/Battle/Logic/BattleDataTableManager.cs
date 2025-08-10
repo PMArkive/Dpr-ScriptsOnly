@@ -19,11 +19,11 @@ namespace Dpr.Battle.Logic
                 return s_Instance;
             }
         }
-        public BattleDataTable BattleDataTable { get; set; }
-        public BattleDefaultPlacementData BattleDefaultPlacementData { get; set; }
-        public BattleWaitCameraData BattleWaitCameraData { get; set; }
-        public BattleSetupEffectLots BattleSetupEffectLots { get; set; }
-        public bool IsInitialized { get; set; }
+        public BattleDataTable BattleDataTable { get; private set; }
+        public BattleDefaultPlacementData BattleDefaultPlacementData { get; private set; }
+        public BattleWaitCameraData BattleWaitCameraData { get; private set; }
+        public BattleSetupEffectLots BattleSetupEffectLots { get; private set; }
+        public bool IsInitialized { get; private set; }
         private bool IsABAppended { get; set; }
 
         public bool AppendAssetBundleRequests()

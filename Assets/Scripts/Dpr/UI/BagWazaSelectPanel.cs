@@ -16,7 +16,7 @@ namespace Dpr.UI
 		private Action<int> onDecideCallback;
 		private Action onCancelCallback;
 		
-		public bool IsShow { get; set; }
+		public bool IsShow { get; private set; }
 		
 		// TODO
 		public void Show() { }

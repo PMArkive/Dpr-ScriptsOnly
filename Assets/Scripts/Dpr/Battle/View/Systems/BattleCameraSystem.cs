@@ -13,7 +13,7 @@ namespace Dpr.Battle.View.Systems
 {
 	public sealed class BattleCameraSystem : SequenceCameraSystem
 	{
-        public WaitCameraStateType WaitCameraState { get; set; }
+        public WaitCameraStateType WaitCameraState { get; private set; }
 
         private const int LOTTERY_MAX = 10;
 		private const int PLAY_WAIT_CAMERA_DELAY_FRAME = 30;

@@ -38,7 +38,7 @@ namespace Dpr.UI
 		private Keyguide keyguide;
 		private bool isShowCapsuleView;
 		
-		public bool IsCopyRequest { get; set; }
+		public bool IsCopyRequest { get; private set; }
 		
 		// TODO
 		public override void OnCreate() { }

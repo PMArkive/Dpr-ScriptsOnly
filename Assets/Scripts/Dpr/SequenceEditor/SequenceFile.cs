@@ -16,7 +16,7 @@ namespace Dpr.SequenceEditor
 		
 		public List<Group> GroupData { get => _groupData; set => _groupData = value; }
 		public int MaxFrame { get => GetCommandParams().Max(x => x.EndFrame) + 1; }
-		public bool HasChainAttack { get; set; }
+		public bool HasChainAttack { get; private set; }
 		
 		// TODO
 		public List<CommandParam> GetCommandParams() { return default; }

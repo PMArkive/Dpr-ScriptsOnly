@@ -7,10 +7,9 @@ namespace DPData
     {
         public byte[] VanishNew;
 
-        // TODO
         public BoukenNote(int a)
         {
-            VanishNew = null;
+            VanishNew = new byte[(int)AdventureNoteID.MAX];
         }
     }
 }

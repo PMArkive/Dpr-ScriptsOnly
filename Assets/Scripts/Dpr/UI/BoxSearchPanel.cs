@@ -23,14 +23,14 @@ namespace Dpr.UI
 		private BoxMark _markIndex;
 		private List<string> _selectedItemList;
 		
-		public int CurrentIndex { get; set; }
-		public int CurrentDepth { get; set; }
-		public int MaxDepth { get; set; }
-		public BoxWindow.SEARCH_DATA SearchData { get; set; }
+		public int CurrentIndex { get; private set; }
+		public int CurrentDepth { get; private set; }
+		public int MaxDepth { get; private set; }
+		public BoxWindow.SEARCH_DATA SearchData { get; private set; }
 		public BoxWindow.SearchType SearchType { get => BoxWindow.SearchMsgData[CurrentIndex].type; }
-		public int[] DepthIndexes { get; set; }
+		public int[] DepthIndexes { get; private set; }
 		public List<int> LastSelectValues { get; set; }
-		public List<BoxWindow.SearchItemData> SearchItemList { get; set; }
+		public List<BoxWindow.SearchItemData> SearchItemList { get; private set; }
 		
 		// TODO
 		public void Initialize(BoxWindow.SEARCH_DATA searchData, Action onClose, Action onDecide, Action onExecute, Action onChange) { }

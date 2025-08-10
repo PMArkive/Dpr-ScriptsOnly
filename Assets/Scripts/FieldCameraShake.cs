@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FieldCameraShake
 {
-    public Vector3 ShakeOffset { get; set; } = Vector3.zero;
+    public Vector3 ShakeOffset { get; private set; } = Vector3.zero;
 
     private FieldFloatMove Time = new FieldFloatMove();
     private Vector3 DefaultShakeOffset;

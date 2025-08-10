@@ -22,8 +22,8 @@ namespace Dpr.UI
 		public event Action<IUIButton> OnRequiredItemData;
 		
 		public int PageIndex { get => pagingIndexSelector.CurrentIndex; }
-		public int PageCount { get; set; }
-		public IUIButton SelectedItem { get; set; }
+		public int PageCount { get; private set; }
+		public IUIButton SelectedItem { get; private set; }
 		
 		// TODO
 		public void Initialize() { }

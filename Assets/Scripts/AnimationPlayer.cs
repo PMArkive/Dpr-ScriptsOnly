@@ -32,7 +32,7 @@ public class AnimationPlayer
     public AnimationClip layerClip { get => _layerClip; set => _layerClip = value; }
     public AvatarMask additiveAvatarMask { get => _additiveAvatarMask; set => _additiveAvatarMask = value; }
     public AnimationClip additiveLayerClip { get => _additiveLayerClip; set => _additiveLayerClip = value; }
-    public int currentIndex { get; set; }
+    public int currentIndex { get; private set; }
     public bool forceLoop { get; set; }
     public bool forcePlay { get; set; }
 

@@ -14,7 +14,7 @@ namespace Dpr.SecretBase
 		public Pedestal.SheetInfo pedestal;
 		private NGMotionMono ngMotionPlayer;
 		
-		public bool isLoading { get; set; }
+		public bool isLoading { get; private set; }
 		public Vector3 Position { get => cursor.transform.position; }
 		
 		public PlacementData(PlacementData prev, RectInt rect, FieldCursor origin, Transform root)

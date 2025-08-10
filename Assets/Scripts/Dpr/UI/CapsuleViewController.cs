@@ -27,8 +27,8 @@ namespace Dpr.UI
 		private bool isFading;
 		
 		public bool IsInitialized { get => View3DController != null && View3DController.IsIntialized; }
-		public Capsule2DViewController View2DController { get; set; }
-		public Capsule3DViewController View3DController { get; set; }
+		public Capsule2DViewController View2DController { get; private set; }
+		public Capsule3DViewController View3DController { get; private set; }
 		
 		// TODO
 		public IEnumerator Initialize() { return default; }

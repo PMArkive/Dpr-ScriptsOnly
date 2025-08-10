@@ -550,10 +550,10 @@ public class PiaPlugin
 
     public struct Result
     {
-        public ResultValue resultValue { get; set; }
+        public ResultValue resultValue { get; private set; }
         private uint innerErrorCode { get; set; }
-        public ViewerType viewerType { get; set; }
-        public HandlingType handlingType { get; set; }
+        public ViewerType viewerType { get; private set; }
+        public HandlingType handlingType { get; private set; }
         private nn.Result sdkViewerResult { get; }
 
         public Result(HandlingType _handlingType) : this(ResultValue.ResultNotImplemented, 0, ViewerType.ShouldNotUse, _handlingType) { }
@@ -626,9 +626,9 @@ public class PiaPlugin
 
     internal struct DispatchResultNative : IDisposable
     {
-        public Result result { get; set; }
-        public IntPtr pSessionEventArray { get; set; }
-        public int sessionEventNum { get; set; }
+        public Result result { get; private set; }
+        public IntPtr pSessionEventArray { get; private set; }
+        public int sessionEventNum { get; private set; }
 
         // TODO
         public void Dispose() { }
@@ -636,8 +636,8 @@ public class PiaPlugin
 
     public struct SessionEventListNative : IDisposable
     {
-        public IntPtr pSessionEventArray { get; set; }
-        public int sessionEventNum { get; set; }
+        public IntPtr pSessionEventArray { get; private set; }
+        public int sessionEventNum { get; private set; }
 
         // TODO
         public void Dispose() { }
@@ -647,7 +647,7 @@ public class PiaPlugin
     {
         public bool isCompleted;
 
-        public Result result { get; set; }
+        public Result result { get; private set; }
     }
 
     public struct CryptoSetting
@@ -682,7 +682,7 @@ public class PiaPlugin
     {
         private const uint ArraySize = 75;
 
-        public uint count { get; set; }
+        public uint count { get; private set; }
 
         private TraceFlag[] flags;
 
@@ -913,11 +913,11 @@ public class PiaPlugin
 
     public class Watermark
     {
-		public string name { get; set; }
-        public long valueMax { get; set; }
-        public long valueMin { get; set; }
-        public long latestValue { get; set; }
-        public long updateCount { get; set; }
+		public string name { get; private set; }
+        public long valueMax { get; private set; }
+        public long valueMin { get; private set; }
+        public long latestValue { get; private set; }
+        public long updateCount { get; private set; }
 
         public Watermark()
         {
@@ -940,12 +940,12 @@ public class PiaPlugin
 
     internal class WatermarkNative : IDisposable
     {
-		public IntPtr pName { get; set; }
-        public int nameSize { get; set; }
-        public long valueMax { get; set; }
-        public long valueMin { get; set; }
-        public long latestValue { get; set; }
-        public long updateCount { get; set; }
+		public IntPtr pName { get; private set; }
+        public int nameSize { get; private set; }
+        public long valueMax { get; private set; }
+        public long valueMin { get; private set; }
+        public long latestValue { get; private set; }
+        public long updateCount { get; private set; }
 
         // TODO
         public void Dispose() { }
@@ -1005,12 +1005,12 @@ public class PiaPlugin
 
     internal class LocalAdressInfoNative : IDisposable
     {
-		public IntPtr address6 { get; set; }
-        public ushort address6Length { get; set; }
-        public uint interfaceIndex { get; set; }
-        public IntPtr address4 { get; set; }
-        public ushort address4Length { get; set; }
-        public uint subnetMask { get; set; }
+		public IntPtr address6 { get; private set; }
+        public ushort address6Length { get; private set; }
+        public uint interfaceIndex { get; private set; }
+        public IntPtr address4 { get; private set; }
+        public ushort address4Length { get; private set; }
+        public uint subnetMask { get; private set; }
 
         internal LocalAdressInfoNative()
         {

@@ -40,7 +40,7 @@ namespace Dpr.UI
 		private int _repeatCount;
 		private uint _seEventId;
 
-        public bool IsInitialized { get; set; }
+        public bool IsInitialized { get; private set; }
 
         private UnityAction _onButtonAction;
 

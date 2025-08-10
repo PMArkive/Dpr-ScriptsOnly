@@ -173,7 +173,7 @@ public class FieldPlayerEntity : FieldCharacterEntity
     [NonSerialized]
     public bool isExtrudable;
 
-    public bool DashFlag { set; get; }
+    public bool DashFlag { private set; get; }
 
     private JumpCalculator _path = new JumpCalculator();
     private bool _setupMaterials;
@@ -184,7 +184,7 @@ public class FieldPlayerEntity : FieldCharacterEntity
     public Vector3 InputMoveVector;
 
     public Func<FieldPlayerEntity, bool> LateUpdateEvent { get; set; }
-    public float MoveSpeed { set; get; }
+    public float MoveSpeed { private set; get; }
 
     private float _beforeAngle;
     public int FormType = -1;
@@ -2664,7 +2664,7 @@ public class FieldPlayerEntity : FieldCharacterEntity
         UpdateSwimEffect(deltaTime);
     }
 
-    public Transform BiidaruTransform { get; set; }
+    public Transform BiidaruTransform { get; private set; }
 
     private Vector3 BiidaruPosOriginal;
     private Vector3 BiidaruMoveStartPos;
@@ -2709,7 +2709,7 @@ public class FieldPlayerEntity : FieldCharacterEntity
             BiidaruTransform.localPosition = BiidaruPosOriginal + Vector3.Lerp(BiidaruMoveStartPos, BiidaruMoveEndPos, BiidaruMoveTime.CurrentValue);
     }
 
-    public FieldFloatMove VisiblePodMove { get; set; } = new FieldFloatMove();
+    public FieldFloatMove VisiblePodMove { get; private set; } = new FieldFloatMove();
 
     public void VisiblePod(bool visible)
     {

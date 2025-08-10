@@ -20,7 +20,7 @@ namespace Dpr.UI
 		[SerializeField]
 		private Color32 _grayColor = new Color32(160, 160, 160, 255);
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected { get; private set; }
 
         private bool[] _isHitSearch = new bool[BoxWork.TRAY_POKE_MAX];
 		private bool _isSearchActive;

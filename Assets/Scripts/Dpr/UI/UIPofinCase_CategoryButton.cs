@@ -19,7 +19,7 @@ namespace Dpr.UI
 		// TODO
 		private void Awake() { }
 		
-		public bool isOn { get; set; }
+		public bool isOn { get; private set; }
 		
 		// TODO
 		public void SetOn() { }

@@ -5,10 +5,10 @@ namespace Dpr.SequenceEditor
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class MacroAttribute : Attribute
     {
-	    public CommandNo CommandNo { get; set; }
-        public string Color { get; set; }
-        public string Type { get; set; }
-        public string PreFunc { get; set; }
+	    public CommandNo CommandNo { get; private set; }
+        public string Color { get; private set; }
+        public string Type { get; private set; }
+        public string PreFunc { get; private set; }
 
         public MacroAttribute(CommandNo command)
         {

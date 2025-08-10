@@ -26,7 +26,7 @@ namespace Dpr.Battle.View.UI
 		[SerializeField]
 		private Sprite[] _frameSprite;
 		
-		public bool IsGrayOut { get; set; }
+		public bool IsGrayOut { get; private set; }
 		
 		// TODO
 		public bool Initialize(BTL_POKEPARAM btlParam, bool isSelected, bool isPlayerSide, [Optional] Sprite effectiveSprite, string effectiveStr = "") { return default; }

@@ -8,11 +8,11 @@ using Effect;
 
 public class FieldWazaCutIn
 {
-    public bool IsInitialized { get; set; }
+    public bool IsInitialized { get; private set; }
     public bool IsBusy { get; }
     public bool IsLoaded { get; }
     public bool IsPlayedEffect { get; }
-    public bool IsOverrideEnvironmentSettings { get; set; }
+    public bool IsOverrideEnvironmentSettings { get; private set; }
 
     public float PokemonVisibleTimeOffset;
     private GameObject LoadedPokemonObject;

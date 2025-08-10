@@ -10,7 +10,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using XLSXContent;
 
@@ -95,7 +94,7 @@ namespace Dpr.UnderGround
         public bool isOtherBase { get => nowBasePlayerInfo != null; }
         public static bool isOnline { get => UgNetworkManager.isInstantiated && NetworkManager.SessionState == INL1.IlcaNetSessionState.SS_Gaming; }
         public static bool isJoinOther { get => NetworkManager.Instance.IsJoinOtherPlayer(); }
-        public int effectiveBasePlayerIndex { get; set; }
+        public int effectiveBasePlayerIndex { get; private set; }
 
         public List<SecretBaseModel> SecretBases;
         public UgStationID_to_DigFossilIDList ugDigGroupList;

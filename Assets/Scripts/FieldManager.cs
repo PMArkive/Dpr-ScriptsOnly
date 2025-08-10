@@ -57,7 +57,7 @@ public class FieldManager
     public MapInfo.SheetZoneData ZoneData { get => GameManager.mapInfo[(int)PlayerWork.zoneID]; }
     public AreaID areaID { get => ZoneData.AreaID; }
     public ZoneID zoneID { get => ZoneData.ZoneID; }
-    public ZoneID Before_zoneID { set; get; } = ZoneID.UNKNOWN;
+    public ZoneID Before_zoneID { private set; get; } = ZoneID.UNKNOWN;
 
     private LoadEffectData[] _effectDataArray;
     private EffectInstance _weatherEffectInstance;
@@ -100,7 +100,7 @@ public class FieldManager
             PlayerWork.SystemData = data;
         }
     }
-    public bool IsMenuOpen { set; get; }
+    public bool IsMenuOpen { private set; get; }
 
     private bool _isMenuOpenRequest;
     public bool isMenuOpenRequest { get => _isMenuOpenRequest; }
@@ -108,11 +108,11 @@ public class FieldManager
     private float _shortCutPushTime;
     private int _shortCutPushHoldId;
 
-    public bool IsPoketchOpen { set; get; }
+    public bool IsPoketchOpen { private set; get; }
 
     public bool SND_W_ID_CTRL_BGM_FLAG;
 
-    public KinomiResources KinomiResources { set; get; }
+    public KinomiResources KinomiResources { private set; get; }
 
     private UpdateType _demoReturnType;
     private bool _demoReturnInput;

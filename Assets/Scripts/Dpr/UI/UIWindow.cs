@@ -37,7 +37,7 @@ namespace Dpr.UI
         protected bool isCompleteTransition { get => _transitionFadeType == UITransition.FadeType.None; }
         public Canvas canvas { get => _canvas; }
         public UIInputController InputController { get => _input; }
-        public bool IsClosing { get; set; }
+        public bool IsClosing { get; private set; }
 
         private readonly int _animStateIn = Animator.StringToHash("in");
         private readonly int _animStateOut = Animator.StringToHash("out");

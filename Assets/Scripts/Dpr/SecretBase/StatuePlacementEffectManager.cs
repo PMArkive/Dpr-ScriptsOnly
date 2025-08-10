@@ -16,7 +16,7 @@ namespace Dpr.SecretBase
 		private readonly Dictionary<int, EffectData> effectData = new Dictionary<int, EffectData>();
 		private EffectInstance effecttInstance;
 		
-		public bool IsLoadCompleted { get; set; }
+		public bool IsLoadCompleted { get; private set; }
 		
 		// TODO
 		public void Play(EffectID id, Vector3 pos) { }

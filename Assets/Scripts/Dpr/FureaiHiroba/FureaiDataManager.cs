@@ -18,18 +18,18 @@ namespace Dpr.FureaiHiroba
         public Dictionary<int, UnityEngine.Object> PokeAssets = new Dictionary<int, UnityEngine.Object>();
         private Dictionary<Type, UnityEngine.Object> MasterData = new Dictionary<Type, UnityEngine.Object>();
 
-        public List<FureaiPokeScaleTable.SheetTable> scaleTable { get; set; }
-        public List<FreeSanpoGridPosition.SheetSheet1> gridPositions { get; set; }
-        public List<PokeWalkingActionNakayoshi.SheetSheet1> nakayoshiHoseiData { get; set; }
-        public List<PokeWalkingActionSeikaku.SheetSheet1> seikakuHoseiData { get; set; }
-        public List<HirobaPokeTalk.SheetSheet1> talkList { get; set; }
-        public List<FreeSanpoKuse.SheetSheet1> ActionKuseList { get; set; }
-        public List<FreeSanpoCanActions.SheetSheet1> CanActionList { get; set; }
-        public List<FreeSanpoActionProbability.SheetSheet1> ActionProbabilityList { get; set; }
-        public List<MonohiroiKinomi.SheetSheet1> MonohiroiKinomiList { get; set; }
-        public List<MonohiroiSonota.SheetSheet1> MonohiroiSonotaList { get; set; }
-        public List<EffectPosData> EffectPosData { get; set; }
-        public List<GameObject> EffectList { get; set; }
+        public List<FureaiPokeScaleTable.SheetTable> scaleTable { get; private set; }
+        public List<FreeSanpoGridPosition.SheetSheet1> gridPositions { get; private set; }
+        public List<PokeWalkingActionNakayoshi.SheetSheet1> nakayoshiHoseiData { get; private set; }
+        public List<PokeWalkingActionSeikaku.SheetSheet1> seikakuHoseiData { get; private set; }
+        public List<HirobaPokeTalk.SheetSheet1> talkList { get; private set; }
+        public List<FreeSanpoKuse.SheetSheet1> ActionKuseList { get; private set; }
+        public List<FreeSanpoCanActions.SheetSheet1> CanActionList { get; private set; }
+        public List<FreeSanpoActionProbability.SheetSheet1> ActionProbabilityList { get; private set; }
+        public List<MonohiroiKinomi.SheetSheet1> MonohiroiKinomiList { get; private set; }
+        public List<MonohiroiSonota.SheetSheet1> MonohiroiSonotaList { get; private set; }
+        public List<EffectPosData> EffectPosData { get; private set; }
+        public List<GameObject> EffectList { get; private set; }
 
         public List<int> EnterblePokeList = new List<int>();
         public static readonly Vector2Int[] DontEnterPoints = new Vector2Int[20]

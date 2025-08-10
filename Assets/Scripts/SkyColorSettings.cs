@@ -57,7 +57,7 @@ public sealed class SkyColorSettings : MonoBehaviour
 
 	private static MaterialPropertyBlock _propertyBlock = null;
 	
-	public BtlvWeather CurrentWeather { get => _currentWeather; set => _currentWeather = value; }
+	public BtlvWeather CurrentWeather { get => _currentWeather; private set => _currentWeather = value; }
 	public float Weight { get => _weight; set => _weight = Mathf.Clamp01(value); }
 	
 	// TODO

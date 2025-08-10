@@ -14,7 +14,7 @@ public class FieldObjectEntity : BaseEntity
     [NonSerialized]
     public bool isLanding = true;
 
-    public Vector3 oldMoveVector { set; get; }
+    public Vector3 oldMoveVector { private set; get; }
     public Vector4 locatorDirect
     {
         set
@@ -76,7 +76,7 @@ public class FieldObjectEntity : BaseEntity
         }
     }
 
-    public Vector2Int oldGridPosition { set; get; }
+    public Vector2Int oldGridPosition { private set; get; }
     public float Height
     {
         get => transform.position.y;

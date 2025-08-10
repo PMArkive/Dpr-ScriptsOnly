@@ -31,8 +31,8 @@ namespace Dpr.Battle.View.UI
         private int _minIndex;
         private int _maxIndex;
 
-        public bool IsReturnable { get; set; }
-        public BtlAction Result { get; set; }
+        public bool IsReturnable { get; private set; }
+        public BtlAction Result { get; private set; }
 
         // TODO
         public override void Startup() { }

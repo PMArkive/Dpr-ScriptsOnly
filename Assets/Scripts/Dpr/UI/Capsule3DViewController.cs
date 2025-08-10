@@ -52,9 +52,9 @@ namespace Dpr.UI
 		private bool isLoadedCapsuleObject;
 		private bool isLoadedSealObject;
 		
-		public float CapsuleRadius { get; set; }
+		public float CapsuleRadius { get; private set; }
 		public bool IsIntialized { get => isLoadedCapsuleObject && isLoadedSealObject; }
-		public bool IsHitCapsule { get; set; }
+		public bool IsHitCapsule { get; private set; }
 		
 		// TODO
 		public void OnViewportChange(int screenWidth, int screenHeight) { }
@@ -152,11 +152,11 @@ namespace Dpr.UI
 			private Vector3 modelCameraRotation = Vector3.zero;
 			
 			public Vector3 CapsuleObjectPosition { get => capsuleObjectPosition; }
-			public Quaternion CapsuleObjectRotation { get; set; }
+			public Quaternion CapsuleObjectRotation { get; private set; }
 			public Vector3 ModelCameraRootPosition { get => modelCameraRootPosition; }
-			public Quaternion ModelCameraRootRotation { get; set; }
+			public Quaternion ModelCameraRootRotation { get; private set; }
 			public Vector3 ModelCameraPosition { get => modelCameraPosition; }
-			public Quaternion ModelCameraRotation { get; set; }
+			public Quaternion ModelCameraRotation { get; private set; }
 			
 			// TODO
 			public void Initialize() { }

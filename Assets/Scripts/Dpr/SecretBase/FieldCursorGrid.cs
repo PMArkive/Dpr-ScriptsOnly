@@ -13,8 +13,8 @@ namespace Dpr.SecretBase
 		[SerializeField]
 		private Transform right;
 
-		public int Width { get; set; } = 1;
-		public int Height { get; set; } = 1;
+		public int Width { get; private set; } = 1;
+		public int Height { get; private set; } = 1;
 		
 		// TODO
 		public void SetSize(int width, int height) { }

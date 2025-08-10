@@ -15,9 +15,9 @@ namespace Dpr.UI
 		private CardModelViewController cardModelViewController;
 		private bool isOpened;
 		
-		public bool IsShowBadgeCase { get; set; }
-		public bool IsCardFront { get; set; }
-		public bool IsOpen { get; set; }
+		public bool IsShowBadgeCase { get; private set; }
+		public bool IsCardFront { get; private set; }
+		public bool IsOpen { get; private set; }
 		public bool IsAnimation { get => mainAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f; }
 		
 		// TODO

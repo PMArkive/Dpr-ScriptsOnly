@@ -39,7 +39,7 @@ namespace Dpr.Battle.View.UI
         [SerializeField]
         private Image[] _pokeBallList;
 
-        public bool DoDisplay { get; set; }
+        public bool DoDisplay { get; private set; }
 
         private uint _currentHP;
         private uint _maxHP;

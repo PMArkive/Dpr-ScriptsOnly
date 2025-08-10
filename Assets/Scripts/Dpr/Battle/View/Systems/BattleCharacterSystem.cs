@@ -13,8 +13,8 @@ namespace Dpr.Battle.View.Systems
 		private BOTrainer[] _trainers;
 		private BOPokemon[] _pokemons;
 		
-		public BOTrainer[] Trainers { get => _trainers; set => _trainers = value; }
-		public BOPokemon[] Pokemons { get => _pokemons; set => _pokemons = value; }
+		public BOTrainer[] Trainers { get => _trainers; private set => _trainers = value; }
+		public BOPokemon[] Pokemons { get => _pokemons; private set => _pokemons = value; }
 		
 		public BattleCharacterSystem(BattleViewSystem pViewSystem)
 		{

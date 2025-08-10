@@ -13,7 +13,7 @@ namespace Dpr.Battle.View.UI
 		private bool _isPlayerside;
 		private bool[] _isEnableSE;
 
-        public bool IsInitialized { get; set; }
+        public bool IsInitialized { get; private set; }
 
         private const float BALL_PLATE_WAIT = 2.2f;
 		private const float BALL_DELAY = 0.1f;

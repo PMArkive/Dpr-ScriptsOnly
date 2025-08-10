@@ -26,7 +26,7 @@ namespace Dpr.UI
 		private float duration;
 		private float afterDuration;
 		
-		public bool IsAnimation { get; set; }
+		public bool IsAnimation { get; private set; }
 		
 		// TODO
 		public void SetHpText(TextMeshProUGUI text) { }

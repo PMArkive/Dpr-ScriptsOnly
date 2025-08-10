@@ -16,11 +16,11 @@ namespace Dpr.Battle.View.UI
 		[SerializeField]
 		private TextMeshProUGUI _nameText;
 
-        public TokuseiNo _currentNo { get; set; }
+        public TokuseiNo _currentNo { get; private set; }
 
         private TokuseiNo _changeNo;
 
-        public bool IsDisplay { get; set; }
+        public bool IsDisplay { get; private set; }
 
         public bool isSkillSwapOpenAnimation;
 		

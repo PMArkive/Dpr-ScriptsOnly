@@ -52,9 +52,9 @@ namespace Dpr.UI
 		private Action onCancelSelectAmountCallback;
 		private Action<int> onSelectAmountValueChangedCallback;
 		
-		public int CurrentCategoryId { get; set; }
+		public int CurrentCategoryId { get; private set; }
 		public bool IsNoItem { get => items == null || items.Count == 0; }
-		public BagItemButton SelectedItemButton { get; set; }
+		public BagItemButton SelectedItemButton { get; private set; }
 		public bool IsShowSelectAmount { get => selectAmount.IsShow; }
 		public bool CanSwitchDescriptionWazaPanel { get => SelectedItemButton != null && (ItemInfo.CategoryType)CurrentCategoryId == ItemInfo.CategoryType.WazaMachine; }
 		public UIButtonSelector CategorySelector { get => categoryButtonSelector; }

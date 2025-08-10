@@ -20,7 +20,7 @@ namespace Dpr.DigFossil
 		private DigAudioManager audioManager;
 		private IDigCursor cursor;
 		
-		public bool IsPickaxe { get; set; }
+		public bool IsPickaxe { get; private set; }
 		
 		// TODO
 		public void Initialize(IDigCursor cursor) { }

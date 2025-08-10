@@ -22,7 +22,7 @@ public class BaseEntity : MonoBehaviour
         return null;
     }
 
-    public Vector3 beforePosition { set; get; }
+    public Vector3 beforePosition { private set; get; }
 
     private Transform _cacheTransform;
 
@@ -44,11 +44,11 @@ public class BaseEntity : MonoBehaviour
         _alreadyRegistered = false;
     }
 
-    public int currentSequence { get; set; }
+    public int currentSequence { get; private set; }
     public int nextSequence { get; set; }
-    public float sequenceTime { get; set; }
+    public float sequenceTime { get; private set; }
     public string entityEname { get => _enityName == string.Empty ? name : _enityName; set => _enityName = value; }
-    public BaseEntity target { get; set; }
+    public BaseEntity target { get; private set; }
     public Transform transform
     {
         get

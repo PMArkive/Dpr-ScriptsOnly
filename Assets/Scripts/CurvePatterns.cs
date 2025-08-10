@@ -6,7 +6,7 @@ public class CurvePatterns : ScriptableObject
     [SerializeField]
     private AnimationCurve[] curves;
 
-	public float[] times { get; set; }
+	public float[] times { get; private set; }
     public int Count { get => curves.Length; }
 
     public void OnEnable()

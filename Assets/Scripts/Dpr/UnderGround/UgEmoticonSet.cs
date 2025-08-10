@@ -13,7 +13,7 @@ namespace Dpr.UnderGround
 		[SerializeField]
 		private CanvasGroup group;
 
-        public int nowIndex { get; set; }
+        public int nowIndex { get; private set; }
 
         public Action<int> OnDeside;
 		

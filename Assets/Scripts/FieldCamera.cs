@@ -46,9 +46,9 @@ public class FieldCamera : MonoBehaviour
     public Camera EncountEffectCamera;
     public bool IsUpdateStop;
 
-    public EventCamera EventCamera { set; get; }
-    public FieldCameraShake FieldCameraShake { set; get; } = new FieldCameraShake();
-    public FieldFloatMove TargetRangeOffset { set; get; } = new FieldFloatMove();
+    public EventCamera EventCamera { private set; get; }
+    public FieldCameraShake FieldCameraShake { private set; get; } = new FieldCameraShake();
+    public FieldFloatMove TargetRangeOffset { private set; get; } = new FieldFloatMove();
     public float Fov { get => _camera.fieldOfView; set => _camera.fieldOfView = value; }
 
     private bool isPanCamera;
@@ -58,7 +58,7 @@ public class FieldCamera : MonoBehaviour
     private float _scriptFardepthTime;
     private float _scriptFardepthTimeVectol = -1.0f;
 
-    public AfterImage AfterImage { set; get; }
+    public AfterImage AfterImage { private set; get; }
 
     private float _fovOffset;
     private float _fovOffsetStart;

@@ -45,7 +45,7 @@ public class FieldPokemonEntity : FieldObjectEntity
     private MaterialPropertyBlock _propertyBlock;
     private Transform _originBone;
 
-    public PokemonPrefabInfo PrefabInfo { set; get; }
+    public PokemonPrefabInfo PrefabInfo { private set; get; }
 
     private readonly int[] _blinkPatterns = new int[3] { 1, 2, 1 };
     private const float BlinkIntervalMax = 12.0f;

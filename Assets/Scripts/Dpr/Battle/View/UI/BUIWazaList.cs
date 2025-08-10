@@ -48,7 +48,7 @@ namespace Dpr.Battle.View.UI
         private Dictionary<int, PrevWazaData> _prevUseWazas;
         private int _pokeIndex;
 
-        public int Result { get; set; }
+        public int Result { get; private set; }
 
         // TODO
         public override void Startup() { }

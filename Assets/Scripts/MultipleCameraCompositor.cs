@@ -72,7 +72,7 @@ public class MultipleCameraCompositor : MonoBehaviour, IViewportChangeHandler, I
         _resolveDepthCB = new CommandBuffer();
         _resolveDepthCB.name = "Resolve DepthBuffer";
         _resolveDepthCB.SetGlobalTexture(OPAQUE_DEPTHTEX_ID, BuiltinRenderTextureType.Depth);
-        _camera.AddCommandBuffer(CameraEvent.AfterForwardOpaque, _resolveDepthCB);
+        _mainCamera.AddCommandBuffer(CameraEvent.AfterForwardOpaque, _resolveDepthCB);
 
         Sequencer.update += OnUpdate;
     }
@@ -107,7 +107,7 @@ public class MultipleCameraCompositor : MonoBehaviour, IViewportChangeHandler, I
 
             if (_resolveDepthCB != null)
             {
-                _camera.RemoveCommandBuffer(CameraEvent.AfterForwardOpaque, _resolveDepthCB);
+                _mainCamera.RemoveCommandBuffer(CameraEvent.AfterForwardOpaque, _resolveDepthCB);
                 _resolveDepthCB.Clear();
                 _resolveDepthCB = null;
             }

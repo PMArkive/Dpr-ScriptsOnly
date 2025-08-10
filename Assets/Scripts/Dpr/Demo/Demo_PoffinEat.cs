@@ -17,7 +17,7 @@ namespace Dpr.Demo
 		private EffectData bgEff;
 		private bool isEndThrow;
 
-		public ConditionParam ConditionParam { get; set; }
+		public ConditionParam ConditionParam { get; private set; }
 		
 		public Demo_PoffinEat()
         {

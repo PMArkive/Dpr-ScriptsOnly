@@ -63,7 +63,7 @@ namespace Dpr.UI
 		private bool canResetRotate { get => currentCapsuleInfo.Is3DEditMode && isChangeRotate && !isBindCategoryTab && !isShowPullDown; }
 		public Capsule2DViewController Capsule2DViewController { get => capsuleViewController.View2DController; }
 		public Capsule3DViewController Capsule3DViewController { get => capsuleViewController.View3DController; }
-		public bool IsShow { get; set; }
+		public bool IsShow { get; private set; }
 		public bool IsAllowPreview { get => !isShowPullDown; }
 		public Action OnSelectSealWhenAffixSealMaxCount { get; set; }
 		

@@ -21,7 +21,7 @@ namespace Dpr.UI
 		private bool isSerialUsed;
 		private GiftNetworkController networkController;
 		
-		public bool IsNoItem { get; set; }
+		public bool IsNoItem { get; private set; }
 		
 		// TODO
 		protected override void OnAddContextMenuYesNoItemParams(List<ContextMenuItem.Param> contextMenuItemParams) { }

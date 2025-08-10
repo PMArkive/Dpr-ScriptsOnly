@@ -22,8 +22,8 @@ namespace Dpr.SubContents
         public UnityEngine.Object Cook_Pot;
         public UnityEngine.Object Cook_Pofin;
 
-        public List<PoffinResult.SheetSheet1> PofinData { get; set; }
-        public List<PoffinNakayoshiScoreHosei.SheetSheet1> PofinNakayoshiScoreHoseiData { get; set; }
+        public List<PoffinResult.SheetSheet1> PofinData { get; private set; }
+        public List<PoffinNakayoshiScoreHosei.SheetSheet1> PofinNakayoshiScoreHoseiData { get; private set; }
 
         private List<GameObject> PofinNonActives = new List<GameObject>();
         private Vector3 playerPos;

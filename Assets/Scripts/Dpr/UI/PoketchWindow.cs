@@ -102,8 +102,8 @@ namespace Dpr.UI
         private float _cursorMinY;
         private float _cursorMaxY;
 
-        public int CurrentAppIndex { get; set; }
-        public bool IsLarge { get; set; }
+        public int CurrentAppIndex { get; private set; }
+        public bool IsLarge { get; private set; }
         public bool IsPauseContinue { get; set; }
         public bool IsCloseOnce { get; set; }
 

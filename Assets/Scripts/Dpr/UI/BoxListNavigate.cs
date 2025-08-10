@@ -22,7 +22,7 @@ namespace Dpr.UI
 		[SerializeField]
 		private UINavigator _rightBottom;
 		
-		public List<UINavigator> NavigatorList { get; set; }
+		public List<UINavigator> NavigatorList { get; private set; }
 		public GridLayoutGroup LayoutGroup { get => _layout; }
 		public int Width { get => _arrayWidth; }
 		public int Height { get => _arrayHeight; }

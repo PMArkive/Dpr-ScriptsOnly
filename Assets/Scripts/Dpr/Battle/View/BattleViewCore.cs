@@ -11,8 +11,8 @@ namespace Dpr.Battle.View
         private Material _shadowCastMaterial;
         private Transform _cluster;
 
-        public BattleViewSystem ViewSystem { get; set; }
-        public BattleViewUISystem UISystem { get; set; }
+        public BattleViewSystem ViewSystem { get; private set; }
+        public BattleViewUISystem UISystem { get; private set; }
         public Transform Cluster { get => _cluster; }
         public Material ShadowCastMaterial { get => _shadowCastMaterial; }
 

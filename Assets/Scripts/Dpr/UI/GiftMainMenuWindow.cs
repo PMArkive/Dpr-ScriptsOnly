@@ -10,7 +10,7 @@ namespace Dpr.UI
 		private GiftMenuItem[] menuItems;
 		private IndexSelector indexSelector;
 		
-		public MenuType SelectedMenuType { get; set; }
+		public MenuType SelectedMenuType { get; private set; }
 		
 		// TODO
 		protected override void OnInitialize() { }

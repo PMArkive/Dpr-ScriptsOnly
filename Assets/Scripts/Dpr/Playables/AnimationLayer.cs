@@ -39,7 +39,7 @@ namespace Dpr.Playables
         public AvatarMask AvatarMask { get => _avatarMask; set => _avatarMask = value; }
         public AnimationLayerBlending Blending { get => _blending; set => _blending = value; }
         public float AnimationSpeed { get => _animationSpeed; set => _animationSpeed = value; }
-        public int CurrentIndex { get => _currentIndex; set => _currentIndex = value; }
+        public int CurrentIndex { get => _currentIndex; private set => _currentIndex = value; }
         public bool IsForceLoop { get => _isForceLoop; set => _isForceLoop = value; }
         public AnimationMixerPlayable AnimationMixer { get => _animationMixer; }
         public AnimationClipPlayable CurrentPlayable { get => (AnimationClipPlayable)_animationMixer.GetInput(_activePort); }

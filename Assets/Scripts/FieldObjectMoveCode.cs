@@ -9,7 +9,7 @@ public class FieldObjectMoveCode
         // Empty, explicitly declared
     }
 
-    public FieldObjectEntity Entity { set; get; }
+    public FieldObjectEntity Entity { private set; get; }
 
     public void SetEntity(FieldObjectEntity entity)
     {
@@ -42,8 +42,8 @@ public class FieldObjectMoveCode
     private FieldCharacterEntity charaEntity;
     public int EntityType;
 
-    public int PlayerGridDistance { set; get; } = 9999;
-    public bool IsPlayerHeight { set; get; }
+    public int PlayerGridDistance { private set; get; } = 9999;
+    public bool IsPlayerHeight { private set; get; }
     public bool IsForceEyeHit { get; set; }
 
     private Vector3 playerPosition;

@@ -4,8 +4,8 @@ namespace Dpr.RouteSearch
 {
     public class Node
     {
-        public Vector2Int Id { get; set; }
-        public float HeuristicCost { get; set; }
+        public Vector2Int Id { get; private set; }
+        public float HeuristicCost { get; private set; }
 
         public NodeAttribute Attribute;
         public Vector2Int FromId;

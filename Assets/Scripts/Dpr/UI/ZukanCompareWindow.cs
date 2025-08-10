@@ -38,7 +38,7 @@ namespace Dpr.UI
 		[SerializeField]
 		private ZukanCompareAnimationEvent zukanCompareAnimationEvent;
 
-        public ZukanInfo CurrentZukanInfo { get; set; }
+        public ZukanInfo CurrentZukanInfo { get; private set; }
 
         private List<ZukanInfo> selectableZukanInfoList;
 		private IndexSelector indexSelector;

@@ -17,7 +17,7 @@ namespace Dpr.UI
 		private Sprite unselectSprite;
 		
 		// TODO
-		public MessageEnumData.MsgLangId LangId { get; set; }
+		public MessageEnumData.MsgLangId LangId { get; private set; }
 		
 		// TODO
 		public int GetIndex() { return default; }

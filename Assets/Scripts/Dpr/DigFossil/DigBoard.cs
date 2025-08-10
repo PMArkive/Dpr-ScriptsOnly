@@ -27,13 +27,13 @@ namespace Dpr.DigFossil
 		private const int PARTS_TREASURE_NUM_MAX = 4;
 		private const int DEPOSIT_EMPTY = -1;
 		
-		public Vector2 GridSize { get; set; }
-		public Vector2 FieldSize { get; set; }
-		public Vector2 FieldOffset { get; set; }
+		public Vector2 GridSize { get; private set; }
+		public Vector2 FieldSize { get; private set; }
+		public Vector2 FieldOffset { get; private set; }
 		public int[,] BuildupMap { get; } = new int[DIGMAP_HEIGHT, DIGMAP_WIDTH];
         public int[,] DepositMap { get; } = new int[DIGMAP_HEIGHT, DIGMAP_WIDTH];
 		public List<DigDepositViewManager.PlacementInfo> DepositPlacementInfos { get; } = new List<DigDepositViewManager.PlacementInfo>();
-		public DigMasterDataManager.RatioId RatioId { get; set; }
+		public DigMasterDataManager.RatioId RatioId { get; private set; }
 
         private int dugOutOrder;
         private bool isInitialized;

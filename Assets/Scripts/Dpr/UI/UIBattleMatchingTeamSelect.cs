@@ -38,7 +38,7 @@ namespace Dpr.UI
         };
 		private readonly Vector2 MSG_WINDOW_ANCHOR_POS = new Vector2(15.0f, 110.0f);
 		
-		public bool isActiveKeyGuide { get; set; }
+		public bool isActiveKeyGuide { get; private set; }
 		public bool IsServerError { get => _isServerError; }
 		
 		// TODO

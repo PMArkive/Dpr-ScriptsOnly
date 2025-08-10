@@ -4,10 +4,10 @@ namespace Dpr.UI
 {
 	public class Seal3DObject : MonoBehaviour
 	{
-        public int SealId { get; set; }
-        public int AffixSealId { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsSetSeal { get; set; }
+        public int SealId { get; private set; }
+        public int AffixSealId { get; private set; }
+        public bool IsActive { get; private set; }
+        public bool IsSetSeal { get; private set; }
 
         private Transform rootTransform;
 		private Material sealMaterial;

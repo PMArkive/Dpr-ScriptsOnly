@@ -6,8 +6,8 @@ namespace Nintendo.MessageStudio.Lib
     {
 	    public ushort Tag { get => 0; }
         public ushort TagGroup { get => 0; }
-        public ushort ParentLength { get; set; }
-        public string Ruby { get; set; }
+        public ushort ParentLength { get; private set; }
+        public string Ruby { get; private set; }
 
         public RubyTagInfo(byte[] param)
         {

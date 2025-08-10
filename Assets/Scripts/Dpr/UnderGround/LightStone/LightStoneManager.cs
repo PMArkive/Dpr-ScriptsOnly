@@ -47,7 +47,7 @@ namespace Dpr.UnderGround.LightStone
 		public bool IsBonusTime { get => UgFieldManager.Instance.isKousekiBonus; }
 		public int LightStoneCount { get => UgFieldManager.Instance.KousekiCount; }
 		public int LightStoneMaxNum { get => UgFieldManager.KOUSEKI_BONUS_START_NUM; }
-		public int LightStoneCountMine { get; set; }
+		public int LightStoneCountMine { get; private set; }
 		public EffectData LightStoneSmallEfData { get => lightStoneSmallEfData; }
 		public EffectData LightStoneLargeEfData { get => lightStoneLargeEfData; }
 		public EffectData SmokeEfData { get => smokeEfData; }

@@ -23,8 +23,8 @@ namespace Dpr.Battle.View.Objects
 		protected float _animSpeed = 1.0f;
 
 		public int Index { get; set; } = -1;
-		public bool IsEnable { get; set; } = true;
-		public int Priority { get; set; }
+		public bool IsEnable { get; private set; } = true;
+		public int Priority { get; private set; }
 		public Vector3 NodeScaleTranslation { get; set; }
 		public Vector3 NodeRotateTranslation { get; set; }
 		

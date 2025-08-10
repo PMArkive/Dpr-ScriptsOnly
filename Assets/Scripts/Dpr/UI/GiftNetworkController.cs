@@ -18,7 +18,7 @@ namespace Dpr.UI
 		private Action<bool> onCompleteUpdateSerialCodeUsed;
 		private bool isCheckSerialCodeRequested;
 		
-		public int ProgressCount { get; set; }
+		public int ProgressCount { get; private set; }
 		
 		// TODO
 		public void CallInternetGo(Action<bool, SessionErrorType> onFinishedInternetGo) { }

@@ -16,9 +16,9 @@ namespace Pml.UgFather
         private const int LIMIT_LOOP_COUNT = 100;
 
         public static UgFatherDataManager Instance { get; } = new UgFatherDataManager();
-        public UgFatherPos UGFPos { get; set; }
-        public UgFatherExpansion UGFExpansion { get; set; }
-        public UgFatherShopTable UGFShop { get; set; }
+        public UgFatherPos UGFPos { get; private set; }
+        public UgFatherExpansion UGFExpansion { get; private set; }
+        public UgFatherShopTable UGFShop { get; private set; }
 
         public UgFatherShopTable.Sheetbuy01[] UGFBuyTamaS { get => UGFShop.buy01; }
         public UgFatherShopTable.Sheetbuy02[] UGFBuyTamaL { get => UGFShop.buy02; }

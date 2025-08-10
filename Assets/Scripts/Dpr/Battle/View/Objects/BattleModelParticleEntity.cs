@@ -17,7 +17,7 @@ namespace Dpr.Battle.View.Objects
 		private static Dictionary<int, EffectData> _effectDataDic = new Dictionary<int, EffectData>();
 		private EffectData _effectData;
 		
-		public bool IsLoaded { get; set; }
+		public bool IsLoaded { get; private set; }
 		public EffectBattleID EffectBattleId { get => _effectBattleId; }
 		private bool isManualEffectDataRelease { get => PlayerWork.isSealPreview; }
 		

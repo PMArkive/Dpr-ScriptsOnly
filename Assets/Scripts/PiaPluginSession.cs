@@ -789,13 +789,13 @@ public class PiaPluginSession
 
     public class StationInfo
     {
-        public ulong constantId { get; set; }
-        public int stationIndex { get; set; }
-        public ushort playerNum { get; set; }
-        public List<PiaPlugin.PlayerInfo> playerInfoList { get; set; }
-        public int rtt { get; set; }
-        public float unicastPacketLossRate { get; set; }
-        public float broadcastPacketLossRate { get; set; }
+        public ulong constantId { get; private set; }
+        public int stationIndex { get; private set; }
+        public ushort playerNum { get; private set; }
+        public List<PiaPlugin.PlayerInfo> playerInfoList { get; private set; }
+        public int rtt { get; private set; }
+        public float unicastPacketLossRate { get; private set; }
+        public float broadcastPacketLossRate { get; private set; }
 
         public StationInfo()
         {
@@ -814,13 +814,13 @@ public class PiaPluginSession
 
     internal struct StationInfoNative : IDisposable
     {
-        public ulong constantId { get; set; }
-        public int stationIndex { get; set; }
-        public ushort playerNum { get; set; }
-        public IntPtr pStationInfoArray { get; set; }
-        public int rtt { get; set; }
-        public float unicastPacketLossRate { get; set; }
-        public float broadcastPacketLossRate { get; set; }
+        public ulong constantId { get; private set; }
+        public int stationIndex { get; private set; }
+        public ushort playerNum { get; private set; }
+        public IntPtr pStationInfoArray { get; private set; }
+        public int rtt { get; private set; }
+        public float unicastPacketLossRate { get; private set; }
+        public float broadcastPacketLossRate { get; private set; }
 
         // TODO
         public void Dispose() { }
@@ -828,18 +828,18 @@ public class PiaPluginSession
 
     public class SessionStatus
     {
-        public uint sessionId { get; set; }
-        public ushort stationNum { get; set; }
-        public ushort playerNum { get; set; }
-        public ushort matchmakeSessionStationNum { get; set; }
-        public ushort matchmakeSessionParticipantNum { get; set; }
-        public ulong hostConstantId { get; set; }
-        public ulong localConstantId { get; set; }
-        public uint jointSessionId { get; set; }
-        public ulong jointSessionHostConstantId { get; set; }
-        public List<StationInfo> stationInfoList { get; set; }
-        public Status status { get; set; }
-        public DisconnectReason disconnectReason { get; set; }
+        public uint sessionId { get; private set; }
+        public ushort stationNum { get; private set; }
+        public ushort playerNum { get; private set; }
+        public ushort matchmakeSessionStationNum { get; private set; }
+        public ushort matchmakeSessionParticipantNum { get; private set; }
+        public ulong hostConstantId { get; private set; }
+        public ulong localConstantId { get; private set; }
+        public uint jointSessionId { get; private set; }
+        public ulong jointSessionHostConstantId { get; private set; }
+        public List<StationInfo> stationInfoList { get; private set; }
+        public Status status { get; private set; }
+        public DisconnectReason disconnectReason { get; private set; }
 
         public SessionStatus()
         {
@@ -863,18 +863,18 @@ public class PiaPluginSession
 
     internal struct SessionStatusNative : IDisposable
     {
-        public uint sessionId { get; set; }
-        public ushort stationNum { get; set; }
-        public ushort playerNum { get; set; }
-        public ushort matchmakeSessionStationNum { get; set; }
-        public ushort matchmakeSessionParticipantNum { get; set; }
-        public ulong hostConstantId { get; set; }
-        public ulong localConstantId { get; set; }
-        public uint jointSessionId { get; set; }
-        public ulong jointSessionHostConstantId { get; set; }
-        public IntPtr pStationInfoList { get; set; }
-        public Status status { get; set; }
-        public DisconnectReason disconnectReason { get; set; }
+        public uint sessionId { get; private set; }
+        public ushort stationNum { get; private set; }
+        public ushort playerNum { get; private set; }
+        public ushort matchmakeSessionStationNum { get; private set; }
+        public ushort matchmakeSessionParticipantNum { get; private set; }
+        public ulong hostConstantId { get; private set; }
+        public ulong localConstantId { get; private set; }
+        public uint jointSessionId { get; private set; }
+        public ulong jointSessionHostConstantId { get; private set; }
+        public IntPtr pStationInfoList { get; private set; }
+        public Status status { get; private set; }
+        public DisconnectReason disconnectReason { get; private set; }
 
         internal SessionStatusNative(SessionStatus sessionStatus)
         {

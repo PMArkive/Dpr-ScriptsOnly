@@ -179,7 +179,7 @@ public class FieldEventEntity : FieldObjectEntity
             return;
         }
 
-        if (checkHeight || Math.Abs(EntityManager.activeFieldPlayer.Height - Height) <= 0.3f)
+        if (!checkHeight || Math.Abs(EntityManager.activeFieldPlayer.Height - Height) <= 0.3f)
         {
             Vector2 vec;
             float x;
