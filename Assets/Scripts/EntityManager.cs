@@ -9,24 +9,24 @@ public static class EntityManager
     public static BattlePlayerEntity activeBattlePlayer { get; set; } = null;
     public static FieldPlayerEntity activeFieldPlayer { get; set; } = null;
     public static FieldPokemonEntity activeFieldPartner { get; set; } = null;
-    public static FieldPlayerEntity[] fieldPlayers { get; set; } = ArrayHelper.Empty<FieldPlayerEntity>();
-    public static FieldPokemonEntity[] fieldPokemons { get; set; } = ArrayHelper.Empty<FieldPokemonEntity>();
-    public static FieldCharacterEntity[] fieldCharacters { get; set; } = ArrayHelper.Empty<FieldCharacterEntity>();
-    public static FieldObjectEntity[] fieldObjects { get; set; } = ArrayHelper.Empty<FieldObjectEntity>();
-    public static FieldEventEntity[] fieldEventObjects { get; set; } = ArrayHelper.Empty<FieldEventEntity>();
-    public static FieldEventDoorEntity[] fieldDoorObjects { get; set; } = ArrayHelper.Empty<FieldEventDoorEntity>();
-    public static FieldEventLiftEntity[] fieldLiftObjects { get; set; } = ArrayHelper.Empty<FieldEventLiftEntity>();
-    public static FieldTobariGymWallEntity[] fieldTobariGymWalls { get; set; } = ArrayHelper.Empty<FieldTobariGymWallEntity>();
-    public static FieldNagisaGymGearEntity[] fieldNagisaGymGears { get; set; } = ArrayHelper.Empty<FieldNagisaGymGearEntity>();
-    public static FieldNomoseGymWaterEntity[] fieldNomoseGymWater { get; set; } = ArrayHelper.Empty<FieldNomoseGymWaterEntity>();
-    public static FieldNomoseGymSwitchEntity[] fieldNomoseGymSwitches { get; set; } = ArrayHelper.Empty<FieldNomoseGymSwitchEntity>();
-    public static FieldElevatorBackgroundEntity[] fieldElevatorBackground { get; set; } = ArrayHelper.Empty<FieldElevatorBackgroundEntity>();
-    public static FieldPokemonCenterEntity[] fieldPokemonCenter { get; set; } = ArrayHelper.Empty<FieldPokemonCenterEntity>();
-    public static FieldPokemonCenterMonitorEntity[] fieldPokemonCenterMonitor { get; set; } = ArrayHelper.Empty<FieldPokemonCenterMonitorEntity>();
-    public static FieldEventTrainEntity[] fieldEventTrain { get; set; } = ArrayHelper.Empty<FieldEventTrainEntity>();
-    public static FieldEyePaintingEntity[] fieldEyePainting { get; set; } = ArrayHelper.Empty<FieldEyePaintingEntity>();
-    public static FieldEmbankmentEntity[] fieldEmbankment { get; set; } = ArrayHelper.Empty<FieldEmbankmentEntity>();
-    public static FieldTvEntity[] fieldTv { get; set; } = ArrayHelper.Empty<FieldTvEntity>();
+    public static FieldPlayerEntity[] fieldPlayers { get; private set; } = ArrayHelper.Empty<FieldPlayerEntity>();
+    public static FieldPokemonEntity[] fieldPokemons { get; private set; } = ArrayHelper.Empty<FieldPokemonEntity>();
+    public static FieldCharacterEntity[] fieldCharacters { get; private set; } = ArrayHelper.Empty<FieldCharacterEntity>();
+    public static FieldObjectEntity[] fieldObjects { get; private set; } = ArrayHelper.Empty<FieldObjectEntity>();
+    public static FieldEventEntity[] fieldEventObjects { get; private set; } = ArrayHelper.Empty<FieldEventEntity>();
+    public static FieldEventDoorEntity[] fieldDoorObjects { get; private set; } = ArrayHelper.Empty<FieldEventDoorEntity>();
+    public static FieldEventLiftEntity[] fieldLiftObjects { get; private set; } = ArrayHelper.Empty<FieldEventLiftEntity>();
+    public static FieldTobariGymWallEntity[] fieldTobariGymWalls { get; private set; } = ArrayHelper.Empty<FieldTobariGymWallEntity>();
+    public static FieldNagisaGymGearEntity[] fieldNagisaGymGears { get; private set; } = ArrayHelper.Empty<FieldNagisaGymGearEntity>();
+    public static FieldNomoseGymWaterEntity[] fieldNomoseGymWater { get; private set; } = ArrayHelper.Empty<FieldNomoseGymWaterEntity>();
+    public static FieldNomoseGymSwitchEntity[] fieldNomoseGymSwitches { get; private set; } = ArrayHelper.Empty<FieldNomoseGymSwitchEntity>();
+    public static FieldElevatorBackgroundEntity[] fieldElevatorBackground { get; private set; } = ArrayHelper.Empty<FieldElevatorBackgroundEntity>();
+    public static FieldPokemonCenterEntity[] fieldPokemonCenter { get; private set; } = ArrayHelper.Empty<FieldPokemonCenterEntity>();
+    public static FieldPokemonCenterMonitorEntity[] fieldPokemonCenterMonitor { get; private set; } = ArrayHelper.Empty<FieldPokemonCenterMonitorEntity>();
+    public static FieldEventTrainEntity[] fieldEventTrain { get; private set; } = ArrayHelper.Empty<FieldEventTrainEntity>();
+    public static FieldEyePaintingEntity[] fieldEyePainting { get; private set; } = ArrayHelper.Empty<FieldEyePaintingEntity>();
+    public static FieldEmbankmentEntity[] fieldEmbankment { get; private set; } = ArrayHelper.Empty<FieldEmbankmentEntity>();
+    public static FieldTvEntity[] fieldTv { get; private set; } = ArrayHelper.Empty<FieldTvEntity>();
 
     public static void Add(BaseEntity entity)
     {

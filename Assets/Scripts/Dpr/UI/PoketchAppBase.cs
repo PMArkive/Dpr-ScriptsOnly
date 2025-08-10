@@ -10,13 +10,13 @@ namespace Dpr.UI
 		[SerializeField]
 		public PoketchButton[] Buttons;
 
-		public POKETCH_APPID AppID { get; set; } = POKETCH_APPID.NONE;
+		public POKETCH_APPID AppID { get; protected set; } = POKETCH_APPID.NONE;
 
         protected PoketchWindow _poketchInstance;
 		protected bool isInitialized;
 
-		public PoketchButton PreButton { get; set; }
-		public PoketchWindow.TouchState PreState { get; set; }
+		public PoketchButton PreButton { get; protected set; }
+		public PoketchWindow.TouchState PreState { get; protected set; }
 		
 		// TODO
 		public void Initialize() { }

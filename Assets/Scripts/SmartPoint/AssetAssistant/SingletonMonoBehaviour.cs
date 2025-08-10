@@ -10,7 +10,7 @@ namespace SmartPoint.AssetAssistant
     {
         protected static T _instance;
 
-        public static bool isQuit { get; set; }
+        public static bool isQuit { get; private set; }
 
         private static Scene lastScene;
 

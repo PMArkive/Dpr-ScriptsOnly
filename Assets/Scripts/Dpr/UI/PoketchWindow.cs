@@ -122,7 +122,7 @@ namespace Dpr.UI
         public float CursorX { get => _cursor.transform.position.x; }
         public float CursorY { get => _cursor.transform.position.y; }
         public float Scale { get => IsLarge ? _largeScale : _smallScale; }
-        public static PoketchWindow Instance { get; set; }
+        public static PoketchWindow Instance { get; private set; }
 
         // TODO
         public override void OnCreate() { }

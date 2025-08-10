@@ -15,29 +15,29 @@ public class UgResManager
     private static Dictionary<string, UgEncount> UgEncounts;
     private static UgPokemonData UgPokemonData;
 
-    public static UgRandMark UgRandMark { set; get; }
-    public static UgMiniMap UgMiniMap { set; get; }
-    public static UgIconImages UgIconImages { set; get; }
-    public static GameObject UgCanvasPrefab { set; get; }
-    public static GameObject UgFieldManagerPrefab { set; get; }
+    public static UgRandMark UgRandMark { private set; get; }
+    public static UgMiniMap UgMiniMap { private set; get; }
+    public static UgIconImages UgIconImages { private set; get; }
+    public static GameObject UgCanvasPrefab { private set; get; }
+    public static GameObject UgFieldManagerPrefab { private set; get; }
 
     private static GameObject UgEmoticonSetPrefab;
 
-    public static UgEmoticonSet UgEmoticonSet { set; get; }
+    public static UgEmoticonSet UgEmoticonSet { private set; get; }
 
     private static GameObject UgInfoSetPrefab;
 
-    public static UgInfoSet UgInfoSet { set; get; }
-    public static UgEncountLevel UgEncountLevel { set; get; }
-    public static UgSpecialPokemon UgSpecialPokemon { set; get; }
-    public static UgPokemonPos UgPokemonPos { set; get; }
-    public static UgNpcPos UgNpcPos { set; get; }
-    public static UgNpcList UgNpcList { set; get; }
-    public static UgNpcTalk UgNpcTalk { set; get; }
-    public static UgDrillUsablePositions UgDrillUsablePositions { set; get; }
-    public static UgDigFossilePosGroups UgDigFossilePosGroups { set; get; }
-    public static UgAllDigFossilePos UgAllDigFossilePos { set; get; }
-    public static UgTamagoWazaIgnoreTable UgTamagoWazaIgnoreTable { set; get; }
+    public static UgInfoSet UgInfoSet { private set; get; }
+    public static UgEncountLevel UgEncountLevel { private set; get; }
+    public static UgSpecialPokemon UgSpecialPokemon { private set; get; }
+    public static UgPokemonPos UgPokemonPos { private set; get; }
+    public static UgNpcPos UgNpcPos { private set; get; }
+    public static UgNpcList UgNpcList { private set; get; }
+    public static UgNpcTalk UgNpcTalk { private set; get; }
+    public static UgDrillUsablePositions UgDrillUsablePositions { private set; get; }
+    public static UgDigFossilePosGroups UgDigFossilePosGroups { private set; get; }
+    public static UgAllDigFossilePos UgAllDigFossilePos { private set; get; }
+    public static UgTamagoWazaIgnoreTable UgTamagoWazaIgnoreTable { private set; get; }
 
     private static bool _isDataLoadRequest;
     private static bool _isDataLoadEnd;

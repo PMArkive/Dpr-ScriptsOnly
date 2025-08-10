@@ -2,8 +2,8 @@ using System;
 
 public class NetStateModel
 {
-	public int nowStateID { get; set; }
-	public bool isOtherWaiting { get; set; }
+	public int nowStateID { get; protected set; }
+	public bool isOtherWaiting { get; protected set; }
 
     private Action<CancelModel> OnCancel;
     public Action OnCancelCallBack;

@@ -11,11 +11,11 @@ public class LightStoneResourcesManager
     private const string DataAssetName = "lightstone/prefabs/lightstonemanager";
     private const string PokemonAssetPath = "pokemons/field/{0}";
 
-    public static LightStoneManager LightStoneManager { get; set; }
-    public static GameObject DhigudaPrefab { get; set; }
-    public static GameObject DagutorioPrefab { get; set; }
-    public static PokemonInfo.SheetCatalog DhigudaCatalog { get; set; }
-    public static PokemonInfo.SheetCatalog DagutorioCatalog { get; set; }
+    public static LightStoneManager LightStoneManager { get; private set; }
+    public static GameObject DhigudaPrefab { get; private set; }
+    public static GameObject DagutorioPrefab { get; private set; }
+    public static PokemonInfo.SheetCatalog DhigudaCatalog { get; private set; }
+    public static PokemonInfo.SheetCatalog DagutorioCatalog { get; private set; }
 
     private static GameObject ugLightStoneManagerPrefab;
 

@@ -30,7 +30,7 @@ using SmartPoint.Components;
 
 public class FieldManager
 {
-    public static FieldManager Instance { set; get; }
+    public static FieldManager Instance { private set; get; }
 
     private const int MapSize = 64;
 
@@ -40,7 +40,7 @@ public class FieldManager
     public static FieldWalkingManager fwMng = new FieldWalkingManager();
     public static Utils.AssetUnloader abUnloader = new Utils.AssetUnloader();
 
-    public static bool IsResume { get; set; }
+    public static bool IsResume { get; private set; }
 
     private UpdateType _updateType;
     public UpdateType updateType { get => _updateType; }

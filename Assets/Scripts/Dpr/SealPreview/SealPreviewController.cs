@@ -13,7 +13,7 @@ namespace Dpr.SealPreview
 		public static CapsuleInfo PreviewCapsuleInfo;
 		public static CapsuleInfo PreviewSubCapsuleInfo;
 
-        public static bool IsLoadFailed { get; set; }
+        public static bool IsLoadFailed { get; private set; }
 
         private static bool isDispose;
 		[SerializeField]
@@ -28,7 +28,7 @@ namespace Dpr.SealPreview
 		private SealPreviewViewSystem _sealPreviewViewSystem;
 		private Transform _cluster;
 
-		private SealPreviewState CurrentPreviewState { get; private set; }
+		private SealPreviewState CurrentPreviewState { get; set; }
 		
 		// TODO
 		public static void RequestDispose() { }

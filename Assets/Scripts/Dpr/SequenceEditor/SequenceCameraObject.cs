@@ -115,8 +115,8 @@ namespace Dpr.SequenceEditor
 			}
 		}
         public Camera Compositor { get => _compositor; }
-        public SequenceCameraSystem.CameraStateType CameraState { get; set; }
-        public CameraMode CurrentCameraMode { get; set; }
+        public SequenceCameraSystem.CameraStateType CameraState { get; protected set; }
+        public CameraMode CurrentCameraMode { get; protected set; }
         public bool IsAudioListener { get; set; }
 
         // TODO

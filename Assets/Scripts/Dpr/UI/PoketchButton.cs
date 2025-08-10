@@ -45,8 +45,8 @@ namespace Dpr.UI
         private UnityAction _onButtonAction;
 
         public bool CanDrag { get => _canDrag; }
-        private UnityAction OnTouchAction { get; set; }
-        private UnityAction OnReleaseAction { get; set; }
+        public UnityAction OnTouchAction { private get; set; }
+        public UnityAction OnReleaseAction { private get; set; }
 
         // TODO
         public void Initialize([Optional] UnityAction callback, uint seEventId = EVENTS.S_FI304) { }

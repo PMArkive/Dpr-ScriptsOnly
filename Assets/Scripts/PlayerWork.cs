@@ -613,7 +613,7 @@ public class PlayerWork : PlayerPrefsProvider<PlayerWork>
 
     public static bool IsZenmetuFlag { get; set; } = false;
     public static bool IsNeedUnloadOnFieldConnector { get; set; } = false;
-    public static WarpType Warp { get; set; } = WarpType.None;
+    public static WarpType Warp { get; private set; } = WarpType.None;
     public static bool Telescope { get; set; } = false;
     public static bool TelescopeReturn { get; set; } = false;
 

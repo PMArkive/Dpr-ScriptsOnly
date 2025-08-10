@@ -52,7 +52,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public static Transform fieldObjectHolder { get => Instance._fieldObjectHolder; }
     public static Transform battleObjectHolder { get => Instance._battleObjectHolder; }
-    public static bool isReady { get; set; }
+    public static bool isReady { get; private set; }
     public static MapInfo mapInfo { get => Instance.gameSettings.mapInfo; }
     public static ArenaInfo arenaInfo { get => Instance.gameSettings.arenaInfo; }
     public static CalenderEncTable calenderEncTable { get => Instance.gameSettings.calenderEncTable; }

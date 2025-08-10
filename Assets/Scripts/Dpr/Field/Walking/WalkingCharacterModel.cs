@@ -48,7 +48,7 @@ namespace Dpr.Field.Walking
         public int SleepLevel;
         public bool isCanSleepAnimation;
 
-        public bool isDestroyed { get; set; }
+        public bool isDestroyed { get; protected set; }
 
         public List<Vector3> route;
         private Vector3 PokeDefaultScale;

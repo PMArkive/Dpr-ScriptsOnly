@@ -258,7 +258,7 @@ namespace Dpr.UI
         public bool IsClosed { get; }
         public bool IsTradeCheckIllegal { get; set; }
 
-        public static Color32[] MarkColorSet { get; set; }
+        public static Color32[] MarkColorSet { get; private set; }
 
         // TODO
         public static void SetPanelTransitionSide(GameObject parentObject, RectTransform targetTransform, float targetPosX, [Optional] Action callback) { }

@@ -10,7 +10,7 @@ namespace Dpr.Title
     public static class AssetPreloader
     {
         private static List<string> _preloadRequestList = new List<string>();
-        public static bool IsLoading { get; set; } = false;
+        public static bool IsLoading { get; private set; } = false;
 
         public static IEnumerator PreloadAssetBundle()
         {

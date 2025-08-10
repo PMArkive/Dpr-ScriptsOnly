@@ -20,7 +20,7 @@ public sealed class BattleConnector : SceneConnector
 	private static GameObject _cachedSkyObject = null;
 	private static BattleFieldObject _battleFieldObject = null;
 	
-	public static int arenaIndex { get; set; }
+	public static int arenaIndex { get; private set; }
 	
 	// TODO
 	public static ArenaInfo.SheetArenaData currentArenaData { get; set; }

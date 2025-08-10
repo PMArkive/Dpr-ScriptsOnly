@@ -32,17 +32,17 @@ namespace Dpr.Sequence
 		protected float _sequenceElapsedTime;
 		protected float _sequenceInterpolationTime;
 
-		public SequenceFile SequenceFile { get; set; }
-		public int CurrentFrame { get; set; } = -1;
+		public SequenceFile SequenceFile { get; protected set; }
+		public int CurrentFrame { get; protected set; } = -1;
 		public float CurrentTime { get => _sequenceElapsedTime; }
-		public int MaxFrame { get; set; } = -1;
+		public int MaxFrame { get; protected set; } = -1;
 		public float MaxTime { get => Mathe.FrameToSecond(MaxFrame); }
 		protected List<CommandParam> Commands { get; set; }
 		protected bool IsCommandSkip { get; set; }
-		public bool IsPause { get; set; }
+		public bool IsPause { get; protected set; }
 		public bool IsLoadedSequenceFile { get => SequenceFile != null && Commands != null; }
 		public bool IsPreLoaded { get => _preLoadCoroutines.Count == 0; }
-		public bool IsFinishSequence { get; set; }
+		public bool IsFinishSequence { get; protected set; }
 		protected bool IsInterpolationTime { get; set; }
 		
 		public SequenceSystem()

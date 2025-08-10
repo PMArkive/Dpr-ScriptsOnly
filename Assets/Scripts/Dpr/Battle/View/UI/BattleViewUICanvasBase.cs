@@ -35,12 +35,12 @@ namespace Dpr.Battle.View.UI
         }
         protected int MaxIndex { get; set; }
         public CanvasGroup CanvasGroup { get => this.GetComponentThis(ref _canvasGroup); }
-        public int CurrentIndex { get; set; }
-        public bool IsFocus { get; set; }
-        public bool IsShow { get; set; }
-        public bool IsValid { get; set; }
-        public bool IsTransition { get; set; }
-        public BattleUIAnimationState animationState { get; set; }
+        public int CurrentIndex { get; protected set; }
+        public bool IsFocus { get; protected set; }
+        public bool IsShow { get; protected set; }
+        public bool IsValid { get; protected set; }
+        public bool IsTransition { get; protected set; }
+        public BattleUIAnimationState animationState { get; protected set; }
         public bool isOpenState { get => animationState == BattleUIAnimationState.Opening || animationState == BattleUIAnimationState.Opened; }
         public bool isCloseState { get => animationState == BattleUIAnimationState.closing || animationState == BattleUIAnimationState.Closed; }
 

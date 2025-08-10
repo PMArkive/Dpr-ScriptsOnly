@@ -7,7 +7,7 @@ public class UgFatherResourceManager
 {
     public const string DataAssetName = "ugfdata";
 
-    public static UgFatherManager UgFather { get; set; }
+    public static UgFatherManager UgFather { get; private set; }
     public static bool IsDataLoadEnd { get => ugFatherManagerPrefab != null; }
 
     private static GameObject ugFatherManagerPrefab;

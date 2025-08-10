@@ -19,7 +19,7 @@ public class BattleCharacterEntity : BattleObjectEntity
     private float _speakStartTime;
 
     public override string entityType { get => "BattleCharacter"; }
-    public TrainerSimpleParam TrainerSimpleParam { get; set; }
+    public TrainerSimpleParam TrainerSimpleParam { get; protected set; }
 
     protected override void Awake()
     {

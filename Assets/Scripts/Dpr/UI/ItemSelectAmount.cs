@@ -16,7 +16,7 @@ namespace Dpr.UI
         [SerializeField]
         protected IndexSelector indexSelector;
 
-        public bool IsShow { get; set; }
+        public bool IsShow { get; protected set; }
         public int CurrentAmount { get => indexSelector.CurrentIndex; }
 
         // TODO
