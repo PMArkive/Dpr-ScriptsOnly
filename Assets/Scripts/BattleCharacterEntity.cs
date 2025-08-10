@@ -91,14 +91,7 @@ public class BattleCharacterEntity : BattleObjectEntity
 
     protected override void OnUpdate(float deltaTime)
     {
-        if (currentSequence != nextSequence && SwitchToNext())
-        {
-            currentSequence = nextSequence;
-            sequenceTime = 0.0f;
-        }
-
-        ProcessSequence(deltaTime);
-        sequenceTime += deltaTime;
+        base.OnUpdate(deltaTime);
 
         if (!enabled)
             return;

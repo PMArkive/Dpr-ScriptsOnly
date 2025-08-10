@@ -13,7 +13,7 @@ namespace Dpr.FureaiHiroba
     {
         private FureaiDataManager dataMng;
 
-        public List<FureaiPokeModel> PokeList { get; privateset; }
+        public List<FureaiPokeModel> PokeList { get; private set; }
 
         public List<int> NumberList;
         public List<KeyValuePair<int, int>> PairPosition = new List<KeyValuePair<int, int>>()
