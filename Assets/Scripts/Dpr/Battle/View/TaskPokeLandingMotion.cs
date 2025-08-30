@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Dpr.Battle.Logic;
 using Dpr.Battle.View.Objects;
 using Dpr.SequenceEditor;
@@ -34,8 +35,37 @@ namespace Dpr.Battle.View
 		private string _effectFileName;
 		private bool _isContest;
 		
-		// TODO
-		public TaskPokeLandingMotion(ISequenceViewSystem pBtlvSystem, BtlvPos vPos, BattleViewCharacter pPoke, float introHeight, SEQ_DEF_DEFAULT_PLACEMENT placement = SEQ_DEF_DEFAULT_PLACEMENT.SEQ_DEF_DEFAULT_PLACEMENT_DEFAULT) { }
+		public TaskPokeLandingMotion(ISequenceViewSystem pBtlvSystem, BtlvPos vPos, BattleViewCharacter pPoke, float introHeight, SEQ_DEF_DEFAULT_PLACEMENT placement = SEQ_DEF_DEFAULT_PLACEMENT.SEQ_DEF_DEFAULT_PLACEMENT_DEFAULT) :
+			base()
+		{
+			_vPos = vPos;
+			_iPtrPoke = pPoke as BOPokemon;
+			_introHeight = introHeight;
+			_effectFileName = string.Empty;
+			_isContest = PlayerWork.isContest;
+			_iPtrBtlvSystem.GetDefaultPokePos(vPos, ref _defualtPokePos, ref _rotY, placement);
+			_battleDataTable = BattleDataTableManager.Instance.BattleDataTable;
+
+			if (!_isContest)
+			{
+				_btlvSound = new BtlvSound(_battleDataTable.GetBattleConstantString(BattleConstantKey.LANDING_SOUND_REGISTER));
+				_btlvSound.CreateSound(_battleDataTable.GetBattleConstantString(BattleConstantKey.LANDING_SOUND_REGISTER));
+                _pokeEffWeight = _iPtrPoke.CheckPokemonEffectWeight();
+			}
+
+			var lifeTime = _battleDataTable.GetBattleConstantInt(BattleConstantKey.POKE_LANDING_POLE_SCALE_FRAME);
+			var basePos = Vector3.zero;
+			_iPtrPoke.GetNodeBasePositionSequence(SEQ_DEF_NODE.SEQ_DEF_NODE_CENTER, ref basePos);
+			basePos.x = 0.0f;
+			basePos.z = 0.0f;
+			basePos.y *= _iPtrPoke.GetScaleOffset().y;
+			_centerOfsY = basePos.y;
+
+			_iPtrPoke.SetScaleVec(Vector4.one * 0.01f);
+
+			pBtlvSystem.GetTaskManagerLate().RegisterTask(new TaskVector4Control(basePos, Vector4.zero, Ease.Linear, lifeTime, x => _iPtrPoke.SetTranslationOffset(x)));
+			pBtlvSystem.GetTaskManagerLate().RegisterTask(new TaskVector4Control(Vector4.one * 0.01f, Vector4.one, Ease.Linear, lifeTime, x => _iPtrPoke.SetScaleVec(x)));
+        }
 		
 		protected override void OnDispose()
 		{

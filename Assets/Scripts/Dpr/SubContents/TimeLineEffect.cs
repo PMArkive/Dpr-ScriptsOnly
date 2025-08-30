@@ -8,8 +8,14 @@ namespace Dpr.SubContents
 		private EffectData _effectData;
 		private EffectInstance _effectInstance;
 		
-		// TODO
-		public void SetEffect(EffectData effectData, BindModelEffect bindModel) { }
+		public void SetEffect(EffectData effectData, BindModelEffect bindModel)
+		{
+			_effectData = effectData;
+			_effectInstance = null;
+
+			if (bindModel.StartActive)
+				OnEnable();
+		}
 		
 		// TODO
 		private void LateUpdate() { }

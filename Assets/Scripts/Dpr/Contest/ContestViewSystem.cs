@@ -277,8 +277,10 @@ namespace Dpr.Contest
 		// TODO
 		private BtlvPos ConvertPokeTrgTovPos(int value) { return default; }
 		
-		// TODO
-		public void FindContestCommand(Macro macro) { }
+		public void FindContestCommand(Macro macro)
+		{
+			onFindCommand?.Invoke(macro.CommandNo, this);
+		}
 		
 		// TODO
 		public void PerformContestCommand(Macro macro) { }

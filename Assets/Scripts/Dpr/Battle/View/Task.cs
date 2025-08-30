@@ -45,11 +45,16 @@ namespace Dpr.Battle.View
 			_elapsedTime = 0.0f;
 		}
 		
-		// TODO
-		public void Dispose() { }
+		public void Dispose()
+		{
+            OnDispose();
+            Clear();
+        }
 		
-		// TODO
-		protected virtual void OnDispose() { }
+		protected virtual void OnDispose()
+		{
+			// Empty
+		}
 		
 		public void Clear(Task iPtrDummyTask)
 		{
@@ -59,43 +64,90 @@ namespace Dpr.Battle.View
 			_priority = 0;
 		}
 		
-		// TODO
-		public void Delete() { }
+		public void Delete()
+		{
+			_iPtrPrev._iPtrNext = _iPtrNext;
+			_iPtrNext._iPtrPrev = _iPtrPrev;
+
+			Dispose();
+		}
 		
-		// TODO
-		protected virtual void Clear() { }
+		protected virtual void Clear()
+		{
+            _priority = 0;
+            _iPtrPrev = null;
+            _iPtrNext = null;
+            _isSelfDelete = false;
+            _frame = 0;
+            _lifeTime = 0;
+            _isStart = false;
+			_onFinished = null;
+            _onStart = null;
+            Parent = null;
+
+            _startTime = 0.0f;
+            _endTime = 0.0f;
+            _elapsedTime = 0.0f;
+        }
 		
 		// TODO
 		public virtual void Update(float deltaTime, float currentSequenceTime, int step) { }
 		
-		// TODO
-		protected virtual void FinishTask() { }
+		protected virtual void FinishTask()
+		{
+			OnFinishTask();
+			_isSelfDelete = true;
+			_onFinished?.Invoke();
+		}
 		
-		// TODO
-		public Task SetOnStart(Action onStart) { return default; }
+		public Task SetOnStart(Action onStart)
+		{
+			_onStart = onStart;
+			return this;
+		}
 		
-		// TODO
-		public Task SetOnFinished(Action onFinished) { return default; }
+		public Task SetOnFinished(Action onFinished)
+		{
+			_onFinished = onFinished;
+			return this;
+		}
 		
-		// TODO
-		public Task SetStartTime(float startTime) { return default; }
+		public Task SetStartTime(float startTime)
+		{
+			_startTime = startTime;
+			return this;
+		}
 		
-		// TODO
-		public Task SetEndTime(float endTime) { return default; }
+		public Task SetEndTime(float endTime)
+		{
+			_endTime = endTime;
+			_duration = endTime - _startTime;
+			return this;
+		}
 		
-		// TODO
-		public Task SetDuration(float duration) { return default; }
+		public Task SetDuration(float duration)
+		{
+			_duration = duration;
+			return this;
+		}
 		
-		// TODO
-		public Task SetAdvanceMode(AdvanceMode mode) { return default; }
+		public Task SetAdvanceMode(AdvanceMode mode)
+		{
+			_advanceMode = mode;
+			return this;
+		}
 		
-		// TODO
-		protected virtual void OnUpdate(int frame, float raito) { }
+		protected virtual void OnUpdate(int frame, float raito)
+		{
+			// Empty
+		}
 		
-		// TODO
-		protected virtual void OnFinishTask() { }
+		protected virtual void OnFinishTask()
+        {
+            // Empty
+        }
 
-		public enum AdvanceMode : int
+        public enum AdvanceMode : int
 		{
 			Step = 0,
 			Time = 1,

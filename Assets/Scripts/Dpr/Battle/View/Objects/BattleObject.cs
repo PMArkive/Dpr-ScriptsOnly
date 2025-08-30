@@ -46,14 +46,18 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public Vector3 GetTranslationVec() { return default; }
 		
-		// TODO
-		public void SetTranslationOffset(Vector3 translation) { }
+		public void SetTranslationOffset(Vector3 translation)
+		{
+			m_translationOffset = translation;
+		}
 		
 		// TODO
 		public Vector3 GetTranslationOffset() { return default; }
 		
-		// TODO
-		public void SetScaleVec(Vector3 scale) { }
+		public void SetScaleVec(Vector3 scale)
+		{
+			m_scale = scale;
+		}
 		
 		// TODO
 		public Vector3 GetScaleVec() { return default; }
@@ -61,8 +65,10 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public void SetScaleOffset(Vector3 scale) { }
 		
-		// TODO
-		public Vector3 GetScaleOffset() { return default; }
+		public Vector3 GetScaleOffset()
+		{
+			return m_scaleOffset;
+		}
 		
 		// TODO
 		public void SetNodeScaleTranslation(Vector3 translation) { }

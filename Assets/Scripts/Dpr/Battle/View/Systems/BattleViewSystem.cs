@@ -1,6 +1,7 @@
 ﻿using Dpr.Battle.Logic;
 using Dpr.Battle.View.Objects;
 using Dpr.SequenceEditor;
+using Effect;
 using Pml;
 using Pml.Battle;
 using Pml.PokePara;
@@ -873,8 +874,33 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private BtlvWazaEffect_TurnType GetUniqWazaSeqTurnType(BtlvPos vPos, WazaNo no, BtlvWazaEffect_TurnType turnType) { return default; }
 
-        // TODO
-        public void CheckWazaDataPath_Particle(ref string path, int idx, bool isBallEffect, bool isCapture, bool isAttributeEffect, bool isStreamLineEffect) { }
+        public void CheckWazaDataPath_Particle(ref string path, int idx, bool isBallEffect, bool isCapture, bool isAttributeEffect, bool isStreamLineEffect)
+        {
+            var effManager = EffectManager.Instance;
+
+            if (isBallEffect)
+            {
+                path = m_battleDataTable.BallEffectData[(int)m_effectBallId[idx]].IntroEffectAssetbundleName;
+            }
+            else if (isCapture)
+            {
+                path = m_battleDataTable.BallEffectData[(int)m_effectBallId[idx]].CaptureEffectAssetbundleName;
+            }
+            else if (isAttributeEffect)
+            {
+                if (m_attrEffParam.attrEffectID == EffectBattleID.NONE)
+                    return;
+
+                path = effManager.dbEffects.BattleEffectData[(int)m_attrEffParam.attrEffectID].AssetBundleName;
+            }
+            else if (isStreamLineEffect)
+            {
+                if (m_attrEffParam.streamLineEffectID == EffectBattleID.NONE)
+                    return;
+
+                path = effManager.dbEffects.BattleEffectData[(int)m_attrEffParam.streamLineEffectID].AssetBundleName;
+            }
+        }
 
         // TODO
         private bool IsFieldStadium { get; }

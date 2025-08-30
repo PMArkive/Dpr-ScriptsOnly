@@ -1961,10 +1961,11 @@ namespace Dpr.EvScript
 
         private bool CheckUpdateAdjustHeroPos(float deltaTime)
         {
-            if (HeroMoveGridCenterFront(deltaTime))
+            if (!HeroMoveGridCenterFront(deltaTime))
                 return false;
 
-            var label = _callLabel_AdjustHeroPos = null;
+            var label = _callLabel_AdjustHeroPos;
+            _callLabel_AdjustHeroPos = null;
 
             if (FieldManager.Instance.StopSwayGrass_NextArea())
                 FieldManager.Instance.SetBgmEvent(FieldManager.Instance.GetNowBgmState());

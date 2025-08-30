@@ -8,8 +8,11 @@ namespace Dpr.SubContents
 		protected Action OnStopTimeLine;
 		protected Action OnResumeTimeLine;
 		
-		// TODO
-		public void SetCallBack(Action OnStop, Action OnResume) { }
+		public void SetCallBack(Action OnStop, Action OnResume)
+		{
+			OnStopTimeLine = OnStop;
+			OnResumeTimeLine = OnResume;
+		}
 		
 		// TODO
 		public void StopTimeLine() { }

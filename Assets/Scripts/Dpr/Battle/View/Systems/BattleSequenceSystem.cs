@@ -1,13 +1,17 @@
 using Audio;
 using Dpr.Battle.Logic;
 using Dpr.Battle.View.Objects;
+using Dpr.Contest;
 using Dpr.Message;
 using Dpr.Sequence;
 using Dpr.SequenceEditor;
 using Effect;
+using SmartPoint.AssetAssistant;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using XLSXContent;
 
@@ -1408,7 +1412,115 @@ namespace Dpr.Battle.View.Systems
 		private bool CheckCanPlayCommand(SequenceFile file, CommandParam param, bool isSkip) { return default; }
 		
 		// TODO
-		public override void CommandCallback(SequenceFile file, CommandParam param, bool isSkip) { }
+		public override void CommandCallback(SequenceFile file, CommandParam param, bool isSkip)
+		{
+			if (!CheckCanPlayCommand(file, param, false))
+				return;
+
+			if (isSkip)
+			{
+				// This variable is assigned to but nothing is done with it.
+                Action<SequenceFile, ISequenceViewSystem, CommandParam> action = null;
+                switch (param.CommandNo)
+                {
+                    case CommandNo.DprParticleCreateSeal:
+						PreloadParticleSeal(file, _ISequenceViewSystem, param);
+						break;
+
+					case CommandNo.ModelCreateBall:
+						PreloadModelBall(file, _ISequenceViewSystem, param);
+                        action = BTL_SEQ_FUNC_DEF_ModelCreateBall;
+						break;
+
+					case CommandNo.ContestHensin:
+					case CommandNo.SpecialMigawariVisible:
+					case CommandNo.ContestCaptureScene:
+						if (_ISequenceViewSystem != null && _ISequenceViewSystem is ContestViewSystem)
+							((ContestViewSystem)_ISequenceViewSystem).FindContestCommand(param.Macro);
+                        break;
+
+                    case CommandNo.SubCameraAnimationTrainer:
+                    case CommandNo.DprCameraAnimationTrainer:
+                    case CommandNo.CameraAnimationTrainer:
+                        PreloadCameraAnimationTrainer(file, _ISequenceViewSystem, param);
+                        break;
+
+                    case CommandNo.DprParticleCreateCutSceneTrainer:
+                        PreloadParticleCutSceneTrainer(file, _ISequenceViewSystem, param);
+						action = BTL_SEQ_FUNC_DEF_DprCutSceneTrainerParticleCreate;
+                        break;
+
+                    case CommandNo.DprCameraAnimation:
+                    case CommandNo.SubCameraAnimationSpecialPos:
+                    case CommandNo.SubCameraAnimationPoke:
+                    case CommandNo.CameraAnimationPosition:
+                    case CommandNo.SubCameraAnimationPosition:
+                    case CommandNo.CameraAnimationPoke:
+                    case CommandNo.CameraAnimationSpecialPos:
+                        PreloadCameraAnimation(file, _ISequenceViewSystem, param);
+                        break;
+
+                    case CommandNo.ModelCreate:
+                        PreloadModel(file, _ISequenceViewSystem, param);
+                        break;
+
+                    case CommandNo.ParticleCreate:
+                        PreloadParticle(file, _ISequenceViewSystem, param);
+						action = BTL_SEQ_PRE_FUNC_DEF_ParticleCreate;
+                        break;
+
+                    case CommandNo.SoundLoadBank:
+                        PreloadSoundBank(file, _ISequenceViewSystem, param);
+                        break;
+
+                    case CommandNo.PokemonAttackMotion:
+                    case CommandNo.ContestUserPokemonAttackMotion:
+                        CheckAttackMotionTimming(file, _ISequenceViewSystem, param);
+                        break;
+
+                    case CommandNo.SpecialFieldEffectCreate:
+                        PreloadGroundParticle(file, _ISequenceViewSystem, param);
+                        break;
+
+                    case CommandNo.SpecialChainAttakDefine:
+                        CheckSpecialChainAttakDefine(file, _ISequenceViewSystem, param);
+                        break;
+                }
+            }
+			else
+			{
+                if (param.IsAlreadyCalled)
+                    return;
+
+                Action<SequenceFile, ISequenceViewSystem, CommandParam> action = null;
+                switch (param.CommandNo)
+                {
+                    case CommandNo.ModelCreateGBall:
+                        action = BTL_SEQ_FUNC_DEF_ModelCreateGBall;
+                        break;
+
+                    case CommandNo.DispEffectSpEnvironmentPokemonColorSet:
+                        action = BTL_SEQ_FUNC_DEF_DispEffectSpEnvironmentPokemonColorSet;
+                        break;
+
+                    case CommandNo.DprModelParticleStop:
+                        action = BTL_SEQ_FUNC_DEF_DprModelParticleStop;
+                        break;
+
+                    case CommandNo.SpecialRenderPathVisible:
+                        action = BTL_SEQ_FUNC_DEF_SpecialRenderPathVisible;
+                        break;
+
+					// TODO: more cases
+                }
+
+                if (action == null)
+                    return;
+
+                param.IsAlreadyCalled = true;
+                action.Invoke(file, _ISequenceViewSystem, param);
+            }
+		}
 		
 		// TODO
 		public override void CommandCallbackLate(SequenceFile file, CommandParam param, bool isSkip) { }
@@ -1427,15 +1539,50 @@ namespace Dpr.Battle.View.Systems
 		
 		// TODO
 		private void PreloadModelGBall(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
-		
-		// TODO
-		private void PreloadParticle(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
+
+		private void PreloadParticle(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param)
+		{
+			if (param.Macro == null)
+				return;
+
+			if (param.Macro is ParticleCreate macro)
+			{
+				var effData = EffectManager.Instance.dbEffects.BattleEffectData;
+				var path = macro.file;
+
+                pViewSystem.CheckWazaDataPath_Particle(ref path, macro.index, macro.isBallEffect, macro.isCapture, macro.isAttrEffect, macro.isStreamLineEffect);
+				if (BattleViewAssetManager.CachedEffectData.Any(x => x.Item1 == path))
+				{
+					var cachedEff = BattleViewAssetManager.CachedEffectData.Find(x => x.Item1 == path);
+					if (cachedEff.Item2.referencedCount != 0)
+						return;
+
+					BattleViewAssetManager.CachedEffectData.Remove(cachedEff);
+                }
+
+				var assetPath = IsAttributeEffect(macro) ? path : BattleViewDefine.Path.GetFXPath(path);
+
+				var eff = Array.Find(effData, x => x.AssetBundleName == assetPath);
+
+                if (eff != null)
+				{
+					eff.AssetBundleName = eff.AssetBundleName.ToLower();
+					_preLoadCoroutines.Add(Sequencer.Start(EffectManager.Instance.OpLoad(new EffectManager.LoadParam[] { eff }, (effectData, isAllLoaded) =>
+					{
+						BattleViewAssetManager.CachedEffectData.Add(new Tuple<string, EffectData>(path, effectData));
+                    })));
+				}
+            }
+		}
 		
 		// TODO
 		private void PreloadParticleCutSceneTrainer(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
 		
 		// TODO
-		private void PreloadParticleSeal(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
+		private void PreloadParticleSeal(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param)
+		{
+
+		}
 		
 		// TODO
 		private void PreloadModelAnimationConfig(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
@@ -1470,8 +1617,10 @@ namespace Dpr.Battle.View.Systems
 		// TODO
 		private void PreloadGPokemonIntro(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
 		
-		// TODO
-		private void PreloadPokemonIntro(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
+		private void PreloadPokemonIntro(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param)
+		{
+			// Empty
+		}
 		
 		// TODO
 		private void PreloadVibration(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }
@@ -1503,8 +1652,10 @@ namespace Dpr.Battle.View.Systems
 		// TODO
 		public SequenceCameraSystem GetCameraSystem() { return default; }
 		
-		// TODO
-		private static bool IsAttributeEffect(ParticleCreate macro) { return default; }
+		private static bool IsAttributeEffect(ParticleCreate macro)
+		{
+			return macro.isAttrEffect || macro.isStreamLineEffect;
+		}
 		
 		// TODO
 		private void CNT_SEQ_FUNC_DEF_PokemonActive(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param) { }

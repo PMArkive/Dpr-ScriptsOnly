@@ -214,8 +214,13 @@ namespace Dpr.SealPreview
 		// TODO
 		public BTLV_WAZA_EFF_PARAM SetWazaParam(BTLV_WAZA_EFF_PARAM param) { return default; }
 		
-		// TODO
-		public void CheckWazaDataPath_Particle(ref string path, int idx, bool isBallEffect, bool isCapture, bool isAttributeEffect, bool isStreamLineEffect) { }
+		public void CheckWazaDataPath_Particle(ref string path, int idx, bool isBallEffect, bool isCapture, bool isAttributeEffect, bool isStreamLineEffect)
+		{
+			if (isBallEffect)
+				path = m_battleDataTable.BallEffectData[(int)m_effectBallId[idx]].IntroEffectAssetbundleName;
+			else if (isCapture)
+                path = m_battleDataTable.BallEffectData[(int)m_effectBallId[idx]].CaptureEffectAssetbundleName;
+		}
 		
 		// TODO
 		private BallId __SeqComFunc_GetEffectBallId__(int idx) { return default; }

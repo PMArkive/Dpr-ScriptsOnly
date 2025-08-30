@@ -4,6 +4,7 @@ using System.IO;
 using Audio;
 using DG.Tweening;
 using Dpr.Battle.Logic;
+using Dpr.Battle.View;
 using Dpr.Message;
 using Dpr.MsgWindow;
 using Dpr.SubContents;
@@ -199,7 +200,7 @@ namespace Dpr.Demo
             gonbe.transform.localScale = Vector3.zero;
             gonbe.transform.localPosition = new Vector3(0.38f, 0.0f, 0.314f);
             var pokeBall = Array.Find(BattleDataTableManager.Instance.BattleDataTable.BallEffectData, x => x.BallID == BallId.MONSUTAABOORU);
-            var path = ("effect/prefab/battle/" + Path.GetFileNameWithoutExtension(pokeBall.IntroEffectAssetbundleName)).ToLower();
+            var path = BattleViewDefine.Path.GetFXPath(pokeBall.IntroEffectAssetbundleName);
             var effectParam = Array.Find(EffectManager.Instance.dbEffects.BattleEffectData, x => x.AssetBundleName == path);
             yield return EffectManager.Instance.OpLoad(new EffectManager.LoadParam[1] { effectParam }, (effect, isAllLoaded) =>
             {

@@ -1,4 +1,6 @@
-﻿using SmartPoint.AssetAssistant;
+﻿using AK;
+using AK.Wwise;
+using SmartPoint.AssetAssistant;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -54,7 +56,7 @@ namespace Audio
             uint systemSoundID = AkSoundEngine.GetIDFromString("System");
             AkSoundEngine.SetOutputVolume(systemSoundID, 1.0f);
 
-            uint[] volumeParamIds = { 0x8D5E4BB2, 0xD2D1DC50, 0xD4FFB03E };
+            uint[] volumeParamIds = { GAME_PARAMETERS.CONFIG_BGMVOLUME, GAME_PARAMETERS.CONFIG_SEVOLUME, GAME_PARAMETERS.CONFIG_VOICEVOLUME };
             for (int i = 0; i < _listenerRoot.childCount; i++)
             {
                 ListenerParam listenerParam = new ListenerParam();
@@ -155,13 +157,13 @@ namespace Audio
         public void EnableMute(ListenerType type, bool isMute)
         {
             if (type == ListenerType.Bgm && isMute)
-                PostEventInternal(0x4eaf83c9, 0x100009, false);
+                PostEventInternal(EVENTS.MUTE_BGM, 0x100009, false);
             else if (type == ListenerType.Bgm && !isMute)
-                PostEventInternal(0x7999c78, 0x100009, false);
+                PostEventInternal(EVENTS.UNMUTE_BGM, 0x100009, false);
             else if (type != ListenerType.Bgm && isMute)
-                PostEventInternal(0x7e2c5bad, 0x100009, false);
+                PostEventInternal(EVENTS.MUTE_SE, 0x100009, false);
             else if (type != ListenerType.Bgm && !isMute)
-                PostEventInternal(0xce42fd56, 0x100009, false);
+                PostEventInternal(EVENTS.UNMUTE_SE, 0x100009, false);
         }
 
         public void Load(LoadParam loadParam, UnityAction<AudioData> onLoaded)
@@ -226,12 +228,12 @@ namespace Audio
             _listenerParams[(int)ListenerType.Bgm]._volumes[1] = _listenerParams[(int)ListenerType.Bgm]._volumes[1];
             
             SetVolumeInternal(ListenerType.Bgm);
-            _bgmPlayId = PostEventInternal(0xba5ea5ec, 0x100009, false);
+            _bgmPlayId = PostEventInternal(EVENTS.PLAY_BGM, 0x100009, false);
         }
 
         public void StopBgm()
         {
-            PostEventInternal(0x3ffbcd36, 0x100009, false);
+            PostEventInternal(EVENTS.STOP_BGM, 0x100009, false);
             _bgmPlayId = 0;
         }
 

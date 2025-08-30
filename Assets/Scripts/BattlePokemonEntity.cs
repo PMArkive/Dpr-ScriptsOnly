@@ -210,8 +210,10 @@ public sealed class BattlePokemonEntity : BattleObjectEntity
     // TODO
     public void SetBlinkIntParameter(CharaAutomaticBlinkProcess.BlinkIntParameter param) { }
 
-    // TODO
-    public PokeAnimSound GetPokeAnimSound() { return null; }
+    public PokeAnimSound GetPokeAnimSound()
+    {
+        return _pokeAnimSound;
+    }
 
     // TODO
     private void AK_EffectStart00(int value) { }

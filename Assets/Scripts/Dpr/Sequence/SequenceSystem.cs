@@ -61,29 +61,44 @@ namespace Dpr.Sequence
 			IsFinishSequence = false;
 		}
 		
-		// TODO
-		public void Dispose() { }
+		public void Dispose()
+		{
+			UnInitialize();
+		}
 		
 		// TODO
 		public virtual void UnInitialize() { }
 
-		// TODO
 		public abstract void LoadSequence(string path, bool isWaitCamera = false);
 
-		// TODO
 		public abstract void SetPause(bool value);
 
-		// TODO
 		public abstract void Stop();
 		
-		// TODO
-		public void Update(float deltaTime, int step = 1) { }
-		
+		public void Update(float deltaTime, int step = DEFAULT_SEQUENCE_SYSTEM_STEP_CNT)
+		{
+			CheckPreLoadCount();
+
+			if (IsUpdateValid())
+			{
+				_step = step;
+				OnUpdate(deltaTime, step);
+			}
+		}
+
 		// TODO
 		public void LateUpdate(float deltaTime) { }
 		
-		// TODO
-		private bool IsUpdateValid() { return default; }
+		private bool IsUpdateValid()
+		{
+			if (IsPause)
+				return false;
+
+			if (SequenceFile == null)
+				return false;
+
+			return !IsFinishSequence;
+		}
 		
 		// TODO
 		protected void CheckPreLoadCount() { }
@@ -91,34 +106,58 @@ namespace Dpr.Sequence
 		// TODO
 		protected void StepFrame(float deltaTime) { }
 		
-		// TODO
-		protected virtual void OnUpdate(float deltaTime, int step) { }
+		protected virtual void OnUpdate(float deltaTime, int step)
+        {
+            // Empty
+        }
+
+        protected virtual void OnLateUpdate(float deltaTime, int step)
+        {
+            // Empty
+        }
+
+        protected virtual void OnComplete()
+		{
+			SequenceFile = null;
+			Commands = null;
+			CurrentFrame = -1;
+			_sequenceElapsedTime = 0.0f;
+			_sequenceInterpolationTime = 0.0f;
+			IsInterpolationTime = false;
+		}
 		
-		// TODO
-		protected virtual void OnLateUpdate(float deltaTime, int step) { }
-		
-		// TODO
-		protected virtual void OnComplete() { }
-		
-		// TODO
-		protected void SetSkipCommand(bool isSkip) { }
+		protected void SetSkipCommand(bool isSkip)
+		{
+			IsCommandSkip = isSkip;
+		}
 		
 		// TODO
 		public virtual void SkipFrame(int frame, bool isReset = true) { }
 		
-		// TODO
-		public virtual void CommandCallback(SequenceFile file, CommandParam param, bool isSkip) { }
+		public virtual void CommandCallback(SequenceFile file, CommandParam param, bool isSkip)
+		{
+			// Empty
+		}
 		
-		// TODO
-		public virtual void CommandCallbackLate(SequenceFile file, CommandParam param, bool isSkip) { }
+		public virtual void CommandCallbackLate(SequenceFile file, CommandParam param, bool isSkip)
+        {
+            // Empty
+        }
+
+        // TODO
+        public void SetupEnvironmentParam() { }
 		
-		// TODO
-		public void SetupEnvironmentParam() { }
+		public BTLV_ENVIRONMENT_PARAM GetEnvironmentParam()
+		{
+			return _environmentParam;
+		}
 		
-		// TODO
-		public BTLV_ENVIRONMENT_PARAM GetEnvironmentParam() { return default; }
-		
-		// TODO
-		public List<CommandParam> FindCommands(CommandNo commandNo) { return default; }
+		public List<CommandParam> FindCommands(CommandNo commandNo)
+		{
+			if (Commands.IsNullOrEmpty())
+				return null;
+
+			return Commands.FindAll(x => x.CommandNo == commandNo);
+		}
 	}
 }
