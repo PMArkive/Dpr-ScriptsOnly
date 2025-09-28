@@ -29,8 +29,10 @@ namespace Dpr.Battle.Logic
         // TODO
         private void createSimulator() { }
 
-        // TODO
-        public MainModule GetMainModule() { return null; }
+        public MainModule GetMainModule()
+        {
+            return m_pMainModule;
+        }
 
         // TODO
         public virtual BattleEnv GetBattleEnv() { return null; }

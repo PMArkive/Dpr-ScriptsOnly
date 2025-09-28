@@ -1,8 +1,10 @@
-﻿using Dpr.Battle.Logic;
+﻿using AK;
+using Dpr.Battle.Logic;
 using Dpr.MsgWindow;
 using Dpr.NetworkUtils;
 using Dpr.UI;
 using Pml;
+using Pml.WazaData;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,6 +16,7 @@ namespace Dpr.Battle.View.UI
         private const string WazaNameMessageLabel = "msg_ui_btl_pokewaza";
         private const string WazaDescriptionOpenMessageLabel = "msg_ui_btl_06";
         private const string WazaDescriptionCloseMessageLabel = "msg_ui_btl_07";
+
         [SerializeField]
         private BUIButton _wazaDescriptionButton;
         [SerializeField]
@@ -41,6 +44,7 @@ namespace Dpr.Battle.View.UI
         private Color _ppColorDanger = new Color(1.0f, 0.5f, 0.3f);
         [SerializeField]
         private Color _ppColorEmpty = Color.red;
+
         private BTL_ACTION_PARAM_OBJ _destActionParam;
         private List<BTLV_WAZA_INFO?> _btlvWazaInfos;
         private BTL_POKEPARAM _btlPokeParam;
@@ -50,8 +54,23 @@ namespace Dpr.Battle.View.UI
 
         public int Result { get; private set; }
 
-        // TODO
-        public override void Startup() { }
+        public override void Startup()
+        {
+            base.Startup();
+
+            CurrentIndex = 0;
+            _wazaDescriptionButton.SetOnSubmit(OnSubmitWazaDescription);
+
+            for (int i=0; i<_wazaButtons.Length; i++)
+            {
+                var wazaButton = _wazaButtons[i];
+                wazaButton.SetOnSelected(() => OnSelectedWazaButton(wazaButton));
+                wazaButton.SetOnSubmit(() => OnSubmitWazaButton(wazaButton));
+            }
+
+            _btlvWazaInfos = new List<BTLV_WAZA_INFO?>();
+            _prevUseWazas = new Dictionary<int, PrevWazaData>();
+        }
 
         // TODO
         public void Initialize(BTL_POKEPARAM bpp, byte pokeIndex, BTL_ACTION_PARAM_OBJ dest) { }
@@ -100,15 +119,19 @@ namespace Dpr.Battle.View.UI
 
         protected override void OnShow()
         {
-            IsFocus = true;
-            IsShow = true;
-            animationState = BattleUIAnimationState.Opened;
+            base.OnShow();
             SelectButton(_wazaButtons, CurrentIndex, false);
             BattleViewCore.Instance.UISystem.CursorFrame.SetActive(true);
         }
 
-        // TODO
-        protected override void OnHide() { }
+        protected override void OnHide()
+        {
+            base.OnHide();
+            var wazaDesc = BattleViewCore.Instance.UISystem.WazaDescription;
+
+            if (wazaDesc)
+                wazaDesc.Hide(false, null);
+        }
 
         // TODO
         public void SetSelect(int num) { }
@@ -122,14 +145,48 @@ namespace Dpr.Battle.View.UI
         // TODO
         private void OnSelectedWazaButton(BUIWazaButton button) { }
 
-        // TODO
-        private void OnSubmitWazaButton(BUIWazaButton button) { }
+        private void OnSubmitWazaButton(BUIWazaButton button)
+        {
+            _destActionParam.value.fight_pokeID = _btlPokeParam.GetID();
+            _destActionParam.value.fight_targetPos = (byte)BtlPokePos.POS_NULL;
+            _destActionParam.value.fight_cmd = (byte)PokeActionCategory.Fight; // Unsure if this is the right enum
+            _destActionParam.value.fight_waza = (ushort)_btlPokeParam.WAZA_GetID((byte)button.Index);
+            _destActionParam.value.fight_wazaInfoFlag = false;
+            _destActionParam.value.fight_gFlag = false;
 
-        // TODO
-        private void OnSubmit() { }
+            Result = button.Index;
+        }
 
-        // TODO
-        private void OnCancel() { }
+        private void OnSubmit()
+        {
+            var wazaButton = _wazaButtons[CurrentIndex];
+            var wazaInfo = wazaButton.Info.Value;
+
+            if (WazaDataSystem.IsValid(wazaInfo.WazaNo))
+            {
+                if (wazaInfo.PP == 0 && wazaButton.Info.HasValue)
+                {
+                    BattleViewCore.Instance.UISystem.PlaySe(EVENTS.UI_COMMON_BEEP);
+                }
+                else
+                {
+                    UpdateSelectedWazaNo(_pokeIndex, _btlPokeParam.GetID(), wazaInfo.WazaNo);
+                    wazaButton.Submit();
+                    IsValid = true;
+                }
+            }
+        }
+
+        private void OnCancel()
+        {
+            _destActionParam.value.fight_cmd = (byte)PokeActionCategory.Null; // Unsure if this is the right enum
+
+            Result = -1;
+            IsValid = true;
+
+            BattleViewCore.Instance.UISystem.CursorFrame.SetActive(false);
+            BattleViewCore.Instance.UISystem.PlaySe(EVENTS.UI_COMMON_CANCEL);
+        }
 
         // TODO
         private void SetYbuttonText(bool isDescriptionShow) { }
@@ -140,8 +197,17 @@ namespace Dpr.Battle.View.UI
         // TODO
         public void ExecuteCurrentButton() { }
 
-        // TODO
-        private WazaNo GetSelectedWazaNo(int pokemonIndex, int id) { return WazaNo.NULL; }
+        private WazaNo GetSelectedWazaNo(int pokemonIndex, int id)
+        {
+            if (_prevUseWazas.ContainsKey(pokemonIndex))
+            {
+                var prevWaza = _prevUseWazas[pokemonIndex];
+                if (prevWaza.id == id)
+                    return prevWaza.wazaNo;
+            }
+
+            return WazaNo.NULL;
+        }
 
         // TODO
         private void UpdateSelectedWazaNo(int pokemonIndex, int id, WazaNo selectdWazaNo) { }

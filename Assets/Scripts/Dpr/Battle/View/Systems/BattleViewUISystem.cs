@@ -388,44 +388,21 @@ namespace Dpr.Battle.View.Systems
             }
         }
 
-        // TODO
-        public BUIActionList ActionList { get; }
-
+        public BUIActionList ActionList { get => _actionList; }
         public BUIWazaList WazaList { get => _wazaList; }
-
-        // TODO
-        public BUIPokeBallList PokeBallList { get; }
-
-        // TODO
-        public BUIWazaDescription WazaDescription { get; }
-
+        public BUIPokeBallList PokeBallList { get => _pokeBallList; }
+        public BUIWazaDescription WazaDescription { get => _wazaDescription; }
         public BUIStatusWindow[] StatusWindows { get => _statusWindows; }
-
-        // TODO
-        public BUITokuseiPlate TokuseiNear { get; }
-
-        // TODO
-        public BUITokuseiPlate TokuseiFar { get; }
-
-        // TODO
-        public BUIBallPlate BallPlateNear { get; }
-
-        // TODO
-        public BUIBallPlate BallPlateFar { get; }
-
-        // TODO
-        public BUISafariBall SafariBall { get; }
-
-        // TODO
-        public BUITargetSelect TargetSelect { get; }
-
-        // TODO
-        public BUICommTime CommTime { get; }
+        public BUITokuseiPlate TokuseiNear { get => _tokuseiNear; }
+        public BUITokuseiPlate TokuseiFar { get => _tokuseiFar; }
+        public BUIBallPlate BallPlateNear { get => _ballPlateNear; }
+        public BUIBallPlate BallPlateFar { get => _ballPlateFar; }
+        public BUISafariBall SafariBall { get => _safariBall; }
+        public BUITargetSelect TargetSelect { get => _targetSelect; }
+        public BUICommTime CommTime { get => _commTime; }
 
         public Dpr.UI.Cursor CursorFrame { get => _cursor; }
-
         public ItemNo SelectItem { get => _pokeBallList.IsValid ? _pokeBallList.Result : _selectItem; }
-
         public static BattleViewUISystem Instance { get => _instance; }
 
         public static IEnumerator LoadAssetSelf(Transform parent, [Optional] Action callback)

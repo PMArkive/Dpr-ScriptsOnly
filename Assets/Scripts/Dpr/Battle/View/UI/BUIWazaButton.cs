@@ -26,7 +26,11 @@ namespace Dpr.Battle.View.UI
         // TODO
         public void Initialize(int index, BTLV_WAZA_INFO? info, [Optional] Sprite typeSprite, [Optional] Sprite effBgSprite, [Optional] Sprite effSprite, [Optional] string affinityString, [Optional] Color[] ppColors) { }
 
-        // TODO
-        public void SetTextColor(Color color) { }
+        public void SetTextColor(Color color)
+        {
+            _text.color = color;
+            _effectiveText.color = color;
+            _effectiveImage.color = color;
+        }
     }
 }

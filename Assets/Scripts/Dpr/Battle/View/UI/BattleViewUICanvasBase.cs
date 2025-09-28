@@ -47,8 +47,15 @@ namespace Dpr.Battle.View.UI
         // TODO
         private void OnDestroy() { }
 
-        // TODO
-        public virtual void Startup() { }
+        public virtual void Startup()
+        {
+            IsValid = false;
+            IsFocus = false;
+            IsShow = false;
+            animationState = BattleUIAnimationState.Closed;
+
+            CanvasGroup.alpha = 0.0f;
+        }
 
         // TODO
         public virtual void Reset() { }
@@ -59,11 +66,22 @@ namespace Dpr.Battle.View.UI
         // TODO
         public abstract void OnUpdate(float deltaTime);
 
-        // TODO
-        public void Show([Optional] Action onComplete) { }
+        public void Show([Optional] Action onComplete)
+        {
+            _onShowComplete = onComplete;
 
-        // TODO
-        public void Hide([Optional, DefaultParameterValue(false)] bool isForce, [Optional] Action onComplete) { }
+            if (DOTween.IsTweening(CanvasGroup))
+                CanvasGroup.DOKill();
+
+            PlayTransitionAnimation(true);
+        }
+
+        public void Hide([Optional, DefaultParameterValue(false)] bool isForce, [Optional] Action onComplete)
+        {
+            IsFocus = false;
+            _onHideComplete = onComplete;
+            PlayTransitionAnimation(false);
+        }
 
         // TODO
         protected void PlayTransitionAnimation(bool isShow) { }
@@ -71,20 +89,36 @@ namespace Dpr.Battle.View.UI
         // TODO
         private IEnumerator OnPlayAnimationCor(float time) { return null; }
 
-        // TODO
-        protected virtual void PreparaNext(bool isForward) { }
+        protected virtual void PreparaNext(bool isForward)
+        {
+            if (isForward)
+                CurrentIndex++;
+            else
+                CurrentIndex--;
+        }
 
-        // TODO
-        public virtual void ForceHide() { }
+        public virtual void ForceHide()
+        {
+            // Empty
+        }
 
-        // TODO
-        protected virtual void OnShow() { }
+        protected virtual void OnShow()
+        {
+            IsFocus = true;
+            IsShow = true;
+            animationState = BattleUIAnimationState.Opened;
+        }
 
-        // TODO
-        protected virtual void OnHide() { }
+        protected virtual void OnHide()
+        {
+            IsShow = false;
+            animationState = BattleUIAnimationState.Closed;
+        }
 
-        // TODO
-        protected virtual void OnPlayAnimation() { }
+        protected virtual void OnPlayAnimation()
+        {
+            // Empty
+        }
 
         // TODO
         protected virtual void SetAlpha(float alpha, float duration = 0.0f) { }

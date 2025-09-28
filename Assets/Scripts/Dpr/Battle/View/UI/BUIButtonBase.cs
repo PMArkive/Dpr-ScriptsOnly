@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AK;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,9 +8,10 @@ using UnityEngine.UI;
 namespace Dpr.Battle.View.UI
 {
     [RequireComponent(typeof(Image))]
-    public abstract class BUIButtonBase<T> : UIBehaviour, IBattleUIButton<T>
+    public abstract class BUIButtonBase<T> : UIBehaviour, IBattleUIButton<T> where T : BUIButtonBase<T>
     {
         private static readonly Color DisableColor = new Color(0.8f, 0.8f, 0.8f);
+
         [SerializeField]
         protected Image _backgroundImage;
         [SerializeField]
@@ -48,20 +50,60 @@ namespace Dpr.Battle.View.UI
             }
         }
 
-        // TODO
-        protected override void OnDestroy() { }
+        protected override void OnDestroy()
+        {
+            _cachedRectTransform = null;
+            _onSelected = null;
+            base.OnDestroy();
+        }
 
-        // TODO
-        public T SetOnSelected(Action onSelected) { return default(T); }
+        public T SetOnSelected(Action onSelected)
+        {
+            _onSelected = onSelected;
+            return (T)this;
+        }
 
-        // TODO
-        public T SetOnSubmit(Action onSubmit) { return default(T); }
+        public T SetOnSubmit(Action onSubmit)
+        {
+            _onSubmit = onSubmit;
+            return (T)this;
+        }
 
-        // TODO
-        public bool Submit() { return false; }
+        public bool Submit()
+        {
+            if (_isEnabele)
+            {
+                BattleViewCore.Instance.UISystem.PlaySe(EVENTS.UI_COMMON_DECIDE);
+                BattleViewCore.Instance.UISystem.CursorFrame.Play(Dpr.UI.Cursor.animStateDecide);
+                _onSubmit?.Invoke();
+                return true;
+            }
+            else
+            {
+                BattleViewCore.Instance.UISystem.PlaySe(EVENTS.UI_COMMON_BEEP);
+                return false;
+            }
+        }
 
-        // TODO
-        protected virtual void OnChangeState(StateType type) { }
+        protected virtual void OnChangeState(StateType type)
+        {
+            if (_index == -1)
+                return;
+
+            _state = type;
+            _isSelected = type == StateType.Selected;
+
+            if (type != StateType.Selected)
+                return;
+
+            _onSelected?.Invoke();
+
+            var cursor = BattleViewCore.Instance.UISystem.CursorFrame;
+            cursor.transform.SetParent(transform);
+            ((RectTransform)cursor.transform).sizeDelta = Vector3.zero;
+            cursor.transform.localPosition = Vector3.zero;
+            ((RectTransform)cursor.transform).anchoredPosition = Vector2.zero;
+        }
 
         public enum TransitionType : int
         {

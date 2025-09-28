@@ -96,8 +96,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public byte GetFairyGymResult() { return 0; }
 
-        // TODO
-        public BattleViewBase GetBattleViewSystem() { return null; }
+        public BattleViewBase GetBattleViewSystem()
+        {
+            return m_viewCore;
+        }
 
         // TODO
         public MainModule(BATTLE_SETUP_PARAM setupParam) { }
@@ -336,8 +338,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public bool CheckAllClientQuit() { return false; }
 
-        // TODO
-        public BtlRule GetRule() { return BtlRule.BTL_RULE_SINGLE; }
+        public BtlRule GetRule()
+        {
+            return m_rule;
+        }
 
         // TODO
         public bool IsWazaEffectEnable() { return false; }
