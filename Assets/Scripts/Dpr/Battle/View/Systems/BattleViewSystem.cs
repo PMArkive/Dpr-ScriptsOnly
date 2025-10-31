@@ -1,4 +1,5 @@
-﻿using Dpr.Battle.Logic;
+﻿using AK;
+using Dpr.Battle.Logic;
 using Dpr.Battle.View.Objects;
 using Dpr.SequenceEditor;
 using Effect;
@@ -33,12 +34,12 @@ namespace Dpr.Battle.View.Systems
         private BattleScreenObject m_iPtrScreenObject;
         private Dictionary<BtlvPos, string> m_skrtModelDict;
         private BTLV_WAZA_EFF_PARAM m_wazaParam;
-        private BtlvPos[] m_comTargetPoke;
-        private BtlvPos[] m_comTargetDamage;
-        private BtlvPos[] m_comTargetTrainer;
+        private BtlvPos[] m_comTargetPoke = new BtlvPos[(int)CommandTarget.MAX];
+        private BtlvPos[] m_comTargetDamage = new BtlvPos[(int)BtlvPos.BTL_VPOS_NUM];
+        private BtlvPos[] m_comTargetTrainer = new BtlvPos[(int)CommandTarget.MAX];
         private BtlEff m_comEffectId;
-        private BallId[] m_effectBallId;
-        private BtlvBallInfo[] m_effectBallInfo;
+        private BallId[] m_effectBallId = new BallId[BattleViewDefine.POKE_BALL_MAX_NUM];
+        private BtlvBallInfo[] m_effectBallInfo = new BtlvBallInfo[BattleViewDefine.POKE_BALL_MAX_NUM];
         private int m_comIsVisibleTame;
         private bool m_comIsMigawari;
         private bool m_comMigawariReserve;
@@ -53,8 +54,8 @@ namespace Dpr.Battle.View.Systems
         private Func<bool> m_pComWaitFunc;
         private bool m_isStartMsgDisplay;
         private int m_wazaMsgFrame;
-        private BtlvPos m_beforePlayEffPos;
-        private BtlEff m_beforePlayEffNo;
+        private BtlvPos m_beforePlayEffPos = BtlvPos.BTL_VPOS_ERROR;
+        private BtlEff m_beforePlayEffNo = BtlEff.BTLEFF_MAX;
         private bool m_isFieldIndoor;
         private bool m_isFieldStadium;
         private bool m_isFieldRoseTower;
@@ -77,7 +78,7 @@ namespace Dpr.Battle.View.Systems
         private TaskManager m_iPtrTaskManager;
         private TaskManager m_iPtrTaskManagerLate;
         private Stack<Tuple<int, uint, uint>> m_uPtrSoundPlayingIDHash;
-        private int m_shadowResolutionBackup;
+        private int m_shadowResolutionBackup = -1;
 
         // TODO
         public override void CMD_UI_OnFirstSelectActionStart() { }
@@ -439,11 +440,52 @@ namespace Dpr.Battle.View.Systems
         // TODO
         public override bool CMD_WaitFinishWaitCameraEffect() { return false; }
 
-        // TODO
-        public BattleViewSystem(BTLV_INIT_PARAM initParam): base(initParam) { }
+        public BattleViewSystem(BTLV_INIT_PARAM initParam): base(initParam)
+        {
+            BattleViewAssetManager.Initialize();
+            InitializeMember();
+        }
 
-        // TODO
-        private void InitializeMember() { }
+        private void InitializeMember()
+        {
+            m_isFinalize = false;
+            m_isFinalizeFadeSkip = false;
+            EndSequence = EndSequenceType.FADE;
+
+            m_iPtrWeatherSystem = new BattleWeatherSystem();
+            m_iPtrBattleGroundEffectSystem = new BattleGroundEffectSystem(this);
+            m_wazaParam = BTLV_WAZA_EFF_PARAM.Factory();
+
+            InitializeSequenceState = InitializeSequenceStateType.Unregistered;
+            SetupSequenceState = SetupSequenceStateType.NONE;
+
+            m_pComWaitFunc = null;
+            m_isStartMsgDisplay = false;
+            m_wazaMsgFrame = 0;
+            m_isFieldIndoor = GetMainModule().GetFieldSituation().bgComponent.isIndoor;
+            m_isFieldStadium = false;
+            m_isFieldRoseTower = false;
+            m_isFieldStadiumWide = false;
+            m_isFieldWaitcamExcept = false;
+            m_reqCheckPinch = false;
+            m_canChangePinch = false;
+            m_isSoundPlayingFinishCheckInvalid = false;
+            m_soundPlayingFinishWaitCount = 0;
+
+            m_pokePinchSound = BtlvSound.CreatePerpetuateSound(EVENTS.PLAY_BA_SYS_PINCH);
+
+            m_deadActParam = DeadActParam.Factory();
+            m_memberChangeActParam = MemberChangeActParam.Factory();
+            m_memberOutActParam = MemberOutActParam.Factory();
+            m_startGActParam = StartGActParam.Factory();
+            m_endGActParam = EndGActParam.Factory();
+            m_trainerTalkParam = TrainerTalkParam.Factory();
+            m_attrEffParam = BTLV_ATTR_EFF_PARAM.Factory();
+
+            m_iPtrTaskManager = new TaskManager();
+            m_iPtrTaskManagerLate = new TaskManager();
+            m_uPtrSoundPlayingIDHash = new Stack<Tuple<int, uint, uint>>(BattleViewDefine.DEFAULT_HASH_SOUND_PLAYING_ID_MAX);
+        }
 
         // TODO
         public override void CMD_ACT_WazaEffect_Start(BtlPokePos atPokePos, BtlPokePos defPokePos, WazaNo waza, byte wazaType, WazaTarget wazaRange, BtlvWazaEffect_TurnType turnType, byte continueCount, bool syncDamageEffect, bool isGShockOccur) { }
@@ -478,8 +520,15 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private void StartWazaEffectCore() { }
 
-        // TODO
-        private void PlaySequenceEffect(BtlEff no, bool isKeepResource = false) { }
+        private void PlaySequenceEffect(BtlEff no, bool isKeepResource = false)
+        {
+            if (CheckCanPlayEffect(m_comTargetPoke[0], no))
+            {
+                var miscEff = m_battleDataTable.FindMiscEffectData(no);
+                if (miscEff != null)
+                    PlaySequenceCore(BattleViewDefine.Path.GetSequencePath(miscEff.CmdSeqName), isKeepResource);
+            }
+        }
 
         // TODO
         public override void CMD_ACT_DamageEffectSingle_Start(WazaNo wazaID, BtlPokePos defPokePos, TypeAffinity.AboutAffinityID affAbout) { }
@@ -677,8 +726,7 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private void StartLoadSequence() { }
 
-        // TODO
-        private bool IsSoundPlayingFinishCheckInvalid { get; }
+        private bool IsSoundPlayingFinishCheckInvalid { get => m_isSoundPlayingFinishCheckInvalid; }
 
         private InitializeSequenceStateType InitializeSequenceState { get; set; }
         private SetupSequenceStateType SetupSequenceState { get; set; }
@@ -688,15 +736,9 @@ namespace Dpr.Battle.View.Systems
         private EndSequenceType EndSequence { get; set; }
 
         public bool IsStencilEnable { get; set; }
-
-        // TODO
-        private bool IsAllTaskFinished { get; }
-
+        private bool IsAllTaskFinished { get => m_iPtrTaskManager.IsAllFinished && m_iPtrTaskManagerLate.IsAllFinished; }
         public float blurry { get; set; }
-
-        // TODO
-        public Dictionary<BtlvPos, string> PositionForModelIDDict { get; set; }
-
+        public Dictionary<BtlvPos, string> PositionForModelIDDict { get => m_skrtModelDict; set => m_skrtModelDict = value; }
         public bool IsApplicationPause { get; set; }
 
         // TODO
@@ -711,11 +753,34 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private void ResetHitBack() { }
 
-        // TODO
-        private bool CheckCanPlayEffect(BtlvPos vPos, BtlEff effectNo) { return false; }
+        private bool CheckCanPlayEffect(BtlvPos vPos, BtlEff effectNo)
+        {
+            if (effectNo > BtlEff.BTLEFF_MAX)
+                return false;
 
-        // TODO
-        private void ResetCheckCanPlayEffect() { }
+            switch (effectNo)
+            {
+                case BtlEff.BTLEFF_STATUS_UP_G:
+                case BtlEff.BTLEFF_STATUS_DOWN_G:
+                case BtlEff.BTLEFF_STATUS_UP:
+                case BtlEff.BTLEFF_STATUS_DOWN:
+                    if (m_beforePlayEffPos == vPos && m_beforePlayEffNo == effectNo)
+                        return false;
+                    else
+                        break;
+            }
+
+            m_beforePlayEffPos = vPos;
+            m_beforePlayEffNo = effectNo;
+
+            return true;
+        }
+
+        private void ResetCheckCanPlayEffect()
+        {
+            m_beforePlayEffPos = BtlvPos.BTL_VPOS_ERROR;
+            m_beforePlayEffNo = BtlEff.BTLEFF_MAX;
+        }
 
         // TODO
         private BallId GetCaptureBall(BtlvPos vPos, out bool isStrangeBall)
@@ -727,29 +792,54 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private BtlvBallInfo GetBallInfo(BtlvPos vPos) { return default; }
 
-        // TODO
-        public override BtlRule GetBattleRule() { return BtlRule.BTL_RULE_SINGLE; }
+        public override BtlRule GetBattleRule()
+        {
+            var mainModule = GetMainModule();
+            if (mainModule != null)
+                return mainModule.GetRule();
 
-        // TODO
-        public PartyDesc GetPartySetupParam(byte clientId) { return null; }
+            return BtlRule.BTL_RULE_SINGLE;
+        }
 
-        // TODO
-        public BTLV_WAZA_EFF_PARAM GetWazaParam() { return default; }
+        public PartyDesc GetPartySetupParam(byte clientId)
+        {
+            return GetMainModule()?.GetPartySetupParam(clientId);
+        }
 
-        // TODO
-        public BTLV_WAZA_EFF_PARAM SetWazaParam(BTLV_WAZA_EFF_PARAM param) { return default; }
+        public BTLV_WAZA_EFF_PARAM GetWazaParam()
+        {
+            return m_wazaParam;
+        }
 
-        // TODO
-        public BTLV_ATTR_EFF_PARAM GetAttrEffParam() { return default; }
+        public BTLV_WAZA_EFF_PARAM SetWazaParam(BTLV_WAZA_EFF_PARAM param)
+        {
+            m_wazaParam = param;
+            return param;
+        }
 
-        // TODO
-        public string GetSoundEventName() { return null; }
+        public BTLV_ATTR_EFF_PARAM GetAttrEffParam()
+        {
+            return m_attrEffParam;
+        }
 
-        // TODO
-        public TrainerTalkParam GetTrainerTalkParam() { return default; }
+        public string GetSoundEventName()
+        {
+            return m_attrSoundEvent;
+        }
 
-        // TODO
-        public BtlvMode GetBtlvMode() { return default; }
+        public TrainerTalkParam GetTrainerTalkParam()
+        {
+            return m_trainerTalkParam;
+        }
+
+        public BtlvMode GetBtlvMode()
+        {
+            var mainModule = GetMainModule();
+            if (mainModule != null && mainModule.GetCompetitor(false) == BtlCompetitor.BTL_COMPETITOR_DEMO_CAPTURE)
+                return BtlvMode.CAPTURE;
+
+            return BtlvMode.BATTLE;
+        }
 
         // TODO
         private void ResetDefaultCamera(int frame = 0, EaseFunc moveType = EaseFunc.LINEAR) { }
@@ -772,29 +862,56 @@ namespace Dpr.Battle.View.Systems
         // TODO
         public float GetTimeZoneSensorScale() { return 0.0f; }
 
-        // TODO
-        private BattleEffectComponentData GetBattleEffectComponentData() { return default; }
+        private BattleEffectComponentData GetBattleEffectComponentData()
+        {
+            return GetMainModule()?.GetBattleEffectData();
+        }
 
-        // TODO
-        private bool WaitLoadSequence() { return false; }
+        private bool WaitLoadSequence()
+        {
+            return m_iPtrSequenceSystem.IsPreLoaded;
+        }
 
-        // TODO
-        private bool WaitSequenceResource() { return false; }
+        private bool WaitSequenceResource()
+        {
+            return true;
+        }
 
-        // TODO
-        private bool IsExistGPoke() { return false; }
+        private bool IsExistGPoke()
+        {
+            return false;
+        }
 
-        // TODO
-        private bool IsExistGPokeSide(bool playerSide) { return false; }
+        private bool IsExistGPokeSide(bool playerSide)
+        {
+            return false;
+        }
 
-        // TODO
-        public string GetBattleModelPath(string idx) { return null; }
+        public string GetBattleModelPath(string idx)
+        {
+            return BattleViewDefine.Path.GetFXPath(idx);
+        }
 
-        // TODO
-        public string GetBttleWazaModelPath(string idx) { return null; }
+        public string GetBttleWazaModelPath(string idx)
+        {
+            return BattleViewDefine.Path.GetModelPath(idx);
+        }
 
-        // TODO
-        public string GetBallModelPath(int idx) { return null; }
+        public string GetBallModelPath(int idx)
+        {
+            var ballID = m_effectBallInfo[idx].ballId;
+            var strangeBall = m_effectBallInfo[idx].isStrangeBall;
+
+            var path = BattleViewDefine.Path.GetBallPath(ballID);
+
+            if (strangeBall)
+                path = BattleViewDefine.Path.GetBallPath((BallId)99);
+
+            if (string.IsNullOrEmpty(path))
+                path = BattleViewDefine.Path.GetBallPath(BallId.MONSUTAABOORU);
+
+            return path;
+        }
 
         // TODO
         public void ResetPokemon(BtlvPos vPos, int frame, SEQ_DEF_MOVETYPE moveType, SEQ_DEF_DEFAULT_PLACEMENT placement = SEQ_DEF_DEFAULT_PLACEMENT.SEQ_DEF_DEFAULT_PLACEMENT_DEFAULT) { }
@@ -820,8 +937,13 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private void GetDefaultTrainerPos(BtlvPos vPos, ref Vector3 pPos, ref int pDeg, bool isOrigin, SEQ_DEF_DEFAULT_PLACEMENT placement) { }
 
-        // TODO
-        public BattleViewCharacter GetTrainerModel(BtlvPos vPos) { return default; }
+        public BattleViewCharacter GetTrainerModel(BtlvPos vPos)
+        {
+            if (vPos == BtlvPos.BTL_VPOS_ERROR)
+                return null;
+
+            return m_iPtrCharacterSystem.GetTrainerModel(vPos);
+        }
 
         // TODO
         private void SetVisibleTrainerObject(bool value) { }
@@ -832,29 +954,45 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private void SetEnableMotionWaitB(bool isEnable) { }
 
-        // TODO
-        public BattleScreenObject GetScreenObject() { return default; }
+        public BattleScreenObject GetScreenObject()
+        {
+            return m_iPtrScreenObject;
+        }
 
-        // TODO
-        public void SetReqCheckPinch(bool value) { }
+        public void SetReqCheckPinch(bool value)
+        {
+            m_reqCheckPinch = value;
+        }
 
-        // TODO
-        public bool IsReqCheckPinch() { return false; }
+        public bool IsReqCheckPinch()
+        {
+            return m_reqCheckPinch;
+        }
 
-        // TODO
-        public void SetCanChangePinch(bool value) { }
+        public void SetCanChangePinch(bool value)
+        {
+            m_canChangePinch = value;
+        }
 
-        // TODO
-        public bool IsCanChangePinch() { return false; }
+        public bool IsCanChangePinch()
+        {
+            return m_canChangePinch;
+        }
 
-        // TODO
-        public void SetIsSoundPlayingFinishCheckInvalid(bool value) { }
+        public void SetIsSoundPlayingFinishCheckInvalid(bool value)
+        {
+            m_isSoundPlayingFinishCheckInvalid = value;
+        }
 
-        // TODO
-        private void SaveFog() { }
+        private void SaveFog()
+        {
+            // Empty
+        }
 
-        // TODO
-        private bool UIFog_Wait() { return false; }
+        private bool UIFog_Wait()
+        {
+            return BattleViewCore.Instance.UISystem.UIFog_Wait();
+        }
 
         // TODO
         private void SetComTargetReset() { }
@@ -868,8 +1006,10 @@ namespace Dpr.Battle.View.Systems
         // TODO
         private void SetupWazaTarget_AllFunc(BtlvPos atkPos, ref BtlvPos[] retArray, bool enemyOnly) { }
 
-        // TODO
-        private bool IsDefGPoke() { return false; }
+        private bool IsDefGPoke()
+        {
+            return false;
+        }
 
         // TODO
         private BtlvWazaEffect_TurnType GetUniqWazaSeqTurnType(BtlvPos vPos, WazaNo no, BtlvWazaEffect_TurnType turnType) { return default; }
@@ -902,53 +1042,108 @@ namespace Dpr.Battle.View.Systems
             }
         }
 
-        // TODO
-        private bool IsFieldStadium { get; }
+        private bool IsFieldStadium { get => m_isFieldStadium; }
+        private bool IsFieldRoseTower { get => m_isFieldRoseTower; }
+        private bool IsFieldStadiumWide { get => m_isFieldStadiumWide; }
+        private bool IsFieldWaitcamExceptreturn { get => m_isFieldWaitcamExcept; }
+
+        public Stack<Tuple<int, uint, uint>> GetSoundPlayingIDHashTable()
+        {
+            return m_uPtrSoundPlayingIDHash;
+        }
+
+        public BattleSequenceSystem GetSequenceSystem()
+        {
+            return m_iPtrSequenceSystem;
+        }
+
+        public BattleCharacterSystem GetCharacterSystem()
+        {
+            return m_iPtrCharacterSystem;
+        }
+
+        public SequenceCameraSystem GetCameraSystem()
+        {
+            return m_iPtrCameraSystem;
+        }
+
+        public BattleWeatherSystem GetBattleWeatherSystem()
+        {
+            return m_iPtrWeatherSystem;
+        }
+
+        public BattleGroundEffectSystem GetBattleGroundEffectSystem()
+        {
+            return m_iPtrBattleGroundEffectSystem;
+        }
+
+        public BattleViewUISystem GetHUD()
+        {
+            return BattleViewCore.Instance.UISystem;
+        }
+
+        public TaskManager GetTaskManager()
+        {
+            return m_iPtrTaskManager;
+        }
+
+        public TaskManager GetTaskManagerLate()
+        {
+            return m_iPtrTaskManagerLate;
+        }
+
+        private bool IsGosanke(BTL_POKEPARAM pokeParam)
+        {
+            if (pokeParam == null)
+                return false;
+
+            if (pokeParam.GetHenshinMonsNo() != (ushort)MonsNo.NAETORU &&
+                pokeParam.GetHenshinMonsNo() != (ushort)MonsNo.HIKOZARU &&
+                pokeParam.GetHenshinMonsNo() != (ushort)MonsNo.POTTYAMA)
+                return false;
+
+            return pokeParam.GetSrcData().IsOwnedOriginalParent();
+        }
+
+        private bool IsGosanke(PokemonParam pokeParam)
+        {
+            if (pokeParam == null)
+                return false;
+
+            if (pokeParam.GetMonsNo() != MonsNo.NAETORU &&
+                pokeParam.GetMonsNo() != MonsNo.HIKOZARU &&
+                pokeParam.GetMonsNo() != MonsNo.POTTYAMA)
+                return false;
+
+            return pokeParam.IsOwnedOriginalParent();
+        }
 
         // TODO
-        private bool IsFieldRoseTower { get; }
+        private string GetGosankeThrowSeq(uint friendShip)
+        {
+            var entryMotionData = BattleDataTableManager.Instance.BattleDataTable.PokemonEntryMotionData;
 
-        // TODO
-        private bool IsFieldStadiumWide { get; }
+            if (GetMainModule().GetSetupStatusFlag(BTL_STATUS_FLAG.BTL_STATUS_TUTORIAL))
+                return m_battleDataTable.GetSetupIntroPlaySequenceData(BattleSetupIntroID.THROW_PLAYER_SINGLE_HAPPY_A).SeqName;
 
-        // TODO
-        private bool IsFieldWaitcamExceptreturn { get; }
+            for (int i=0; i<entryMotionData.Length; i++)
+            {
+                var motion = entryMotionData[i];
+                if (motion.friendship != null)
+                {
+                    if ((motion.friendship.Length == 2 && motion.friendship[0] <= friendShip && friendShip <= motion.friendship[1]) ||
+                        (motion.friendship.Length == 1 && motion.friendship[0] == friendShip))
+                    {
+                        if (motion == null)
+                            break;
 
-        // TODO
-        public Stack<Tuple<int, uint, uint>> GetSoundPlayingIDHashTable() { return null; }
 
-        // TODO
-        public BattleSequenceSystem GetSequenceSystem() { return default; }
+                    }
+                }
+            }
 
-        // TODO
-        public BattleCharacterSystem GetCharacterSystem() { return default; }
-
-        // TODO
-        public SequenceCameraSystem GetCameraSystem() { return default; }
-
-        // TODO
-        public BattleWeatherSystem GetBattleWeatherSystem() { return default; }
-
-        // TODO
-        public BattleGroundEffectSystem GetBattleGroundEffectSystem() { return default; }
-
-        // TODO
-        public BattleViewUISystem GetHUD() { return null; }
-
-        // TODO
-        public TaskManager GetTaskManager() { return default; }
-
-        // TODO
-        public TaskManager GetTaskManagerLate() { return default; }
-
-        // TODO
-        private bool IsGosanke(BTL_POKEPARAM pokeParam) { return false; }
-
-        // TODO
-        private bool IsGosanke(PokemonParam pokeParam) { return false; }
-
-        // TODO
-        private string GetGosankeThrowSeq(uint friendShip) { return ""; }
+            return m_battleDataTable.GetSetupIntroPlaySequenceData(BattleSetupIntroID.THROW_PLAYER_SINGLE).SeqName;
+        }
 
         public enum BattleViewSide : int
         {

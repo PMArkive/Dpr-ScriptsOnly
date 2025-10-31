@@ -9,18 +9,32 @@ public struct AzukariyaData
     public ulong eggSeed;
     public int eggStepCount;
 
-    // TODO
-    public void Get(PokemonParam pp, int index) { }
+    public void Get(PokemonParam pp, int index)
+    {
+        pp.Deserialize_Full(pokemonParam[index]);
+    }
 
-    // TODO
-    public PokemonParam Get(int index) { return null; }
+    public PokemonParam Get(int index)
+    {
+        var param = new PokemonParam();
+        Get(param, index);
+        return param;
+    }
 
-    // TODO
-    public void Set(int index, PokemonParam pp) { }
+    public void Set(int index, PokemonParam pp)
+    {
+        pp.Serialize_Full(pokemonParam[index].buffer);
+    }
 
-    // TODO
-    public void Clear() { }
+    public void Clear()
+    {
+        pokemonParam = new SerializedPokemonFull[AzukariyaWork.POKE_MAX];
+        for (int i = 0; i < pokemonParam.Length; i++)
+            pokemonParam[i].CreateWorkIfNeed();
+    }
 
-    // TODO
-    public void Initialize() { }
+    public void Initialize()
+    {
+        Clear();
+    }
 }

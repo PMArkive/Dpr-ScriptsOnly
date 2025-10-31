@@ -1419,11 +1419,150 @@ namespace Dpr.EvScript
         // TODO
         public Vector3 CalcContactCheckPos() { return Vector3.zero; }
 
-        // TODO
-        public bool CanContact(FieldObjectEntity obj, Vector3 playerpos) { return false; }
+        public bool CanContact(FieldObjectEntity obj, Vector3 playerpos)
+        {
+            return CanContact2(obj, playerpos);
+        }
 
-        // TODO
-        public bool CanContact2(FieldObjectEntity obj, Vector3 playerpos) { return false; }
+        public bool CanContact2(FieldObjectEntity obj, Vector3 playerpos)
+        {
+            var player = EntityManager.activeFieldPlayer;
+
+            if (obj == null)
+                return false;
+
+            if (player == obj)
+                return false;
+
+            if (!obj.gameObject.activeInHierarchy)
+                return false;
+
+            var eventParams = obj.EventParams;
+            if (eventParams.ContactLabel == "" && eventParams.TalkLabel == "")
+                return false;
+
+            var vanishFlag = (EvWork.FLAG_INDEX)eventParams.VanishFlagIndex;
+            if ((int)vanishFlag > -1 && vanishFlag != EvWork.FLAG_INDEX.FLAG_END_SAVE_SIZE && FlagWork.GetFlag(vanishFlag))
+                return false;
+
+            var workIndex = eventParams.WorkIndex;
+            if (workIndex != EvWork.WORK_INDEX.SCWK_WK_SAVE_SIZE && FlagWork.GetWork(workIndex) != eventParams.WorkValue)
+                return false;
+
+            if (eventParams.Rockclimb && !player.CheckRockClimbing(obj))
+                return false;
+
+            if (!eventParams.HeightIgnore)
+            {
+                var isSwim = player.IsSwim();
+                var playerHeight = isSwim ? (playerpos.y - 0.6f) : playerpos.y;
+                var threshold = (isSwim || eventParams.Kairiki) ? 0.6f : 0.3f;
+
+                if (threshold < Math.Abs(playerHeight - obj.Height))
+                    return false;
+            }
+
+            if (eventParams.IsContactCenter && IsHit(playerpos, obj.worldPosition, eventParams.ContactSize, true))
+                return true;
+
+            var playerPos2D = new Vector2(playerpos.x, playerpos.z);
+            var objPos = new Vector2(obj.worldPosition.x, obj.worldPosition.z);
+            var objCorner = objPos + eventParams.TalkSegment;
+
+            // Check that the player is within 10 tiles (circle) of two of the corners of the tile of the obj
+            if (new Vector2(objPos.x - playerPos2D.x, objPos.y - playerPos2D.y).sqrMagnitude > 100.0f &&
+                new Vector2(objCorner.x - playerPos2D.x, objCorner.y - playerPos2D.y).sqrMagnitude > 100.0f)
+                return false;
+
+            float distance;
+            int hitstatus;
+            SegmentHit(ref objPos, ref objCorner, ref playerPos2D, eventParams.TalkRange, out _, out _, out distance, out hitstatus);
+
+            if (hitstatus == 0)
+            {
+                if (!eventParams.Rockclimb)
+                    return false;
+
+                var rockClimbPos = player.CalcRockClimbingAnotherTalkPosition(obj);
+                var rockClimbPos2D = new Vector2(rockClimbPos.x, rockClimbPos.z);
+                var rockClimbCorner = rockClimbPos2D + eventParams.TalkSegment;
+
+                SegmentHit(ref rockClimbPos2D, ref rockClimbCorner, ref playerPos2D, eventParams.TalkRange, out _, out _, out distance, out hitstatus);
+
+                Vector2 talkAnglePos;
+                switch (hitstatus)
+                {
+                    case 0:
+                        return false;
+
+                    case 1:
+                        var normalSize = (new Vector2(rockClimbCorner.x, rockClimbCorner.y) - rockClimbPos2D).normalized;
+                        talkAnglePos = playerPos2D - (new Vector2(-normalSize.y, normalSize.x) * distance);
+                        break;
+
+                    case 2:
+                        talkAnglePos = rockClimbPos2D;
+                        break;
+
+                    default:
+                        talkAnglePos = rockClimbCorner;
+                        break;
+                }
+
+                var diff = new Vector2(talkAnglePos.x - playerPos2D.x, talkAnglePos.y - playerPos2D.y);
+                var diffAngle = PlayerDiffAngle(ref diff);
+
+                if (diffAngle <= DataManager.GetFieldCommonParam(ParamIndx.TalkAngleLimit))
+                {
+                    eventParams.TalkAngle = diffAngle;
+                    _hit_position.x = talkAnglePos.x;
+                    _hit_position.y = obj.Height;
+                    _hit_position.z = talkAnglePos.y;
+                    return true;
+                }
+                else
+                {
+                    eventParams.TalkAngle = -1.0f;
+                    return false;
+                }
+            }
+            else
+            {
+                Vector2 talkAnglePos;
+                switch (hitstatus)
+                {
+                    case 1:
+                        var normalSize = (new Vector2(objCorner.x, objCorner.y) - objPos).normalized;
+                        talkAnglePos = playerPos2D - (new Vector2(-normalSize.y, normalSize.x) * distance);
+                        break;
+
+                    case 2:
+                    default:
+                        talkAnglePos = objPos;
+                        break;
+                }
+
+                if (!IsTalkBitMask(ref playerPos2D, ref talkAnglePos, eventParams.TalkBit))
+                    return false;
+
+                var diff = new Vector2(talkAnglePos.x - playerPos2D.x, talkAnglePos.y - playerPos2D.y);
+                var diffAngle = PlayerDiffAngle(ref diff);
+
+                if (diffAngle <= DataManager.GetFieldCommonParam(ParamIndx.TalkAngleLimit))
+                {
+                    eventParams.TalkAngle = diffAngle;
+                    _hit_position.x = talkAnglePos.x;
+                    _hit_position.y = obj.Height;
+                    _hit_position.z = talkAnglePos.y;
+                    return true;
+                }
+                else
+                {
+                    eventParams.TalkAngle = -1.0f;
+                    return false;
+                }
+            }
+        }
 
         public void ClearPlayerMoveVector()
         {
@@ -1563,21 +1702,40 @@ namespace Dpr.EvScript
         // TODO
         private bool WarpHit(FieldEventDoorEntity eventEntity) { return false; }
 
-        // TODO
-        private void CorrectionEventEntityWait(float deltatime) { }
-
-        // TODO
-        private bool CorrectionDirCheck(FieldEventEntity eventEntity) { return false; }
-
-        // TODO
-        private void CorrectionDirSegment(FieldEventEntity eventEntity, out Vector2 segStart, out Vector2 segEnd)
+        private void CorrectionEventEntityWait(float deltatime)
         {
-            segStart = Vector2.zero;
-            segEnd = Vector2.zero;
+            if (EntityManager.activeFieldPlayer.IsEventCorrectionMoveEnd())
+            {
+                EntityManager.activeFieldPlayer.nextSequence = FieldPlayerEntity.SequenceID.Active;
+                PlayerWork.isPlayerInputActive = false;
+                _updateDelegate = WarpUpdate;
+                WarpUpdate(deltatime);
+            }
         }
 
-        // TODO
-        private float CorrectionDirAngle(FieldEventEntity eventEntity) { return 0.0f; }
+        private bool CorrectionDirCheck(FieldEventEntity eventEntity)
+        {
+            return true;
+        }
+
+        private void CorrectionDirSegment(FieldEventEntity eventEntity, out Vector2 segStart, out Vector2 segEnd)
+        {
+            segStart.x = eventEntity.worldPosition.x - 0.5f - eventEntity.offset.x;
+            segStart.y = eventEntity.worldPosition.z - 0.5f + eventEntity.offset.y;
+            segEnd.x = eventEntity.worldPosition.x + 0.5f - eventEntity.offset.x - eventEntity.size.x;
+            segEnd.y = eventEntity.worldPosition.z + 0.5f + eventEntity.offset.y - eventEntity.size.y;
+        }
+
+        private float CorrectionDirAngle(FieldEventEntity eventEntity)
+        {
+            float[] angles = { 180.0f, 0.0f, 90.0f, 270.0f };
+
+            var doorEntity = eventEntity as FieldEventDoorEntity;
+            if (doorEntity != null)
+                return angles[(int)doorEntity.startVectol];
+            else
+                return angles[(int)eventEntity.correctionDir];
+        }
 
         // TODO
         private bool IsLiftHit(FieldEventLiftEntity liftEntity) { return false; }
