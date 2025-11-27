@@ -25,6 +25,7 @@ using Dpr.SubContents;
 using System.Runtime.InteropServices;
 using Dpr.FureaiHiroba;
 using Dpr.Field;
+using System.Reflection;
 
 namespace Dpr.EvScript
 {
@@ -1575,21 +1576,29 @@ namespace Dpr.EvScript
         // TODO
         private bool IsTalkBitMask(ref Vector2 target, ref Vector2 talkpont, byte mask) { return false; }
 
-        // TODO
-        private bool IsHit(Vector3 traA, Vector3 traB, Vector2 rangB, bool center) { return false; }
+        private bool IsHit(Vector3 traA, Vector3 traB, Vector2 rangB, bool center)
+        {
+            if (center)
+                return rangB.x > Math.Abs(traA.x - traB.x) && rangB.y > Math.Abs(traA.z - traB.z);
+            else
+                return new Rect(Math.Abs(traB.x) - 0.5f, Math.Abs(traB.z) - 0.5f, rangB.x, rangB.y).Contains(new Vector2(Math.Abs(traA.x), Math.Abs(traA.z)));
+        }
 
         // TODO
         private float PlayerDiffAngle(ref Vector2 diff) { return 0.0f; }
 
-        // TODO
         private bool IsCircleHit(ref Vector2 v1, ref Vector2 v2, float range, out float outAngle)
         {
-            outAngle = 0.0f;
-            return false;
+            var diff = new Vector2(v2.x - v1.x, v2.y - v1.y);
+            outAngle = PlayerDiffAngle(ref diff);
+
+            return DataManager.GetFieldCommonParam(ParamIndx.TalkAngleLimit) >= outAngle && IsCircleHit(ref v1, ref v2, range);
         }
 
-        // TODO
-        private bool IsCircleHit(ref Vector2 v1, ref Vector2 v2, float range) { return false; }
+        private bool IsCircleHit(ref Vector2 v1, ref Vector2 v2, float range)
+        {
+            return new Vector2(v2.x - v1.x, v2.y - v1.y).sqrMagnitude <= range * range;
+        }
 
         // TODO
         private bool WarpListCheck()
@@ -1904,8 +1913,17 @@ namespace Dpr.EvScript
                 return "";
         }
 
-        // TODO
-        public int GetBadgeCount() { return 0; }
+        public int GetBadgeCount()
+        {
+            return (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C02) ? 1 : 0) +
+                (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C03) ? 1 : 0) +
+                (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C04) ? 1 : 0) +
+                (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C05) ? 1 : 0) +
+                (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C06) ? 1 : 0) +
+                (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C07) ? 1 : 0) +
+                (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C08) ? 1 : 0) +
+                (FlagWork.GetSysFlag(EvWork.SYSFLAG_INDEX.BADGE_ID_C09) ? 1 : 0);
+        }
 
         // TODO
         private string GetTrainerMsg(int tr_id, int kind) { return null; }
@@ -2071,14 +2089,50 @@ namespace Dpr.EvScript
         // TODO
         public void UG_EnterOrExit() { }
 
-        // TODO
-        public bool IsCanGotoUG() { return false; }
+        public bool IsCanGotoUG()
+        {
+            // Unused assignment
+            _ = GameManager.mapInfo[(int)PlayerWork.zoneID];
 
-        // TODO
-        public bool CheckPlaceData() { return false; }
+            var x = EntityManager.activeFieldPlayer.gridPosition.x;
+            var y = EntityManager.activeFieldPlayer.gridPosition.y;
+            x = x > -1 ? x : x + 31;
+            y = y > -1 ? y : y + 31;
 
-        // TODO
-        private UgJumpPos.SheetData GetUgJumpPosData(int MatrixID) { return null; }
+            _ugNextJumpPos = GetUgJumpPosData((y / 32) * 30 + (x / 32)); // 32 is the block size, 30 is the whole map size
+
+            if (_ugNextJumpPos == null)
+                return false;
+            else
+                return CheckPlaceData();
+        }
+
+        public bool CheckPlaceData()
+        {
+            var placedataStr = "PlaceData_" + _areaID;
+            var placedatas = DataManager.PlaceData[placedataStr].Data;
+            var pos = EntityManager.activeFieldPlayer.gridPosition;
+
+            for (int i=0; i<placedatas.Length; i++)
+            {
+                if (placedatas[i].Dowsing == 0 && pos == placedatas[i].Position)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private UgJumpPos.SheetData GetUgJumpPosData(int MatrixID)
+        {
+            var jumpData = DataManager.UgJumpPos;
+            for (int i=0; i<jumpData.Data.Length; i++)
+            {
+                if (jumpData[i].ID == MatrixID)
+                    return jumpData[i];
+            }
+
+            return null;
+        }
 
         // TODO
         private void GotoOnTheGround()
@@ -4669,8 +4723,31 @@ namespace Dpr.EvScript
         // TODO
         private bool EvCmdCutIn() { return false; }
 
-        // TODO
-        private MonsNo GetHidenWazaMonsNo(WazaNo wazaNo) { return MonsNo.NULL; }
+        private MonsNo GetHidenWazaMonsNo(WazaNo wazaNo)
+        {
+            switch (wazaNo)
+            {
+                // Cut, Rock Smash = Bidoof
+                case WazaNo.IAIGIRI:
+                case WazaNo.IWAKUDAKI:
+                    return MonsNo.BIPPA;
+
+                // Fly, Defog = Staraptor
+                case WazaNo.SORAWOTOBU:
+                case WazaNo.KIRIBARAI:
+                    return MonsNo.MUKUHOOKU;
+
+                // Surf, Strength, Waterfall, Rock Climb = Bibarel
+                case WazaNo.NAMINORI:
+                case WazaNo.KAIRIKI:
+                case WazaNo.TAKINOBORI:
+                case WazaNo.ROKKUKURAIMU:
+                    return MonsNo.BIIDARU;
+
+                default:
+                    return MonsNo.NULL;
+            }
+        }
 
         // TODO
         private bool CheckHidenWazaForceResetForm(WazaNo wazaNo) { return false; }

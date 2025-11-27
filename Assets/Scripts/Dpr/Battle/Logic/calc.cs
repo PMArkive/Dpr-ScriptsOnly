@@ -234,22 +234,65 @@ namespace Dpr.Battle.Logic
         // TODO
         public static byte RULE_HandPokeIndex(BtlRule rule, byte numCoverPos) { return 0; }
 
-        // TODO
-        public static uint calcWinMoney_Sub(in BSP_TRAINER_DATA trData, in PokeParty party) { return 0; }
+        public static uint calcWinMoney_Sub(in BSP_TRAINER_DATA trData, in PokeParty party)
+        {
+            if (party == null)
+                return 0;
 
-        // TODO
-        public static uint CalcWinMoney(BATTLE_SETUP_PARAM sp) { return 0; }
+            if (trData == null)
+                return 0;
 
-        // TODO
-        public static uint CalcLoseMoney(BATTLE_SETUP_PARAM sp, POKECON pokeCon) { return 0; }
+            var memberCount = party.GetMemberCount();
+            if (memberCount == 0)
+                return 0;
 
-        // TODO
-        private static uint CalcPenaltyMoney(uint level_max) { return 0; }
+            var lastMon = party.GetMemberPointerConst(memberCount - 1);
+            var baseGold = trData.GetGoldParam();
+            return baseGold * lastMon.GetLevel() * 4;
+        }
+
+        public static uint CalcWinMoney(BATTLE_SETUP_PARAM sp)
+        {
+            if (sp.competitor != BtlCompetitor.BTL_COMPETITOR_TRAINER)
+                return 0;
+
+            return calcWinMoney_Sub(sp.tr_data[1], sp.party[1]) + calcWinMoney_Sub(sp.tr_data[3], sp.party[3]);
+        }
+
+        public static uint CalcLoseMoney(BATTLE_SETUP_PARAM sp, POKECON pokeCon)
+        {
+            var party = pokeCon.GetPartyDataConst(0);
+            var memberCount = party.GetMemberCount();
+
+            uint levelMax = 0;
+            if (memberCount != 0)
+            {
+                for (byte i=0; i!=memberCount; i++)
+                {
+                    var newLevel = (uint)party.GetMemberDataConst(i).GetValue(BTL_POKEPARAM.ValueID.BPP_LEVEL);
+                    if (levelMax < newLevel)
+                        levelMax = newLevel;
+                }
+            }
+
+            return CalcPenaltyMoney(levelMax);
+        }
+
+        private static uint CalcPenaltyMoney(uint level_max)
+        {
+            var penalty = level_max * PENALTY_COEF[PlayerWork.badge] * 4;
+            var playerMoney = (uint)PlayerWork.GetMoney();
+
+            if (penalty >= playerMoney)
+                return playerMoney;
+            else
+                return penalty;
+        }
 
         public class ESCAPEINFO
         {
 	        public uint count;
-            public byte[] clientID = new byte[5];
+            public byte[] clientID = new byte[(int)BTL_CLIENT_ID.BTL_CLIENT_NUM];
         }
 
         private struct StatusRankTableElem

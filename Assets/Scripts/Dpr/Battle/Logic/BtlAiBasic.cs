@@ -1,15 +1,95 @@
+﻿using Pml;
+using System;
+
 namespace Dpr.Battle.Logic
 {
 	public class BtlAiBasic : BtlAIBaseScript
 	{
-		// TODO
-		protected override void main() { }
+		protected override void main()
+		{
+			var seqNo = Call(CMD_CHECK_WORKWAZA_SEQNO, Array.Empty<long>());
+
+			// Ignored
+			_ = string.Format("■PAWN basicAI start ...wazaNo = {0}[{1}],　seqNo = {2}, score={3}\n", CurrentWazaNo(), (int)CurrentWazaNo(), seqNo, p_Score);
+
+			main_proc();
+
+			// Ignored
+			_ = string.Format("■PAWN baseAI score = {0}\n", p_Score);
+		}
 		
-		// TODO
-		private void main_proc() { }
+		private void main_proc()
+		{
+			var rule = Call(CMD_CHECK_BTL_RULE, Array.Empty<long>());
+
+			if (rule == BTL_RULE_DOUBLE)
+			{
+				var mikata = Call(CMD_IF_MIKATA_ATTACK, Array.Empty<long>());
+				if (mikata != HAVE_NO)
+					return;
+            }
+
+			if (Basic_ConaHoushi() != HAVE_YES &&
+                Basic_Itazuragokoro() != HAVE_YES &&
+                Basic_Sensei() != HAVE_YES &&
+                Basic_Hayatenotubasa() != HAVE_YES &&
+                Basic_DaimaxNG() != HAVE_YES)
+			{
+				var waza = CurrentWazaNo();
+
+				if (waza != WazaNo.TUNODORIRU && waza != WazaNo.ZIWARE)
+				{
+					var dmg = Call(CMD_CHECK_DAMAGE_WAZA, new long[] { (long)CurrentWazaNo() });
+					if (dmg == 0)
+					{
+						Calc_BasicAll();
+						return;
+					}
+				}
+
+                if (Calc_BasicDamage() == HAVE_YES)
+                    Calc_BasicAll();
+			}
+		}
 		
-		// TODO
-		private int Basic_ConaHoushi() { return default; }
+		private int Basic_ConaHoushi()
+		{
+			var waza = CurrentWazaNo();
+
+			// Not a powder move
+			if (waza != WazaNo.DOKUNOKONA &&
+				waza != WazaNo.SIBIREGONA &&
+				waza != WazaNo.NEMURIGONA &&
+				waza != WazaNo.KINOKONOHOUSI &&
+				waza != WazaNo.IKARINOKONA &&
+				waza != WazaNo.HUNZIN)
+				return HAVE_NO;
+
+			// Defensive ability is Overcoat
+            if ((TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { (long)AIStatusFlag.CHECK_DEFENCE }) == TokuseiNo.BOUZIN)
+            {
+                var tokusei = (TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { (long)AIStatusFlag.CHECK_ATTACK });
+
+				// Offensive ability is not Mold Breaker, Turboblaze, nor Teravolt
+				if (tokusei != TokuseiNo.KATAYABURI &&
+                    tokusei != TokuseiNo.TAABOBUREIZU &&
+                    tokusei != TokuseiNo.TERABORUTEEZI)
+				{
+                    ScoreCtrl(-10);
+                    return HAVE_YES;
+                }
+            }
+
+			// Defensive type is Grass
+            if ((PokeType)Call(CMD_CHECK_TYPE, new long[] { (long)AIStatusFlag.CHECK_DEFENCE_TYPE1 }) == PokeType.KUSA ||
+                (PokeType)Call(CMD_CHECK_TYPE, new long[] { (long)AIStatusFlag.CHECK_DEFENCE_TYPE2 }) == PokeType.KUSA)
+            {
+                ScoreCtrl(-10);
+                return HAVE_YES;
+            }
+
+			return HAVE_NO;
+        }
 		
 		// TODO
 		private int Basic_Itazuragokoro() { return default; }

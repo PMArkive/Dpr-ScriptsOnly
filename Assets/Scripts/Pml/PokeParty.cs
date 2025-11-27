@@ -38,8 +38,10 @@ namespace Pml
         // TODO
         public PokemonParam GetMemberPointerConst(uint idx) { return null; }
 
-        // TODO
-        public uint GetMemberCount() { return 0; }
+        public uint GetMemberCount()
+        {
+            return m_memberCount;
+        }
 
         // TODO
         public void SetMemberCount(uint count) { }

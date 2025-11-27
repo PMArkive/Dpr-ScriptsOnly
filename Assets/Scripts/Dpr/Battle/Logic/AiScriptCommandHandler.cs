@@ -1,4 +1,5 @@
 ﻿using Pml;
+using Pml.Personal;
 
 namespace Dpr.Battle.Logic
 {
@@ -7,97 +8,324 @@ namespace Dpr.Battle.Logic
         private readonly MainModule m_mainModule;
         private readonly BattleEnv m_pBattleEnv;
         private BattleSimulator m_pBattleSimulator;
-        private CommandParam m_commandParam;
-        private WazaNo[][] m_usedWaza;
+        private CommandParam m_commandParam = new CommandParam();
+        private WazaNo[][] m_usedWaza = RectangularArrays.RectangularDefaultArray<WazaNo>(PokeID.NUM, BattleDefConst.PTL_WAZA_MAX);
         private bool m_isEscapeSelected;
-        private Random m_randGenerator;
+        private Random m_randGenerator = new Random();
 
-        // TODO
-        public AiScriptCommandHandler(MainModule mainModule, BattleSimulator pBattleSimulator, BattleEnv pBattleEnv, ulong randSeed) { }
+        public AiScriptCommandHandler(MainModule mainModule, BattleSimulator pBattleSimulator, BattleEnv pBattleEnv, ulong randSeed)
+        {
+            m_mainModule = mainModule;
+            m_pBattleEnv = pBattleEnv;
+            m_pBattleSimulator = pBattleSimulator;
+            m_isEscapeSelected = false;
+            m_randGenerator.Initialize(randSeed);
 
-        // TODO
-        public void Dispose() { }
+            for (int i=0; i<PokeID.NUM; i++)
+            {
+                m_usedWaza[i][0] = WazaNo.NULL;
+                m_usedWaza[i][1] = WazaNo.NULL;
+                m_usedWaza[i][2] = WazaNo.NULL;
+                m_usedWaza[i][3] = WazaNo.NULL;
+            }
+        }
 
-        // TODO
-        public void SetCommandParam(in CommandParam commandParam) { }
+        public void Dispose()
+        {
+            m_pBattleSimulator = null;
+            m_commandParam?.Clear();
+            m_commandParam = null;
+            m_usedWaza = null;
+            m_randGenerator = null;
+        }
 
-        // TODO
-        public CommandParam GetCommandParam() { return null; }
+        public void SetCommandParam(in CommandParam commandParam)
+        {
+            m_commandParam.CopyFrom(commandParam);
+        }
 
-        // TODO
-        public Random GetRandGenerator() { return null; }
+        public CommandParam GetCommandParam()
+        {
+            return m_commandParam;
+        }
 
-        // TODO
-        public MainModule GetMainModule() { return null; }
+        public Random GetRandGenerator()
+        {
+            return m_randGenerator;
+        }
 
-        // TODO
-        public BattleSimulator GetBattleSimulator() { return null; }
+        public MainModule GetMainModule()
+        {
+            return m_mainModule;
+        }
 
-        // TODO
-        public POKECON GetPokeCon() { return null; }
+        public BattleSimulator GetBattleSimulator()
+        {
+            return m_pBattleSimulator;
+        }
 
-        // TODO
-        public BattleEnv GetBattleEnv() { return null; }
+        public POKECON GetPokeCon()
+        {
+            return m_pBattleEnv.GetPokeCon();
+        }
 
-        // TODO
-        public BTL_POKEPARAM GetAttackPokeParam() { return null; }
+        public BattleEnv GetBattleEnv()
+        {
+            return m_pBattleEnv;
+        }
 
-        // TODO
-        public BTL_POKEPARAM GetDefensePokeParam() { return null; }
+        public BTL_POKEPARAM GetAttackPokeParam()
+        {
+            return m_commandParam.attackPoke;
+        }
 
-        // TODO
-        public BtlPokePos GetAttackPokePos() { return BtlPokePos.POS_1ST_0; }
+        public BTL_POKEPARAM GetDefensePokeParam()
+        {
+            return m_commandParam.defensePoke;
+        }
 
-        // TODO
-        public BtlPokePos GetDefensePokePos() { return BtlPokePos.POS_1ST_0; }
+        public BtlPokePos GetAttackPokePos()
+        {
+            return GetPokePos(GetAttackPokeParam());
+        }
 
-        // TODO
-        private BtlPokePos GetPokePos(BTL_POKEPARAM pokeParam) { return BtlPokePos.POS_1ST_0; }
+        public BtlPokePos GetDefensePokePos()
+        {
+            return GetPokePos(GetDefensePokeParam());
+        }
 
-        // TODO
-        public BTL_POKEPARAM GetBenchPokeParam() { return null; }
+        private BtlPokePos GetPokePos(BTL_POKEPARAM pokeParam)
+        {
+            if (pokeParam == null)
+                return BtlPokePos.POS_NULL;
 
-        // TODO
-        public byte GetCurrentWazaIndex() { return 0; }
+            return m_mainModule.PokeIDtoPokePos(GetPokeCon(), pokeParam.GetID());
+        }
 
-        // TODO
-        public WazaNo GetCurrentWazaNo() { return WazaNo.NULL; }
+        public BTL_POKEPARAM GetBenchPokeParam()
+        {
+            return m_commandParam.currentBenchPoke;
+        }
 
-        // TODO
-        public ushort GetCurrentItemNo() { return 0; }
+        public byte GetCurrentWazaIndex()
+        {
+            return m_commandParam.currentWazaIndex;
+        }
 
-        // TODO
-        public BTL_POKEPARAM GetBpp(BtlPokePos pos) { return null; }
+        public WazaNo GetCurrentWazaNo()
+        {
+            return m_commandParam.currentWazaNo;
+        }
 
-        // TODO
-        public BTL_POKEPARAM GetBppByAISide(uint ai_side) { return null; }
+        public ushort GetCurrentItemNo()
+        {
+            return m_commandParam.currentItemNo;
+        }
 
-        // TODO
-        public byte AISideToClientID(uint ai_side) { return 0; }
+        public BTL_POKEPARAM GetBpp(BtlPokePos pos)
+        {
+            return GetPokeCon().GetFrontPokeDataConst(pos);
+        }
 
-        // TODO
-        public BtlPokePos AISideToPokePos(uint ai_side) { return BtlPokePos.POS_1ST_0; }
+        public BTL_POKEPARAM GetBppByAISide(uint ai_side)
+        {
+            if (ai_side == (uint)AIStatusFlag.CHECK_BENCH)
+                return GetBenchPokeParam();
 
-        // TODO
-        public TokuseiNo CheckTokuseiByAISide(int ai_side) { return TokuseiNo.NULL; }
+            return GetBpp(AISideToPokePos(ai_side));
+        }
 
-        // TODO
-        public uint CalcMaxDamage(BTL_POKEPARAM atkPoke, BTL_POKEPARAM defPoke, bool loss_flag) { return 0; }
+        public byte AISideToClientID(uint ai_side)
+        {
+            if (ai_side == (uint)AIStatusFlag.CHECK_BENCH)
+                ai_side = (uint)AIStatusFlag.CHECK_ATTACK;
 
-        // TODO
-        public void StoreUsedWaza(BTL_POKEPARAM bpp) { }
+            return m_mainModule.BtlPosToClientID(AISideToPokePos(ai_side));
+        }
 
-        // TODO
-        public bool CheckWazaStored(BTL_POKEPARAM bpp, WazaNo waza_no) { return false; }
+        public BtlPokePos AISideToPokePos(uint ai_side)
+        {
+            switch ((AIStatusFlag)ai_side)
+            {
+                case AIStatusFlag.CHECK_DEFENCE:
+                    return GetDefensePokePos();
 
-        // TODO
-        public void ResetEscape() { }
+                case AIStatusFlag.CHECK_ATTACK:
+                    return GetAttackPokePos();
 
-        // TODO
-        public void NotifyEscapeByAI() { }
+                case AIStatusFlag.CHECK_DEFENCE_FRIEND:
+                    {
+                        var pos = GetDefensePokePos();
+                        if (m_mainModule.GetRule() == BtlRule.BTL_RULE_DOUBLE)
+                            return m_mainModule.GetFriendPokePos(pos, 1);
+                        else
+                            return pos;
+                    }
 
-        // TODO
-        public bool IsEscapeSelected() { return false; }
+                case AIStatusFlag.CHECK_ATTACK_FRIEND:
+                    {
+                        var pos = GetAttackPokePos();
+                        if (m_mainModule.GetRule() == BtlRule.BTL_RULE_DOUBLE)
+                            return m_mainModule.GetFriendPokePos(pos, 1);
+                        else
+                            return pos;
+                    }
+
+                case AIStatusFlag.CHECK_RAID_FRIEND1:
+                    {
+                        var pos = GetAttackPokePos();
+                        if (m_mainModule.GetRule() != BtlRule.BTL_RULE_RAID)
+                            return pos;
+                        else
+                            return m_mainModule.GetFriendPokePos(pos, 0);
+                    }
+
+                case AIStatusFlag.CHECK_RAID_FRIEND2:
+                    {
+                        var pos = GetAttackPokePos();
+                        if (m_mainModule.GetRule() != BtlRule.BTL_RULE_RAID)
+                            return pos;
+                        else
+                            return m_mainModule.GetFriendPokePos(pos, 1);
+                    }
+
+                case AIStatusFlag.CHECK_RAID_FRIEND3:
+                    {
+                        var pos = GetAttackPokePos();
+                        if (m_mainModule.GetRule() != BtlRule.BTL_RULE_RAID)
+                            return pos;
+                        else
+                            return m_mainModule.GetFriendPokePos(pos, 2);
+                    }
+
+                default:
+                    return GetAttackPokePos();
+            }
+        }
+
+        public TokuseiNo CheckTokuseiByAISide(int ai_side)
+        {
+            BTL_POKEPARAM bpp;
+            if (ai_side == (uint)AIStatusFlag.CHECK_BENCH)
+                bpp = GetBenchPokeParam();
+            else
+                bpp = GetPokeCon().GetFrontPokeDataConst(AISideToPokePos((uint)ai_side));
+
+            if (bpp == null)
+                return TokuseiNo.NULL;
+
+            if (ai_side == (int)AIStatusFlag.CHECK_ATTACK || ai_side == (int)AIStatusFlag.CHECK_ATTACK_FRIEND)
+                return (TokuseiNo)bpp.GetValue(BTL_POKEPARAM.ValueID.BPP_TOKUSEI_EFFECTIVE);
+
+            var tokuseiEffective = (TokuseiNo)bpp.GetValue(BTL_POKEPARAM.ValueID.BPP_TOKUSEI_EFFECTIVE);
+            if (tokuseiEffective == TokuseiNo.KAGEHUMI ||
+                tokuseiEffective == TokuseiNo.ZIRYOKU ||
+                tokuseiEffective == TokuseiNo.ARIZIGOKU)
+                return tokuseiEffective;
+
+            if (BattleAiSystem.IsTokuseiOpened(bpp.GetID()))
+                return tokuseiEffective;
+
+            var paramIDs = new ParamID[] { ParamID.TOKUSEI1, ParamID.TOKUSEI2, ParamID.TOKUSEI3 };
+            var monsno = bpp.GetMonsNo();
+            var formno = bpp.GetFormNo();
+            var tokuseis = Arrays.InitializeWithDefaultInstances<TokuseiNo>(paramIDs.Length);
+
+            ulong tokuseiCount = 0;
+            for (int i=0; i<paramIDs.Length; i++)
+            {
+                var monTokusei = (TokuseiNo)calc.PERSONAL_GetParam(monsno, formno, paramIDs[i]);
+                if (monTokusei != TokuseiNo.NULL)
+                {
+                    tokuseis[tokuseiCount] = monTokusei;
+                    tokuseiCount++;
+                }
+            }
+
+            if (tokuseiCount == 0)
+                return tokuseiEffective;
+
+            return tokuseis[m_randGenerator.GetValue(tokuseiCount)];
+        }
+
+        public uint CalcMaxDamage(BTL_POKEPARAM atkPoke, BTL_POKEPARAM defPoke, bool loss_flag)
+        {
+            var atkPokeID = atkPoke.GetID();
+            var defPokeID = defPoke.GetID();
+
+            ushort maxDmg = 0;
+            for (byte i=0; i!=atkPoke.WAZA_GetCount(); i++)
+            {
+                var dmg = m_pBattleSimulator.CalcDamage(atkPokeID, defPokeID, atkPoke.WAZA_GetID(i), true, loss_flag);
+                if (dmg > maxDmg)
+                    dmg = maxDmg;
+            }
+
+            return maxDmg;
+        }
+
+        public void StoreUsedWaza(BTL_POKEPARAM bpp)
+        {
+            var prevWaza = bpp.GetPrevWazaID();
+            var usedWaza = m_usedWaza[bpp.GetID()];
+
+            if (usedWaza[0] == prevWaza)
+                return;
+            else if (usedWaza[0] == WazaNo.NULL)
+            {
+                usedWaza[0] = prevWaza;
+                return;
+            }
+
+            if (usedWaza[1] == prevWaza)
+                return;
+            else if (usedWaza[1] == WazaNo.NULL)
+            {
+                usedWaza[1] = prevWaza;
+                return;
+            }
+
+            if (usedWaza[2] == prevWaza)
+                return;
+            else if (usedWaza[2] == WazaNo.NULL)
+            {
+                usedWaza[2] = prevWaza;
+                return;
+            }
+
+            if (usedWaza[3] == prevWaza)
+                return;
+            else if (usedWaza[3] == WazaNo.NULL)
+            {
+                usedWaza[3] = prevWaza;
+                return;
+            }
+        }
+
+        public bool CheckWazaStored(BTL_POKEPARAM bpp, WazaNo waza_no)
+        {
+            var usedWaza = m_usedWaza[bpp.GetID()];
+
+            return (usedWaza[0] != WazaNo.NULL && usedWaza[0] == waza_no) ||
+                   (usedWaza[1] != WazaNo.NULL && usedWaza[1] == waza_no) ||
+                   (usedWaza[2] != WazaNo.NULL && usedWaza[2] == waza_no) ||
+                   (usedWaza[3] != WazaNo.NULL && usedWaza[3] == waza_no);
+        }
+
+        public void ResetEscape()
+        {
+            m_isEscapeSelected = false;
+        }
+
+        public void NotifyEscapeByAI()
+        {
+            m_isEscapeSelected = true;
+        }
+
+        public bool IsEscapeSelected()
+        {
+            return m_isEscapeSelected;
+        }
 
         public class CommandParam
         {

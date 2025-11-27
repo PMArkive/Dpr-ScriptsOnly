@@ -192,8 +192,10 @@ public sealed class BattlePokemonEntity : BattleObjectEntity
         }
     }
 
-    // TODO
-    public override AnimationPlayer GetAnimationPlayer() { return null; }
+    public override AnimationPlayer GetAnimationPlayer()
+    {
+        return _animationPlayer;
+    }
 
     // TODO
     public void RequestAnimationState(AnimationState state, float duration = 0.0f, float startTime = 0.0f) { }
