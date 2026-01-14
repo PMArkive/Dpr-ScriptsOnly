@@ -309,8 +309,25 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_CHECK_WAZASEQNO(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WAZA_AISYOU(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WAZA_AISYOU(AiScriptCommandHandler handle, long[] args)
+        {
+            var atkBpp = handle.GetBppByAISide((uint)args[0]);
+            var defBpp = handle.GetBppByAISide((uint)args[1]);
+            var wazano = (WazaNo)args[2];
+            var targetAff = (TypeAffinity.AffinityID)args[3];
+
+            var aff = CalcTypeAffinity(handle.GetBattleEnv(), handle.GetBattleSimulator(), atkBpp, defBpp, wazano);
+
+            if (aff == TypeAffinity.AffinityID.TYPEAFF_NULL)
+                return CELL_FALSE;
+
+            if (targetAff == TypeAffinity.AffinityID.TYPEAFF_4)
+                return (aff > TypeAffinity.AffinityID.TYPEAFF_2) ? CELL_TRUE : CELL_FALSE;
+            else if (targetAff == TypeAffinity.AffinityID.TYPEAFF_4)
+                return (aff < TypeAffinity.AffinityID.TYPEAFF_1_2) ? CELL_TRUE : CELL_FALSE;
+            else
+                return (aff == targetAff) ? CELL_TRUE : CELL_FALSE;
+        }
 
         // TODO
         private static long CMDFUNC_GET_WAZA_AISYOU(AiScriptCommandHandler handle, long[] args) { return 0; }
