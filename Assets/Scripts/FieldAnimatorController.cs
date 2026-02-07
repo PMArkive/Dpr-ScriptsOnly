@@ -7,36 +7,74 @@ public class FieldAnimatorController : MonoBehaviour
 	private Transform transform;
 	private Transform _returnParent;
 	
-	// TODO
-	public void SetChild(Transform tran) { }
+	public void SetChild(Transform tran)
+	{
+		_returnParent = tran.parent;
+
+		tran.SetParent(transform);
+		tran.localPosition = Vector3.zero;
+		tran.localRotation = Quaternion.identity;
+	}
 	
-	// TODO
-	public Transform GetReturnParent() { return default; }
+	public Transform GetReturnParent()
+	{
+		return _returnParent;
+	}
 	
-	// TODO
-	private void Awake() { }
+	private void Awake()
+	{
+		_animator = GetComponent<Animator>();
+		transform = gameObject.transform;
+	}
 	
-	// TODO
-	private void OnDestroy() { }
+	private void OnDestroy()
+	{
+		_animator.runtimeAnimatorController = null;
+		_animator = null;
+	}
 	
-	// TODO
-	public void Play(string statename) { }
+	public void Play(string statename)
+    {
+        _animator.Play(statename);
+		_isPlay = true;
+    }
 	
-	// TODO
-	public void Stop() { }
+	public void Stop()
+	{
+		_animator.Play("stop");
+        _isPlay = false;
+    }
 	
-	// TODO
-	public void OnStateMachineExit() { }
+	public void OnStateMachineExit()
+	{
+		_isPlay = false;
+	}
 	
-	// TODO
-	public bool IsPlay() { return default; }
+	public bool IsPlay()
+	{
+		return _isPlay;
+	}
 	
-	// TODO
-	public bool IsPlay(string statename) { return default; }
+	public bool IsPlay(string statename)
+	{
+		if (!IsPlay())
+			return false;
+
+		var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+
+		if (stateInfo.IsName(statename))
+			return stateInfo.normalizedTime < 1.0f;
+
+		return _isPlay;
+	}
 	
-	// TODO
-	public bool Ready() { return default; }
+	public bool Ready()
+	{
+		return _animator.runtimeAnimatorController != null;
+	}
 	
-	// TODO
-	public Animator GetAnimator() { return default; }
+	public Animator GetAnimator()
+	{
+		return _animator;
+	}
 }

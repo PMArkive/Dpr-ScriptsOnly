@@ -239,8 +239,14 @@ namespace Dpr.SubContents
         // TODO
         public static int GetNakayoshiRank(uint friendship) { return 0; }
 
-        // TODO
-        public static void ArrayDestroy(object[] objects) { }
+        public static void ArrayDestroy(object[] objects)
+        {
+            if (objects == null)
+                return;
+
+            for (int i=0; i<objects.Length; i++)
+                objects[i] = null;
+        }
 
         // TODO
         public static float Vector2ToAngle(Vector2 input, float offset) { return 0.0f; }

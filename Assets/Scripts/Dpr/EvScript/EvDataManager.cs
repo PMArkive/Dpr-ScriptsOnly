@@ -7094,8 +7094,43 @@ namespace Dpr.EvScript
         // TODO
         private bool EvCmdTemotiBallLoadWait() { return false; }
 
-        // TODO
-        private bool EvCmdPokecenPutBall() { return false; }
+        private bool EvCmdPokecenPutBall()
+        {
+            var index = GetArgInt(_evArg[1]);
+
+            if (EntityManager.fieldPokemonCenter.Length == 0)
+                return true;
+
+            var center = EntityManager.fieldPokemonCenter[0];
+
+            uint partyIdx;
+            int validIndex = 0;
+            var ballId = BallId.MAX;
+            for (partyIdx=0; partyIdx<PlayerWork.playerParty.GetMemberCount(); partyIdx++)
+            {
+                var mon = PlayerWork.playerParty.GetMemberPointer(partyIdx);
+                if (!mon.IsEgg(EggCheckType.BOTH_EGG))
+                {
+                    if (index == validIndex)
+                    {
+                        ballId = (BallId)mon.GetGetBall();
+                        break;
+                    }
+
+                    validIndex++;
+                }
+            }
+
+            partyIdx = (uint)index;
+            center.PutBall(index, ballId);
+
+            if (EntityManager.fieldPokemonCenterMonitor.Length == 0)
+                return true;
+
+            EntityManager.fieldPokemonCenterMonitor[0].DisplayIcon(index, (int)partyIdx);
+
+            return true;
+        }
 
         // TODO
         private bool EvCmdPokecenClearBall() { return false; }
@@ -7467,26 +7502,96 @@ namespace Dpr.EvScript
         // TODO
         private bool EvCmd_PARK_ITEM_NAME() { return false; }
 
-        // TODO
-        private bool EvCmd_LOAD_UMA_ANIME() { return false; }
+        private bool EvCmd_LOAD_UMA_ANIME()
+        {
+            if (_umaAnimatorCtr == null)
+                _umaAnimatorCtr = new FieldAnimatorController[3];
 
-        // TODO
-        private IEnumerator LoadUMAAsset() { return null; }
+            Sequencer.Start(LoadUMAAsset());
 
-        // TODO
-        private bool EvCmd_RELEASE_UMA_ANIME() { return false; }
+            return true;
+        }
 
-        // TODO
-        private bool EvCmd_LOAD_UMA_ANIME_WAIT() { return false; }
+        private IEnumerator LoadUMAAsset()
+        {
+            AssetManager.AppendAssetBundleRequest("field/animeobj/chapter111", true, null, null);
+            yield return AssetManager.DispatchRequests((eventType, name, asset) =>
+            {
+                if (asset != null && asset is GameObject)
+                {
+                    for (int i=0; i<_umaAnimatorCtr.Length; i++)
+                        _umaAnimatorCtr[i] = (UnityEngine.Object.Instantiate(asset) as GameObject).GetComponent<FieldAnimatorController>();
+                }
+            });
+        }
 
-        // TODO
-        private bool EvCmd_UMA_ANIME_PLAY() { return false; }
+        private bool EvCmd_RELEASE_UMA_ANIME()
+        {
+            for (int i=0; i<_umaAnimatorCtr.Length; i++)
+            {
+                _umaAnimatorCtr[i].transform.GetChild(0).SetParent(_umaAnimatorCtr[i].GetReturnParent());
 
-        // TODO
-        private bool EvCmd_UMA_ANIME_ATTACH() { return false; }
+                UnityEngine.Object.Destroy(_umaAnimatorCtr[i].gameObject);
 
-        // TODO
-        private bool EvCmd_UMA_PLAY_WAIT() { return false; }
+                _umaAnimatorCtr[i] = null;
+            }
+
+            AssetManager.UnloadAssetBundle("field/animeobj/chapter111");
+
+            return true;
+        }
+
+        private bool EvCmd_LOAD_UMA_ANIME_WAIT()
+        {
+            for (int i=0; i<_umaAnimatorCtr.Length; i++)
+            {
+                if (_umaAnimatorCtr[i] == null)
+                    return false;
+
+                if (!_umaAnimatorCtr[i].Ready())
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool EvCmd_UMA_ANIME_PLAY()
+        {
+            int controllerIndex = GetArgInt(_evArg[1]);
+            string statename = GetArgString(_evData, _evArg[2]);
+
+            _umaAnimatorCtr[controllerIndex].Play(statename);
+
+            return true;
+        }
+
+        private bool EvCmd_UMA_ANIME_ATTACH()
+        {
+            int controllerIndex = GetArgInt(_evArg[1]);
+            string entityName = GetArgString(_evData, _evArg[2]);
+
+            var entity = Find_fieldObjectEntity(entityName);
+            entity.isExtruded = false;
+            entity.isLanding = false;
+            entity.SetPositionDirect(Vector3.zero);
+
+            _umaAnimatorCtr[controllerIndex].SetChild(entity.transform);
+
+            return true;
+        }
+
+        private bool EvCmd_UMA_PLAY_WAIT()
+        {
+            int controllerIndex = GetArgInt(_evArg[1]);
+
+            // BUG: Checks for if there's only 1 argument instead of 2.
+            if (_evArg.Length < 2)
+                return !_umaAnimatorCtr[controllerIndex].IsPlay();
+
+            string statename = GetArgString(_evData, _evArg[2]);
+
+            return !_umaAnimatorCtr[controllerIndex].IsPlay(statename);
+        }
 
         // TODO
         private bool EvCmd_OBJ_ANIME_SPEED() { return false; }
@@ -7586,8 +7691,17 @@ namespace Dpr.EvScript
         // TODO
         private bool EvCmd_CAMERA_CONTROLLER_IS_NULL() { return false; }
 
-        // TODO
-        private bool EvCmd_UMA_IS_NULL() { return false; }
+        private bool EvCmd_UMA_IS_NULL()
+        {
+            int controllerIndex = GetArgInt(_evArg[1]);
+
+            if (_umaAnimatorCtr == null)
+                FlagWork.SetWork(_evArg[2].data, _WORK_TRUE);
+            else
+                FlagWork.SetWork(_evArg[2].data, _umaAnimatorCtr[controllerIndex] == null ? _WORK_TRUE : _WORK_FALSE);
+
+            return true;
+        }
 
         // TODO
         private bool EvCmdGetIsHaveSecretBase() { return false; }
@@ -8196,14 +8310,38 @@ namespace Dpr.EvScript
                     case EvCmdID.NAME._EVENT_CAMERA_INDEX:
                         return EvCmdEventCameraIndex();
 
+                    case EvCmdID.NAME._POKECEN_PUT_BALL:
+                        return EvCmdPokecenPutBall();
+
                     case EvCmdID.NAME._CAMERA_CONTROLLER_PLAY:
                         return EvCmd_CAMERA_CONTROLLER_PLAY();
+
+                    case EvCmdID.NAME._LOAD_UMA_ANIME:
+                        return EvCmd_LOAD_UMA_ANIME();
+
+                    case EvCmdID.NAME._RELEASE_UMA_ANIME:
+                        return EvCmd_RELEASE_UMA_ANIME();
+
+                    case EvCmdID.NAME._LOAD_UMA_ANIME_WAIT:
+                        return EvCmd_LOAD_UMA_ANIME_WAIT();
+
+                    case EvCmdID.NAME._UMA_ANIME_PLAY:
+                        return EvCmd_UMA_ANIME_PLAY();
+
+                    case EvCmdID.NAME._UMA_ANIME_ATTACH:
+                        return EvCmd_UMA_ANIME_ATTACH();
+
+                    case EvCmdID.NAME._UMA_PLAY_WAIT:
+                        return EvCmd_UMA_PLAY_WAIT();
 
                     case EvCmdID.NAME._DISPLAY_MESSAGE:
                         return EvCmd_DISPLAY_MESSAGE();
 
                     case EvCmdID.NAME._DISPLAY_MESSAGE_CLOSE:
                         return EvCmd_DISPLAY_MESSAGE_CLOSE();
+
+                    case EvCmdID.NAME._UMA_IS_NULL:
+                        return EvCmd_UMA_IS_NULL();
 
                     case EvCmdID.NAME._TV_RED_GYARADOS_ON:
                         return EvCmd_TV_RED_GYARADOS_ON();
