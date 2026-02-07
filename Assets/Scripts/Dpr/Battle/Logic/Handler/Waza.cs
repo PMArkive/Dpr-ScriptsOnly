@@ -1,5 +1,8 @@
 using Pml;
 using Pml.WazaData;
+using Dpr.Battle.Logic;
+using System;
+using UnityEngine.EventSystems;
 
 namespace Dpr.Battle.Logic.Handler
 {
@@ -2579,6 +2582,41 @@ namespace Dpr.Battle.Logic.Handler
 				this.waza1 = waza1;
 				this.waza2 = waza2;
 				this.effect = effect;
+			}
+		}
+
+		private static bool get_WeatherBallParam(ref Waza.WeatherBallParam param, BtlWeather weather)
+		{
+			switch (weather)
+			{
+				case BtlWeather.BTL_WEATHER_SHINE:
+					param.type = PokeType.HONOO;
+					param.effIndex = 1;
+					return true;
+				case BtlWeather.BTL_WEATHER_RAIN:
+					param.type = PokeType.MIZU;
+					param.effIndex = 4;
+					return true;
+				case BtlWeather.BTL_WEATHER_SNOW:
+					param.type = PokeType.KOORI;
+					param.effIndex = 2;
+					return true;
+				case BtlWeather.BTL_WEATHER_SAND:
+					param.type = PokeType.IWA;
+					param.effIndex = 3;
+					return true;
+				case BtlWeather.BTL_WEATHER_STORM:
+					param.type = PokeType.MIZU;
+					param.effIndex = 4;
+					return true;
+				case BtlWeather.BTL_WEATHER_DAY:
+					param.type = PokeType.HONOO;
+					param.effIndex = 1;
+					return true;
+				default:
+					param.type = 0;
+					param.effIndex = 0;
+					return false;
 			}
 		}
 	}

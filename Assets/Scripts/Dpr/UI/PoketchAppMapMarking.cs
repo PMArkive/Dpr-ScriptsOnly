@@ -49,5 +49,7 @@ namespace Dpr.UI
 		
 		// TODO
 		private void ResetButtonsState([Optional] PoketchButton targetButton) { }
+
+		private ZoneID[] _pokeZoneIDs;
 	}
 }

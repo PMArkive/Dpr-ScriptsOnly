@@ -10,6 +10,10 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using Dpr;
+using Dpr.Item;
+using Dpr.MsgWindow;
 
 namespace Dpr.Battle.View.Systems
 {

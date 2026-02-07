@@ -25,6 +25,8 @@ using Dpr.SubContents;
 using System.Runtime.InteropServices;
 using Dpr.FureaiHiroba;
 using Dpr.Field;
+using Dpr;
+using Dpr.NetworkUtils;
 
 namespace Dpr.EvScript
 {

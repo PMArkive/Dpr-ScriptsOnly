@@ -3,6 +3,7 @@ using Dpr.Message;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System;
 
 namespace Dpr.MsgWindow
 {

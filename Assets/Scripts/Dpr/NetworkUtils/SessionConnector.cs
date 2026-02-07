@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Dpr.NetworkUtils
 {
