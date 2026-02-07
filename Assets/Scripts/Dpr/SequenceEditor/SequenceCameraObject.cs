@@ -5,7 +5,6 @@ using SmartPoint.Rendering;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Rendering;
-using System;
 
 namespace Dpr.SequenceEditor
 {

@@ -1,7 +1,5 @@
 ﻿using Dpr.SubContents;
 using System.Collections;
-using System;
-using System.Collections.Generic;
 
 namespace Dpr.Field.Walking
 {

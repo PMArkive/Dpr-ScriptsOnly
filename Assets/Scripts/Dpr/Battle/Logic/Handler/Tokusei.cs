@@ -1012,7 +1012,32 @@ namespace Dpr.Battle.Logic.Handler
 		
 		// TODO
 		public static void handler_Yotimu(in EventFactor.EventHandlerArgs args, byte pokeID) { }
-		
+
+		public static byte get_yotimu_wazapri(WazaNo waza)
+		{
+			if (WAZADATA.GetDamageType(waza) == WazaDamageType.NONE)
+				return 1;
+
+			byte power = (byte)WAZADATA.GetPower(waza);
+			if (power == 1)
+			{
+				if (WAZADATA.GetCategory(waza) == WazaCategory.ICHIGEKI)
+					return 150;
+
+				switch (waza)
+				{
+					case WazaNo.KAUNTAA:
+					case WazaNo.MIRAAKOOTO:
+					case WazaNo.METARUBAASUTO:
+						return 120;
+					default:
+						return 80;
+				}
+			}
+
+			return power;
+		}
+
 		// TODO
 		public static EventFactor.EventHandlerTable[] ADD_KikenYoti(ref EventPriority prio) { return default; }
 		
@@ -2306,29 +2331,5 @@ namespace Dpr.Battle.Logic.Handler
 			}
 		}
 
-		public static byte get_yotimu_wazapri(WazaNo waza)
-		{
-			if (WAZADATA.GetDamageType(waza) == WazaDamageType.NONE)
-				return 1;
-
-			uint power = WAZADATA.GetPower(waza);
-			if (power == 1)
-			{
-				if (WAZADATA.GetCategory(waza) == WazaCategory.ICHIGEKI)
-					return 150;
-
-				switch (waza)
-				{
-					case WazaNo.KAUNTAA:
-					case WazaNo.MIRAAKOOTO:
-					case WazaNo.METARUBAASUTO:
-						return 120;
-					default:
-						return 80;
-				}
-			}
-
-			return (byte)power;
-		}
 	}
 }

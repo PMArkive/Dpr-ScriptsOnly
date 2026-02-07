@@ -867,7 +867,42 @@ namespace Dpr.Battle.Logic.Handler
 		
 		// TODO
 		public static EventFactor.EventHandlerTable[] ADD_WeatherBall() { return default; }
-		
+
+		private static bool get_WeatherBallParam(ref Waza.WeatherBallParam param, BtlWeather weather)
+		{
+			switch (weather)
+			{
+				case BtlWeather.BTL_WEATHER_SHINE:
+					param.type = PokeType.HONOO;
+					param.effIndex = (byte)BtlvWazaEffect_TurnType.BTLV_WAZAEFF_WEATHERBALL_SHINE;
+					return true;
+				case BtlWeather.BTL_WEATHER_RAIN:
+					param.type = PokeType.MIZU;
+					param.effIndex = (byte)BtlvWazaEffect_TurnType.BTLV_WAZAEFF_WEATHERBALL_RAIN;
+					return true;
+				case BtlWeather.BTL_WEATHER_SNOW:
+					param.type = PokeType.KOORI;
+					param.effIndex = (byte)BtlvWazaEffect_TurnType.BTLV_WAZAEFF_WEATHERBALL_SNOW;
+					return true;
+				case BtlWeather.BTL_WEATHER_SAND:
+					param.type = PokeType.IWA;
+					param.effIndex = (byte)BtlvWazaEffect_TurnType.BTLV_WAZAEFF_WEATHERBALL_SAND;
+					return true;
+				case BtlWeather.BTL_WEATHER_STORM:
+					param.type = PokeType.MIZU;
+					param.effIndex = (byte)BtlvWazaEffect_TurnType.BTLV_WAZAEFF_WEATHERBALL_RAIN;
+					return true;
+				case BtlWeather.BTL_WEATHER_DAY:
+					param.type = PokeType.HONOO;
+					param.effIndex = (byte)BtlvWazaEffect_TurnType.BTLV_WAZAEFF_WEATHERBALL_SHINE;
+					return true;
+				default:
+					param.type = PokeType.NORMAL;
+					param.effIndex = (byte)BtlvWazaEffect_TurnType.BTLV_WAZAEFF_WEATHERBALL_NORMAL;
+					return false;
+			}
+		}
+
 		// TODO
 		public static void handler_WeatherBall_Type(in EventFactor.EventHandlerArgs args, byte pokeID) { }
 		
@@ -2585,39 +2620,5 @@ namespace Dpr.Battle.Logic.Handler
 			}
 		}
 
-		private static bool get_WeatherBallParam(ref Waza.WeatherBallParam param, BtlWeather weather)
-		{
-			switch (weather)
-			{
-				case BtlWeather.BTL_WEATHER_SHINE:
-					param.type = PokeType.HONOO;
-					param.effIndex = 1;
-					return true;
-				case BtlWeather.BTL_WEATHER_RAIN:
-					param.type = PokeType.MIZU;
-					param.effIndex = 4;
-					return true;
-				case BtlWeather.BTL_WEATHER_SNOW:
-					param.type = PokeType.KOORI;
-					param.effIndex = 2;
-					return true;
-				case BtlWeather.BTL_WEATHER_SAND:
-					param.type = PokeType.IWA;
-					param.effIndex = 3;
-					return true;
-				case BtlWeather.BTL_WEATHER_STORM:
-					param.type = PokeType.MIZU;
-					param.effIndex = 4;
-					return true;
-				case BtlWeather.BTL_WEATHER_DAY:
-					param.type = PokeType.HONOO;
-					param.effIndex = 1;
-					return true;
-				default:
-					param.type = 0;
-					param.effIndex = 0;
-					return false;
-			}
-		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Dpr.UI
 		private int _gridSize;
 		private Vector2 _grigBasePosition = Vector2.zero;
 		private TownMapTable.SheetData[] _mapDatas;
-		private ZoneID[] _pokeZoneID = new ZoneID[2];
+		private ZoneID[] _pokeZoneIDs = new ZoneID[2];
 		private float _blinkCount;
 		
 		// TODO
@@ -49,7 +49,5 @@ namespace Dpr.UI
 		
 		// TODO
 		private void ResetButtonsState([Optional] PoketchButton targetButton) { }
-
-		private ZoneID[] _pokeZoneIDs;
 	}
 }
