@@ -1,9 +1,11 @@
-﻿namespace Pml.PokePara
+using System;
+using System.Runtime.InteropServices;
+using Pml;
+
+namespace Pml.PokePara
 {
     public class Accessor
     {
-        // TODO: cctor
-
         private const uint CORE_DATA_SIZE = 328;
         private const uint CALC_DATA_SIZE = 16;
         public const uint FULL_SERIALIZE_DATA_SIZE = 344;
@@ -31,49 +33,153 @@
         private const byte POS2 = 1;
         private const byte POS3 = 2;
         private const byte POS4 = 3;
-        private static readonly byte[][] BLOCK_POS_TABLE;
+        private static readonly byte[][] BLOCK_POS_TABLE = GenerateBlockPosTable();
 
-        // TODO
+        private static byte[][] GenerateBlockPosTable()
+        {
+            byte[][] order = new byte[24][]
+            {
+                new byte[] { 0, 1, 2, 3 },
+                new byte[] { 0, 1, 3, 2 },
+                new byte[] { 0, 2, 1, 3 },
+                new byte[] { 0, 2, 3, 1 },
+                new byte[] { 0, 3, 1, 2 },
+                new byte[] { 0, 3, 2, 1 },
+                new byte[] { 1, 0, 2, 3 },
+                new byte[] { 1, 0, 3, 2 },
+                new byte[] { 1, 2, 0, 3 },
+                new byte[] { 1, 2, 3, 0 },
+                new byte[] { 1, 3, 0, 2 },
+                new byte[] { 1, 3, 2, 0 },
+                new byte[] { 2, 0, 1, 3 },
+                new byte[] { 2, 0, 3, 1 },
+                new byte[] { 2, 1, 0, 3 },
+                new byte[] { 2, 1, 3, 0 },
+                new byte[] { 2, 3, 0, 1 },
+                new byte[] { 2, 3, 1, 0 },
+                new byte[] { 3, 0, 1, 2 },
+                new byte[] { 3, 0, 2, 1 },
+                new byte[] { 3, 1, 0, 2 },
+                new byte[] { 3, 1, 2, 0 },
+                new byte[] { 3, 2, 0, 1 },
+                new byte[] { 3, 2, 1, 0 },
+            };
+
+            byte[][] table = new byte[32][];
+            for (int i = 0; i < 32; i++)
+                table[i] = order[i % 24];
+
+            return table;
+        }
+
         public static void Initialize() { }
 
-        // TODO
-        public void AttachDecodedData(byte[] coreData, byte[] calcData) { }
+        public void AttachDecodedData(byte[] coreData, byte[] calcData)
+        {
+            m_pCoreData = coreData;
+            m_pCalcData = calcData;
+            m_accessState.isEncoded = false;
+            m_accessState.isFastMode = false;
+            UpdateChecksumAndEncode();
+        }
 
-        // TODO
-        public void AttachEncodedData(byte[] coreData, byte[] calcData) { }
+        public void AttachEncodedData(byte[] coreData, byte[] calcData)
+        {
+            m_pCoreData = coreData;
+            m_pCalcData = calcData;
+            m_accessState.isEncoded = true;
+            m_accessState.isFastMode = false;
+        }
 
-        // TODO
-        public bool HaveCalcData() { return false; }
+        public bool HaveCalcData()
+        {
+            return m_pCalcData != null;
+        }
 
-        // TODO
-        public void ClearData() { }
+        public void ClearData()
+        {
+            if (m_pCoreData != null)
+                Array.Clear(m_pCoreData, 0, m_pCoreData.Length);
 
-        // TODO
-        public void ClearCalcData() { }
+            if (m_pCalcData != null)
+                Array.Clear(m_pCalcData, 0, m_pCalcData.Length);
 
-        // TODO
-        public void StartFastMode() { }
+            m_accessState.isEncoded = false;
+            m_accessState.isFastMode = false;
+            UpdateChecksumAndEncode();
+        }
 
-        // TODO
-        public void EndFastMode() { }
+        public void ClearCalcData()
+        {
+            if (m_pCalcData != null)
+                Array.Clear(m_pCalcData, 0, m_pCalcData.Length);
+        }
 
-        // TODO
-        public bool IsFastMode() { return false; }
+        public void StartFastMode()
+        {
+            DecodeAndCheckIllegalWrite();
+            m_accessState.isFastMode = true;
+        }
 
-        // TODO
-        public bool IsEncoded() { return false; }
+        public void EndFastMode()
+        {
+            m_accessState.isFastMode = false;
+            UpdateChecksumAndEncode();
+        }
 
-        // TODO
-        public void Serialize_FullData(byte[] buffer) { }
+        public bool IsFastMode()
+        {
+            return m_accessState.isFastMode;
+        }
 
-        // TODO
-        public void Serialize_CoreData(byte[] buffer) { }
+        public bool IsEncoded()
+        {
+            return m_accessState.isEncoded;
+        }
 
-        // TODO
-        public void Deserialize_FullData(byte[] serializedData) { }
+        public void Serialize_FullData(byte[] buffer)
+        {
+            unsafe
+            {
+                fixed (byte* dst = buffer)
+                {
+                    Serialize(dst, dst + CORE_SERIALIZE_DATA_SIZE);
+                }
+            }
+        }
 
-        // TODO
-        public void Deserialize_CoreData(byte[] serializedData) { }
+        public void Serialize_CoreData(byte[] buffer)
+        {
+            unsafe
+            {
+                fixed (byte* dst = buffer)
+                {
+                    Serialize(dst, null);
+                }
+            }
+        }
+
+        public void Deserialize_FullData(byte[] serializedData)
+        {
+            unsafe
+            {
+                fixed (byte* src = serializedData)
+                {
+                    Deserialize(src, src + CORE_SERIALIZE_DATA_SIZE);
+                }
+            }
+        }
+
+        public void Deserialize_CoreData(byte[] serializedData)
+        {
+            unsafe
+            {
+                fixed (byte* src = serializedData)
+                {
+                    Deserialize(src, null);
+                }
+            }
+        }
 
         public unsafe void Serialize_FullData(void* buffer)
         {
@@ -95,707 +201,2956 @@
             Deserialize(serializedData, null);
         }
 
-        // TODO
-        public uint GetPersonalRnd() { return 0; }
-
-        // TODO
-        public uint GetColorRnd() { return 0; }
-
-        // TODO
-        public uint GetCheckSum() { return 0; }
-
-        // TODO
-        public bool IsFuseiTamago() { return false; }
-
-        // TODO
-        public uint GetSick() { return 0; }
-
-        // TODO
-        public MonsNo GetMonsNo() { return MonsNo.NULL; }
-
-        // TODO
-        public uint GetItemNo() { return 0; }
-
-        // TODO
-        public uint GetID() { return 0; }
-
-        // TODO
-        public uint GetExp() { return 0; }
-
-        // TODO
-        public uint GetFriendship() { return 0; }
-
-        // TODO
-        public TokuseiNo GetTokuseiNo() { return TokuseiNo.NULL; }
-
-        // TODO
-        public ushort GetBoxMark() { return 0; }
-
-        // TODO
-        public uint GetLangId() { return 0; }
-
-        // TODO
-        public uint GetEffortHp() { return 0; }
-
-        // TODO
-        public uint GetEffortAtk() { return 0; }
-
-        // TODO
-        public uint GetEffortDef() { return 0; }
-
-        // TODO
-        public uint GetEffortSpAtk() { return 0; }
-
-        // TODO
-        public uint GetEffortSpDef() { return 0; }
-
-        // TODO
-        public uint GetEffortAgi() { return 0; }
-
-        // TODO
-        public byte GetStyle() { return 0; }
-
-        // TODO
-        public byte GetBeautiful() { return 0; }
-
-        // TODO
-        public byte GetCute() { return 0; }
-
-        // TODO
-        public byte GetClever() { return 0; }
-
-        // TODO
-        public byte GetStrong() { return 0; }
-
-        // TODO
-        public byte GetFur() { return 0; }
-
-        // TODO
-        public bool HaveRibbon(uint ribbonNo) { return false; }
-
-        // TODO
-        public uint GetLumpingRibbon(LumpingRibbon ribbonId) { return default; }
-
-        // TODO
-        public byte GetEquipRibbonNo() { return 0; }
-
-        // TODO
-        public WazaNo GetWazaNo(byte wazaIndex) { return WazaNo.NULL; }
-
-        // TODO
-        public byte GetPP(byte wazaIndex) { return 0; }
-
-        // TODO
-        public byte GetWazaPPUpCount(byte wazaIndex) { return 0; }
-
-        // TODO
-        public WazaNo GetTamagoWazaNo(byte index) { return WazaNo.NULL; }
-
-        // TODO
-        public uint GetTalentHp() { return 0; }
-
-        // TODO
-        public uint GetTalentAtk() { return 0; }
-
-        // TODO
-        public uint GetTalentDef() { return 0; }
-
-        // TODO
-        public uint GetTalentSpAtk() { return 0; }
-
-        // TODO
-        public uint GetTalentSpDef() { return 0; }
-
-        // TODO
-        public uint GetTalentAgi() { return 0; }
-
-        // TODO
-        public uint GetEffortG() { return 0; }
-
-        // TODO
-        public bool IsEventPokemon() { return false; }
-
-        // TODO
-        public bool GetOfficialBattleEnableFlag() { return false; }
-
-        // TODO
-        public Sex GetSex() { return Sex.MALE; }
-
-        // TODO
-        public ushort GetFormNo() { return 0; }
-
-        // TODO
-        public uint GetSeikaku() { return 0; }
-
-        // TODO
-        public uint GetSeikakuHosei() { return 0; }
-
-        // TODO
-        public bool IsTokusei1() { return false; }
-
-        // TODO
-        public bool IsTokusei2() { return false; }
-
-        // TODO
-        public bool IsTokusei3() { return false; }
-
-        // TODO
-        public bool IsFavorite() { return false; }
-
-        // TODO
-        public bool IsSpecialGEnable() { return false; }
-
-        // TODO
-        public bool IsTamago() { return false; }
-
-        // TODO
-        public bool HaveNickName() { return false; }
-
-        // TODO
-        public string GetNickName() { return ""; }
-
-        // TODO
-        public uint GetCassetteVersion() { return 0; }
-
-        // TODO
-        public string GetOyaName() { return ""; }
-
-        // TODO
-        public uint GetTamagoGetYear() { return 0; }
-
-        // TODO
-        public uint GetTamagoGetMonth() { return 0; }
-
-        // TODO
-        public uint GetTamagoGetDay() { return 0; }
-
-        // TODO
-        public uint GetBirthYear() { return 0; }
-
-        // TODO
-        public uint GetBirthMonth() { return 0; }
-
-        // TODO
-        public uint GetBirthDay() { return 0; }
-
-        // TODO
-        public uint GetGetPlace() { return 0; }
-
-        // TODO
-        public uint GetBirthPlace() { return 0; }
-
-        // TODO
-        public uint GetPokerus() { return 0; }
-
-        // TODO
-        public uint GetGetBall() { return 0; }
-
-        // TODO
-        public uint GetGetLevel() { return 0; }
-
-        // TODO
-        public Sex GetOyasex() { return Sex.MALE; }
-
-        // TODO
-        public uint GetLevel() { return 0; }
-
-        // TODO
-        public uint GetHp() { return 0; }
-
-        // TODO
-        public uint GetMaxHp() { return 0; }
-
-        // TODO
-        public uint GetAtk() { return 0; }
-
-        // TODO
-        public uint GetDef() { return 0; }
-
-        // TODO
-        public uint GetSpAtk() { return 0; }
-
-        // TODO
-        public uint GetSpDef() { return 0; }
-
-        // TODO
-        public uint GetAgi() { return 0; }
-
-        // TODO
-        public GState GetGState() { return GState.NONE; }
-
-        // TODO
-        public byte GetEnjoy() { return 0; }
-
-        // TODO
-        public byte GetNadenadeValue() { return 0; }
-
-        // TODO
-        public ushort GetOthersFriendshipTrainerID() { return 0; }
-
-        // TODO
-        public bool GetOwnedOthersFlag() { return false; }
-
-        // TODO
-        public byte GetOriginalFriendship() { return 0; }
-
-        // TODO
-        public byte GetOthersFriendship() { return 0; }
-
-        // TODO
-        public byte GetMemoriesLevel() { return 0; }
-
-        // TODO
-        public byte GetMemoriesCode() { return 0; }
-
-        // TODO
-        public ushort GetMemoriesData() { return 0; }
-
-        // TODO
-        public byte GetMemoriesFeel() { return 0; }
-
-        // TODO
-        public byte GetOthersMemoriesLevel() { return 0; }
-
-        // TODO
-        public byte GetOthersMemoriesCode() { return 0; }
-
-        // TODO
-        public ushort GetOthersMemoriesData() { return 0; }
-
-        // TODO
-        public byte GetOthersMemoriesFeel() { return 0; }
-
-        // TODO
-        public string GetPastParentsName() { return ""; }
-
-        // TODO
-        public Sex GetPastParentsSex() { return Sex.NUM; }
-
-        // TODO
-        public byte GetPastParentsLangID() { return 0; }
-
-        // TODO
-        public bool CompareOyaName(string cmpName) { return false; }
-
-        // TODO
-        public uint GetMultiPurposeWork() { return 0; }
-
-        // TODO
-        public byte GetTrainingFlag() { return 0; }
-
-        // TODO
-        public bool GetWazaRecordFlag(byte recordIndex) { return false; }
-
-        // TODO
-        public bool GetPokeJobFlag(byte jobIndex) { return false; }
-
-        // TODO
-        public byte GetCampFriendship() { return 0; }
-
-        // TODO
-        public uint GetPalma() { return 0; }
-
-        // TODO
-        public byte GetTalentHeight() { return 0; }
-
-        // TODO
-        public byte GetTalentWeight() { return 0; }
-
-        // TODO
-        public byte GetBattleRomMark() { return 0; }
-
-        // TODO
-        public void SetDprIllegalFlag(bool flag) { }
-
-        // TODO
-        public bool GetDprIllegalFlag() { return false; }
-
-        // TODO
-        public void SetPersonalRnd(uint rnd) { }
-
-        // TODO
-        public void SetColorRnd(uint rnd) { }
-
-        // TODO
-        public void SetSick(uint sick) { }
-
-        // TODO
-        public void SetFuseiTamagoFlag(bool flag) { }
-
-        // TODO
-        public void SetCheckSum(ushort checksum) { }
-
-        // TODO
-        public void SetMonsNo(uint monsno) { }
-
-        // TODO
-        public void SetItemNo(ushort itemno) { }
-
-        // TODO
-        public void SetID(uint id) { }
-
-        // TODO
-        public void SetExp(uint exp) { }
-
-        // TODO
-        public void SetFriendship(byte friendship) { }
-
-        // TODO
-        public void SetTokuseiNo(uint tokusei) { }
-
-        // TODO
-        public void SetBoxMark(ushort mark) { }
-
-        // TODO
-        public void SetLangId(byte langId) { }
-
-        // TODO
-        public void SetEffortHp(byte value) { }
-
-        // TODO
-        public void SetEffortAtk(byte value) { }
-
-        // TODO
-        public void SetEffortDef(byte value) { }
-
-        // TODO
-        public void SetEffortSpAtk(byte value) { }
-
-        // TODO
-        public void SetEffortSpDef(byte value) { }
-
-        // TODO
-        public void SetEffortAgi(byte value) { }
-
-        // TODO
-        public void SetStyle(byte style) { }
-
-        // TODO
-        public void SetBeautiful(byte beautiful) { }
-
-        // TODO
-        public void SetCute(byte cute) { }
-
-        // TODO
-        public void SetClever(byte clever) { }
-
-        // TODO
-        public void SetStrong(byte strong) { }
-
-        // TODO
-        public void SetFur(byte fur) { }
-
-        // TODO
-        public void SetRibbon(uint ribbonNo) { }
-
-        // TODO
-        public void RemoveRibbon(uint ribbonNo) { }
-
-        // TODO
-        public void SetLumpingRibbon(LumpingRibbon ribbonId, uint num) { }
-
-        // TODO
-        public void SetEquipRibbonNo(byte ribbonNo) { }
-
-        // TODO
-        public void SetWazaNo(byte wazaIndex, uint wazano) { }
-
-        // TODO
-        public void SetPP(byte wazaIndex, byte pp) { }
-
-        // TODO
-        public void SetWazaPPUpCount(byte wazaIndex, byte count) { }
-
-        // TODO
-        public void SetTamagoWazaNo(byte index, uint wazano) { }
-
-        // TODO
-        public void SetTalentHp(byte value) { }
-
-        // TODO
-        public void SetTalentAtk(byte value) { }
-
-        // TODO
-        public void SetTalentDef(byte value) { }
-
-        // TODO
-        public void SetTalentSpAtk(byte value) { }
-
-        // TODO
-        public void SetTalentSpDef(byte value) { }
-
-        // TODO
-        public void SetTalentAgi(byte value) { }
-
-        // TODO
-        public void SetEffortG(byte value) { }
-
-        // TODO
-        public void SetEventPokemonFlag(bool flag) { }
-
-        // TODO
-        public void SetOfficialBattleEnableFlag(bool flag) { }
-
-        // TODO
-        public void SetSex(Sex sex) { }
-
-        // TODO
-        public void SetFormNo(ushort formno) { }
-
-        // TODO
-        public void SetSeikaku(uint seikaku) { }
-
-        // TODO
-        public void SetSeikakuHosei(uint seikaku) { }
-
-        // TODO
-        public void SetTamagoFlag(bool flag) { }
-
-        // TODO
-        public void SetTokusei1Flag(bool flag) { }
-
-        // TODO
-        public void SetTokusei2Flag(bool flag) { }
-
-        // TODO
-        public void SetTokusei3Flag(bool flag) { }
-
-        // TODO
-        public void SetFavoriteFlag(bool flag) { }
-
-        // TODO
-        public void SetSpecialGFlag(bool flag) { }
-
-        // TODO
-        private unsafe void copyString(char* dst, string _src, int dst_len) { }
-
-        // TODO
-        public void SetNickName(string nickName) { }
-
-        // TODO
-        public void SetNickNameFlag(bool flag) { }
-
-        // TODO
-        public void SetCassetteVersion(uint version) { }
-
-        // TODO
-        public void SetOyaName(string oyaName) { }
-
-        // TODO
-        public void SetTamagoGetYear(byte year) { }
-
-        // TODO
-        public void SetTamagoGetMonth(byte month) { }
-
-        // TODO
-        public void SetTamagoGetDay(byte day) { }
-
-        // TODO
-        public void SetBirthYear(byte year) { }
-
-        // TODO
-        public void SetBirthMonth(byte month) { }
-
-        // TODO
-        public void SetBirthDay(byte day) { }
-
-        // TODO
-        public void SetGetPlace(ushort place) { }
-
-        // TODO
-        public void SetBirthPlace(ushort place) { }
-
-        // TODO
-        public void SetPokerus(byte pokerus) { }
-
-        // TODO
-        public void SetGetBall(byte ball) { }
-
-        // TODO
-        public void SetGetLevel(byte level) { }
-
-        // TODO
-        public void SetOyasex(Sex sex) { }
-
-        // TODO
-        public void SetLevel(byte level) { }
-
-        // TODO
-        public void SetMaxHp(ushort maxHp) { }
-
-        // TODO
-        public void SetHp(ushort hp) { }
-
-        // TODO
-        public void SetAtk(ushort atk) { }
-
-        // TODO
-        public void SetDef(ushort def) { }
-
-        // TODO
-        public void SetSpAtk(ushort spatk) { }
-
-        // TODO
-        public void SetSpDef(ushort spdef) { }
-
-        // TODO
-        public void SetAgi(ushort agi) { }
-
-        // TODO
-        public void SetGState(GState state) { }
-
-        // TODO
-        public void SetEnjoy(byte enjoy) { }
-
-        // TODO
-        public void SetNadenadeValue(byte value) { }
-
-        // TODO
-        public void SetOthersFriendshipTrainerID(ushort trainerId) { }
-
-        // TODO
-        public void SetOwnedOthersFlag(bool flag) { }
-
-        // TODO
-        public void SetOriginalFriendship(byte friendship) { }
-
-        // TODO
-        public void SetOthersFriendship(byte friendship) { }
-
-        // TODO
-        public void SetMemoriesLevel(byte level) { }
-
-        // TODO
-        public void SetMemoriesCode(byte code) { }
-
-        // TODO
-        public void SetMemoriesData(ushort data) { }
-
-        // TODO
-        public void SetMemoriesFeel(byte feel) { }
-
-        // TODO
-        public void SetOthersMemoriesLevel(byte level) { }
-
-        // TODO
-        public void SetOthersMemoriesCode(byte code) { }
-
-        // TODO
-        public void SetOthersMemoriesData(ushort data) { }
-
-        // TODO
-        public void SetOthersMemoriesFeel(byte feel) { }
-
-        // TODO
-        public void SetPastParentsName(string name) { }
-
-        // TODO
-        public void SetPastParentsSex(Sex sex) { }
-
-        // TODO
-        public void SetPastParentsLangID(byte langID) { }
-
-        // TODO
-        public void SetMultiPurposeWork(uint value) { }
-
-        // TODO
-        public void SetTrainingFlag(byte value) { }
-
-        // TODO
-        public void SetWazaRecordFlag(byte recordIndex, bool set) { }
-
-        // TODO
-        public void ClearWazaRecordFlag() { }
-
-        // TODO
-        public ulong GetBankUniqueID() { return 0; }
-
-        // TODO
-        public void SetBankUniqueID(ulong value) { }
-
-        // TODO
-        public void ClearBankUniqueID() { }
-
-        // TODO
-        public void SetPokeJobFlag(byte jobIndex, bool set) { }
-
-        // TODO
-        public void ClearPokeJobFlag() { }
-
-        // TODO
-        public void SetCampFriendship(byte value) { }
-
-        // TODO
-        public void SetPalma(uint value) { }
-
-        // TODO
-        public void SetTalentHeight(byte value) { }
-
-        // TODO
-        public void SetTalentWeight(byte value) { }
-
-        // TODO
-        public void SetBattleRomMark(byte value) { }
-
-        // TODO
-        public void RemoveAllRibbon() { }
-
-        // TODO
-        private unsafe CalcData* GetCalcData(byte* _addr, bool forWrite) { return default; }
-
-        // TODO
-        private unsafe CoreDataBlockA* GetCoreDataBlockA(byte* _addr, bool forWrite) { return default; }
-
-        // TODO
-        private unsafe CoreDataBlockB* GetCoreDataBlockB(byte* _addr, bool forWrite) { return default; }
-
-        // TODO
-        private unsafe CoreDataBlockC* GetCoreDataBlockC(byte* _addr, bool forWrite) { return default; }
-
-        // TODO
-        private unsafe CoreDataBlockD* GetCoreDataBlockD(byte* _addr, bool forWrite) { return default; }
-
-        // TODO
-        protected unsafe static CoreDataHeader* GetCoreDataHeader(byte* addr) { return null; }
-
-        // TODO
-        private unsafe static byte GetCoreDataBlockPos(uint key, CoreDataBlockId blockId) { return default; }
-
-        // TODO
-        private void UpdateChecksumAndEncode() { }
-
-        // TODO
-        public static void updateChecksumAndEncode_Core(byte[] pCoreData) { }
-
-        // TODO
-        private static void updateChecksumAndEncode_Calc(byte[] pCoreData, byte[] pCalcData) { }
-
-        // TODO
-        private void DecodeAndCheckIllegalWrite() { }
-
-        // TODO
-        private unsafe void Serialize(void* bufferForCore, void* bufferForCalc) { }
-
-        // TODO
-        private unsafe void Deserialize(void* serializedCoreData, void* serializedCalcData) { }
-
-        // TODO
-        private static void CalcWazaRecordBitPos(out byte arrayIndex, out byte bitFlag, byte recordIndex)
+        // =============================================
+        // Getters - Header
+        // =============================================
+
+        public uint GetPersonalRnd()
         {
-            arrayIndex = 0;
-            bitFlag = 0;
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    return header->personalRnd;
+                }
+            }
         }
 
-        // TODO
+        public uint GetCheckSum()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    return header->checksum;
+                }
+            }
+        }
+
+        public bool IsFuseiTamago()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    return header->fuseiTamagoFlag;
+                }
+            }
+        }
+
+        // =============================================
+        // Getters - BlockA
+        // =============================================
+
+        public MonsNo GetMonsNo()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return (MonsNo)block->monsno;
+                }
+            }
+        }
+
+        public uint GetItemNo()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->itemno;
+                }
+            }
+        }
+
+        public uint GetID()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->id;
+                }
+            }
+        }
+
+        public uint GetExp()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->exp;
+                }
+            }
+        }
+
+        public TokuseiNo GetTokuseiNo()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return (TokuseiNo)block->tokuseino;
+                }
+            }
+        }
+
+        public ushort GetBoxMark()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->boxMark;
+                }
+            }
+        }
+
+        public uint GetColorRnd()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->colorRnd;
+                }
+            }
+        }
+
+        public uint GetSeikaku()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->seikaku;
+                }
+            }
+        }
+
+        public uint GetSeikakuHosei()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->seikakuHosei;
+                }
+            }
+        }
+
+        public ushort GetFormNo()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->formNo;
+                }
+            }
+        }
+
+        public uint GetEffortHp()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->effortHp;
+                }
+            }
+        }
+
+        public uint GetEffortAtk()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->effortAtk;
+                }
+            }
+        }
+
+        public uint GetEffortDef()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->effortDef;
+                }
+            }
+        }
+
+        public uint GetEffortAgi()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->effortAgi;
+                }
+            }
+        }
+
+        public uint GetEffortSpAtk()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->effortSpatk;
+                }
+            }
+        }
+
+        public uint GetEffortSpDef()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->effortSpdef;
+                }
+            }
+        }
+
+        public byte GetStyle()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->style;
+                }
+            }
+        }
+
+        public byte GetBeautiful()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->beautiful;
+                }
+            }
+        }
+
+        public byte GetCute()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->cute;
+                }
+            }
+        }
+
+        public byte GetClever()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->clever;
+                }
+            }
+        }
+
+        public byte GetStrong()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->strong;
+                }
+            }
+        }
+
+        public byte GetFur()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->fur;
+                }
+            }
+        }
+
+        public uint GetPokerus()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->pokerus;
+                }
+            }
+        }
+
+        public bool IsTokusei1()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->tokusei1Flag;
+                }
+            }
+        }
+
+        public bool IsTokusei2()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->tokusei2Flag;
+                }
+            }
+        }
+
+        public bool IsTokusei3()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->tokusei3Flag;
+                }
+            }
+        }
+
+        public bool IsFavorite()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->favoriteFlag;
+                }
+            }
+        }
+
+        public bool IsSpecialGEnable()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->special_g_flag;
+                }
+            }
+        }
+
+        public bool IsEventPokemon()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->eventGetFlag;
+                }
+            }
+        }
+
+        public bool GetOfficialBattleEnableFlag()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->officialBattleEnableFlag;
+                }
+            }
+        }
+
+        public Sex GetSex()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return (Sex)block->sex;
+                }
+            }
+        }
+
+        public byte GetCampFriendship()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return (byte)block->camp_friendship;
+                }
+            }
+        }
+
+        public bool GetDprIllegalFlag()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->dpr_illegal_flag;
+                }
+            }
+        }
+
+        public byte GetTalentHeight()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->talentHeight;
+                }
+            }
+        }
+
+        public byte GetTalentWeight()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    return block->talentWeight;
+                }
+            }
+        }
+
+        public bool HaveRibbon(uint ribbonNo)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_1)
+                        return (block->ribbonA & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_1))) != 0;
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_2)
+                        return (block->ribbonB & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_2))) != 0;
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_3)
+                        return (block->ribbonC & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_3))) != 0;
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_4)
+                        return (block->ribbonD & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_4))) != 0;
+
+                    return false;
+                }
+            }
+        }
+
+        public uint GetLumpingRibbon(LumpingRibbon ribbonId)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, false);
+                    switch (ribbonId)
+                    {
+                        case LumpingRibbon.A:
+                            return block->lumpingRibbonA;
+                        case LumpingRibbon.B:
+                            return block->lumpingRibbonB;
+                        default:
+                            return 0;
+                    }
+                }
+            }
+        }
+
+        // =============================================
+        // Getters - BlockB
+        // =============================================
+
+        public uint GetSick()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->sick;
+                }
+            }
+        }
+
+        public WazaNo GetWazaNo(byte wazaIndex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
+                        return (WazaNo)block->waza[wazaIndex];
+                    return WazaNo.NULL;
+                }
+            }
+        }
+
+        public byte GetPP(byte wazaIndex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
+                        return block->pp[wazaIndex];
+                    return 0;
+                }
+            }
+        }
+
+        public byte GetWazaPPUpCount(byte wazaIndex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
+                        return block->pointupUsedCount[wazaIndex];
+                    return 0;
+                }
+            }
+        }
+
+        public WazaNo GetTamagoWazaNo(byte index)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    if (index < PmlConstants.MAX_WAZA_NUM)
+                        return (WazaNo)block->tamagoWaza[index];
+                    return WazaNo.NULL;
+                }
+            }
+        }
+
+        public uint GetHp()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->hp;
+                }
+            }
+        }
+
+        public uint GetTalentHp()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->talentHp;
+                }
+            }
+        }
+
+        public uint GetTalentAtk()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->talentAtk;
+                }
+            }
+        }
+
+        public uint GetTalentDef()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->talentDef;
+                }
+            }
+        }
+
+        public uint GetTalentSpAtk()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->talentSpatk;
+                }
+            }
+        }
+
+        public uint GetTalentSpDef()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->talentSpdef;
+                }
+            }
+        }
+
+        public uint GetTalentAgi()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->talentAgi;
+                }
+            }
+        }
+
+        public uint GetEffortG()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->effortG;
+                }
+            }
+        }
+
+        public bool IsTamago()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->tamagoFlag;
+                }
+            }
+        }
+
+        public bool HaveNickName()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->nicknameFlag;
+                }
+            }
+        }
+
+        public string GetNickName()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return new string(block->nickname);
+                }
+            }
+        }
+
+        public uint GetPalma()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, false);
+                    return block->palma;
+                }
+            }
+        }
+
+        // =============================================
+        // Getters - BlockC
+        // =============================================
+
+        public string GetPastParentsName()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return new string(block->pastParentsName);
+                }
+            }
+        }
+
+        public Sex GetPastParentsSex()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return (Sex)block->pastParentsSex;
+                }
+            }
+        }
+
+        public byte GetPastParentsLangID()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->pastParentLangID;
+                }
+            }
+        }
+
+        public bool GetOwnedOthersFlag()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->ownedByOthers != 0;
+                }
+            }
+        }
+
+        public ushort GetOthersFriendshipTrainerID()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->othersFriendshipTrainerId;
+                }
+            }
+        }
+
+        public byte GetOthersFriendship()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->othersFriendship;
+                }
+            }
+        }
+
+        public byte GetOthersMemoriesLevel()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->othersMemoriesLevel;
+                }
+            }
+        }
+
+        public byte GetOthersMemoriesCode()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->othersMemoriesCode;
+                }
+            }
+        }
+
+        public ushort GetOthersMemoriesData()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->othersMemoriesData;
+                }
+            }
+        }
+
+        public byte GetOthersMemoriesFeel()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->othersMemoriesFeel;
+                }
+            }
+        }
+
+        public bool GetPokeJobFlag(byte jobIndex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    CalcPokeJobBitPos(out byte arrayIndex, out byte bitFlag, jobIndex);
+                    if (arrayIndex < CoreDataBlockC.POKEJOB_LEN)
+                        return (block->pokejob[arrayIndex] & bitFlag) != 0;
+                    return false;
+                }
+            }
+        }
+
+        public byte GetEnjoy()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->enjoy;
+                }
+            }
+        }
+
+        public byte GetNadenadeValue()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->nadeNadeValue;
+                }
+            }
+        }
+
+        public uint GetCassetteVersion()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->getCassette;
+                }
+            }
+        }
+
+        public byte GetBattleRomMark()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->battleRomMark;
+                }
+            }
+        }
+
+        public uint GetLangId()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->langId;
+                }
+            }
+        }
+
+        public uint GetMultiPurposeWork()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->multiWork;
+                }
+            }
+        }
+
+        public byte GetEquipRibbonNo()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, false);
+                    return block->equipRibbon;
+                }
+            }
+        }
+
+        // =============================================
+        // Getters - BlockD
+        // =============================================
+
+        public string GetOyaName()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return new string(block->parentsName);
+                }
+            }
+        }
+
+        public uint GetFriendship()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var blockC = GetCoreDataBlockC(addr, false);
+                    if (blockC->ownedByOthers != 0)
+                        return blockC->othersFriendship;
+
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->friendship;
+                }
+            }
+        }
+
+        public byte GetOriginalFriendship()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->friendship;
+                }
+            }
+        }
+
+        public byte GetMemoriesLevel()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->memories_level;
+                }
+            }
+        }
+
+        public byte GetMemoriesCode()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->memories_code;
+                }
+            }
+        }
+
+        public ushort GetMemoriesData()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->memories_data;
+                }
+            }
+        }
+
+        public byte GetMemoriesFeel()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->memories_feel;
+                }
+            }
+        }
+
+        public uint GetTamagoGetYear()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->eggGetYear;
+                }
+            }
+        }
+
+        public uint GetTamagoGetMonth()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->eggGetMonth;
+                }
+            }
+        }
+
+        public uint GetTamagoGetDay()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->eggGetDay;
+                }
+            }
+        }
+
+        public uint GetBirthYear()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->firstContactYear;
+                }
+            }
+        }
+
+        public uint GetBirthMonth()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->firstContactMonth;
+                }
+            }
+        }
+
+        public uint GetBirthDay()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->firstContactDay;
+                }
+            }
+        }
+
+        public uint GetGetPlace()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->getPlace;
+                }
+            }
+        }
+
+        public uint GetBirthPlace()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->birthPlace;
+                }
+            }
+        }
+
+        public uint GetGetBall()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->getBall;
+                }
+            }
+        }
+
+        public uint GetGetLevel()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->getLevel;
+                }
+            }
+        }
+
+        public Sex GetOyasex()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return (Sex)block->parentsSex;
+                }
+            }
+        }
+
+        public byte GetTrainingFlag()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    return block->trainingFlag;
+                }
+            }
+        }
+
+        public bool GetWazaRecordFlag(byte recordIndex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    CalcWazaRecordBitPos(out byte arrayIndex, out byte bitFlag, recordIndex);
+                    if (arrayIndex < CoreDataBlockD.WAZA_RECORD_FLAG_LEN)
+                        return (block->wazaRecordFlag[arrayIndex] & bitFlag) != 0;
+                    return false;
+                }
+            }
+        }
+
+        public ulong GetBankUniqueID()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, false);
+                    ulong value = 0;
+                    for (int i = 0; i < CoreDataBlockD.BANK_UNIQUE_ID_LEN; i++)
+                        value |= (ulong)block->bankUniqueID[i] << (i * 8);
+                    return value;
+                }
+            }
+        }
+
+        public bool CompareOyaName(string cmpName)
+        {
+            return GetOyaName() == cmpName;
+        }
+
+        // =============================================
+        // Getters - CalcData
+        // =============================================
+
+        public uint GetLevel()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return calc->level;
+                }
+            }
+        }
+
+        public uint GetMaxHp()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return calc->maxHp;
+                }
+            }
+        }
+
+        public uint GetAtk()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return calc->atk;
+                }
+            }
+        }
+
+        public uint GetDef()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return calc->def;
+                }
+            }
+        }
+
+        public uint GetSpAtk()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return calc->spatk;
+                }
+            }
+        }
+
+        public uint GetSpDef()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return calc->spdef;
+                }
+            }
+        }
+
+        public uint GetAgi()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return calc->agi;
+                }
+            }
+        }
+
+        public GState GetGState()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, false);
+                    return (GState)calc->gState;
+                }
+            }
+        }
+
+        // =============================================
+        // Setters - Header
+        // =============================================
+
+        public void SetPersonalRnd(uint rnd)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    header->personalRnd = rnd;
+                }
+            }
+        }
+
+        public void SetCheckSum(ushort checksum)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    header->checksum = checksum;
+                }
+            }
+        }
+
+        public void SetFuseiTamagoFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    header->fuseiTamagoFlag = flag;
+                }
+            }
+        }
+
+        // =============================================
+        // Setters - BlockA
+        // =============================================
+
+        public void SetMonsNo(uint monsno)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->monsno = (ushort)monsno;
+                }
+            }
+        }
+
+        public void SetItemNo(ushort itemno)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->itemno = itemno;
+                }
+            }
+        }
+
+        public void SetID(uint id)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->id = id;
+                }
+            }
+        }
+
+        public void SetExp(uint exp)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->exp = exp;
+                }
+            }
+        }
+
+        public void SetTokuseiNo(uint tokusei)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->tokuseino = (ushort)tokusei;
+                }
+            }
+        }
+
+        public void SetBoxMark(ushort mark)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->boxMark = mark;
+                }
+            }
+        }
+
+        public void SetColorRnd(uint rnd)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->colorRnd = rnd;
+                }
+            }
+        }
+
+        public void SetSeikaku(uint seikaku)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->seikaku = (byte)seikaku;
+                }
+            }
+        }
+
+        public void SetSeikakuHosei(uint seikaku)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->seikakuHosei = (byte)seikaku;
+                }
+            }
+        }
+
+        public void SetFormNo(ushort formno)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->formNo = formno;
+                }
+            }
+        }
+
+        public void SetEffortHp(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->effortHp = value;
+                }
+            }
+        }
+
+        public void SetEffortAtk(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->effortAtk = value;
+                }
+            }
+        }
+
+        public void SetEffortDef(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->effortDef = value;
+                }
+            }
+        }
+
+        public void SetEffortAgi(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->effortAgi = value;
+                }
+            }
+        }
+
+        public void SetEffortSpAtk(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->effortSpatk = value;
+                }
+            }
+        }
+
+        public void SetEffortSpDef(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->effortSpdef = value;
+                }
+            }
+        }
+
+        public void SetStyle(byte style)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->style = style;
+                }
+            }
+        }
+
+        public void SetBeautiful(byte beautiful)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->beautiful = beautiful;
+                }
+            }
+        }
+
+        public void SetCute(byte cute)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->cute = cute;
+                }
+            }
+        }
+
+        public void SetClever(byte clever)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->clever = clever;
+                }
+            }
+        }
+
+        public void SetStrong(byte strong)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->strong = strong;
+                }
+            }
+        }
+
+        public void SetFur(byte fur)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->fur = fur;
+                }
+            }
+        }
+
+        public void SetPokerus(byte pokerus)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->pokerus = pokerus;
+                }
+            }
+        }
+
+        public void SetRibbon(uint ribbonNo)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_1)
+                        block->ribbonA |= (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_1));
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_2)
+                        block->ribbonB |= (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_2));
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_3)
+                        block->ribbonC |= (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_3));
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_4)
+                        block->ribbonD |= (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_4));
+                }
+            }
+        }
+
+        public void RemoveRibbon(uint ribbonNo)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_1)
+                        block->ribbonA &= ~(1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_1));
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_2)
+                        block->ribbonB &= ~(1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_2));
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_3)
+                        block->ribbonC &= ~(1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_3));
+                    else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_4)
+                        block->ribbonD &= ~(1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_4));
+                }
+            }
+        }
+
+        public void RemoveAllRibbon()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->ribbonA = 0;
+                    block->ribbonB = 0;
+                    block->ribbonC = 0;
+                    block->ribbonD = 0;
+                    block->lumpingRibbonA = 0;
+                    block->lumpingRibbonB = 0;
+                }
+            }
+        }
+
+        public void SetLumpingRibbon(LumpingRibbon ribbonId, uint num)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    switch (ribbonId)
+                    {
+                        case LumpingRibbon.A:
+                            block->lumpingRibbonA = (byte)num;
+                            break;
+                        case LumpingRibbon.B:
+                            block->lumpingRibbonB = (byte)num;
+                            break;
+                    }
+                }
+            }
+        }
+
+        public void SetTokusei1Flag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->tokusei1Flag = flag;
+                }
+            }
+        }
+
+        public void SetTokusei2Flag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->tokusei2Flag = flag;
+                }
+            }
+        }
+
+        public void SetTokusei3Flag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->tokusei3Flag = flag;
+                }
+            }
+        }
+
+        public void SetFavoriteFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->favoriteFlag = flag;
+                }
+            }
+        }
+
+        public void SetSpecialGFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->special_g_flag = flag;
+                }
+            }
+        }
+
+        public void SetEventPokemonFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->eventGetFlag = flag;
+                }
+            }
+        }
+
+        public void SetOfficialBattleEnableFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->officialBattleEnableFlag = flag;
+                }
+            }
+        }
+
+        public void SetSex(Sex sex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->sex = (byte)sex;
+                }
+            }
+        }
+
+        public void SetCampFriendship(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->camp_friendship = value;
+                }
+            }
+        }
+
+        public void SetDprIllegalFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->dpr_illegal_flag = flag;
+                }
+            }
+        }
+
+        public void SetTalentHeight(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->talentHeight = value;
+                }
+            }
+        }
+
+        public void SetTalentWeight(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockA(addr, true);
+                    block->talentWeight = value;
+                }
+            }
+        }
+
+        // =============================================
+        // Setters - BlockB
+        // =============================================
+
+        public void SetSick(uint sick)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->sick = sick;
+                }
+            }
+        }
+
+        public void SetWazaNo(byte wazaIndex, uint wazano)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
+                        block->waza[wazaIndex] = (ushort)wazano;
+                }
+            }
+        }
+
+        public void SetPP(byte wazaIndex, byte pp)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
+                        block->pp[wazaIndex] = pp;
+                }
+            }
+        }
+
+        public void SetWazaPPUpCount(byte wazaIndex, byte count)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
+                        block->pointupUsedCount[wazaIndex] = count;
+                }
+            }
+        }
+
+        public void SetTamagoWazaNo(byte index, uint wazano)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    if (index < PmlConstants.MAX_WAZA_NUM)
+                        block->tamagoWaza[index] = (ushort)wazano;
+                }
+            }
+        }
+
+        public void SetHp(ushort hp)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->hp = hp;
+                }
+            }
+        }
+
+        public void SetTalentHp(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->talentHp = value;
+                }
+            }
+        }
+
+        public void SetTalentAtk(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->talentAtk = value;
+                }
+            }
+        }
+
+        public void SetTalentDef(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->talentDef = value;
+                }
+            }
+        }
+
+        public void SetTalentSpAtk(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->talentSpatk = value;
+                }
+            }
+        }
+
+        public void SetTalentSpDef(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->talentSpdef = value;
+                }
+            }
+        }
+
+        public void SetTalentAgi(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->talentAgi = value;
+                }
+            }
+        }
+
+        public void SetEffortG(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->effortG = value;
+                }
+            }
+        }
+
+        public void SetTamagoFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->tamagoFlag = flag;
+                }
+            }
+        }
+
+        public void SetNickNameFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->nicknameFlag = flag;
+                }
+            }
+        }
+
+        public void SetNickName(string nickName)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    copyString(block->nickname, nickName, PmlConstants.MONS_NAME_BUFFER_SIZE);
+                }
+            }
+        }
+
+        public void SetPalma(uint value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockB(addr, true);
+                    block->palma = value;
+                }
+            }
+        }
+
+        // =============================================
+        // Setters - BlockC
+        // =============================================
+
+        public void SetPastParentsName(string name)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    copyString(block->pastParentsName, name, PmlConstants.PERSON_NAME_BUFFER_SIZE);
+                }
+            }
+        }
+
+        public void SetPastParentsSex(Sex sex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->pastParentsSex = (byte)sex;
+                }
+            }
+        }
+
+        public void SetPastParentsLangID(byte langID)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->pastParentLangID = langID;
+                }
+            }
+        }
+
+        public void SetOwnedOthersFlag(bool flag)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->ownedByOthers = (byte)(flag ? 1 : 0);
+                }
+            }
+        }
+
+        public void SetOthersFriendshipTrainerID(ushort trainerId)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->othersFriendshipTrainerId = trainerId;
+                }
+            }
+        }
+
+        public void SetOthersFriendship(byte friendship)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->othersFriendship = friendship;
+                }
+            }
+        }
+
+        public void SetOthersMemoriesLevel(byte level)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->othersMemoriesLevel = level;
+                }
+            }
+        }
+
+        public void SetOthersMemoriesCode(byte code)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->othersMemoriesCode = code;
+                }
+            }
+        }
+
+        public void SetOthersMemoriesData(ushort data)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->othersMemoriesData = data;
+                }
+            }
+        }
+
+        public void SetOthersMemoriesFeel(byte feel)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->othersMemoriesFeel = feel;
+                }
+            }
+        }
+
+        public void SetPokeJobFlag(byte jobIndex, bool set)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    CalcPokeJobBitPos(out byte arrayIndex, out byte bitFlag, jobIndex);
+                    if (arrayIndex < CoreDataBlockC.POKEJOB_LEN)
+                    {
+                        if (set)
+                            block->pokejob[arrayIndex] |= bitFlag;
+                        else
+                            block->pokejob[arrayIndex] &= (byte)~bitFlag;
+                    }
+                }
+            }
+        }
+
+        public void ClearPokeJobFlag()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    for (int i = 0; i < CoreDataBlockC.POKEJOB_LEN; i++)
+                        block->pokejob[i] = 0;
+                }
+            }
+        }
+
+        public void SetEnjoy(byte enjoy)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->enjoy = enjoy;
+                }
+            }
+        }
+
+        public void SetNadenadeValue(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->nadeNadeValue = value;
+                }
+            }
+        }
+
+        public void SetCassetteVersion(uint version)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->getCassette = (byte)version;
+                }
+            }
+        }
+
+        public void SetBattleRomMark(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->battleRomMark = value;
+                }
+            }
+        }
+
+        public void SetLangId(byte langId)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->langId = langId;
+                }
+            }
+        }
+
+        public void SetMultiPurposeWork(uint value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->multiWork = value;
+                }
+            }
+        }
+
+        public void SetEquipRibbonNo(byte ribbonNo)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockC(addr, true);
+                    block->equipRibbon = ribbonNo;
+                }
+            }
+        }
+
+        // =============================================
+        // Setters - BlockD
+        // =============================================
+
+        public void SetOyaName(string oyaName)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    copyString(block->parentsName, oyaName, PmlConstants.PERSON_NAME_BUFFER_SIZE);
+                }
+            }
+        }
+
+        public void SetFriendship(byte friendship)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var blockC = GetCoreDataBlockC(addr, false);
+                    if (blockC->ownedByOthers != 0)
+                    {
+                        var blockCW = GetCoreDataBlockC(addr, true);
+                        blockCW->othersFriendship = friendship;
+                    }
+                    else
+                    {
+                        var block = GetCoreDataBlockD(addr, true);
+                        block->friendship = friendship;
+                    }
+                }
+            }
+        }
+
+        public void SetOriginalFriendship(byte friendship)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->friendship = friendship;
+                }
+            }
+        }
+
+        public void SetMemoriesLevel(byte level)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->memories_level = level;
+                }
+            }
+        }
+
+        public void SetMemoriesCode(byte code)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->memories_code = code;
+                }
+            }
+        }
+
+        public void SetMemoriesData(ushort data)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->memories_data = data;
+                }
+            }
+        }
+
+        public void SetMemoriesFeel(byte feel)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->memories_feel = feel;
+                }
+            }
+        }
+
+        public void SetTamagoGetYear(byte year)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->eggGetYear = year;
+                }
+            }
+        }
+
+        public void SetTamagoGetMonth(byte month)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->eggGetMonth = month;
+                }
+            }
+        }
+
+        public void SetTamagoGetDay(byte day)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->eggGetDay = day;
+                }
+            }
+        }
+
+        public void SetBirthYear(byte year)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->firstContactYear = year;
+                }
+            }
+        }
+
+        public void SetBirthMonth(byte month)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->firstContactMonth = month;
+                }
+            }
+        }
+
+        public void SetBirthDay(byte day)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->firstContactDay = day;
+                }
+            }
+        }
+
+        public void SetGetPlace(ushort place)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->getPlace = place;
+                }
+            }
+        }
+
+        public void SetBirthPlace(ushort place)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->birthPlace = place;
+                }
+            }
+        }
+
+        public void SetGetBall(byte ball)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->getBall = ball;
+                }
+            }
+        }
+
+        public void SetGetLevel(byte level)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->getLevel = level;
+                }
+            }
+        }
+
+        public void SetOyasex(Sex sex)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->parentsSex = (byte)sex;
+                }
+            }
+        }
+
+        public void SetTrainingFlag(byte value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    block->trainingFlag = value;
+                }
+            }
+        }
+
+        public void SetWazaRecordFlag(byte recordIndex, bool set)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    CalcWazaRecordBitPos(out byte arrayIndex, out byte bitFlag, recordIndex);
+                    if (arrayIndex < CoreDataBlockD.WAZA_RECORD_FLAG_LEN)
+                    {
+                        if (set)
+                            block->wazaRecordFlag[arrayIndex] |= bitFlag;
+                        else
+                            block->wazaRecordFlag[arrayIndex] &= (byte)~bitFlag;
+                    }
+                }
+            }
+        }
+
+        public void ClearWazaRecordFlag()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    for (int i = 0; i < CoreDataBlockD.WAZA_RECORD_FLAG_LEN; i++)
+                        block->wazaRecordFlag[i] = 0;
+                }
+            }
+        }
+
+        public void SetBankUniqueID(ulong value)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    for (int i = 0; i < CoreDataBlockD.BANK_UNIQUE_ID_LEN; i++)
+                        block->bankUniqueID[i] = (byte)(value >> (i * 8));
+                }
+            }
+        }
+
+        public void ClearBankUniqueID()
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var block = GetCoreDataBlockD(addr, true);
+                    for (int i = 0; i < CoreDataBlockD.BANK_UNIQUE_ID_LEN; i++)
+                        block->bankUniqueID[i] = 0;
+                }
+            }
+        }
+
+        // =============================================
+        // Setters - CalcData
+        // =============================================
+
+        public void SetLevel(byte level)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->level = level;
+                }
+            }
+        }
+
+        public void SetMaxHp(ushort maxHp)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->maxHp = maxHp;
+                }
+            }
+        }
+
+        public void SetAtk(ushort atk)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->atk = atk;
+                }
+            }
+        }
+
+        public void SetDef(ushort def)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->def = def;
+                }
+            }
+        }
+
+        public void SetSpAtk(ushort spatk)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->spatk = spatk;
+                }
+            }
+        }
+
+        public void SetSpDef(ushort spdef)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->spdef = spdef;
+                }
+            }
+        }
+
+        public void SetAgi(ushort agi)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->agi = agi;
+                }
+            }
+        }
+
+        public void SetGState(GState state)
+        {
+            unsafe
+            {
+                fixed (byte* addr = m_pCalcData)
+                {
+                    var calc = GetCalcData(addr, true);
+                    calc->gState = (byte)state;
+                }
+            }
+        }
+
+        // =============================================
+        // Infrastructure
+        // =============================================
+
+        private unsafe CalcData* GetCalcData(byte* _addr, bool forWrite)
+        {
+            return (CalcData*)_addr;
+        }
+
+        private unsafe CoreDataBlockA* GetCoreDataBlockA(byte* _addr, bool forWrite)
+        {
+            if (!m_accessState.isFastMode)
+            {
+                if (forWrite)
+                    DecodeAndCheckIllegalWrite();
+                else
+                    DecodeAndCheckIllegalWrite();
+            }
+
+            var header = GetCoreDataHeader(_addr);
+            byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.A);
+            byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
+
+            if (!m_accessState.isFastMode && !forWrite)
+                UpdateChecksumAndEncode();
+
+            return (CoreDataBlockA*)blockStart;
+        }
+
+        private unsafe CoreDataBlockB* GetCoreDataBlockB(byte* _addr, bool forWrite)
+        {
+            if (!m_accessState.isFastMode)
+            {
+                if (forWrite)
+                    DecodeAndCheckIllegalWrite();
+                else
+                    DecodeAndCheckIllegalWrite();
+            }
+
+            var header = GetCoreDataHeader(_addr);
+            byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.B);
+            byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
+
+            if (!m_accessState.isFastMode && !forWrite)
+                UpdateChecksumAndEncode();
+
+            return (CoreDataBlockB*)blockStart;
+        }
+
+        private unsafe CoreDataBlockC* GetCoreDataBlockC(byte* _addr, bool forWrite)
+        {
+            if (!m_accessState.isFastMode)
+            {
+                if (forWrite)
+                    DecodeAndCheckIllegalWrite();
+                else
+                    DecodeAndCheckIllegalWrite();
+            }
+
+            var header = GetCoreDataHeader(_addr);
+            byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.C);
+            byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
+
+            if (!m_accessState.isFastMode && !forWrite)
+                UpdateChecksumAndEncode();
+
+            return (CoreDataBlockC*)blockStart;
+        }
+
+        private unsafe CoreDataBlockD* GetCoreDataBlockD(byte* _addr, bool forWrite)
+        {
+            if (!m_accessState.isFastMode)
+            {
+                if (forWrite)
+                    DecodeAndCheckIllegalWrite();
+                else
+                    DecodeAndCheckIllegalWrite();
+            }
+
+            var header = GetCoreDataHeader(_addr);
+            byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.D);
+            byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
+
+            if (!m_accessState.isFastMode && !forWrite)
+                UpdateChecksumAndEncode();
+
+            return (CoreDataBlockD*)blockStart;
+        }
+
+        protected unsafe static CoreDataHeader* GetCoreDataHeader(byte* addr)
+        {
+            return (CoreDataHeader*)addr;
+        }
+
+        private unsafe static byte GetCoreDataBlockPos(uint key, CoreDataBlockId blockId)
+        {
+            uint index = (key >> 13) & 0x1F;
+            return BLOCK_POS_TABLE[index][(int)blockId];
+        }
+
+        private void UpdateChecksumAndEncode()
+        {
+            if (m_accessState.isEncoded || m_accessState.isFastMode)
+                return;
+
+            updateChecksumAndEncode_Core(m_pCoreData);
+
+            if (m_pCalcData != null)
+                updateChecksumAndEncode_Calc(m_pCoreData, m_pCalcData);
+
+            m_accessState.isEncoded = true;
+        }
+
+        public static void updateChecksumAndEncode_Core(byte[] pCoreData)
+        {
+            unsafe
+            {
+                fixed (byte* addr = pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    uint personalRnd = header->personalRnd;
+
+                    byte* blocksStart = addr + CoreDataHeader.SIZE;
+                    uint blocksSize = CORE_DATA_SIZE - CoreDataHeader.SIZE;
+
+                    header->checksum = Encoder.CalcChecksum(blocksStart, blocksSize);
+
+                    Encoder.Encode(blocksStart, blocksSize, personalRnd);
+                }
+            }
+        }
+
+        private static void updateChecksumAndEncode_Calc(byte[] pCoreData, byte[] pCalcData)
+        {
+            unsafe
+            {
+                fixed (byte* coreAddr = pCoreData)
+                fixed (byte* calcAddr = pCalcData)
+                {
+                    var header = GetCoreDataHeader(coreAddr);
+                    uint personalRnd = header->personalRnd;
+
+                    Encoder.Encode(calcAddr, CALC_DATA_SIZE, personalRnd);
+                }
+            }
+        }
+
+        private void DecodeAndCheckIllegalWrite()
+        {
+            if (!m_accessState.isEncoded)
+                return;
+
+            unsafe
+            {
+                fixed (byte* addr = m_pCoreData)
+                {
+                    var header = GetCoreDataHeader(addr);
+                    uint personalRnd = header->personalRnd;
+
+                    byte* blocksStart = addr + CoreDataHeader.SIZE;
+                    uint blocksSize = CORE_DATA_SIZE - CoreDataHeader.SIZE;
+
+                    Encoder.Decode(blocksStart, blocksSize, personalRnd);
+                }
+
+                if (m_pCalcData != null)
+                {
+                    fixed (byte* calcAddr = m_pCalcData)
+                    {
+                        fixed (byte* coreAddr = m_pCoreData)
+                        {
+                            var header = GetCoreDataHeader(coreAddr);
+                            Encoder.Decode(calcAddr, CALC_DATA_SIZE, header->personalRnd);
+                        }
+                    }
+                }
+            }
+
+            m_accessState.isEncoded = false;
+        }
+
+        private unsafe void Serialize(void* bufferForCore, void* bufferForCalc)
+        {
+            if (!m_accessState.isEncoded)
+                UpdateChecksumAndEncode();
+
+            fixed (byte* src = m_pCoreData)
+            {
+                Buffer.MemoryCopy(src, bufferForCore, CORE_DATA_SIZE, CORE_DATA_SIZE);
+            }
+
+            if (bufferForCalc != null && m_pCalcData != null)
+            {
+                fixed (byte* src = m_pCalcData)
+                {
+                    Buffer.MemoryCopy(src, bufferForCalc, CALC_DATA_SIZE, CALC_DATA_SIZE);
+                }
+            }
+        }
+
+        private unsafe void Deserialize(void* serializedCoreData, void* serializedCalcData)
+        {
+            fixed (byte* dst = m_pCoreData)
+            {
+                Buffer.MemoryCopy(serializedCoreData, dst, CORE_DATA_SIZE, CORE_DATA_SIZE);
+            }
+
+            if (serializedCalcData != null && m_pCalcData != null)
+            {
+                fixed (byte* dst = m_pCalcData)
+                {
+                    Buffer.MemoryCopy(serializedCalcData, dst, CALC_DATA_SIZE, CALC_DATA_SIZE);
+                }
+            }
+
+            m_accessState.isEncoded = true;
+            m_accessState.isFastMode = false;
+            DecodeAndCheckIllegalWrite();
+            UpdateChecksumAndEncode();
+        }
+
+        private unsafe void copyString(char* dst, string _src, int dst_len)
+        {
+            int len = Math.Min(_src.Length, dst_len - 1);
+            for (int i = 0; i < len; i++)
+                dst[i] = _src[i];
+            for (int i = len; i < dst_len; i++)
+                dst[i] = '\0';
+        }
+
+        private static void CalcWazaRecordBitPos(out byte arrayIndex, out byte bitFlag, byte recordIndex)
+        {
+            arrayIndex = (byte)(recordIndex / 8);
+            bitFlag = (byte)(1 << (recordIndex % 8));
+        }
+
         private static void CalcPokeJobBitPos(out byte arrayIndex, out byte bitFlag, byte jobIndex)
         {
-            arrayIndex = 0;
-            bitFlag = 0;
+            arrayIndex = (byte)(jobIndex / 8);
+            bitFlag = (byte)(1 << (jobIndex % 8));
         }
 
         private struct AccessState
         {
-	        public bool isEncoded;
+            public bool isEncoded;
             public bool isFastMode;
         }
     }

@@ -39,28 +39,52 @@ namespace Pml.PokePara
 		private const int bitsA6_mask = 1073741824;
 		private const int bitsA7_mask = -2147483648;
 		
-		// TODO
-		public uint talentHp { get; set; }
-		
-		// TODO
-		public uint talentAtk { get; set; }
-		
-		// TODO
-		public uint talentDef { get; set; }
-		
-		// TODO
-		public uint talentAgi { get; set; }
-		
-		// TODO
-		public uint talentSpatk { get; set; }
-		
-		// TODO
-		public uint talentSpdef { get; set; }
-		
-		// TODO
-		public bool tamagoFlag { get; set; }
-		
-		// TODO
-		public bool nicknameFlag { get; set; }
+		public uint talentHp
+		{
+			get => (uint)((_bitsA & (uint)bitsA0_mask) >> bitsA0_loc);
+			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA0_mask) | ((value << bitsA0_loc) & (uint)bitsA0_mask));
+		}
+
+		public uint talentAtk
+		{
+			get => (uint)((_bitsA & (uint)bitsA1_mask) >> bitsA1_loc);
+			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA1_mask) | ((value << bitsA1_loc) & (uint)bitsA1_mask));
+		}
+
+		public uint talentDef
+		{
+			get => (uint)((_bitsA & (uint)bitsA2_mask) >> bitsA2_loc);
+			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA2_mask) | ((value << bitsA2_loc) & (uint)bitsA2_mask));
+		}
+
+		public uint talentAgi
+		{
+			get => (uint)((_bitsA & (uint)bitsA3_mask) >> bitsA3_loc);
+			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA3_mask) | ((value << bitsA3_loc) & (uint)bitsA3_mask));
+		}
+
+		public uint talentSpatk
+		{
+			get => (uint)((_bitsA & (uint)bitsA4_mask) >> bitsA4_loc);
+			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA4_mask) | ((value << bitsA4_loc) & (uint)bitsA4_mask));
+		}
+
+		public uint talentSpdef
+		{
+			get => (uint)((_bitsA & (uint)bitsA5_mask) >> bitsA5_loc);
+			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA5_mask) | ((value << bitsA5_loc) & (uint)bitsA5_mask));
+		}
+
+		public bool tamagoFlag
+		{
+			get => (_bitsA & (uint)bitsA6_mask) != 0;
+			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA6_mask) | (value ? (uint)bitsA6_mask : 0));
+		}
+
+		public bool nicknameFlag
+		{
+			get => (_bitsA & unchecked((uint)bitsA7_mask)) != 0;
+			set => _bitsA = (uint)((_bitsA & ~unchecked((uint)bitsA7_mask)) | (value ? unchecked((uint)bitsA7_mask) : 0));
+		}
 	}
 }
