@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
+using Dpr.Message;
 using Pml;
+using Pml.Personal;
 
 namespace Pml.PokePara
 {
@@ -1088,6 +1090,20 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    var header = GetCoreDataHeader(addr);
+                    if (header->fuseiTamagoFlag)
+                    {
+                        DecodeAndCheckIllegalWrite();
+                        var blockC = GetCoreDataBlockC(addr, false);
+                        byte langId = blockC->langId;
+                        UpdateChecksumAndEncode();
+                        if (langId == 0)
+                        {
+                            langId = 1;
+                        }
+                        return PersonalSystem.GetMonsName(MonsNo.TAMAGO, (MessageEnumData.MsgLangId)langId);
+                    }
+
                     DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
                     var value = new string(block->nickname);
