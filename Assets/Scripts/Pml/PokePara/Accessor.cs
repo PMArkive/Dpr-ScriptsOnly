@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Unity.Collections.LowLevel.Unsafe;
 using Pml;
 
 namespace Pml.PokePara
@@ -22,10 +23,10 @@ namespace Pml.PokePara
         private const uint MAX_RIBBON_NO_ON_RIBBON_FIELD_2 = 63;
         private const uint MAX_RIBBON_NO_ON_RIBBON_FIELD_3 = 95;
         private const uint MAX_RIBBON_NO_ON_RIBBON_FIELD_4 = 127;
-        private static unsafe byte* IllegalCoreData;
-        private static unsafe byte* DummyWriteCoreData;
-        private static unsafe byte* IllegalCalcData;
-        private static unsafe byte* DummyWriteCalcData;
+        private static unsafe byte* IllegalCoreData = null;
+        private static unsafe byte* DummyWriteCoreData = null;
+        private static unsafe byte* IllegalCalcData = null;
+        private static unsafe byte* DummyWriteCalcData = null;
         private byte[] m_pCalcData;
         private byte[] m_pCoreData;
         private AccessState m_accessState;
@@ -33,44 +34,41 @@ namespace Pml.PokePara
         private const byte POS2 = 1;
         private const byte POS3 = 2;
         private const byte POS4 = 3;
-        private static readonly byte[][] BLOCK_POS_TABLE = GenerateBlockPosTable();
-
-        private static byte[][] GenerateBlockPosTable()
+        private static readonly byte[][] BLOCK_POS_TABLE = new byte[][]
         {
-            byte[][] order = new byte[24][]
-            {
-                new byte[] { 0, 1, 2, 3 },
-                new byte[] { 0, 1, 3, 2 },
-                new byte[] { 0, 2, 1, 3 },
-                new byte[] { 0, 2, 3, 1 },
-                new byte[] { 0, 3, 1, 2 },
-                new byte[] { 0, 3, 2, 1 },
-                new byte[] { 1, 0, 2, 3 },
-                new byte[] { 1, 0, 3, 2 },
-                new byte[] { 1, 2, 0, 3 },
-                new byte[] { 1, 2, 3, 0 },
-                new byte[] { 1, 3, 0, 2 },
-                new byte[] { 1, 3, 2, 0 },
-                new byte[] { 2, 0, 1, 3 },
-                new byte[] { 2, 0, 3, 1 },
-                new byte[] { 2, 1, 0, 3 },
-                new byte[] { 2, 1, 3, 0 },
-                new byte[] { 2, 3, 0, 1 },
-                new byte[] { 2, 3, 1, 0 },
-                new byte[] { 3, 0, 1, 2 },
-                new byte[] { 3, 0, 2, 1 },
-                new byte[] { 3, 1, 0, 2 },
-                new byte[] { 3, 1, 2, 0 },
-                new byte[] { 3, 2, 0, 1 },
-                new byte[] { 3, 2, 1, 0 },
-            };
-
-            byte[][] table = new byte[32][];
-            for (int i = 0; i < 32; i++)
-                table[i] = order[i % 24];
-
-            return table;
-        }
+            new byte[] { POS1, POS2, POS3, POS4 },
+            new byte[] { POS1, POS2, POS4, POS3 },
+            new byte[] { POS1, POS3, POS2, POS4 },
+            new byte[] { POS1, POS4, POS2, POS3 },
+            new byte[] { POS1, POS3, POS4, POS2 },
+            new byte[] { POS1, POS4, POS3, POS2 },
+            new byte[] { POS2, POS1, POS3, POS4 },
+            new byte[] { POS2, POS1, POS4, POS3 },
+            new byte[] { POS3, POS1, POS2, POS4 },
+            new byte[] { POS4, POS1, POS2, POS3 },
+            new byte[] { POS3, POS1, POS4, POS2 },
+            new byte[] { POS4, POS1, POS3, POS2 },
+            new byte[] { POS2, POS3, POS1, POS4 },
+            new byte[] { POS2, POS4, POS1, POS3 },
+            new byte[] { POS3, POS2, POS1, POS4 },
+            new byte[] { POS4, POS2, POS1, POS3 },
+            new byte[] { POS3, POS4, POS1, POS2 },
+            new byte[] { POS4, POS3, POS1, POS2 },
+            new byte[] { POS2, POS3, POS4, POS1 },
+            new byte[] { POS2, POS4, POS3, POS1 },
+            new byte[] { POS3, POS2, POS4, POS1 },
+            new byte[] { POS4, POS2, POS3, POS1 },
+            new byte[] { POS3, POS4, POS2, POS1 },
+            new byte[] { POS4, POS3, POS2, POS1 },
+            new byte[] { POS1, POS2, POS3, POS4 },
+            new byte[] { POS1, POS2, POS4, POS3 },
+            new byte[] { POS1, POS3, POS2, POS4 },
+            new byte[] { POS1, POS4, POS2, POS3 },
+            new byte[] { POS1, POS3, POS4, POS2 },
+            new byte[] { POS1, POS4, POS3, POS2 },
+            new byte[] { POS2, POS1, POS3, POS4 },
+            new byte[] { POS2, POS1, POS4, POS3 },
+        };
 
         public static void Initialize() { }
 
@@ -111,20 +109,35 @@ namespace Pml.PokePara
 
         public void ClearCalcData()
         {
-            if (m_pCalcData != null)
+            if (m_pCalcData == null)
+                return;
+            if (IsFastMode())
+            {
                 Array.Clear(m_pCalcData, 0, m_pCalcData.Length);
+            }
+            else
+            {
+                StartFastMode();
+                Array.Clear(m_pCalcData, 0, m_pCalcData.Length);
+                EndFastMode();
+            }
         }
 
         public void StartFastMode()
         {
             DecodeAndCheckIllegalWrite();
             m_accessState.isFastMode = true;
+            GFL.ASSERT(!IsEncoded());
         }
 
         public void EndFastMode()
         {
             m_accessState.isFastMode = false;
             UpdateChecksumAndEncode();
+            if (IsFastMode())
+                GFL.ASSERT(false);
+            else
+                GFL.ASSERT(IsEncoded());
         }
 
         public bool IsFastMode()
@@ -139,51 +152,31 @@ namespace Pml.PokePara
 
         public void Serialize_FullData(byte[] buffer)
         {
-            unsafe
-            {
-                fixed (byte* dst = buffer)
-                {
-                    Serialize(dst, dst + CORE_SERIALIZE_DATA_SIZE);
-                }
-            }
+            GFL.ASSERT(buffer.Length >= FULL_SERIALIZE_DATA_SIZE);
+            unsafe { fixed (byte* dst = buffer) Serialize_FullData(dst); }
         }
 
         public void Serialize_CoreData(byte[] buffer)
         {
-            unsafe
-            {
-                fixed (byte* dst = buffer)
-                {
-                    Serialize(dst, null);
-                }
-            }
+            GFL.ASSERT(buffer.Length >= CORE_SERIALIZE_DATA_SIZE);
+            unsafe { fixed (byte* dst = buffer) Serialize_CoreData(dst); }
         }
 
         public void Deserialize_FullData(byte[] serializedData)
         {
-            unsafe
-            {
-                fixed (byte* src = serializedData)
-                {
-                    Deserialize(src, src + CORE_SERIALIZE_DATA_SIZE);
-                }
-            }
+            GFL.ASSERT(serializedData.Length >= FULL_SERIALIZE_DATA_SIZE);
+            unsafe { fixed (byte* src = serializedData) Deserialize_FullData(src); }
         }
 
         public void Deserialize_CoreData(byte[] serializedData)
         {
-            unsafe
-            {
-                fixed (byte* src = serializedData)
-                {
-                    Deserialize(src, null);
-                }
-            }
+            GFL.ASSERT(serializedData.Length >= CORE_SERIALIZE_DATA_SIZE);
+            unsafe { fixed (byte* src = serializedData) Deserialize_CoreData(src); }
         }
 
         public unsafe void Serialize_FullData(void* buffer)
         {
-            Serialize(buffer, (void*)((long)buffer + CORE_SERIALIZE_DATA_SIZE));
+            Serialize(buffer, (byte*)buffer + CORE_SERIALIZE_DATA_SIZE);
         }
 
         public unsafe void Serialize_CoreData(void* buffer)
@@ -193,7 +186,7 @@ namespace Pml.PokePara
 
         public unsafe void Deserialize_FullData(void* serializedData)
         {
-            Deserialize(serializedData, (void*)((long)serializedData + CORE_SERIALIZE_DATA_SIZE));
+            Deserialize(serializedData, (byte*)serializedData + CORE_SERIALIZE_DATA_SIZE);
         }
 
         public unsafe void Deserialize_CoreData(void* serializedData)
@@ -211,8 +204,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var header = GetCoreDataHeader(addr);
-                    return header->personalRnd;
+                    var value = header->personalRnd;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -223,8 +219,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var header = GetCoreDataHeader(addr);
-                    return header->checksum;
+                    var value = header->checksum;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -235,8 +234,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var header = GetCoreDataHeader(addr);
-                    return header->fuseiTamagoFlag;
+                    var value = header->fuseiTamagoFlag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -251,8 +253,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return (MonsNo)block->monsno;
+                    var value = (MonsNo)block->monsno;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -263,8 +268,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->itemno;
+                    var value = (uint)block->itemno;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -275,8 +283,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->id;
+                    var value = block->id;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -287,8 +298,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->exp;
+                    var value = block->exp;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -299,8 +313,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return (TokuseiNo)block->tokuseino;
+                    var value = (TokuseiNo)block->tokuseino;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -311,8 +328,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->boxMark;
+                    var value = block->boxMark;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -323,8 +343,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->colorRnd;
+                    var value = block->colorRnd;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -335,8 +358,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->seikaku;
+                    var value = (uint)block->seikaku;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -347,8 +373,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->seikakuHosei;
+                    var value = (uint)block->seikakuHosei;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -359,8 +388,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->formNo;
+                    var value = block->formNo;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -371,8 +403,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->effortHp;
+                    var value = (uint)block->effortHp;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -383,8 +418,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->effortAtk;
+                    var value = (uint)block->effortAtk;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -395,8 +433,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->effortDef;
+                    var value = (uint)block->effortDef;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -407,8 +448,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->effortAgi;
+                    var value = (uint)block->effortAgi;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -419,8 +463,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->effortSpatk;
+                    var value = (uint)block->effortSpatk;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -431,8 +478,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->effortSpdef;
+                    var value = (uint)block->effortSpdef;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -443,8 +493,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->style;
+                    var value = block->style;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -455,8 +508,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->beautiful;
+                    var value = block->beautiful;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -467,8 +523,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->cute;
+                    var value = block->cute;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -479,8 +538,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->clever;
+                    var value = block->clever;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -491,8 +553,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->strong;
+                    var value = block->strong;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -503,8 +568,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->fur;
+                    var value = block->fur;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -515,8 +583,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->pokerus;
+                    var value = (uint)block->pokerus;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -527,8 +598,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->tokusei1Flag;
+                    var value = block->tokusei1Flag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -539,8 +613,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->tokusei2Flag;
+                    var value = block->tokusei2Flag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -551,8 +628,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->tokusei3Flag;
+                    var value = block->tokusei3Flag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -563,8 +643,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->favoriteFlag;
+                    var value = block->favoriteFlag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -575,8 +658,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->special_g_flag;
+                    var value = block->special_g_flag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -587,8 +673,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->eventGetFlag;
+                    var value = block->eventGetFlag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -599,8 +688,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->officialBattleEnableFlag;
+                    var value = block->officialBattleEnableFlag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -611,8 +703,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return (Sex)block->sex;
+                    var value = (Sex)block->sex;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -623,8 +718,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return (byte)block->camp_friendship;
+                    var value = (byte)block->camp_friendship;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -635,8 +733,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
-                    var block = GetCoreDataBlockA(addr, false);
-                    return block->dpr_illegal_flag;
+                    DecodeAndCheckIllegalWrite();
+                    var block = GetCoreDataBlockA(addr, true);
+                    var value = block->dpr_illegal_flag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -647,8 +748,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->talentHeight;
+                    var value = block->talentHeight;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -659,8 +763,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
-                    return block->talentWeight;
+                    var value = block->talentWeight;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -671,17 +778,21 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
+                    bool value;
                     if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_1)
-                        return (block->ribbonA & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_1))) != 0;
+                        value = (block->ribbonA & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_1))) != 0;
                     else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_2)
-                        return (block->ribbonB & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_2))) != 0;
+                        value = (block->ribbonB & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_2))) != 0;
                     else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_3)
-                        return (block->ribbonC & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_3))) != 0;
+                        value = (block->ribbonC & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_3))) != 0;
                     else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_4)
-                        return (block->ribbonD & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_4))) != 0;
-
-                    return false;
+                        value = (block->ribbonD & (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_4))) != 0;
+                    else
+                        value = false;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -692,16 +803,24 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, false);
+                    uint value;
                     switch (ribbonId)
                     {
                         case LumpingRibbon.A:
-                            return block->lumpingRibbonA;
+                            value = block->lumpingRibbonA;
+                            break;
                         case LumpingRibbon.B:
-                            return block->lumpingRibbonB;
+                            value = block->lumpingRibbonB;
+                            break;
                         default:
-                            return 0;
+                            GFL.ASSERT(false);
+                            value = 0;
+                            break;
                     }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -716,8 +835,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->sick;
+                    var value = block->sick;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -728,10 +850,18 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
+                    WazaNo value;
                     if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
-                        return (WazaNo)block->waza[wazaIndex];
-                    return WazaNo.NULL;
+                        value = (WazaNo)block->waza[wazaIndex];
+                    else
+                    {
+                        GFL.ASSERT(false);
+                        value = WazaNo.NULL;
+                    }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -742,10 +872,18 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
+                    byte value;
                     if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
-                        return block->pp[wazaIndex];
-                    return 0;
+                        value = block->pp[wazaIndex];
+                    else
+                    {
+                        GFL.ASSERT(false);
+                        value = 0;
+                    }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -756,10 +894,18 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
+                    byte value;
                     if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
-                        return block->pointupUsedCount[wazaIndex];
-                    return 0;
+                        value = block->pointupUsedCount[wazaIndex];
+                    else
+                    {
+                        GFL.ASSERT(false);
+                        value = 0;
+                    }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -770,10 +916,18 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
+                    WazaNo value;
                     if (index < PmlConstants.MAX_WAZA_NUM)
-                        return (WazaNo)block->tamagoWaza[index];
-                    return WazaNo.NULL;
+                        value = (WazaNo)block->tamagoWaza[index];
+                    else
+                    {
+                        GFL.ASSERT(false);
+                        value = WazaNo.NULL;
+                    }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -784,8 +938,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->hp;
+                    var value = (uint)block->hp;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -796,8 +953,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->talentHp;
+                    var value = block->talentHp;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -808,8 +968,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->talentAtk;
+                    var value = block->talentAtk;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -820,8 +983,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->talentDef;
+                    var value = block->talentDef;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -832,8 +998,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->talentSpatk;
+                    var value = block->talentSpatk;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -844,8 +1013,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->talentSpdef;
+                    var value = block->talentSpdef;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -856,8 +1028,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->talentAgi;
+                    var value = block->talentAgi;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -868,8 +1043,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->effortG;
+                    var value = (uint)block->effortG;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -880,8 +1058,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->tamagoFlag;
+                    var value = block->tamagoFlag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -892,8 +1073,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->nicknameFlag;
+                    var value = block->nicknameFlag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -904,8 +1088,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return new string(block->nickname);
+                    var value = new string(block->nickname);
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -916,8 +1103,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, false);
-                    return block->palma;
+                    var value = block->palma;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -932,8 +1122,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return new string(block->pastParentsName);
+                    var value = new string(block->pastParentsName);
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -944,8 +1137,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return (Sex)block->pastParentsSex;
+                    var value = (Sex)block->pastParentsSex;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -956,8 +1152,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->pastParentLangID;
+                    var value = block->pastParentLangID;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -968,8 +1167,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->ownedByOthers != 0;
+                    var value = block->ownedByOthers != 0;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -980,8 +1182,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->othersFriendshipTrainerId;
+                    var value = block->othersFriendshipTrainerId;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -992,8 +1197,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->othersFriendship;
+                    var value = block->othersFriendship;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1004,8 +1212,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->othersMemoriesLevel;
+                    var value = block->othersMemoriesLevel;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1016,8 +1227,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->othersMemoriesCode;
+                    var value = block->othersMemoriesCode;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1028,8 +1242,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->othersMemoriesData;
+                    var value = block->othersMemoriesData;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1040,8 +1257,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->othersMemoriesFeel;
+                    var value = block->othersMemoriesFeel;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1052,11 +1272,19 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
                     CalcPokeJobBitPos(out byte arrayIndex, out byte bitFlag, jobIndex);
+                    bool value;
                     if (arrayIndex < CoreDataBlockC.POKEJOB_LEN)
-                        return (block->pokejob[arrayIndex] & bitFlag) != 0;
-                    return false;
+                        value = (block->pokejob[arrayIndex] & bitFlag) != 0;
+                    else
+                    {
+                        GFL.ASSERT(false);
+                        value = false;
+                    }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1067,8 +1295,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->enjoy;
+                    var value = block->enjoy;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1079,8 +1310,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->nadeNadeValue;
+                    var value = block->nadeNadeValue;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1091,8 +1325,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->getCassette;
+                    var value = (uint)block->getCassette;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1103,8 +1340,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->battleRomMark;
+                    var value = block->battleRomMark;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1115,8 +1355,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->langId;
+                    var value = (uint)block->langId;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1127,8 +1370,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->multiWork;
+                    var value = block->multiWork;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1139,8 +1385,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, false);
-                    return block->equipRibbon;
+                    var value = block->equipRibbon;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1155,8 +1404,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return new string(block->parentsName);
+                    var value = new string(block->parentsName);
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1167,12 +1419,20 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var blockC = GetCoreDataBlockC(addr, false);
+                    uint value;
                     if (blockC->ownedByOthers != 0)
-                        return blockC->othersFriendship;
-
-                    var block = GetCoreDataBlockD(addr, false);
-                    return block->friendship;
+                    {
+                        value = blockC->othersFriendship;
+                    }
+                    else
+                    {
+                        var block = GetCoreDataBlockD(addr, false);
+                        value = block->friendship;
+                    }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1183,8 +1443,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->friendship;
+                    var value = block->friendship;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1195,8 +1458,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->memories_level;
+                    var value = block->memories_level;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1207,8 +1473,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->memories_code;
+                    var value = block->memories_code;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1219,8 +1488,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->memories_data;
+                    var value = block->memories_data;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1231,8 +1503,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->memories_feel;
+                    var value = block->memories_feel;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1243,8 +1518,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->eggGetYear;
+                    var value = (uint)block->eggGetYear;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1255,8 +1533,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->eggGetMonth;
+                    var value = (uint)block->eggGetMonth;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1267,8 +1548,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->eggGetDay;
+                    var value = (uint)block->eggGetDay;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1279,8 +1563,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->firstContactYear;
+                    var value = (uint)block->firstContactYear;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1291,8 +1578,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->firstContactMonth;
+                    var value = (uint)block->firstContactMonth;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1303,8 +1593,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->firstContactDay;
+                    var value = (uint)block->firstContactDay;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1315,8 +1608,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->getPlace;
+                    var value = (uint)block->getPlace;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1327,8 +1623,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->birthPlace;
+                    var value = (uint)block->birthPlace;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1339,8 +1638,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->getBall;
+                    var value = (uint)block->getBall;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1351,8 +1653,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->getLevel;
+                    var value = (uint)block->getLevel;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1363,8 +1668,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return (Sex)block->parentsSex;
+                    var value = (Sex)block->parentsSex;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1375,8 +1683,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    return block->trainingFlag;
+                    var value = block->trainingFlag;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1387,11 +1698,19 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
                     CalcWazaRecordBitPos(out byte arrayIndex, out byte bitFlag, recordIndex);
+                    bool value;
                     if (arrayIndex < CoreDataBlockD.WAZA_RECORD_FLAG_LEN)
-                        return (block->wazaRecordFlag[arrayIndex] & bitFlag) != 0;
-                    return false;
+                        value = (block->wazaRecordFlag[arrayIndex] & bitFlag) != 0;
+                    else
+                    {
+                        GFL.ASSERT(false);
+                        value = false;
+                    }
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1402,10 +1721,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, false);
-                    ulong value = 0;
-                    for (int i = 0; i < CoreDataBlockD.BANK_UNIQUE_ID_LEN; i++)
-                        value |= (ulong)block->bankUniqueID[i] << (i * 8);
+                    var value = *(ulong*)block->bankUniqueID;
+                    UpdateChecksumAndEncode();
                     return value;
                 }
             }
@@ -1413,7 +1732,7 @@ namespace Pml.PokePara
 
         public bool CompareOyaName(string cmpName)
         {
-            return GetOyaName() == cmpName;
+            return cmpName.Equals(GetOyaName());
         }
 
         // =============================================
@@ -1422,96 +1741,128 @@ namespace Pml.PokePara
 
         public uint GetLevel()
         {
+            if (m_pCalcData == null) return 0;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return calc->level;
+                    var value = (uint)calc->level;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
 
         public uint GetMaxHp()
         {
+            if (m_pCalcData == null) return 0;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return calc->maxHp;
+                    var value = (uint)calc->maxHp;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
 
         public uint GetAtk()
         {
+            if (m_pCalcData == null) return 0;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return calc->atk;
+                    var value = (uint)calc->atk;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
 
         public uint GetDef()
         {
+            if (m_pCalcData == null) return 0;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return calc->def;
+                    var value = (uint)calc->def;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
 
         public uint GetSpAtk()
         {
+            if (m_pCalcData == null) return 0;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return calc->spatk;
+                    var value = (uint)calc->spatk;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
 
         public uint GetSpDef()
         {
+            if (m_pCalcData == null) return 0;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return calc->spdef;
+                    var value = (uint)calc->spdef;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
 
         public uint GetAgi()
         {
+            if (m_pCalcData == null) return 0;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return calc->agi;
+                    var value = (uint)calc->agi;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
 
         public GState GetGState()
         {
+            if (m_pCalcData == null) return GState.NONE;
             unsafe
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, false);
-                    return (GState)calc->gState;
+                    var value = (GState)calc->gState;
+                    UpdateChecksumAndEncode();
+                    return value;
                 }
             }
         }
@@ -1526,8 +1877,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var header = GetCoreDataHeader(addr);
                     header->personalRnd = rnd;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1538,8 +1891,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var header = GetCoreDataHeader(addr);
                     header->checksum = checksum;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1550,8 +1905,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var header = GetCoreDataHeader(addr);
                     header->fuseiTamagoFlag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1566,8 +1923,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->monsno = (ushort)monsno;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1578,8 +1937,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->itemno = itemno;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1590,8 +1951,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->id = id;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1602,8 +1965,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->exp = exp;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1614,8 +1979,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->tokuseino = (ushort)tokusei;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1626,8 +1993,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->boxMark = mark;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1638,8 +2007,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->colorRnd = rnd;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1650,8 +2021,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->seikaku = (byte)seikaku;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1662,8 +2035,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->seikakuHosei = (byte)seikaku;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1674,8 +2049,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->formNo = formno;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1686,8 +2063,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->effortHp = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1698,8 +2077,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->effortAtk = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1710,8 +2091,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->effortDef = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1722,8 +2105,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->effortAgi = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1734,8 +2119,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->effortSpatk = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1746,8 +2133,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->effortSpdef = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1758,8 +2147,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->style = style;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1770,8 +2161,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->beautiful = beautiful;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1782,8 +2175,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->cute = cute;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1794,8 +2189,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->clever = clever;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1806,8 +2203,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->strong = strong;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1818,8 +2217,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->fur = fur;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1830,8 +2231,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->pokerus = pokerus;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1842,6 +2245,7 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_1)
                         block->ribbonA |= (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_1));
@@ -1851,6 +2255,7 @@ namespace Pml.PokePara
                         block->ribbonC |= (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_3));
                     else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_4)
                         block->ribbonD |= (1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_4));
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1861,6 +2266,7 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_1)
                         block->ribbonA &= ~(1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_1));
@@ -1870,6 +2276,7 @@ namespace Pml.PokePara
                         block->ribbonC &= ~(1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_3));
                     else if (ribbonNo <= MAX_RIBBON_NO_ON_RIBBON_FIELD_4)
                         block->ribbonD &= ~(1u << (int)(ribbonNo - MIN_RIBBON_NO_ON_RIBBON_FIELD_4));
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1880,6 +2287,7 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->ribbonA = 0;
                     block->ribbonB = 0;
@@ -1887,6 +2295,7 @@ namespace Pml.PokePara
                     block->ribbonD = 0;
                     block->lumpingRibbonA = 0;
                     block->lumpingRibbonB = 0;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1897,6 +2306,7 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     switch (ribbonId)
                     {
@@ -1907,6 +2317,7 @@ namespace Pml.PokePara
                             block->lumpingRibbonB = (byte)num;
                             break;
                     }
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1917,8 +2328,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->tokusei1Flag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1929,8 +2342,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->tokusei2Flag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1941,8 +2356,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->tokusei3Flag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1953,8 +2370,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->favoriteFlag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1965,8 +2384,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->special_g_flag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1977,8 +2398,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->eventGetFlag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -1989,8 +2412,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->officialBattleEnableFlag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2001,8 +2426,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->sex = (byte)sex;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2013,8 +2440,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->camp_friendship = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2025,8 +2454,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->dpr_illegal_flag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2037,8 +2468,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->talentHeight = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2049,8 +2482,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockA(addr, true);
                     block->talentWeight = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2065,8 +2500,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->sick = sick;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2077,9 +2514,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
                         block->waza[wazaIndex] = (ushort)wazano;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2090,9 +2529,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
                         block->pp[wazaIndex] = pp;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2103,9 +2544,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     if (wazaIndex < PmlConstants.MAX_WAZA_NUM)
                         block->pointupUsedCount[wazaIndex] = count;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2116,9 +2559,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     if (index < PmlConstants.MAX_WAZA_NUM)
                         block->tamagoWaza[index] = (ushort)wazano;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2129,8 +2574,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->hp = hp;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2141,8 +2588,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->talentHp = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2153,8 +2602,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->talentAtk = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2165,8 +2616,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->talentDef = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2177,8 +2630,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->talentSpatk = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2189,8 +2644,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->talentSpdef = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2201,8 +2658,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->talentAgi = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2213,8 +2672,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->effortG = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2225,8 +2686,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->tamagoFlag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2237,8 +2700,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->nicknameFlag = flag;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2249,8 +2714,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     copyString(block->nickname, nickName, PmlConstants.MONS_NAME_BUFFER_SIZE);
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2261,8 +2728,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockB(addr, true);
                     block->palma = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2277,8 +2746,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     copyString(block->pastParentsName, name, PmlConstants.PERSON_NAME_BUFFER_SIZE);
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2289,8 +2760,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->pastParentsSex = (byte)sex;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2301,8 +2774,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->pastParentLangID = langID;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2313,8 +2788,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->ownedByOthers = (byte)(flag ? 1 : 0);
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2325,8 +2802,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->othersFriendshipTrainerId = trainerId;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2337,8 +2816,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->othersFriendship = friendship;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2349,8 +2830,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->othersMemoriesLevel = level;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2361,8 +2844,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->othersMemoriesCode = code;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2373,8 +2858,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->othersMemoriesData = data;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2385,8 +2872,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->othersMemoriesFeel = feel;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2397,6 +2886,7 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     CalcPokeJobBitPos(out byte arrayIndex, out byte bitFlag, jobIndex);
                     if (arrayIndex < CoreDataBlockC.POKEJOB_LEN)
@@ -2406,6 +2896,11 @@ namespace Pml.PokePara
                         else
                             block->pokejob[arrayIndex] &= (byte)~bitFlag;
                     }
+                    else
+                    {
+                        GFL.ASSERT(false);
+                    }
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2416,9 +2911,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     for (int i = 0; i < CoreDataBlockC.POKEJOB_LEN; i++)
                         block->pokejob[i] = 0;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2429,8 +2926,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->enjoy = enjoy;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2441,8 +2940,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->nadeNadeValue = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2453,8 +2954,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->getCassette = (byte)version;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2465,8 +2968,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->battleRomMark = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2477,8 +2982,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->langId = langId;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2489,8 +2996,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->multiWork = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2501,8 +3010,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockC(addr, true);
                     block->equipRibbon = ribbonNo;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2517,8 +3028,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     copyString(block->parentsName, oyaName, PmlConstants.PERSON_NAME_BUFFER_SIZE);
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2529,6 +3042,7 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var blockC = GetCoreDataBlockC(addr, false);
                     if (blockC->ownedByOthers != 0)
                     {
@@ -2540,6 +3054,7 @@ namespace Pml.PokePara
                         var block = GetCoreDataBlockD(addr, true);
                         block->friendship = friendship;
                     }
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2550,8 +3065,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->friendship = friendship;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2562,8 +3079,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->memories_level = level;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2574,8 +3093,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->memories_code = code;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2586,8 +3107,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->memories_data = data;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2598,8 +3121,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->memories_feel = feel;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2610,8 +3135,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->eggGetYear = year;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2622,8 +3149,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->eggGetMonth = month;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2634,8 +3163,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->eggGetDay = day;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2646,8 +3177,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->firstContactYear = year;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2658,8 +3191,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->firstContactMonth = month;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2670,8 +3205,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->firstContactDay = day;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2682,8 +3219,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->getPlace = place;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2694,8 +3233,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->birthPlace = place;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2706,8 +3247,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->getBall = ball;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2718,8 +3261,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->getLevel = level;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2730,8 +3275,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->parentsSex = (byte)sex;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2742,8 +3289,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     block->trainingFlag = value;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2754,6 +3303,7 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     CalcWazaRecordBitPos(out byte arrayIndex, out byte bitFlag, recordIndex);
                     if (arrayIndex < CoreDataBlockD.WAZA_RECORD_FLAG_LEN)
@@ -2763,6 +3313,11 @@ namespace Pml.PokePara
                         else
                             block->wazaRecordFlag[arrayIndex] &= (byte)~bitFlag;
                     }
+                    else
+                    {
+                        GFL.ASSERT(false);
+                    }
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2773,9 +3328,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     for (int i = 0; i < CoreDataBlockD.WAZA_RECORD_FLAG_LEN; i++)
                         block->wazaRecordFlag[i] = 0;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2786,9 +3343,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     for (int i = 0; i < CoreDataBlockD.BANK_UNIQUE_ID_LEN; i++)
                         block->bankUniqueID[i] = (byte)(value >> (i * 8));
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2799,9 +3358,11 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCoreData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var block = GetCoreDataBlockD(addr, true);
                     for (int i = 0; i < CoreDataBlockD.BANK_UNIQUE_ID_LEN; i++)
                         block->bankUniqueID[i] = 0;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2816,8 +3377,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->level = level;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2828,8 +3391,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->maxHp = maxHp;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2840,8 +3405,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->atk = atk;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2852,8 +3419,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->def = def;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2864,8 +3433,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->spatk = spatk;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2876,8 +3447,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->spdef = spdef;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2888,8 +3461,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->agi = agi;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2900,8 +3475,10 @@ namespace Pml.PokePara
             {
                 fixed (byte* addr = m_pCalcData)
                 {
+                    DecodeAndCheckIllegalWrite();
                     var calc = GetCalcData(addr, true);
                     calc->gState = (byte)state;
+                    UpdateChecksumAndEncode();
                 }
             }
         }
@@ -2917,80 +3494,36 @@ namespace Pml.PokePara
 
         private unsafe CoreDataBlockA* GetCoreDataBlockA(byte* _addr, bool forWrite)
         {
-            if (!m_accessState.isFastMode)
-            {
-                if (forWrite)
-                    DecodeAndCheckIllegalWrite();
-                else
-                    DecodeAndCheckIllegalWrite();
-            }
-
             var header = GetCoreDataHeader(_addr);
             byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.A);
             byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
-
-            if (!m_accessState.isFastMode && !forWrite)
-                UpdateChecksumAndEncode();
 
             return (CoreDataBlockA*)blockStart;
         }
 
         private unsafe CoreDataBlockB* GetCoreDataBlockB(byte* _addr, bool forWrite)
         {
-            if (!m_accessState.isFastMode)
-            {
-                if (forWrite)
-                    DecodeAndCheckIllegalWrite();
-                else
-                    DecodeAndCheckIllegalWrite();
-            }
-
             var header = GetCoreDataHeader(_addr);
             byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.B);
             byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
-
-            if (!m_accessState.isFastMode && !forWrite)
-                UpdateChecksumAndEncode();
 
             return (CoreDataBlockB*)blockStart;
         }
 
         private unsafe CoreDataBlockC* GetCoreDataBlockC(byte* _addr, bool forWrite)
         {
-            if (!m_accessState.isFastMode)
-            {
-                if (forWrite)
-                    DecodeAndCheckIllegalWrite();
-                else
-                    DecodeAndCheckIllegalWrite();
-            }
-
             var header = GetCoreDataHeader(_addr);
             byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.C);
             byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
-
-            if (!m_accessState.isFastMode && !forWrite)
-                UpdateChecksumAndEncode();
 
             return (CoreDataBlockC*)blockStart;
         }
 
         private unsafe CoreDataBlockD* GetCoreDataBlockD(byte* _addr, bool forWrite)
         {
-            if (!m_accessState.isFastMode)
-            {
-                if (forWrite)
-                    DecodeAndCheckIllegalWrite();
-                else
-                    DecodeAndCheckIllegalWrite();
-            }
-
             var header = GetCoreDataHeader(_addr);
             byte pos = GetCoreDataBlockPos(header->personalRnd, CoreDataBlockId.D);
             byte* blockStart = _addr + CoreDataHeader.SIZE + pos * CoreData.CORE_DATA_BLOCK_SIZE;
-
-            if (!m_accessState.isFastMode && !forWrite)
-                UpdateChecksumAndEncode();
 
             return (CoreDataBlockD*)blockStart;
         }
@@ -3089,38 +3622,35 @@ namespace Pml.PokePara
 
         private unsafe void Serialize(void* bufferForCore, void* bufferForCalc)
         {
-            if (!m_accessState.isEncoded)
-                UpdateChecksumAndEncode();
-
-            fixed (byte* src = m_pCoreData)
+            var fastMode = IsFastMode();
+            if (fastMode) EndFastMode();
+            if (bufferForCore != null)
             {
-                Buffer.MemoryCopy(src, bufferForCore, CORE_DATA_SIZE, CORE_DATA_SIZE);
+                fixed (byte* src = m_pCoreData)
+                    UnsafeUtility.MemCpy(bufferForCore, src, CORE_DATA_SIZE);
             }
-
-            if (bufferForCalc != null && m_pCalcData != null)
+            if (bufferForCalc != null)
             {
                 fixed (byte* src = m_pCalcData)
-                {
-                    Buffer.MemoryCopy(src, bufferForCalc, CALC_DATA_SIZE, CALC_DATA_SIZE);
-                }
+                    UnsafeUtility.MemCpy(bufferForCalc, src, CALC_DATA_SIZE);
             }
+            if (fastMode) StartFastMode();
         }
 
         private unsafe void Deserialize(void* serializedCoreData, void* serializedCalcData)
         {
-            fixed (byte* dst = m_pCoreData)
+            if (serializedCoreData != null)
             {
-                Buffer.MemoryCopy(serializedCoreData, dst, CORE_DATA_SIZE, CORE_DATA_SIZE);
+                GFL.ASSERT(m_pCoreData != null);
+                fixed (byte* dst = m_pCoreData)
+                    UnsafeUtility.MemCpy(dst, serializedCoreData, CORE_DATA_SIZE);
             }
-
-            if (serializedCalcData != null && m_pCalcData != null)
+            if (serializedCalcData != null)
             {
+                GFL.ASSERT(m_pCalcData != null);
                 fixed (byte* dst = m_pCalcData)
-                {
-                    Buffer.MemoryCopy(serializedCalcData, dst, CALC_DATA_SIZE, CALC_DATA_SIZE);
-                }
+                    UnsafeUtility.MemCpy(dst, serializedCalcData, CALC_DATA_SIZE);
             }
-
             m_accessState.isEncoded = true;
             m_accessState.isFastMode = false;
             DecodeAndCheckIllegalWrite();

@@ -41,50 +41,50 @@ namespace Pml.PokePara
 		
 		public uint talentHp
 		{
-			get => (uint)((_bitsA & (uint)bitsA0_mask) >> bitsA0_loc);
-			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA0_mask) | ((value << bitsA0_loc) & (uint)bitsA0_mask));
+			get => (_bitsA & bitsA0_mask) >> bitsA0_loc;
+			set => _bitsA = (_bitsA & ~(uint)bitsA0_mask) | ((value << bitsA0_loc) & bitsA0_mask);
 		}
 
 		public uint talentAtk
 		{
-			get => (uint)((_bitsA & (uint)bitsA1_mask) >> bitsA1_loc);
-			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA1_mask) | ((value << bitsA1_loc) & (uint)bitsA1_mask));
+			get => (_bitsA & bitsA1_mask) >> bitsA1_loc;
+			set => _bitsA = (_bitsA & ~(uint)bitsA1_mask) | ((value << bitsA1_loc) & bitsA1_mask);
 		}
 
 		public uint talentDef
 		{
-			get => (uint)((_bitsA & (uint)bitsA2_mask) >> bitsA2_loc);
-			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA2_mask) | ((value << bitsA2_loc) & (uint)bitsA2_mask));
+			get => (_bitsA & bitsA2_mask) >> bitsA2_loc;
+			set => _bitsA = (_bitsA & ~(uint)bitsA2_mask) | ((value << bitsA2_loc) & bitsA2_mask);
 		}
 
 		public uint talentAgi
 		{
-			get => (uint)((_bitsA & (uint)bitsA3_mask) >> bitsA3_loc);
-			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA3_mask) | ((value << bitsA3_loc) & (uint)bitsA3_mask));
+			get => (_bitsA & bitsA3_mask) >> bitsA3_loc;
+			set => _bitsA = (_bitsA & ~(uint)bitsA3_mask) | ((value << bitsA3_loc) & bitsA3_mask);
 		}
 
 		public uint talentSpatk
 		{
-			get => (uint)((_bitsA & (uint)bitsA4_mask) >> bitsA4_loc);
-			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA4_mask) | ((value << bitsA4_loc) & (uint)bitsA4_mask));
+			get => (_bitsA & bitsA4_mask) >> bitsA4_loc;
+			set => _bitsA = (_bitsA & ~(uint)bitsA4_mask) | ((value << bitsA4_loc) & bitsA4_mask);
 		}
 
 		public uint talentSpdef
 		{
-			get => (uint)((_bitsA & (uint)bitsA5_mask) >> bitsA5_loc);
-			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA5_mask) | ((value << bitsA5_loc) & (uint)bitsA5_mask));
+			get => (_bitsA & bitsA5_mask) >> bitsA5_loc;
+			set => _bitsA = (_bitsA & ~(uint)bitsA5_mask) | ((value << bitsA5_loc) & bitsA5_mask);
 		}
 
 		public bool tamagoFlag
 		{
-			get => (_bitsA & (uint)bitsA6_mask) != 0;
-			set => _bitsA = (uint)((_bitsA & ~(uint)bitsA6_mask) | (value ? (uint)bitsA6_mask : 0));
+			get => ((_bitsA & bitsA6_mask) >> bitsA6_loc) != 0;
+			set => _bitsA = (_bitsA & ~(uint)bitsA6_mask) | (uint)(value ? bitsA6_mask : 0);
 		}
 
 		public bool nicknameFlag
 		{
-			get => (_bitsA & unchecked((uint)bitsA7_mask)) != 0;
-			set => _bitsA = (uint)((_bitsA & ~unchecked((uint)bitsA7_mask)) | (value ? unchecked((uint)bitsA7_mask) : 0));
+			get => ((_bitsA & unchecked((uint)bitsA7_mask)) >> bitsA7_loc) != 0;
+			set => _bitsA = (_bitsA & ~unchecked((uint)bitsA7_mask)) | unchecked((uint)(value ? bitsA7_mask : 0));
 		}
 	}
 }
