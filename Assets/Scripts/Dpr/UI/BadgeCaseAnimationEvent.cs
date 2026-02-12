@@ -11,7 +11,7 @@ namespace Dpr.UI
 		
 		public void Register(BadgeCaseObject badgeCaseObject)
 		{
-			this.Length = badgeCaseObject;
+			this.badgeCaseObject = badgeCaseObject;
 		}
 		
 		// TODO

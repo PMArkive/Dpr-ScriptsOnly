@@ -60,8 +60,8 @@ namespace Dpr.UI
 		
 		private void UpdateView()
 		{
-			this.Length.SetActive(this.isFrontView);
-			GameObject.SetActive(this[0],!this.isFrontView);
+			this.frontObject.SetActive(this.isFrontView);
+			this.backObject.SetActive(!this.isFrontView);
 		}
 		
 		// TODO

@@ -49,10 +49,8 @@ namespace Pml.Item
         // TODO
         public ItemNo WazaMachineIDToItemNo(byte machine_no) { return ItemNo.DUMMY_DATA; }
 
-        public uint GetWazaMachineItemNum()
-        {
-        	return this.m_alldata[0].Length;
-        }
+        // TODO
+        public uint GetWazaMachineItemNum() { return 0; }
 
         // TODO
         private int GetIconId(ushort itemno) { return 0; }
@@ -72,7 +70,7 @@ namespace Pml.Item
 
         public static bool IsStrangeBall(BallId ballid)
         {
-        	return 0x19 < (ballid & 0xff) - 1;
+        	return 0x19 < ((int)ballid & 0xff) - 1;
         }
     }
 }

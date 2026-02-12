@@ -17,7 +17,7 @@ namespace Dpr.SubContents
 		
 		private void OnEnable()
 		{
-			Transform.SetSiblingIndex(Text.get_rectTransform(this[0]),100,0);
+			Transform.SetSiblingIndex(Text.get_rectTransform(this.text),100,0);
 		}
 		
 		// TODO

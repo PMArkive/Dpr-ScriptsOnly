@@ -57,7 +57,7 @@ namespace Dpr.Battle.View.UI
 		
 		public void SetGameTime(bool isEnable)
 		{
-			this._isGameTimeEnable = isEnable & 1;
+			this._isGameTimeEnable = (isEnable ? 1 : 0) & 1;
 		}
 		
 		// TODO
@@ -65,7 +65,7 @@ namespace Dpr.Battle.View.UI
 		
 		public void SetCommandTime(bool isEnable)
 		{
-			this._isCommandTimeEnable = isEnable & 1;
+			this._isCommandTimeEnable = (isEnable ? 1 : 0) & 1;
 		}
 		
 		// TODO

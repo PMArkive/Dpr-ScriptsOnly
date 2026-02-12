@@ -25,7 +25,7 @@ namespace Dpr.Battle.Logic
 		{
 			this.arenaEffTable = null;
 			this.arenaIndex = 0xa1ffffffff;
-			this.Length = 0x200;
+			this.enableDarkBall = 0x200;
 			this.footEffectID = (EffectBattleID)0xffffffff;
 			this.isIndoor = false;
 			this.reflectionResolution = 0xffffffffffffffff;

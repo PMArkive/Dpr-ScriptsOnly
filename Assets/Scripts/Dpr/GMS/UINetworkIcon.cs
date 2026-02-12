@@ -8,8 +8,8 @@ namespace Dpr.GMS
 	{
 		private DOTweenAnimation[] matchingIconTweens;
 		private DOTweenAnimation[] attentionIconTweens;
-		private GameObject matchingIconObj;
-		private GameObject attentionIconObj;
+		internal GameObject matchingIconObj;
+		internal GameObject attentionIconObj;
 		private Image matchingIconImage;
 		private Image attentionIconImage;
 		private RectTransform matchingIconRect;

@@ -26,7 +26,7 @@ namespace Dpr.UI
 		
 		public void Select(bool enabled)
 		{
-			GameObject.SetActive(Component.get_gameObject(this[0]),enabled & 1,0);
+			GameObject.SetActive(this._select.gameObject,(enabled ? 1 : 0) & 1,0);
 		}
 
 		public class RankParam

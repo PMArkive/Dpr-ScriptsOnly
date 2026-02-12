@@ -17,7 +17,7 @@ namespace Dpr.Contest
 		public override void OnLateUpdate(float deltaTime)
 		{
 			if (this.Cameras != 0) {
-			  SequenceEditor_SequenceCameraSystem.OnLateUpdate();
+			  SequenceCameraSystem.OnLateUpdate();
 			}
 		}
 		

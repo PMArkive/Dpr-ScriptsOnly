@@ -12,9 +12,9 @@ namespace Dpr.UI
 		
 		public void SetActive(bool isActive)
 		{
-			this[0] = isActive & 1;
-			var uVar1 = Component.gameObject;
-			if (this[0] != 0) {
+			this._isActived = (isActive ? 1 : 0) & 1;
+			var uVar1 = this.gameObject;
+			if (this._isActived) {
 			  uVar1.SetActive(this._data != null);
 			}
 			uVar1.SetActive(0);

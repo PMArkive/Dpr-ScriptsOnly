@@ -35,7 +35,7 @@ namespace Dpr.SubContents
         {
         	this.LoadedAsset = null;
         	this.catalog = null;
-        	this.Length = 0;
+        	this.parent = null;
         	this.pokeParam = null;
         }
     }

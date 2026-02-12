@@ -36,7 +36,7 @@ namespace Dpr.GMS
 		private void SetNewImageEnabled(bool enabled)
 		{
 			if (((this.newIconImage.enabled ^ enabled) & 1) != 0) {
-			  this.newIconImage.enabled = enabled & 1;
+			  this.newIconImage.enabled = (enabled ? 1 : 0) & 1;
 			}
 		}
 		

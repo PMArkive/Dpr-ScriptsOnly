@@ -13,7 +13,7 @@ namespace Dpr.Battle.View.Objects
 		
 		public void UnInitialize()
 		{
-			this[0] = 0;
+			this._cameras = null;
 			this._refCounteds = null;
 		}
 		

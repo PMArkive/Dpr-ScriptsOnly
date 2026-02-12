@@ -36,7 +36,7 @@ namespace Dpr.Contest
 		private BOPokemon tempWazaModelPtr;
 		private SpriteAtlas sceneUISpriteAtlas;
 		private float initCompositorDepth;
-		private int userIndex;
+		internal int userIndex;
 		private bool bLoadedStage;
 		private bool bLoadedCharacter;
 		private bool bPlayingWazaAnim;
@@ -60,8 +60,8 @@ namespace Dpr.Contest
 		
 		public void StartContest()
 		{
-			Contest_SceneObjectManager.DisableCamera(SequenceEditor_SequenceCameraObject.get_Camera(this.wazaCamera),SequenceEditor_SequenceCameraObject.get_Camera(this.wazaCamera));
-			Contest_SceneObjectManager.EnableCamera(SequenceEditor_SequenceCameraObject.get_Camera(this.mainCamera),SequenceEditor_SequenceCameraObject.get_Camera(this.mainCamera));
+			DisableCamera(this.wazaCamera.Camera,SequenceCameraObject.get_Camera(this.wazaCamera));
+			EnableCamera(this.mainCamera.Camera,SequenceCameraObject.get_Camera(this.mainCamera));
 		}
 		
 		// TODO
@@ -84,9 +84,9 @@ namespace Dpr.Contest
 		public void SetAudienceUpdateFlag(bool flag)
 		{
 			if (flag) {
-			  Contest_AudienceGenerator.Play(this.stageModelObj.Length);
+			  this.stageModelObj.generator.Play();
 			}
-			Contest_AudienceGenerator.Stop(this.stageModelObj.Length);
+			this.stageModelObj.generator.Stop();
 		}
 		
 		// TODO
@@ -131,7 +131,7 @@ namespace Dpr.Contest
 			  return *
 			          (this.playerEntityArray + (int)this.userIndex * 8 + 0x20);
 			}
-			return default;
+			return null;
 		}
 		
 		public BOPokemon SpecialWazaModel { get => specialWazaModelPtr; }
@@ -155,19 +155,19 @@ namespace Dpr.Contest
 			          (this.playerEntityArray + (int)this.userIndex * 8[0]
 			          + 0x60);
 			}
-			return default;
+			return null;
 		}
 		
 		// TODO
 		public Vector3 GetDefaultPokePos(BtlvPos posID) { return default; }
 		
-		public Vector3 GetUserDefaultPokePos()
+		public unsafe Vector3 GetUserDefaultPokePos()
 		{
-			if (this.userIndex < this.contestSetting.Length.Length) {
+			if (this.userIndex < this.contestSetting.modelPosArray.Length) {
 			  return *(uint *)
-			          (this.contestSetting.Length + (int)this.userIndex * 8[0] + 0x1c);
+			          (this.contestSetting.modelPosArray + (int)this.userIndex * 8[0] + 0x1c);
 			}
-			return default;
+			return null;
 		}
 		
 		public BOPokemon GetUserWazaModelPokemon()
@@ -177,7 +177,7 @@ namespace Dpr.Contest
 			          (this.playerEntityArray + (int)this.userIndex * 8[0]
 			          + 0x40);
 			}
-			return default;
+			return null;
 		}
 		
 		// TODO
@@ -264,8 +264,9 @@ namespace Dpr.Contest
 		
 		public DanceHeartEffect CreateNPCHeart(Vector2 from, Vector2 to, EmitHeartPattern pattern, Action onComplete)
 		{
-			Contest_ContestHeartEmitter.CreateNPCHeart(this.heartEmitter,from,to)
+			this.heartEmitter.CreateNPCHeart(from,to)
 			;
+			return null;
 		}
 		
 		public int NowMonitorIndex { get => stageFx.NowMonitorIndex; }
@@ -273,7 +274,7 @@ namespace Dpr.Contest
 		
 		public void SwitchMonitor()
 		{
-			Contest_StageEffect.SwitchMonitor(this.stageFx);
+			this.stageFx.SwitchMonitor();
 		}
 		
 		// TODO
@@ -284,7 +285,7 @@ namespace Dpr.Contest
 		
 		public void PlayConfettiFx(Vector3 emitPos)
 		{
-			Contest_StageEffect.PlayConfettiFx(this.stageFx);
+			this.stageFx.PlayConfettiFx();
 		}
 		
 		// TODO

@@ -32,7 +32,7 @@
 
         public byte GetMemberCount()
         {
-        	return this.Length;
+        	return (byte)(this.m_memberCount);
         }
 
         // TODO
@@ -46,7 +46,7 @@
 
         public bool IsFull()
         {
-        	return 5 < this.Length;
+        	return 5 < this.m_memberCount;
         }
 
         // TODO

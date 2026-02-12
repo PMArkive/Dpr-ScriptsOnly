@@ -47,7 +47,7 @@ namespace Dpr.GMS
 		
 		public void SetLockPlaySe(bool lockSe)
 		{
-			this[0] = lockSe & 1;
+			this.lockPlaySe = (lockSe ? 1 : 0) & 1;
 		}
 		
 		public void PlaySe(string eventName)
@@ -56,7 +56,7 @@ namespace Dpr.GMS
 			var uVar2 = String.IsNullOrEmpty(eventName);
 			if ((uVar2 & 1) != 0) {
 			}
-			AudioInstance.Play(this.Length.CreateSe(uVar1,0),0,0,0);
+			AudioInstance.Play(this.audioManager.CreateSe(uVar1,0),0,0,0);
 		}
 		
 		// TODO
@@ -67,7 +67,7 @@ namespace Dpr.GMS
 		
 		private void SendAudioEvent(uint seId)
 		{
-			AudioInstance.Play(this.Length.CreateSe(seId,0),0,0,0);
+			AudioInstance.Play(this.audioManager.CreateSe(seId,0),0,0,0);
 		}
 		
 		// TODO

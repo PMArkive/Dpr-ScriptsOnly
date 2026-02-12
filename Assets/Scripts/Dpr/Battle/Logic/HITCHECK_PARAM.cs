@@ -36,7 +36,7 @@ namespace Dpr.Battle.Logic
         public void SetPluralHitAffinity(TypeAffinity.AffinityID affinity)
         {
         	if ((int)this.pluralHitAffinity == 7) {
-        	  this.pluralHitAffinity = affinity;
+        	  this.pluralHitAffinity = (AffinityID)(affinity);
         	}
         }
 

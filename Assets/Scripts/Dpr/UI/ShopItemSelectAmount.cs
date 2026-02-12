@@ -28,7 +28,7 @@ namespace Dpr.UI
         {
         	ItemSelectAmount.Hide();
         	if (this.onDecideSelectAmountCallback != null) {
-        	  var uVar1 = ItemSelectAmount.CurrentAmount;
+        	  var uVar1 = this.CurrentAmount;
         	  Action<int>.Invoke(this.onDecideSelectAmountCallback,uVar1);
         	}
         }

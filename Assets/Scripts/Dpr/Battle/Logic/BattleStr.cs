@@ -115,7 +115,7 @@ namespace Dpr.Battle.Logic
         	  }
         	}
         	mkstr_std_simple(this,msgFile,strID);
-        	return default;
+        	return null;
         }
 
         // TODO

@@ -72,7 +72,7 @@ namespace Dpr.Field.Walking
 
         private void AddMonohiroiCount()
         {
-        	var iVar1 = Walking_FieldPokeTalkModel.GetTimeAndCount();
+        	var iVar1 = GetTimeAndCount();
         	FlagWork.SetWork(0x1a0,iVar1 + 1);
         }
 
@@ -114,8 +114,8 @@ namespace Dpr.Field.Walking
         {
         	this.friendship = this.param.GetFriendship();
         	this.HPRate = ((float)this.param.GetHp() / (float)CoreParam.GetMaxHp(this.param)) * 100.0;
-        	this.sick = this.param.GetSick();
-        	this.type = this.param.GetType1();
+        	this.sick = (Sick)(this.param.GetSick());
+        	this.type = (PokeType)(this.param.GetType1());
         }
 
         private int GetVoiceID()
@@ -128,8 +128,10 @@ namespace Dpr.Field.Walking
         	return 0;
         }
 
-        // TODO
-        public bool IsMonohiroi() { return false; }
+        public bool IsMonohiroi()
+        {
+        	return this.MonohiroiItemID != -1;
+        }
 
         // TODO
         private bool LotteryMonohiroi() { return false; }
@@ -142,14 +144,16 @@ namespace Dpr.Field.Walking
 
         public void ResetItem()
         {
-        	this[0] = 0xffffffff;
+        	this.MonohiroiItemID = 0xffffffff;
         }
 
         // TODO
         private void LotteryTalkMessage() { }
 
-        // TODO
-        public int GetItemID() { return 0; }
+        public int GetItemID()
+        {
+        	return this.MonohiroiItemID;
+        }
 
         public class MonohiroiLottery : IHaveWeight
         {

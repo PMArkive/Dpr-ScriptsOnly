@@ -38,10 +38,8 @@ namespace Dpr.UI
 		// TODO
 		private int GetPlateType(int index) { return default; }
 		
-		private int GetMemberCount()
-		{
-			return this._pokemonParams.Length;
-		}
+		// TODO
+		private int GetMemberCount() { return default; }
 		
 		// TODO
 		private void OnUpdate(float deltaTime) { }
@@ -70,13 +68,8 @@ namespace Dpr.UI
 		// TODO
 		private void PokemonSwap(BTL_POKEPARAM pokeParam, PositionType posType = PositionType.None) { }
 		
-		private int GetSwapPokmeonNum()
-		{
-			if ((this._selParam != null) && (this._param.isPokeList == 0)) {
-			  return this._selParam[0];
-			}
-			return 1;
-		}
+		// TODO
+		private int GetSwapPokmeonNum() { return default; }
 		
 		// TODO
 		private int GetSelectedPokemonNum() { return default; }
@@ -107,30 +100,8 @@ namespace Dpr.UI
 			return false;
 		}
 		
-		private bool IsSwapWaitPokemon(BTL_POKEPARAM param)
-		{
-			if (param == null) {
-			  return false;
-			}
-			if (this._param.isPokeList == 0) {
-			  if ((this._selParam == null) || (this._selParam[0] != '\x02'))
-			  {
-			    return false;
-			  }
-			  var lVar3 = GetSelectedPokeParam();
-			  if (lVar3 == null) {
-			    return false;
-			  }
-			}
-			else {
-			  if (this._param.swapWaitPokemon == 0) {
-			    return false;
-			  }
-			}
-			var cVar1 = this._param.swapWaitPokemon.GetID();
-			var cVar2 = param.GetID();
-			return cVar1 == cVar2;
-		}
+		// TODO
+		private bool IsSwapWaitPokemon(BTL_POKEPARAM param) { return default; }
 
 		private enum SelectType : int
 		{

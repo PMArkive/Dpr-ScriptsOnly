@@ -133,9 +133,9 @@ namespace Dpr.SealPreview
 
         public void SetBattleRule(BtlRule btlRule)
         {
-        	this.btlRule = btlRule;
-        	SealPreview_SealPreviewViewSystem.SetupInrtoSequence();
-        	SealPreview_SealPreviewViewSystem.SetupThrowBallSequence();
+        	this.btlRule = (BtlRule)(btlRule);
+        	SetupInrtoSequence();
+        	SetupThrowBallSequence();
         }
 
         // TODO
@@ -227,6 +227,7 @@ namespace Dpr.SealPreview
 		public BTLV_WAZA_EFF_PARAM GetWazaParam()
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		// TODO
@@ -238,6 +239,7 @@ namespace Dpr.SealPreview
 		public BTLV_WAZA_EFF_PARAM SetWazaParam(BTLV_WAZA_EFF_PARAM param)
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		public void CheckWazaDataPath_Particle(ref string path, int idx, bool isBallEffect, bool isCapture, bool isAttributeEffect, bool isStreamLineEffect)
@@ -264,6 +266,7 @@ namespace Dpr.SealPreview
 		public string GetBttleWazaModelPath(string idx)
 		{
 			var uVar1 = new NotImplementedException();
+			return default;
 		}
 		
 		// TODO
@@ -272,6 +275,7 @@ namespace Dpr.SealPreview
 		public PartyDesc __GetPartySetupParam__(byte clientId)
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		// TODO
@@ -280,6 +284,7 @@ namespace Dpr.SealPreview
 		public Size GetPokeSize(BattleViewSystem.BattleViewSide side, bool isGPoke = false)
 		{
 			var uVar1 = new NotImplementedException();
+			return (Size)0;
 		}
 		
 		// TODO
@@ -329,6 +334,7 @@ namespace Dpr.SealPreview
 		public int SeqComFunc_GetTargetPokeNum(bool isCheck = true)
 		{
 			var uVar1 = new NotImplementedException();
+			return 0;
 		}
 		
 		// TODO
@@ -337,6 +343,7 @@ namespace Dpr.SealPreview
 		public BtlvPos SeqComFunc_GetTargetPoke_Org(int idx)
 		{
 			var uVar1 = new NotImplementedException();
+			return (BtlvPos)0;
 		}
 		
 		// TODO
@@ -362,7 +369,7 @@ namespace Dpr.SealPreview
 		
 		public void SetIsSoundPlayingFinishCheckInvalid(bool value)
 		{
-			this.m_isSoundPlayingFinishCheckInvalid = value & 1;
+			this.m_isSoundPlayingFinishCheckInvalid = (value ? 1 : 0) & 1;
 		}
 		
 		public void __SetReqCheckPinch__(bool value)
@@ -441,7 +448,8 @@ namespace Dpr.SealPreview
 		
 		private bool __WaitLoadSequence__()
 		{
-			Sequence_SequenceSystem.get_IsPreLoaded(this.m_iPtrSequenceSystem);
+			this.m_iPtrSequenceSystem.IsPreLoaded;
+			return false;
 		}
 		
 		// TODO

@@ -45,17 +45,17 @@ namespace Dpr.Battle.Logic.Net.Data
 		
 		public byte MaxVersion()
 		{
-			return this.Length;
+			return (byte)(this.m_maxVersion);
 		}
 		
 		public byte GetServerClientID()
 		{
-			return this.m_serverClientID;
+			return (byte)(this.m_serverClientID);
 		}
 		
 		public void SetServerClientID(byte clientId)
 		{
-			this.m_serverClientID = clientId;
+			this.m_serverClientID = (byte)(clientId);
 		}
 		
 		public bool IsDeterminedServer()

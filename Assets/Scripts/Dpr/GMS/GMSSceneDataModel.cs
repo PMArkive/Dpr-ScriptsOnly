@@ -39,8 +39,8 @@ namespace Dpr.GMS
 		private Transform keyGuideParent;
 		private RenderTexture renderTexture;
 		private UnionTradeManager.BoxPokeData evolvedTargetPokeParam;
-		private GMSMode selectGMSMode = GMSMode.Top;
-		private SceneState nowSceneState;
+		internal GMSMode selectGMSMode = GMSMode.Top;
+		internal SceneState nowSceneState;
 		private Coroutine coroutineCreatePointHistoryData;
 		private BoxWindow.SelectedPokemon selectBoxPokemon;
 		private StringBuilder voiceEventSb = new StringBuilder(INIT_VOICE_SB_CAPACITY);
@@ -49,14 +49,14 @@ namespace Dpr.GMS
 
 		private int[] ngPokeNos;
 		private float showPointDotValue;
-		private int nowTotalPutPointNum;
+		internal int nowTotalPutPointNum;
 		private int maxPointNum;
 		private int lastSelectModeIndex;
 		private ushort tradeListIndex;
 		private ushort browsingListIndex;
 		private byte achievementStep;
 		private bool lockCheckAchievementFlag;
-		private bool hasAchievementReward;
+		internal bool hasAchievementReward;
 		private bool bIsReady;
 
 		private SpriteAtlas graphicTextAtlas;
@@ -85,9 +85,9 @@ namespace Dpr.GMS
 		{
 			this.lockCheckAchievementFlag = false;
 			this.keyguidePattern = (KeyguidePattern)7;
-			var uVar1 = GMS_GMSSceneDataModel.CalcTotalPutPointNum();
+			var uVar1 = CalcTotalPutPointNum();
 			this.nowTotalPutPointNum = uVar1;
-			GMS_GMSPointDataContainer.RemapRefDataIndex(this.dataContainer);
+			this.dataContainer.RemapRefDataIndex();
 		}
 		
 		// TODO
@@ -234,17 +234,18 @@ namespace Dpr.GMS
 		
 		public int GetNowSelectModeListIndex()
 		{
-			GMS_GMSSceneDataModel.GetStartListIndex(this.selectGMSMode);
+			GetStartListIndex(this.selectGMSMode);
+			return 0;
 		}
 		
 		public void SetTradeListIndex(int index)
 		{
-			this.tradeListIndex = index;
+			this.tradeListIndex = (ushort)(index);
 		}
 		
 		public void SetBrowsingListIndex(int index)
 		{
-			this.browsingListIndex = index;
+			this.browsingListIndex = (ushort)(index);
 		}
 		
 		public Demo_Trade TradeDemoParam { get => tradeDemoParam; }
@@ -287,7 +288,7 @@ namespace Dpr.GMS
 		
 		public void ClearTradeResultData()
 		{
-			GMS_TradeResultData.Clear(this.tradeResultData);
+			this.tradeResultData.Clear();
 		}
 		
 		private bool IsRankMax { get => achievementStep >= gmsMasterData.PutRank.Length - 1; }

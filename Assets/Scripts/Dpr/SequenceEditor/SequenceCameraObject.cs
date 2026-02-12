@@ -201,7 +201,7 @@ namespace Dpr.SequenceEditor
 		
 		public void SetCameraAnimationCheckGround(bool value)
 		{
-			this.m_isCheckGround = value & 1;
+			this.m_isCheckGround = (value ? 1 : 0) & 1;
 		}
 		
 		public bool GetCameraAnimationCheckGround()
@@ -211,7 +211,7 @@ namespace Dpr.SequenceEditor
 		
 		public void SetCameraAnimationmFreezeOnGround(bool value)
 		{
-			this.m_isCheckFreezeOnGround = value & 1;
+			this.m_isCheckFreezeOnGround = (value ? 1 : 0) & 1;
 			this.m_isTransformFreeze = false;
 		}
 		

@@ -50,7 +50,7 @@ namespace Dpr.SecretBase
 		
 		public void SetActivePlaceMentGuide(bool isActive)
 		{
-			GameObject.SetActive(this[0],isActive & 1);
+			this.placementGuide.SetActive((isActive ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -88,7 +88,7 @@ namespace Dpr.SecretBase
 		
 		public void UpdateCrystalColor()
 		{
-			SecretBase_StatuePlacementCrystal.UpdateCrystalColor(this.crystal);
+			this.crystal.UpdateCrystalColor();
 		}
 		
 		// TODO
@@ -97,17 +97,17 @@ namespace Dpr.SecretBase
 		public void SetSelectPedestalMode(bool isPedestalMode)
 		{
 			if (isPedestalMode) {
-			  SecretBase_FieldCursor.SetActiveCursor(this.currentCursor,0);
+			  this.currentCursor.SetActiveCursor(0);
 			  ExtensionMethods.SetActive(this.gridManager,0);
-			  SecretBase_StatuePlacementCrystal.StopyCrystalEffect(this.crystal);
+			  this.crystal.StopyCrystalEffect();
 			  ExtensionMethods.SetActive(this.crystal,0);
 			  ExtensionMethods.SetActive(this.impossibleField,0);
 			}
-			SecretBase_FieldCursor.SetActiveCursor(this.currentCursor,1);
+			this.currentCursor.SetActiveCursor(1);
 			ExtensionMethods.SetActive(this.gridManager,1);
 			ExtensionMethods.SetActive(this.crystal,1);
 			ExtensionMethods.SetActive(this.impossibleField,1);
-			SecretBase_StatuePlacementCrystal.UpdateCrystalColor(this.crystal);
+			this.crystal.UpdateCrystalColor();
 		}
 
 		public enum CursorMode : int

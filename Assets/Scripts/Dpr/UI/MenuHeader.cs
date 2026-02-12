@@ -20,23 +20,23 @@ namespace Dpr.UI
 		public void Setup()
 		{
 			this._useMsgFile = null;
-			if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
-			  GameObject.SetActive(this[0],0);
+			if ((this._timerObj.activeSelf & 1) != 0) {
+			  this._timerObj.SetActive(0);
 			}
 		}
 		
 		public void HideTimer()
 		{
 			this._useMsgFile = null;
-			if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
-			  GameObject.SetActive(this[0],0);
+			if ((this._timerObj.activeSelf & 1) != 0) {
+			  this._timerObj.SetActive(0);
 			}
 		}
 		
 		private void SetTimerActive(bool active)
 		{
-			if (((GameObject.get_activeSelf(this[0]) ^ active) & 1) != 0) {
-			  GameObject.SetActive(this[0],active & 1);
+			if (((this._timerObj.activeSelf ^ active) & 1) != 0) {
+			  this._timerObj.SetActive((active ? 1 : 0) & 1);
 			}
 		}
 		

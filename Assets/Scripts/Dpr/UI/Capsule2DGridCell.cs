@@ -52,6 +52,7 @@ namespace Dpr.UI
 		public Vector3 GetPosition()
 		{
 			this.gridRectTransform.position;
+			return null;
 		}
 		
 		// TODO

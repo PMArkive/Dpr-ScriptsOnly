@@ -8,7 +8,7 @@ namespace Dpr.Battle.Logic
 		{
 			var uVar1 = WAZADATA.GetCategory(waza);
 			if (uVar1 < 10) {
-			  return 0x3d1U >> (ulong)(uVar1 & 0x1f) & 1;
+			  return 0x3d1U >> (int)(uVar1 & 0x1f) & 1;
 			}
 			return false;
 		}

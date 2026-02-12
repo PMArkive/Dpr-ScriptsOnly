@@ -20,7 +20,7 @@ namespace Dpr.UI
 
 		private ushort playerHeight;
 		private PokemonParam currentPokemonParam;
-		private State currentState;
+		internal State currentState;
 		private UIModelViewController.ModelParam playerModelParam;
 		private AnimationLayer playerModelAnimationLayer;
 		private int playerModelWaitAnimationIndex = -1;
@@ -75,7 +75,7 @@ namespace Dpr.UI
 		// TODO
 		private int GetPlayerWaitAnimationIndex(AnimationLayer animationLayer) { return default; }
 
-		private enum State : int
+		internal enum State : int
 		{
 			None = 0,
 			BeforeLoad = 1,

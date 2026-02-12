@@ -11,7 +11,7 @@ namespace Dpr.GMS
 		public void Clear()
 		{
 			this.titleSpr = null;
-			this.Length = 0;
+			this.currentRankData = null;
 		}
 		
 		// TODO

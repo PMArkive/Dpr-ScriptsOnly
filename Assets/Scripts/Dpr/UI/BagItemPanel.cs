@@ -72,7 +72,7 @@ namespace Dpr.UI
 		
 		public void SetShowDescriptionContestWaza(bool isShowWazaContest)
 		{
-			this.bagItemDescriptionPanel.isShowWazaContest = isShowWazaContest & 1;
+			this.bagItemDescriptionPanel.isShowWazaContest = (isShowWazaContest ? 1 : 0) & 1;
 		}
 		
 		// TODO

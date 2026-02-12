@@ -7,14 +7,14 @@ namespace Pml.PokePara
 		
 		public static BoxMarkColor GetBoxMarkColor(ushort value, BoxMark mark)
 		{
-			var uVar1 = (mark & 0xf) << 1;
-			return (value & 3 << (ulong)uVar1 & 0xffff) >> (ulong)uVar1;
+			var uVar1 = ((int)mark & 0xf) << 1;
+			return (value & 3 << (int)uVar1 & 0xffff) >> (int)uVar1;
 		}
 		
 		public static ushort SetBoxMarkColor(ushort value, BoxMark mark, BoxMarkColor color)
 		{
-			var uVar1 = (mark & 0xf) << 1;
-			return value & (3 << (ulong)uVar1 ^ 0xffffffffU) & 0xffff | color << (ulong)uVar1;
+			var uVar1 = ((int)mark & 0xf) << 1;
+			return (ushort)(value & (3 << (int)uVar1 ^ 0xffffffffU) & 0xffff | color << (int)uVar1);
 		}
 	}
 }

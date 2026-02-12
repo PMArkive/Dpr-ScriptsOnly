@@ -15,7 +15,7 @@ namespace Dpr.UI
         [SerializeField]
         [Tooltip("インデックスの範囲外になった場合にループする")]
         private bool IsLoop = true;
-        private MoveState moveState;
+        internal MoveState moveState;
 
         public int CurrentIndex { get; private set; }
         public int MinCount { get; private set; }
@@ -46,15 +46,13 @@ namespace Dpr.UI
         	  }
         	  uVar1 = 3;
         	}
-        	this.moveState = uVar1;
+        	this.moveState = (MoveState)(uVar1);
         }
 
-        public void SetCurrentIndex(int index)
-        {
-        	this.Length = index;
-        }
+        // TODO
+        public void SetCurrentIndex(int index) { }
 
-        private enum MoveState : int
+        internal enum MoveState : int
         {
             Neutral = 0,
             Moving = 1,

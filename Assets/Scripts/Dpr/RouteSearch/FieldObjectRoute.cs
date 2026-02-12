@@ -26,7 +26,7 @@ namespace Dpr.RouteSearch
         public static NodeData CreateNodeData(int width, int height)
         {
         	var uVar1 = new RouteSearch_NodeData();
-        	RouteSearch_NodeData.Initialize(uVar1,width,height);
+        	uVar1.Initialize(width,height);
         	return uVar1;
         }
 

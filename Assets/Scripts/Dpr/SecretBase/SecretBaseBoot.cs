@@ -25,7 +25,7 @@ namespace Dpr.SecretBase
 		
 		private void OnUpdate(float deltaTime)
 		{
-			SecretBase_SecretBaseController.OnUpdate(this.Length);
+			this.scene.OnUpdate();
 		}
 	}
 }

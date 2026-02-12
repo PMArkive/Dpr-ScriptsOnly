@@ -13,11 +13,11 @@ namespace Dpr.UI
 		private NetworkManager networkManager;
 		private Action onFinishState;
 		private Action<ContestMatching.FinishPattern> onFinish;
-		private RecruitmentState currentState;
+		internal RecruitmentState currentState;
 		private int loadCount;
 		private bool bLockPlayerAction;
 		private bool bIsOpenConfirmMsg;
-		private bool bIsActive;
+		internal bool bIsActive;
 		
 		// TODO
 		public void Initialize(ContestMatchingUI contestMatchingUI, ContestMatchingNetwork network, Action onFinishState, Action<ContestMatching.FinishPattern> onFinishMatching) { }
@@ -78,8 +78,33 @@ namespace Dpr.UI
 		// TODO
 		private void FinishRecruitmentMember() { }
 		
-		// TODO
-		private void CheckMemberActive() { }
+		private void CheckMemberActive()
+		{
+			if (((this.networkPtr.IsGamerActive(0) & 1) == 0) &&
+			   (this.networkPtr.IsGamerActive(0) = Dpr_UI_MultiModelView__HasViewModelByIndex
+			                      (this.contestMatchingUIPtr.modelView,0,0), (this.networkPtr.IsGamerActive(0) & 1) != 0))
+			{
+			  this.contestMatchingUIPtr.OnExitPlayer();
+			}
+			if (((this.networkPtr.IsGamerActive(1) & 1) == 0) &&
+			   (this.networkPtr.IsGamerActive(1) = Dpr_UI_MultiModelView__HasViewModelByIndex
+			                      (this.contestMatchingUIPtr.modelView,1,0), (this.networkPtr.IsGamerActive(1) & 1) != 0))
+			{
+			  this.contestMatchingUIPtr.OnExitPlayer(1);
+			}
+			if (((this.networkPtr.IsGamerActive(2) & 1) == 0) &&
+			   (this.networkPtr.IsGamerActive(2) = Dpr_UI_MultiModelView__HasViewModelByIndex
+			                      (this.contestMatchingUIPtr.modelView,2,0), (this.networkPtr.IsGamerActive(2) & 1) != 0))
+			{
+			  this.contestMatchingUIPtr.OnExitPlayer(2);
+			}
+			if (((this.networkPtr.IsGamerActive(3) & 1) == 0) &&
+			   (this.networkPtr.IsGamerActive(3) = Dpr_UI_MultiModelView__HasViewModelByIndex
+			                      (this.contestMatchingUIPtr.modelView,3,0), (this.networkPtr.IsGamerActive(3) & 1) != 0))
+			{
+			  this.contestMatchingUIPtr.OnExitPlayer(3);
+			}
+		}
 		
 		// TODO
 		private void UpdateInput() { }
@@ -98,7 +123,7 @@ namespace Dpr.UI
 		
 		private void ChangeState_WaitAllReady()
 		{
-			Contest_ContestUtils.EmitLog(StringLiteral_11358,3);
+			ContestUtils.EmitLog(StringLiteral_11358,3);
 			this.currentState = (RecruitmentState)1;
 		}
 		
@@ -131,7 +156,7 @@ namespace Dpr.UI
 		// TODO
 		public void OnReceiveReadyData(int stationIndex, NoticeID noticeID) { }
 
-		private enum RecruitmentState : int
+		internal enum RecruitmentState : int
 		{
 			WaitJoinMember = 0,
 			WaitAllReady = 1,

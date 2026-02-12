@@ -20,7 +20,7 @@ namespace Dpr.DigFossil
 		
 		private void OnUpdate(float deltaTime)
 		{
-			DigFossil_DigFossilController.OnUpdate(this.Length);
+			this.scene.OnUpdate();
 		}
 	}
 }

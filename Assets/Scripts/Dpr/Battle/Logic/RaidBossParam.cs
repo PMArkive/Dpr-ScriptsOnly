@@ -32,8 +32,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public void Setup(in SetupParam param) { }
 
-        // TODO
-        public float GetHPCoef() { return 0f; }
+        public float GetHPCoef()
+        {
+        	return this.m_desc.hpCoef;
+        }
 
         public GWall GetGWallConst()
         {
@@ -45,39 +47,51 @@ namespace Dpr.Battle.Logic
         	return this.m_gWall;
         }
 
-        // TODO
-        public byte GetGrade() { return 0; }
+        public byte GetGrade()
+        {
+        	return (byte)(this.m_grade);
+        }
 
         public byte GetReinforceTurn()
         {
-        	return this.m_reinforceTurn;
+        	return (byte)(this.m_reinforceTurn);
         }
 
         public void SetReinforceTurn(byte turn)
         {
-        	this.m_reinforceTurn = turn;
+        	this.m_reinforceTurn = (byte)(turn);
         }
 
         public void DecReinforceTurn()
         {
         	if (this.m_reinforceTurn != 0) {
-        	  this.m_reinforceTurn = this.m_reinforceTurn + -1;
+        	  this.m_reinforceTurn = (byte)(this.m_reinforceTurn + -1);
         	}
         }
 
-        // TODO
-        public byte GetActionNum() { return 0; }
+        public byte GetActionNum()
+        {
+        	return (byte)(this.m_desc.actNum);
+        }
 
-        // TODO
-        public byte GetGWazaUseFrequency() { return 0; }
+        public byte GetGWazaUseFrequency()
+        {
+        	return (byte)(this.m_desc.gWazaFrequency);
+        }
 
-        // TODO
-        public bool IsOnGWazaUseTurn() { return false; }
+        public bool IsOnGWazaUseTurn()
+        {
+        	if ((this.m_desc.gWazaFrequency != 0) && (this.m_gWazaUseTurn == 0))
+        	{
+        	  return !this.m_gWazaUsed;
+        	}
+        	return false;
+        }
 
         public void DecGWazaUseTurn()
         {
         	if (this.m_gWazaUseTurn != 0) {
-        	  this.m_gWazaUseTurn = this.m_gWazaUseTurn + -1;
+        	  this.m_gWazaUseTurn = (byte)(this.m_gWazaUseTurn + -1);
         	}
         }
 
@@ -89,23 +103,23 @@ namespace Dpr.Battle.Logic
         public void ResetGWazaUseSchedule(byte reUseTurn)
         {
         	this.m_gWazaUsed = false;
-        	this.m_gWazaUseTurn = reUseTurn;
+        	this.m_gWazaUseTurn = (byte)(reUseTurn);
         }
 
         public byte GetAngryHPThreshold()
         {
-        	if ((uint)this.m_angryLevel < this.Length[0].Length) {
-        	  return this.Length[0] + (ulong)this.m_angryLevel[0];
+        	if ((uint)this.m_angryLevel < this.m_desc.angryHPThreshold.Length) {
+        	  return (byte)(this.m_desc.angryHPThreshold + (ulong)this.m_angryLevel[0]);
         	}
         }
 
         public void IncAngryLevel()
         {
         	if (this.m_angryLevel < 2) {
-        	  if (this.Length[0].Length <= (uint)this.m_angryLevel) {
+        	  if (this.m_desc.angryHPThreshold.Length <= (uint)this.m_angryLevel) {
         	  }
-        	  if (this.Length[0] + (ulong)this.m_angryLevel[0] != 0) {
-        	    this.m_angryLevel = this.m_angryLevel + 1;
+        	  if (this.m_desc.angryHPThreshold + (ulong)this.m_angryLevel[0] != 0) {
+        	    this.m_angryLevel = (byte)(this.m_angryLevel + 1);
         	    this.m_gWall.DecrementRepairTurnCountMax();
         	  }
         	}
@@ -116,8 +130,8 @@ namespace Dpr.Battle.Logic
         	if (1 < this.m_angryLevel) {
         	  return true;
         	}
-        	if ((uint)this.m_angryLevel < this.Length[0].Length) {
-        	  return this.Length[0] + (ulong)this.m_angryLevel[0] == 0;
+        	if ((uint)this.m_angryLevel < this.m_desc.angryHPThreshold.Length) {
+        	  return this.m_desc.angryHPThreshold + (ulong)this.m_angryLevel[0] == 0;
         	}
         }
 
@@ -126,11 +140,25 @@ namespace Dpr.Battle.Logic
         	return this.m_angryLevel != 0;
         }
 
-        // TODO
-        public WazaNo GetAngryWaza() { return WazaNo.NULL; }
+        public WazaNo GetAngryWaza()
+        {
+        	if (this.m_angryLevel == 0) {
+        	  return (WazaNo)0;
+        	}
+        	if (this.m_angryLevel - 1 < this.m_desc.angryWazaNo.Length) {
+        	  return this.m_desc.angryWazaNo + (int)this.m_angryLevel - 1 * 4[0];
+        	}
+        }
 
-        // TODO
-        public RaidBossAngryWazaTiming GetAngryWazaTiming() { return RaidBossAngryWazaTiming.NONE; }
+        public RaidBossAngryWazaTiming GetAngryWazaTiming()
+        {
+        	if (this.m_angryLevel == 0) {
+        	  return (RaidBossAngryWazaTiming)0;
+        	}
+        	if (this.m_angryLevel - 1 < this.m_desc.angryWazaTimming.Length) {
+        	  return this.m_desc.angryWazaTimming + (int)this.m_angryLevel - 1 * 4[0];
+        	}
+        }
 
         public class SetupParam
         {

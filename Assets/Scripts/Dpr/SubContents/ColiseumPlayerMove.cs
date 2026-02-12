@@ -17,7 +17,7 @@ namespace Dpr.SubContents
 		public void Initialize(FieldPlayerEntity player)
 		{
 			this.player = player;
-			this.Length = 0;
+			this.currentState = (MoveState)0;
 		}
 		
 		public void OnFinalize()
@@ -37,7 +37,7 @@ namespace Dpr.SubContents
 		
 		public void StopPlayerMove()
 		{
-			this.Length = 0;
+			this.currentState = (MoveState)0;
 			this.player.PlayIdle();
 		}
 		

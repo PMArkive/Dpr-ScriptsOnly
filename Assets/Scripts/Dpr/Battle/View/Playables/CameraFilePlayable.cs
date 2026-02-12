@@ -64,25 +64,11 @@ namespace Dpr.Battle.View.Playables
 		// TODO
 		public override void Play([Optional] Action onComplete) { }
 		
-		private void OnStart()
-		{
-			this[0] = 1;
-			if ((int)this._mode != 0) {
-			}
-			Playables_CameraFilePlayable.OnStartWaitCamera();
-		}
+		// TODO
+		private void OnStart() { }
 		
-		private void OnStartWaitCamera()
-		{
-			var uVar1 = ExtensionMethods__GetComponentThis<Transform>
-			                  (this,ref this._animation);
-			var uVar2 = ExtensionMethods__GetComponentThis<Transform>
-			                  (this,ref this._animation);
-			uVar2 = uVar2.clip;
-			uVar2 = uVar2.name;
-			uVar1 = uVar1.get_Item(uVar2);
-			AnimationState.set_speed(this._waitCameraData[0],uVar1);
-		}
+		// TODO
+		private void OnStartWaitCamera() { }
 		
 		// TODO
 		private void OnComplete() { }

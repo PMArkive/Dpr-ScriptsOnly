@@ -28,15 +28,15 @@ namespace Dpr.Contest
 		private void DeactivateWazaCamera()
 		{
 			var uVar1 = Dpr_SequenceEditor_SequenceCameraObject__get_PostProcess
-			                  (this[0],0);
+			                  (this.wazaCamera,0);
 			uVar1.Reset();
 			uVar1.enabled = 0;
 			uVar1 = Dpr_SequenceEditor_SequenceCameraObject__get_PostProcess
-			                  (this[0],0);
+			                  (this.wazaCamera,0);
 			uVar1.enabled = 0;
-			SequenceEditor_SequenceCameraObject.set_IsEnabled(this[0],0);
+			this.wazaCamera.IsEnabled = 0;
 			uVar1 = Dpr_SequenceEditor_SequenceCameraObject__get_PostProcess
-			                  (this.Length,0);
+			                  (this.mainCamera,0);
 			uVar1.enabled = 1;
 		}
 		

@@ -14,15 +14,15 @@ namespace Dpr.Battle.Logic
 			if (!forceGWaza) {
 			  uVar2 = 0;
 			}
-			p = (ulong)(uint)(pokeID << 4) & 0x1f0 | (ulong)((waza & 0xffff) << 0xd) | uVar1 |
-			           (ulong)(uint)(targetPos << 9) & 0x1e00 | uVar2 | 1;
+			p = (ulong)(uint)(pokeID << 4) & 0x1f0 | (ulong)(((int)waza & 0xffff) << 0xd) | uVar1 |
+			           (ulong)(uint)((int)targetPos << 9) & 0x1e00 | uVar2 | 1;
 		}
 		
 		public static void ChangeFightTargetPos(ref BTL_ACTION_PARAM p, BtlPokePos nextTargetPos)
 		{
 			ulong uVar1 = default;
-			if (((nextTargetPos & 0xff) != 5) && (uVar1 = p, (uVar1 & 0xf) == 1)) {
-			  p = uVar1 & 0xffffffffffffe000 | uVar1 & 0x1ff | ((ulong)(nextTargetPos & 0x7fffff) & 0xf) << 9
+			if ((((int)nextTargetPos & 0xff) != 5) && (uVar1 = p, (uVar1 & 0xf) == 1)) {
+			  p = uVar1 & 0xffffffffffffe000 | uVar1 & 0x1ff | ((ulong)((int)nextTargetPos & 0x7fffff) & 0xf) << 9
 			  ;
 			}
 		}

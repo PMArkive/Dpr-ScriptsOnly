@@ -26,8 +26,8 @@ namespace Dpr.UI
 		
 		public void StopSe()
 		{
-			if (this.Length != 0) {
-			  this.Length.Stop();
+			if (this.currentAudioInstance != null) {
+			  this.currentAudioInstance.Stop();
 			}
 		}
 	}

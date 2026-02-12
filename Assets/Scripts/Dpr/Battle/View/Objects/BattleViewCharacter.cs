@@ -88,8 +88,8 @@ namespace Dpr.Battle.View.Objects
 		
 		public override void OnUpdatePreJob(float deltaTime)
 		{
-			Objects_BattleViewCharacter.UpdateWaitB();
-			Objects_BattleObject.UpdateSTR(deltaTime);
+			UpdateWaitB();
+			deltaTime.UpdateSTR();
 		}
 
 		public enum HappyType : int

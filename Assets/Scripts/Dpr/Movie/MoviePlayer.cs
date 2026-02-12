@@ -17,7 +17,7 @@ namespace Dpr.Movie
         private const int ResX = 1280;
         private const int ResY = 720;
         private RawImage _rendererImage;
-        private bool _isPlaying;
+        internal bool _isPlaying;
         private bool isUpdateVideoOnThisFrame;
 
         // TODO
@@ -29,11 +29,11 @@ namespace Dpr.Movie
         public void PlayStreaming(string path, bool loop = false)
         {
         	var uVar1 = String.Concat(path,_StringLiteral_9931);
-        	var uVar2 = Application.get_streamingAssetsPath(0);
+        	var uVar2 = 0.streamingAssetsPath;
         	uVar1 = String.Concat(uVar2,StringLiteral_457,uVar1);
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.set_isLooping(this._switchVideoPlayer,loop & 1);
-        	  Switch_SwitchVideoPlayer.Play(this._switchVideoPlayer,uVar1);
+        	  this._switchVideoPlayer.isLooping = (loop ? 1 : 0) & 1;
+        	  this._switchVideoPlayer.Play(uVar1);
         	  this._isPlaying = true;
         	}
         }
@@ -41,7 +41,7 @@ namespace Dpr.Movie
         public void Stop()
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.Stop(this._switchVideoPlayer);
+        	  this._switchVideoPlayer.Stop();
         	  this._isPlaying = false;
         	}
         }
@@ -60,14 +60,14 @@ namespace Dpr.Movie
         public void JumpTo(float sec)
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.JumpTo(this._switchVideoPlayer);
+        	  this._switchVideoPlayer.JumpTo();
         	}
         }
 
         public bool IsLoop()
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.get_isLooping(this._switchVideoPlayer);
+        	  this._switchVideoPlayer.isLooping;
         	}
         	return false;
         }
@@ -85,7 +85,7 @@ namespace Dpr.Movie
         	  var fVar3 = fVar4;
         	}
         	else {
-        	  fVar3 = (float)Switch_SwitchVideoPlayer.GetVideoLength(this._switchVideoPlayer)
+        	  fVar3 = (float)this._switchVideoPlayer.GetVideoLength()
         	  ;
         	  if ((this._isPlaying) && (fVar4 = 0.0, this._switchVideoPlayer != null)) {
         	    fVar4 = (float)UnityEngine_Switch_SwitchVideoPlayer__GetCurrentTime
@@ -93,13 +93,13 @@ namespace Dpr.Movie
         	  }
         	}
         	if ((((this._switchVideoPlayer == null) ||
-        	     (uVar2 = Switch_SwitchVideoPlayer.get_isLooping(this._switchVideoPlayer), (uVar2 & 1) == 0)) &&
+        	     (uVar2 = this._switchVideoPlayer.isLooping, (uVar2 & 1) == 0)) &&
         	    (this._isPlaying)) && ((fVar3 != 0.0 && (fVar3 + -0.1 <= fVar4)))) {
         	  this._isPlaying = false;
         	}
         	if (!this.isUpdateVideoOnThisFrame) {
         	  if (this._switchVideoPlayer != null) {
-        	    Switch_SwitchVideoPlayer.Update(this._switchVideoPlayer);
+        	    this._switchVideoPlayer.Update();
         	  }
         	  this.isUpdateVideoOnThisFrame = true;
         	}
@@ -121,15 +121,15 @@ namespace Dpr.Movie
 
         private void PlayStreamingEditor(string path, bool loop)
         {
-        	Video_VideoPlayer.set_url(this[0],path);
-        	Video_VideoPlayer.set_isLooping(this[0],loop & 1);
-        	Video_VideoPlayer.Play(this[0]);
+        	this._videoPlayer.url = path;
+        	this._videoPlayer.isLooping = (loop ? 1 : 0) & 1;
+        	this._videoPlayer.Play();
         	this._isPlaying = true;
         }
 
         private void StopEditor()
         {
-        	Video_VideoPlayer.Stop(this[0]);
+        	this._videoPlayer.Stop();
         	this._isPlaying = false;
         }
 
@@ -157,15 +157,15 @@ namespace Dpr.Movie
         private void UpdateSwitch()
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.Update(this._switchVideoPlayer);
+        	  this._switchVideoPlayer.Update();
         	}
         }
 
         private void PlayStreamingSwitch(string path, bool loop)
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.set_isLooping(this._switchVideoPlayer,loop & 1);
-        	  Switch_SwitchVideoPlayer.Play(this._switchVideoPlayer,path);
+        	  this._switchVideoPlayer.isLooping = (loop ? 1 : 0) & 1;
+        	  this._switchVideoPlayer.Play(path);
         	  this._isPlaying = true;
         	}
         }
@@ -173,7 +173,7 @@ namespace Dpr.Movie
         private void StopSwitch()
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.Stop(this._switchVideoPlayer);
+        	  this._switchVideoPlayer.Stop();
         	  this._isPlaying = false;
         	}
         }
@@ -195,14 +195,14 @@ namespace Dpr.Movie
         private void JumpToSwitch(float sec)
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.JumpTo(this._switchVideoPlayer);
+        	  this._switchVideoPlayer.JumpTo();
         	}
         }
 
         private bool IsLoopSwitch()
         {
         	if (this._switchVideoPlayer != null) {
-        	  Switch_SwitchVideoPlayer.get_isLooping(this._switchVideoPlayer);
+        	  this._switchVideoPlayer.isLooping;
         	}
         	return false;
         }

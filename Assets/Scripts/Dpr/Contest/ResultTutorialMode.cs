@@ -14,7 +14,7 @@ namespace Dpr.Contest
 		
 		public void OnFinalize()
 		{
-			SubContents_ShowMessageWindow.OnFinalize(this.resultMsg);
+			this.resultMsg.OnFinalize();
 		}
 		
 		public bool IsSelectRestart { get => bRestart; }

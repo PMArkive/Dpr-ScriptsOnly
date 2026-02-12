@@ -271,8 +271,8 @@ namespace Dpr.Item
         public bool IsCategory(CategoryType category)
         {
         	if ((int)this._categoryType == 9) {
-        	  this._categoryType = Item_ItemInfo.GetParam(0xe);
-        	  this._categoryType = this._categoryType;
+        	  this._categoryType = (CategoryType)(GetParam(0xe));
+        	  this._categoryType = (CategoryType)(this._categoryType);
         	}
         	return this._categoryType == category;
         }
@@ -280,8 +280,8 @@ namespace Dpr.Item
         public bool IsWazaMachine()
         {
         	if ((int)this._categoryType == 9) {
-        	  this._categoryType = Item_ItemInfo.GetParam(0xe);
-        	  this._categoryType = this._categoryType;
+        	  this._categoryType = (CategoryType)(GetParam(0xe));
+        	  this._categoryType = (CategoryType)(this._categoryType);
         	}
         	return (int)this._categoryType == 5;
         }
@@ -290,7 +290,7 @@ namespace Dpr.Item
         {
         	if (this._type != -1) {
         	}
-        	var uVar1 = Item_ItemInfo.GetParam(0x12);
+        	var uVar1 = GetParam(0x12);
         	this._type = uVar1;
         	return (eItemType)0;
         }

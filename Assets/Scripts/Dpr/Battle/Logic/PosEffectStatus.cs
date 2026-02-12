@@ -18,22 +18,22 @@
 
         public bool SetEffect(in PosEffect.EffectParam effectParam)
         {
-        	if (this.m_data.Length != 0) {
+        	if (this.m_data.isEffective != 0) {
         	  return false;
         	}
         	this.m_data.effectParam = effectParam;
-        	this.m_data.Length = 1;
+        	this.m_data.isEffective = 1;
         	return true;
         }
 
         public void RemoveEffect()
         {
-        	this.m_data.Length = 0;
+        	this.m_data.isEffective = 0;
         }
 
         public bool IsEffective()
         {
-        	return this.m_data.Length;
+        	return this.m_data.isEffective;
         }
 
         public PosEffect.EffectParam GetEffectParam()

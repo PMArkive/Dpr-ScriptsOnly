@@ -33,7 +33,7 @@ namespace Dpr.UI
 		
 		public void SetDisableNumber()
 		{
-			this.Length.SetActive(0);
+			this._objNo.SetActive(0);
 		}
 	}
 }

@@ -86,19 +86,19 @@ namespace Dpr.Battle.Logic
 		{
 			var cVar1 = cont.type;
 			if (cVar1 == '\x01') {
-			  cont.permanent_flag = flag & 1;
+			  cont.permanent_flag = (flag ? 1 : 0) & 1;
 			}
 			cVar1 = cont.type;
 			if (cVar1 == '\x03') {
-			  cont.poke_flag = flag & 1;
+			  cont.poke_flag = (flag ? 1 : 0) & 1;
 			}
 			cVar1 = cont.type;
 			if (cVar1 == '\x04') {
-			  cont.poketurn_flag = flag & 1;
+			  cont.poketurn_flag = (flag ? 1 : 0) & 1;
 			}
 			cVar1 = cont.type;
 			if (cVar1 == '\x02') {
-			  cont.turn_flag = flag & 1;
+			  cont.turn_flag = (flag ? 1 : 0) & 1;
 			}
 		}
 		
@@ -117,7 +117,7 @@ namespace Dpr.Battle.Logic
 			}
 			cVar1 = cont.type;
 			if (cVar1 == '\x04') {
-			  bVar2 = cont.poketurn_count;
+			  bVar2 = (byte)(cont.poketurn_count);
 			  if (bVar2 < 8) {
 			    iVar3 = cont.poketurn_count;
 			    cont.poketurn_count = iVar3 + inc;
@@ -136,7 +136,7 @@ namespace Dpr.Battle.Logic
 			}
 			cVar1 = cont.type;
 			if (cVar1 == '\x04') {
-			  bVar2 = cont.poketurn_count;
+			  bVar2 = (byte)(cont.poketurn_count);
 			  if (bVar2 < 8) {
 			    cont.poketurn_count = turn;
 			  }

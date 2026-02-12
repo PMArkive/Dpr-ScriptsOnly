@@ -13,9 +13,9 @@ namespace Dpr.Battle.Logic
 
         public void Clear()
         {
-        	this.targetID = 0;
+        	this.targetID = (byte)0;
         	this.number = (ItemNo)0;
-        	this.param = 0;
+        	this.param = (byte)0;
         }
     }
 }

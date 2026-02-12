@@ -644,7 +644,7 @@ namespace Dpr.Battle.Logic
         public void SetGlobalParameters(int clientID, int score, int pokeChangeEnable)
         {
         	this.p_Score = score;
-        	this.Length = clientID;
+        	this.MyClientID = clientID;
         	this.p_PokeChangeEnable = pokeChangeEnable;
         }
 

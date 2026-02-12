@@ -47,36 +47,43 @@ namespace Dpr.Battle.Logic
         public ushort GetSerialNumber()
         {
         	SEND_DATA_BUFFER.GetSerialNumber(ref this.m_buffer);
+        	return 0;
         }
 
         public ServerSequence GetServerSequence()
         {
         	SEND_DATA_BUFFER.GetServerSequence(ref this.m_buffer);
+        	return (ServerSequence)0;
         }
 
         public ServerRequest GetServerRequest()
         {
         	SEND_DATA_BUFFER.GetServerRequest(ref this.m_buffer);
+        	return (ServerRequest)0;
         }
 
         public unsafe void* GetData()
         {
         	SEND_DATA_BUFFER.GetData(this.m_buffer);
+        	return default;
         }
 
         public uint GetDataSize()
         {
         	SEND_DATA_BUFFER.GetDataSize(ref this.m_buffer);
+        	return 0;
         }
 
         public uint GetTotalSize()
         {
         	SEND_DATA_BUFFER.GetTotalSize(ref this.m_buffer);
+        	return 0;
         }
 
         public string GetString()
         {
         	SEND_DATA_BUFFER.GetString(ref this.m_buffer);
+        	return default;
         }
     }
 }

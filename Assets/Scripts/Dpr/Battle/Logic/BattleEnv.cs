@@ -2,8 +2,8 @@
 {
     public sealed class BattleEnv
     {
-        private POKECON m_pokecon;
-        private FieldStatus m_fieldStatus;
+        internal POKECON m_pokecon;
+        internal FieldStatus m_fieldStatus;
         private SideEffectManager m_sideEffectManager;
         private PosEffectManager m_posEffectManager;
         private EventFactorContainer m_eventFactorContainer;
@@ -17,9 +17,9 @@
         private GRightsManager m_gRightsManager;
         private GGauge[] m_gGauge = new GGauge[(int)BTL_CLIENT_ID.BTL_CLIENT_NUM];
         private RaidBattleStatus m_raidBattleStatus;
-        private BattleFlags m_flags;
-        private BattleCounter m_counter;
-        private EscapeInfo m_escapeInfo;
+        internal BattleFlags m_flags;
+        internal BattleCounter m_counter;
+        internal EscapeInfo m_escapeInfo;
         private WazaParam m_lastExecutedWaza = new WazaParam();
         private TamaHiroiData m_tamaHiroiData = new TamaHiroiData();
 
@@ -71,8 +71,8 @@
         public void Dispose()
         {
         	this.m_pokecon = null;
-        	this.Length = 0;
-        	this[0] = 0;
+        	this.m_fieldStatus = null;
+        	this.m_sideEffectManager = null;
         	this.m_posEffectManager = null;
         	this.m_eventFactorContainer = null;
         	this.m_posPoke = null;
@@ -108,8 +108,10 @@
             return m_fieldStatus;
         }
 
-        // TODO
-        public SideEffectManager GetSideEffectManager() { return null; }
+        public SideEffectManager GetSideEffectManager()
+        {
+        	return this.m_sideEffectManager;
+        }
 
         // TODO
         public SideEffectStatus GetSideEffectStatus(BtlSide side, BtlSideEffect effect) { return null; }
@@ -207,7 +209,7 @@
         {
         	if (this.m_tamaHiroiData.ballValid != 0) {
         	  this.m_tamaHiroiData.ballValid = 0;
-        	  return this.m_tamaHiroiData.ballItem;
+        	  return (ushort)(this.m_tamaHiroiData.ballItem);
         	}
         	return 0;
         }

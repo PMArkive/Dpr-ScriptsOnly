@@ -39,7 +39,7 @@ namespace Dpr.Contest
 		
 		public void SetScriptableObject(DanceSettings danceSettingData)
 		{
-			this.Length = danceSettingData;
+			this.danceSettingData = danceSettingData;
 		}
 		
 		// TODO
@@ -62,7 +62,7 @@ namespace Dpr.Contest
 		
 		public void SetProgressIconSpr(Sprite iconSpr)
 		{
-			Contest_UIMusicProgressBar.SetIconSpr(this.uiMusicProgress,iconSpr);
+			this.uiMusicProgress.SetIconSpr(iconSpr);
 		}
 		
 		// TODO
@@ -70,10 +70,10 @@ namespace Dpr.Contest
 		
 		public bool IsReady()
 		{
-			if (((Contest_UIPlayerStatus.IsReady(this[0]) & 1) != 0) &&
-			   (Contest_UIPlayerStatus.IsReady(this[0]) = Contest_NotesLane.IsReady(this.notesLane), (Contest_UIPlayerStatus.IsReady(this[0]) & 1) != 0))
+			if (((this.uiPlayerStatus.IsReady() & 1) != 0) &&
+			   (this.uiPlayerStatus.IsReady() = NotesLane.IsReady(this.notesLane), (UIPlayerStatus.IsReady(this.uiPlayerStatus) & 1) != 0))
 			{
-			  return Contest_UIContestSkillInfo.IsReady(this.uiSkillInfo);
+			  return this.uiSkillInfo.IsReady();
 			}
 			return false;
 		}
@@ -145,14 +145,14 @@ namespace Dpr.Contest
 		
 		private void ShowUITimingGrade(NoteTapTimingID timingID)
 		{
-			if ((Contest_WazaSequencePlayer.get_IsRunning(this.wazaSeqPlayer) & 1) != 0) {
+			if ((this.wazaSeqPlayer.IsRunning & 1) != 0) {
 			}
-			Contest_NotesLane.ShowTimingGrade(this.notesLane,timingID);
+			this.notesLane.ShowTimingGrade(timingID);
 		}
 		
 		private void UpdateContestWaza()
 		{
-			Contest_WazaSequencePlayer.OnUpdate(this.wazaSeqPlayer);
+			this.wazaSeqPlayer.OnUpdate();
 		}
 		
 		// TODO
@@ -199,7 +199,7 @@ namespace Dpr.Contest
 		
 		public void OnLateUpdate()
 		{
-			Contest_WazaSequencePlayer.OnLateUpdate(this.wazaSeqPlayer);
+			this.wazaSeqPlayer.OnLateUpdate();
 		}
 		
 		// TODO

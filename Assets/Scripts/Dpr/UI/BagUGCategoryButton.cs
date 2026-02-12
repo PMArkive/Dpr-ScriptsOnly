@@ -55,7 +55,7 @@ namespace Dpr.UI
 		
 		public void SetNewIconEnable(bool isEnable)
 		{
-			Behaviour.set_enabled(this[0],isEnable & 1);
+			this.newIconImage.enabled = (isEnable ? 1 : 0) & 1;
 		}
 	}
 }

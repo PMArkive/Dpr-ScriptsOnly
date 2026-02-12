@@ -65,14 +65,14 @@ namespace Dpr.NX
 		
 		private void StartThread()
 		{
-			if (this[0] != 0) {
+			if (this._saveLoadThread != null) {
 			}
 			var uVar1 = new Threading_ThreadStart(this);
 			var uVar2 = new Threading_Thread(uVar1);
-			this[0] = uVar2;
-			Threading_Thread.set_Priority(this[0],0);
+			this._saveLoadThread = uVar2;
+			this._saveLoadThread.Priority = 0;
 			this._threadEnable = true;
-			Threading_Thread.Start(this[0]);
+			this._saveLoadThread.Start();
 		}
 		
 		// TODO

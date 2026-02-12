@@ -73,7 +73,7 @@ namespace Dpr.UI
 		
 		public void SetCapsuleActive(bool isActive)
 		{
-			this.capsuleObject.SetActive(isActive & 1);
+			this.capsuleObject.SetActive((isActive ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -85,8 +85,8 @@ namespace Dpr.UI
 		public void SetBG(RectTransform rectTransform)
 		{
 			rectTransform.SetParent(this.bgRoot,0);
-			GameObject.SetActive(this.Length.gameObject,0,0);
-			GameObject.SetActive(this.Length.gameObject,1,0);
+			GameObject.SetActive(this.bgCamera.gameObject,0,0);
+			GameObject.SetActive(this.bgCamera.gameObject,1,0);
 		}
 		
 		// TODO

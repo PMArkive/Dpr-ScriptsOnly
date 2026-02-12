@@ -4,14 +4,14 @@
     {
         public static byte GetClientNum(BtlRule rule, BtlMultiMode multiMode)
         {
-        	var uVar6 = multiMode & 0xffffffff;
-        	var uVar7 = rule & 0xffffffff;
+        	var uVar6 = (int)multiMode & 0xffffffff;
+        	var uVar7 = (int)rule & 0xffffffff;
         	var uVar1 = IsClientExist(rule,multiMode);
         	var uVar2 = IsClientExist(uVar7,uVar6,1);
         	var uVar3 = IsClientExist(uVar7,uVar6,2);
         	var uVar4 = IsClientExist(uVar7,uVar6,3);
         	var uVar5 = IsClientExist(uVar7,uVar6,4);
-        	return (uVar1 & 1) + (uVar2 & 1) + (uVar3 & 1) + (uVar4 & 1) + (uVar5 & 1);
+        	return (byte)((uVar1 & 1) + (uVar2 & 1) + (uVar3 & 1) + (uVar4 & 1) + (uVar5 & 1));
         }
 
         // TODO
@@ -79,7 +79,7 @@
 
         public static bool IsResultStrictJudge(BtlRule rule, BtlCompetitor competitor)
         {
-        	return (competitor | 1) == 3;
+        	return ((int)competitor | 1) == 3;
         }
 
         public static bool IsDummyClientSwitchEnable(BtlRule rule)

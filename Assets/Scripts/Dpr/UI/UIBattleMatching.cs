@@ -137,6 +137,7 @@ namespace Dpr.UI
 		public bool HasViewModelByIndex(int index)
 		{
 			this._modelView.HasViewModelByIndex(index);
+			return false;
 		}
 		
 		// TODO
@@ -183,7 +184,7 @@ namespace Dpr.UI
 		
 		public void SetActiveTimer(bool active)
 		{
-			this._timer.SetActive(active & 1);
+			this._timer.SetActive((active ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -191,7 +192,7 @@ namespace Dpr.UI
 		
 		public void RemainingWarningText(bool warning = true)
 		{
-			this._timer.RemainingWarningText(warning & 1);
+			this._timer.RemainingWarningText((warning ? 1 : 0) & 1);
 		}
 		
 		public void UpdateUITimeText(string minutes, string seconds)
@@ -219,17 +220,18 @@ namespace Dpr.UI
 		
 		public void OnRuleMoveX(bool left)
 		{
-			this._rule.OnMoveX(left & 1);
+			this._rule.OnMoveX((left ? 1 : 0) & 1);
 		}
 		
 		public void OnRuleMoveY(bool up)
 		{
-			this._rule.OnMoveY(up & 1);
+			this._rule.OnMoveY((up ? 1 : 0) & 1);
 		}
 		
 		public bool OnRuleDecide()
 		{
 			this._rule.OnDecide();
+			return false;
 		}
 		
 		// TODO
@@ -248,7 +250,8 @@ namespace Dpr.UI
 		
 		public bool IsWindowOpen()
 		{
-			SubContents_ShowMessageWindow.get_IsOpen(this._msgWindow);
+			this._msgWindow.IsOpen;
+			return false;
 		}
 		
 		// TODO
@@ -277,8 +280,8 @@ namespace Dpr.UI
 		
 		public void CloseMessageWindow()
 		{
-			if ((SubContents_ShowMessageWindow.get_IsOpen(this._msgWindow) & 1) != 0) {
-			  SubContents_ShowMessageWindow.CloseMsgWindow(this._msgWindow);
+			if ((this._msgWindow.IsOpen & 1) != 0) {
+			  this._msgWindow.CloseMsgWindow();
 			}
 		}
 		

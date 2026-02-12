@@ -10,6 +10,7 @@ namespace Dpr.Battle.Logic
 		private bool isRankEffectOccur(WazaParam wazaParam, BTL_POKEPARAM attacker, BTL_POKEPARAM target)
 		{
 			this.m_pEventLauncher.Event_CheckAddRankEffectOccur();
+			return false;
 		}
 		
 		// TODO

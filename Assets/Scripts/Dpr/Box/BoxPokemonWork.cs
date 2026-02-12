@@ -126,12 +126,12 @@ namespace Dpr.Box
         	var iVar4 = 0;
         	while( true ) {
         	  do {
-        	    Box_BoxPokemonWork.GetPokemon(uVar1,iVar3,iVar4);
+        	    GetPokemon(uVar1,iVar3,iVar4);
         	    var uVar2 = uVar1.IsNull();
         	    if (((uVar2 & 1) == 0) && (uVar2 = uVar1.IsEgg(2), (uVar2 & 1) == 0)
         	       ) {
         	      uVar1.RecoverAll();
-        	      Box_BoxPokemonWork.UpdatePokemon(uVar1,iVar3,iVar4);
+        	      UpdatePokemon(uVar1,iVar3,iVar4);
         	    }
         	    iVar4 = iVar4 + 1;
         	  } while (iVar4 != 0x1e);

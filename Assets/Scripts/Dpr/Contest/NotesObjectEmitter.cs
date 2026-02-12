@@ -29,7 +29,7 @@ namespace Dpr.Contest
 			if (0 < this.currentCreateNum) {
 			  this.currentCreateNum = this.currentCreateNum + -1;
 			}
-			Contest_ContestUtils.EmitLog(_StringLiteral_8901,0);
+			ContestUtils.EmitLog(_StringLiteral_8901,0);
 		}
 		
 		// TODO

@@ -15,8 +15,8 @@ namespace Dpr.GMS
 		{
 			this.pointDataModelArray = pointDataModelArray;
 			var uVar1 = new int[pointDataModelArray.Length];
-			this.Length = uVar1;
-			GMS_GMSPointDataContainer.RemapRefDataIndex();
+			this.refDataIndexArray = uVar1;
+			RemapRefDataIndex();
 		}
 		
 		// TODO

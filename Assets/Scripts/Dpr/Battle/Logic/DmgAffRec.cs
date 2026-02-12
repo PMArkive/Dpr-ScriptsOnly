@@ -15,7 +15,7 @@ namespace Dpr.Battle.Logic
         // TODO
         public void Add(byte pokeID, TypeAffinity.AffinityID aff, bool isNoEffectByFloatingStatus) { }
 
-        public TypeAffinity.AffinityID Get(byte pokeID)
+        public unsafe TypeAffinity.AffinityID Get(byte pokeID)
         {
         	var uVar1 = (uint)pokeID & 0xff;
         	if ((int)this.m_affinityData.Length <= (int)uVar1) {
@@ -28,7 +28,7 @@ namespace Dpr.Battle.Logic
         	return (AffinityID)0;
         }
 
-        public TypeAffinity.AffinityID GetIfEnable(byte pokeID)
+        public unsafe TypeAffinity.AffinityID GetIfEnable(byte pokeID)
         {
         	var uVar1 = (uint)pokeID & 0xff;
         	if ((int)this.m_affinityData.Length <= (int)uVar1) {

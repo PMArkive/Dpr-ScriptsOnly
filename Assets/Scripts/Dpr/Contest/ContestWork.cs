@@ -70,12 +70,13 @@ namespace Dpr.Contest
         	  return false;
         	}
         	var uVar1 = pokeParam.IsHpZero();
-        	return ~uVar1 & 1;
+        	return ~(uVar1 ? 1 : 0) & 1;
         }
 
         private static bool CheckEntryFurContest(PokemonParam pokeParam)
         {
         	pokeParam.HaveRibbon(0x28);
+        	return false;
         }
 
         // TODO

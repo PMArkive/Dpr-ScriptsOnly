@@ -28,10 +28,10 @@ namespace Dpr.Contest
 		public void Deactive()
 		{
 			this.active = false;
-			var uVar1 = Component.gameObject;
+			var uVar1 = this.gameObject;
 			var uVar2 = uVar1.activeSelf;
 			if ((uVar2 & 1) != 0) {
-			  uVar1 = Component.gameObject;
+			  uVar1 = this.gameObject;
 			  uVar1.SetActive(0);
 			}
 		}
@@ -45,7 +45,7 @@ namespace Dpr.Contest
 		public void OnStartHold()
 		{
 			this.isHold = true;
-			Contest_LongTapNotesBg.UpdateMovePosition(0);
+			UpdateMovePosition(0);
 		}
 		
 		// TODO

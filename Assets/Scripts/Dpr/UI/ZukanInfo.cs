@@ -28,7 +28,7 @@ namespace Dpr.UI
 		public PokeType Type2 { get; private set; }
 		public GET_STATUS GetStatus { get; private set; }
 
-        private ModelParam[] modelParams;
+        internal ModelParam[] modelParams;
         private int formIndex;
         private IndexSelector modelIndexSelector;
 
@@ -53,23 +53,11 @@ namespace Dpr.UI
 		// TODO
 		public void SetupUITexts(UIText nameText, UIText classText, UIText heightText, UIText weightText, UIText descText, UIText formNameText) { }
 		
-		public ModelSexType GetCurrentModelSexType()
-		{
-			if (this.modelIndexSelector.Length < this.modelParams.Length) {
-			  return *(uint *)
-			          (this.modelParams + (int)this.modelIndexSelector.Length * 8[0] + 0x14);
-			}
-			return (ModelSexType)0;
-		}
+		// TODO
+		public ModelSexType GetCurrentModelSexType() { return default; }
 		
-		public bool IsRareCurrentModel()
-		{
-			if (this.modelIndexSelector.Length < this.modelParams.Length) {
-			  return *(byte *)
-			          (this.modelParams + (int)this.modelIndexSelector.Length * 8[0] + 0x1c);
-			}
-			return false;
-		}
+		// TODO
+		public bool IsRareCurrentModel() { return default; }
 		
 		// TODO
 		public void MoveModelSelect(int value) { }
@@ -91,7 +79,7 @@ namespace Dpr.UI
 			Both = 3,
 		}
 
-		private class ModelParam
+		internal class ModelParam
 		{
 			public int UniqueID;
 			public ModelSexType SexType;

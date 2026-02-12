@@ -83,10 +83,8 @@ namespace Dpr.Battle.Logic
         // TODO
         public static bool IsFriendPokeID(in EventFactor.SkipCheckHandlerArgs args, byte pokeID1, byte pokeID2) { return false; }
 
-        public static BtlGround GetGround(in EventFactor.EventHandlerArgs args)
-        {
-        	args.Length.Length.GetGround();
-        }
+        // TODO
+        public static BtlGround GetGround(in EventFactor.EventHandlerArgs args) { return BtlGround.BTL_GROUND_NONE; }
 
         // TODO
         public static BTL_FIELD_SITUATION GetFieldSituation(in EventFactor.EventHandlerArgs args) { return null; }
@@ -256,10 +254,8 @@ namespace Dpr.Battle.Logic
         // TODO
         public static BtlWeather GetLocalWeather(in EventFactor.EventHandlerArgs args, byte pokeID) { return BtlWeather.BTL_WEATHER_NONE; }
 
-        public static BtlWeather GetWeather_True(in EventFactor.EventHandlerArgs args)
-        {
-        	args.Length.Length.GetWeather();
-        }
+        // TODO
+        public static BtlWeather GetWeather_True(in EventFactor.EventHandlerArgs args) { return BtlWeather.BTL_WEATHER_NONE; }
 
         // TODO
         public static BtlWeather GetDefaultWeather(in EventFactor.EventHandlerArgs args) { return BtlWeather.BTL_WEATHER_NONE; }
@@ -300,10 +296,8 @@ namespace Dpr.Battle.Logic
         // TODO
         public static void ConsumeItem(in EventFactor.EventHandlerArgs args, in Section_FromEvent_ConsumeItem.Description desc) { }
 
-        public static ushort GetTamaHiroiBall(in EventFactor.EventHandlerArgs args)
-        {
-        	args.Length.GetTamaHiroiData();
-        }
+        // TODO
+        public static ushort GetTamaHiroiBall(in EventFactor.EventHandlerArgs args) { return 0; }
 
         // TODO
         public static void UpdateWaza(in EventFactor.EventHandlerArgs args, in Section_FromEvent_UpdateWaza.Description desc) { }

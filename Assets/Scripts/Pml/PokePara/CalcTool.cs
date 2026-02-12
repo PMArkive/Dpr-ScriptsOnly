@@ -292,6 +292,7 @@
         {
         	return ((atk & 2 | hp >> 1 & 1 | (def >> 1 & 1) << 2 | (agi >> 1 & 1) << 3 |
         	         (spatk >> 1 & 1) << 4 | (spdef >> 1 & 1) << 5) * 0x28) / 0x3f + 0x1e;
+        	return 0;
         }
 
         // TODO

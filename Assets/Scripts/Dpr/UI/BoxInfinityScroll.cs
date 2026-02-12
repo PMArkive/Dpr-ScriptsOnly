@@ -32,14 +32,8 @@ namespace Dpr.UI
 		// TODO
 		public IEnumerator OpSetup(List<BoxInfinityScrollItem.BaseParam> baseParams) { return default; }
 		
-		private void SetParamIndex(int index)
-		{
-			var iVar2 = 0;
-			if (this._params.Length != 0) {
-			  iVar2 = (this._params.Length + index) / this._params.Length;
-			}
-			this._paramIndex = (this._params.Length + index) - iVar2 * this._params.Length;
-		}
+		// TODO
+		private void SetParamIndex(int index) { }
 		
 		public int GetParamIndex()
 		{

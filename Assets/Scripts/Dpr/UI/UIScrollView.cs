@@ -64,7 +64,7 @@ namespace Dpr.UI
 
         public void SetActive(bool isActive)
         {
-        	this.isActive = isActive & 1;
+        	this.isActive = (isActive ? 1 : 0) & 1;
         }
 
         // TODO
@@ -102,29 +102,8 @@ namespace Dpr.UI
         // TODO
         private void RefreshScrollContentAnchorPosition() { }
 
-        private void SetLayoutGroupPadding(int value)
-        {
-        	uint uVar1;
-        	uint uVar3;
-        	uint uVar4;
-        	var uVar6 = this.layoutGroup.Length;
-        	if (!this.isHorizontal) {
-        	  uVar4 = uVar6.left;
-        	  uVar1 = uVar6.right;
-        	  uVar3 = uVar6.bottom;
-        	  uVar6 = new RectOffset();
-        	}
-        	else {
-        	  uVar1 = uVar6.right;
-        	  var uVar2 = uVar6.top;
-        	  uVar3 = uVar6.bottom;
-        	  uVar6 = new RectOffset();
-        	  uVar4 = value;
-        	  value = uVar2;
-        	}
-        	uVar6 = new RectOffset(uVar4,uVar1,value,uVar3);
-        	UI_LayoutGroup.set_padding(this.layoutGroup,uVar6);
-        }
+        // TODO
+        private void SetLayoutGroupPadding(int value) { }
 
         // TODO
         private void SetScrollRectAnchorPosition(float value) { }

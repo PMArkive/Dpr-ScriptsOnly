@@ -51,7 +51,7 @@ namespace Dpr.SubContents
 		
 		public void SetNetworkMode(bool isNetwork)
 		{
-			this.isNetworkMode = isNetwork & 1;
+			this.isNetworkMode = (isNetwork ? 1 : 0) & 1;
 		}
 		
 		// TODO
@@ -78,14 +78,14 @@ namespace Dpr.SubContents
 		private void OnUpdate(float deltaTime)
 		{
 			if ((int)this.currentMode == 2) {
-			  SubContents_ShowMessageWindow.WaitCloseWindow();
+			  WaitCloseWindow();
 			}
 			if ((int)this.currentMode != 1) {
 			  if ((int)this.currentMode == 0) {
-			    SubContents_ShowMessageWindow.UpdateAutoClose();
+			    UpdateAutoClose();
 			  }
 			}
-			SubContents_ShowMessageWindow.UpdateInputClose();
+			UpdateInputClose();
 		}
 		
 		// TODO
@@ -103,7 +103,7 @@ namespace Dpr.SubContents
 		public void CloseMsgWindow()
 		{
 			this.currentMode = (ShowMode)2;
-			var uVar1 = MsgWindowManager.get_IsOpen(0);
+			var uVar1 = 0.IsOpen;
 			if ((uVar1 & 1) != 0) {
 			  MsgWindowManager.CloseMsg(0);
 			}

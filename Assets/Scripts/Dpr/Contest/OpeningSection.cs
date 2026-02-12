@@ -56,7 +56,7 @@ namespace Dpr.Contest
 		
 		public void ResetParam()
 		{
-			var uVar1 = Component.gameObject;
+			var uVar1 = this.gameObject;
 			uVar1.SetActive(1);
 			this.animState = (AnimState)0;
 		}
@@ -66,36 +66,36 @@ namespace Dpr.Contest
 		
 		public void SetMedalSpr(Sprite spr)
 		{
-			UI_Image.set_sprite(this.medalImage,spr);
+			this.medalImage.sprite = spr;
 			this.medalImage.enabled = 1;
 		}
 		
 		public void SetContestTitleSpr(Sprite spr)
 		{
-			UI_Image.set_sprite(this.contestTitleImage,spr);
+			this.contestTitleImage.sprite = spr;
 			this.contestTitleImage.enabled = 1;
 		}
 		
 		public void SetCategorySpr(Sprite spr)
 		{
-			UI_Image.set_sprite(this.categoryTitleImage,spr);
+			this.categoryTitleImage.sprite = spr;
 			this.categoryTitleImage.enabled = 1;
 		}
 		
 		public void SetRankSpr(Sprite spr)
 		{
-			UI_Image.set_sprite(this.rankImage,spr);
+			this.rankImage.sprite = spr;
 			this.rankImage.enabled = 1;
 		}
 		
 		public void SetMedalActive(bool active)
 		{
-			ExtensionMethods.SetActive(this.medalImage,active & 1);
+			ExtensionMethods.SetActive(this.medalImage,(active ? 1 : 0) & 1);
 		}
 		
 		public void SetRankActive(bool active)
 		{
-			ExtensionMethods.SetActive(this.rankImage,active & 1);
+			ExtensionMethods.SetActive(this.rankImage,(active ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -139,8 +139,8 @@ namespace Dpr.Contest
 		
 		public void StopTitleFx()
 		{
-			if (this[0] != 0) {
-			  0.Stop(this[0],0);
+			if (this.titleLogoFx != null) {
+			  0.Stop(this.titleLogoFx,0);
 			}
 		}
 

@@ -36,7 +36,7 @@ namespace Dpr.UI
 		
 		public void SetToday(bool today)
 		{
-			ExtensionMethods.SetActive(this._frameImage,today & 1);
+			ExtensionMethods.SetActive(this._frameImage,(today ? 1 : 0) & 1);
 		}
 		
 		// TODO

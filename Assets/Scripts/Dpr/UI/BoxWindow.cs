@@ -357,7 +357,7 @@ namespace Dpr.UI
         	if (!isEnable) {
         	  uVar1 = 0;
         	}
-        	this._controlType = uVar1;
+        	this._controlType = (ControlType)(uVar1);
         	SetupKeyguide();
         }
 
@@ -367,7 +367,7 @@ namespace Dpr.UI
         	if (!isEnable) {
         	  uVar1 = 0;
         	}
-        	this._controlType = uVar1;
+        	this._controlType = (ControlType)(uVar1);
         	if (!isEnable) {
         	  ExtensionMethods.SetActive(this._cursorBody,1);
         	}
@@ -427,7 +427,7 @@ namespace Dpr.UI
         public void ToNextPhase(NetTradePhase next = NetTradePhase.None)
         {
         	ExtensionMethods.SetActive(this._darkScreen,0);
-        	var uVar1 = MsgWindowManager.get_IsOpen(0);
+        	var uVar1 = 0.IsOpen;
         	if ((uVar1 & 1) == 0) {
         	  this._isPhaseProcDone = false;
         	}
@@ -832,7 +832,7 @@ namespace Dpr.UI
         	if (isEnable) {
         	  uVar1 = 5;
         	}
-        	this._controlType = uVar1;
+        	this._controlType = (ControlType)(uVar1);
         	SetupKeyguide();
         }
 
@@ -1056,8 +1056,8 @@ namespace Dpr.UI
             {
             	if (((((((int)this.mons == 0) && (this.type1 == '\x12')) &&
             	      (this.type2 == '\x12')) &&
-            	     ((this.Length == 0 && (this.waza_machine == 0x7fffffff)))) &&
-            	    ((this[0] == 0 &&
+            	     (((int)this.waza == 0 && (this.waza_machine == 0x7fffffff)))) &&
+            	    (((int)this.tokusei == 0 &&
             	     (((int)this.seikaku == 0x19 && (this.sex == '\x03')))))) &&
             	   (((int)this.item == 2 &&
             	    ((this.mark == 0 && (this.team == 6)))))) {

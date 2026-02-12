@@ -120,10 +120,8 @@ namespace Dpr.GMS
 		// TODO
 		private bool IsRepeat(int assignValue) { return default; }
 		
-		private bool IsRelease(int assignValue)
-		{
-			return (assignValue & (this.localInput.Length ^ 0xffffffff)) == 0;
-		}
+		// TODO
+		private bool IsRelease(int assignValue) { return default; }
 		
 		// TODO
 		private bool IsOn(int assignValue) { return default; }

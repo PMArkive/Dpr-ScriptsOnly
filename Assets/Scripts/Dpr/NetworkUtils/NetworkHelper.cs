@@ -21,9 +21,9 @@ namespace Dpr.NetworkUtils
         	  return 2;
         	}
         	if (0xf < (playerNum & 0xffff)) {
-        	  playerNum = 0x10;
+        	  playerNum = (ushort)0x10;
         	}
-        	return playerNum;
+        	return (ushort)(playerNum);
         }
 
         // TODO
@@ -31,11 +31,11 @@ namespace Dpr.NetworkUtils
 
         public static ushort CreateUnderGroundGameMode(MatchingType matchingType, IlcaNetSessionNetworkType connectType, ushort UgMapGroupID)
         {
-        	var uVar1 = (uint)(0x40002000100 >> ((matchingType & 3) << 4));
+        	var uVar1 = (uint)(0x40002000100 >> (((int)matchingType & 3) << 4));
         	if (2 < (uint)matchingType) {
         	  uVar1 = 0;
         	}
-        	return uVar1 | UgMapGroupID | 0x3000;
+        	return (ushort)(uVar1 | UgMapGroupID | 0x3000);
         }
 
         // TODO
@@ -43,7 +43,7 @@ namespace Dpr.NetworkUtils
 
         public static ushort CreateBattleGameMode(MatchingType matchingType, BattleModeID battleModeID, IlcaNetSessionNetworkType connectType)
         {
-        	var uVar1 = (uint)(0x240022002100 >> ((matchingType & 3) << 4));
+        	var uVar1 = (uint)(0x240022002100 >> (((int)matchingType & 3) << 4));
         	if (2 < (uint)matchingType) {
         	  uVar1 = 0x2000;
         	}
@@ -51,13 +51,13 @@ namespace Dpr.NetworkUtils
         	if (2 < (int)battleModeID - 1U) {
         	  uVar2 = 0;
         	}
-        	return uVar1 | uVar2;
+        	return (ushort)(uVar1 | uVar2);
         }
 
         private static ushort GetMatchingBitByType(MatchingType matchingType)
         {
         	if ((int)matchingType < 3) {
-        	  return 0x40002000100 >> (((ulong)matchingType & 3) << 4);
+        	  return (ushort)(0x40002000100 >> (((ulong)(int)matchingType & 3) << 4));
         	}
         	return 0;
         }
@@ -65,7 +65,7 @@ namespace Dpr.NetworkUtils
         private static ushort GetBattleModeBitByID(BattleModeID battleModeID)
         {
         	if (battleModeID - 1U < 3) {
-        	  return 0x4000200010 >> (((ulong)(battleModeID - 1U) & 3) << 4);
+        	  return (ushort)(0x4000200010 >> (((ulong)(battleModeID - 1U) & 3) << 4));
         	}
         	return 0;
         }

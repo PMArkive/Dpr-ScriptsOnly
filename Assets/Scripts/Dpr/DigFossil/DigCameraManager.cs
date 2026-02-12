@@ -12,15 +12,15 @@ namespace Dpr.DigFossil
 		public void SetCamera(CameraSet set)
 		{
 			if ((int)set == 2) {
-			  GameObject.SetActive(Component.get_gameObject(this[0]),1,0);
+			  GameObject.SetActive(this.resultCamera.gameObject,1,0);
 			}
 			else {
 			  if (((int)set != 1) && ((int)set != 0)) {
 			  }
-			  GameObject.SetActive(this.Length.gameObject,1,0);
+			  GameObject.SetActive(this.mainCamera.gameObject,1,0);
 			}
-			this[0] = Component.get_gameObject(this[0]);
-			GameObject.SetActive(this[0],0);
+			this.resultCamera = this.resultCamera.gameObject;
+			this.resultCamera.SetActive(0);
 		}
 
 		public enum CameraSet : int

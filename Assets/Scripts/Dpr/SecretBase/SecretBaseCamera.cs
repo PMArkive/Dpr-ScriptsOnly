@@ -29,7 +29,7 @@ namespace Dpr.SecretBase
 		public void SetRenderTexture(RenderTexture texture)
 		{
 			ExtensionMethods.SetActive(this.pedestalCamera,1);
-			ExtensionMethods.SetActive(this[0],0);
+			ExtensionMethods.SetActive(this.mainCamera,0);
 			this.pedestalCamera.targetTexture = texture;
 		}
 	}

@@ -39,7 +39,7 @@ namespace Dpr.Item
 
         private int GetMaxCount()
         {
-        	var iVar1 = Item_UgItemInfo.Category;
+        	var iVar1 = get_Category();
         	var uVar2 = 99;
         	if (iVar1 != 2) {
         	  uVar2 = 999;

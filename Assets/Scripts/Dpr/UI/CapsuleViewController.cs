@@ -44,7 +44,7 @@ namespace Dpr.UI
 		
 		public void SetDisablePreviewGuide(bool isEnable)
 		{
-			this.subKeyGuide.SetDisablePreviewGuide(isEnable & 1);
+			this.subKeyGuide.SetDisablePreviewGuide((isEnable ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -58,13 +58,13 @@ namespace Dpr.UI
 		
 		public bool CheckWaitFade()
 		{
-			var uVar1 = Fader.get_isBusy(0);
+			var uVar1 = 0.isBusy;
 			if ((uVar1 & 1) != 0) {
 			  this.isFading = true;
 			  return true;
 			}
 			if (this.isFading) {
-			  var fVar2 = (float)Fader.get_fadeInProgress(0);
+			  var fVar2 = (float)0.fadeInProgress;
 			  if (fVar2 == 1.0) {
 			    this.isFading = false;
 			    return false;

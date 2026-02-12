@@ -646,7 +646,7 @@ namespace Dpr.Battle.Logic
 
         public void Message_Waza(byte attackerID, WazaNo waza, BtlPokePos targetPos, bool needMsgDisplay)
         {
-        	SCQUE_PUT_MSG_WAZA(this[0]);
+        	SCQUE_PUT_MSG_WAZA(this.m_pQueue);
         }
 
         // TODO
@@ -732,7 +732,7 @@ namespace Dpr.Battle.Logic
 
         public void EffectBySide(BtlPokePos pos_from, BtlPokePos pos_to, ushort effectNo)
         {
-        	SCQUE_PUT_ACT_EffectBySide(this[0]);
+        	SCQUE_PUT_ACT_EffectBySide(this.m_pQueue);
         }
 
         // TODO
@@ -746,7 +746,7 @@ namespace Dpr.Battle.Logic
         	var uVar3 = poke.GetItem();
         	var uVar1 = ItemData.IsNuts(uVar3);
         	var uVar2 = poke.GetID();
-        	SCQUE_PUT_ACT_USE_ITEM(this[0],uVar2,uVar1 & 1);
+        	SCQUE_PUT_ACT_USE_ITEM(this.m_pQueue,uVar2,uVar1 & 1);
         }
 
         // TODO
@@ -779,7 +779,7 @@ namespace Dpr.Battle.Logic
         	  poke.COUNTER_Inc(counterID);
         	  var uVar1 = poke.COUNTER_Get(counterID);
         	  var uVar2 = poke.GetID();
-        	  SCQUE_PUT_OP_SetPokeCounter(this[0],uVar2,counterID,uVar1);
+        	  SCQUE_PUT_OP_SetPokeCounter(this.m_pQueue,uVar2,counterID,uVar1);
         	}
         }
 
@@ -970,7 +970,7 @@ namespace Dpr.Battle.Logic
 
         public void Act_SwapPokePos(byte clientID, BtlPokePos pos1, BtlPokePos pos2)
         {
-        	SCQUE_PUT_ACT_MemberMove(this[0]);
+        	SCQUE_PUT_ACT_MemberMove(this.m_pQueue);
         }
 
         // TODO
@@ -1080,7 +1080,7 @@ namespace Dpr.Battle.Logic
 
         public void Act_RaidResult()
         {
-        	SCQUE_PUT_ACT_RaidResult(this[0]);
+        	SCQUE_PUT_ACT_RaidResult(this.m_pQueue);
         }
 
         // TODO
@@ -1139,12 +1139,12 @@ namespace Dpr.Battle.Logic
 
         public void Act_WazaDamage(byte targetID, TypeAffinity.AboutAffinityID affAbout, WazaNo wazaID)
         {
-        	SCQUE_PUT_ACT_WazaDamage(this[0]);
+        	SCQUE_PUT_ACT_WazaDamage(this.m_pQueue);
         }
 
         public void Act_WazaEffect(BtlPokePos atPokePos, BtlPokePos defPokePos, WazaNo waza, byte wazaType, byte arg, byte pluralHitIndex, bool bSyncDamageEffect, bool isGShockOccur)
         {
-        	SCQUE_PUT_ACT_WazaEffect(this[0]);
+        	SCQUE_PUT_ACT_WazaEffect(this.m_pQueue);
         }
 
         // TODO
@@ -1155,7 +1155,7 @@ namespace Dpr.Battle.Logic
 
         public void Act_Hensin(byte userID, byte targetID)
         {
-        	SCQUE_PUT_ACT_Hensin(this[0]);
+        	SCQUE_PUT_ACT_Hensin(this.m_pQueue);
         }
 
         // TODO
@@ -1163,12 +1163,12 @@ namespace Dpr.Battle.Logic
 
         public void Act_MemberIn(byte clientID, byte posIdx, byte memberIdx, bool fPutMsg)
         {
-        	SCQUE_PUT_ACT_MemberIn(this[0]);
+        	SCQUE_PUT_ACT_MemberIn(this.m_pQueue);
         }
 
         public void Act_MemberOut(BtlPokePos pos, ushort effectNo)
         {
-        	SCQUE_PUT_ACT_MemberOut(this[0]);
+        	SCQUE_PUT_ACT_MemberOut(this.m_pQueue);
         }
 
         // TODO
@@ -1179,7 +1179,7 @@ namespace Dpr.Battle.Logic
 
         public void Act_BallThrow(BtlPokePos userPos, BtlPokePos targetPos, byte yureCnt, bool fSuccess, bool fZukanRegister, bool fCritical, ushort ballItemID)
         {
-        	SCQUE_PUT_ACT_BallThrow(this[0]);
+        	SCQUE_PUT_ACT_BallThrow(this.m_pQueue);
         }
 
         // TODO
@@ -1193,7 +1193,7 @@ namespace Dpr.Battle.Logic
 
         public void ActOp_SkillSwap(byte pokeID_1, byte pokeID_2, TokuseiNo tokID_1, TokuseiNo tokID_2)
         {
-        	SCQUE_PUT_ACTOP_SkillSwap(this[0]);
+        	SCQUE_PUT_ACTOP_SkillSwap(this.m_pQueue);
         }
 
         // TODO
@@ -1207,7 +1207,7 @@ namespace Dpr.Battle.Logic
 
         public void Act_AddExp()
         {
-        	SCQUE_PUT_ACT_AddExp(this[0]);
+        	SCQUE_PUT_ACT_AddExp(this.m_pQueue);
         }
 
         // TODO
@@ -1287,7 +1287,7 @@ namespace Dpr.Battle.Logic
 
         public void SafariAct(byte pokeID, byte param0, byte param1)
         {
-        	SCQUE_PUT_ACT_Safari(this[0]);
+        	SCQUE_PUT_ACT_Safari(this.m_pQueue);
         }
 
         public class SetupParam

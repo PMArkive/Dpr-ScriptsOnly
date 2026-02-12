@@ -40,7 +40,7 @@ namespace Dpr.UI
 		
 		public void SetRawImage(RawImage[] rawImages)
 		{
-			this.Length = rawImages;
+			this.targetRawImages = rawImages;
 			Initialize();
 		}
 		

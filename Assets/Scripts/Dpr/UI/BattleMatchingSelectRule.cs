@@ -22,7 +22,7 @@ namespace Dpr.UI
 		public void Initialize(Action onFinishState, Action onSelectMember, Action onDecideMember, Action onRule, Action onLeave)
 		{
 			this._onFinishState = onFinishState;
-			this[0] = onSelectMember;
+			this._onSelectMember = onSelectMember;
 			this._onDecideMember = onDecideMember;
 			this._onRule = onRule;
 			this._onLeave = onLeave;

@@ -12,7 +12,8 @@ namespace Dpr.Field.Walking
 		
 		public override bool ObjectCollisionUpdate(float deltaTime, bool isIgnoreJump = false)
 		{
-			Walking_WalkingCollisionModelBase.ObjectCollisionUpdate(deltaTime,isIgnoreJump & 1);
+			deltaTime.ObjectCollisionUpdate((isIgnoreJump ? 1 : 0) & 1);
+			return false;
 		}
 		
 		// TODO

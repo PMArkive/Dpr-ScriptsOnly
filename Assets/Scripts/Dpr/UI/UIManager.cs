@@ -1315,27 +1315,27 @@ namespace Dpr.UI
         	var uVar5 = new PokemonParam(uVar4);
         	var uVar3 = battlePokemonParam.GetValue(0xd);
         	uVar5.SetHp(uVar3);
-        	uVar3 = battlePokemonParam.GetValue(0xf);
+        	uVar3 = (ushort)(battlePokemonParam.GetValue(0xf));
         	uVar5.SetMaxHp(uVar3);
-        	uVar3 = battlePokemonParam.GetValue(0x17);
+        	uVar3 = (ushort)(battlePokemonParam.GetValue(0x17));
         	uVar5.SetExp(uVar3);
-        	uVar3 = battlePokemonParam.GetPokeSick();
+        	uVar3 = (ushort)(battlePokemonParam.GetPokeSick());
         	uVar5.SetSick(uVar3);
-        	uVar3 = battlePokemonParam.GetItem();
+        	uVar3 = (ushort)(battlePokemonParam.GetItem());
         	uVar5.SetItem(uVar3);
         	var cVar1 = battlePokemonParam.WAZA_GetCount_Org();
         	if (cVar1 != 0) {
         	  var uVar6 = 0;
         	  do {
-        	    uVar3 = battlePokemonParam.WAZA_GetID_Org(uVar6);
+        	    uVar3 = (ushort)(battlePokemonParam.WAZA_GetID_Org(uVar6));
         	    uVar5.SetWaza(uVar6,uVar3);
         	    uVar4 = battlePokemonParam.GetSrcData();
-        	    uVar3 = uVar4.GetWazaPPUpCount(uVar6);
+        	    uVar3 = (ushort)(uVar4.GetWazaPPUpCount(uVar6));
         	    uVar5.SetWazaPPUpCount(uVar6,uVar3);
-        	    uVar3 = battlePokemonParam.WAZA_GetPP_Org(uVar6);
+        	    uVar3 = (ushort)(battlePokemonParam.WAZA_GetPP_Org(uVar6));
         	    uVar5.SetWazaPP(uVar6,uVar3);
         	    uVar6 = uVar6 + 1;
-        	    bVar2 = battlePokemonParam.WAZA_GetCount_Org();
+        	    bVar2 = (byte)(battlePokemonParam.WAZA_GetCount_Org());
         	  } while (uVar6 < bVar2);
         	}
         	return uVar5;

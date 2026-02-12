@@ -19,7 +19,7 @@ namespace Dpr.SecretBase
 			var uVar1 = statue.Length;
 			this.placement = statue;
 			this.dir_backup = uVar1;
-			this.bIsPrevField = isField & 1;
+			this.bIsPrevField = (isField ? 1 : 0) & 1;
 		}
 		
 		// TODO

@@ -103,7 +103,7 @@ namespace Dpr.Contest
 		
 		public void UpdateSkillEffect(double elapsedTime)
 		{
-			Contest_AContestSkillBase.UpdateSkill(this.contestSkill);
+			this.contestSkill.UpdateSkill();
 		}
 		
 		public void AddWazaScore(int score)

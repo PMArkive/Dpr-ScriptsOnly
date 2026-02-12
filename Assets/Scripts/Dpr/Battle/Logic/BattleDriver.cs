@@ -8,7 +8,7 @@
         private ServerCommandGenerator m_serverCmdGenerator;
         private ServerCommandPutter m_serverCmdPutter;
         private WazaCommandPutter m_wazaCmdPutter;
-        private ServerCommandExecutor m_serverCmdExecutor;
+        internal ServerCommandExecutor m_serverCmdExecutor;
         private EventSystem m_eventSystem;
         private EventLauncher m_eventLauncher;
         private PokeActionContainer m_pokeActionContainer;
@@ -95,7 +95,7 @@
 
         public void Initialize()
         {
-        	ServerCommandQueue.Initialize(this[0]);
+        	this.m_serverCmdQueue.Initialize();
         	this.m_eventSystem.Initialize();
         	this.m_sectionSharedData.Initialize();
         	this.m_pokeActionContainer.Clear();

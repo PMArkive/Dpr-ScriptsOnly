@@ -54,7 +54,7 @@ namespace Dpr.DigFossil
 		
 		public void PlayOneShot(EffectId id, Vector3 pos)
 		{
-			DigFossil_DigEffectManager.Play(id,pos,1);
+			Play(id,pos,1);
 		}
 		
 		// TODO
@@ -63,13 +63,15 @@ namespace Dpr.DigFossil
 		public EffectInstance PlayToCollapse()
 		{
 			this.pos_collapse.position;
-			DigFossil_DigEffectManager.Play(7,1);
+			Play(7,1);
+			return null;
 		}
 		
 		public EffectInstance PlayToAllDigouted()
 		{
 			this.pos_collapse.position;
-			DigFossil_DigEffectManager.Play(10,1);
+			Play(10,1);
+			return null;
 		}
 		
 		// TODO

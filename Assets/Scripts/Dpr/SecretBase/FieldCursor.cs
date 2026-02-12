@@ -51,13 +51,13 @@ namespace Dpr.SecretBase
 		
 		public void SetActiveCursor(bool value)
 		{
-			GameObject.SetActive(this.Length.gameObject,value & 1,0);
+			GameObject.SetActive(this.cursorRoot.gameObject,(value ? 1 : 0) & 1,0);
 		}
 		
 		public void SetActivePointer(bool value)
 		{
 			if (this.pointer != null) {
-			  GameObject.SetActive(this.pointer.gameObject,value & 1,0);
+			  GameObject.SetActive(this.pointer.gameObject,(value ? 1 : 0) & 1,0);
 			}
 		}
 		

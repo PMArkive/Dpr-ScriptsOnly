@@ -143,7 +143,7 @@ namespace Dpr.Field.Walking
         public void Turearuki_Talk()
         {
         	if (this.pokeTalkModel != null) {
-        	  Walking_FieldPokeTalkModel.StartTalk();
+        	  FieldPokeTalkModel.StartTalk();
         	}
         }
 

@@ -30,7 +30,7 @@ namespace Dpr.Field.Walking
 		
 		public void Cancel()
 		{
-			Walking_CorSystem.Cancel(this.corSys);
+			this.corSys.Cancel();
 		}
 		
 		// TODO
@@ -44,13 +44,13 @@ namespace Dpr.Field.Walking
 		
 		public void Pause()
 		{
-			Walking_CorSystem.Pause(this.corSys);
+			this.corSys.Pause();
 		}
 		
 		public Coroutine Restart()
 		{
 			if (this.corSys.isPause != 0) {
-			  var uVar1 = Walking_CorSystem.Restart();
+			  var uVar1 = CorSystem.Restart();
 			  return uVar1;
 			}
 			return 0;

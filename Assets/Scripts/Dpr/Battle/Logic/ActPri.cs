@@ -14,25 +14,26 @@
         private static uint MakeBitFlag(uint value, uint mask)
         {
         	var uVar1 = GetShiftWidthByMask(mask);
-        	return value << (ulong)(uVar1 & 0x1f) & mask;
+        	return value << (int)(uVar1 & 0x1f) & mask;
         }
 
         private static uint GetMaskedValue(uint value, uint mask)
         {
         	var uVar1 = GetShiftWidthByMask(mask);
-        	return (mask & value) >> (ulong)(uVar1 & 0x1f);
+        	return (mask & value) >> (int)(uVar1 & 0x1f);
         }
 
         private static uint SetMaskedValue(uint oldValue, uint mask, uint setValue)
         {
         	var uVar1 = GetShiftWidthByMask(mask);
-        	return setValue << (ulong)(uVar1 & 0x1f) & mask | oldValue & (mask ^ 0xffffffff);
+        	return setValue << (int)(uVar1 & 0x1f) & mask | oldValue & (mask ^ 0xffffffff);
         }
 
         public static uint Make(DominantPriority dominantPri, OperationPriority operationPri, byte wazaPri, byte spPri, ushort agility)
         {
-        	return (dominantPri & 7) << 0x19 | (operationPri & 7) << 0x16 | (wazaPri & 0x3f) << 0x10 |
+        	return ((int)dominantPri & 7) << 0x19 | ((int)operationPri & 7) << 0x16 | (wazaPri & 0x3f) << 0x10 |
         	       (spPri & 7) << 0xd | agility & 0x1fff;
+        	return 0;
         }
 
         public static uint ChangeAgility(uint priority, ushort agility)
@@ -47,12 +48,12 @@
 
         public static byte GetWazaPri(uint priority)
         {
-        	return priority >> 0x10 & 0x3f;
+        	return (byte)(priority >> 0x10 & 0x3f);
         }
 
         public static byte GetSpPri(uint priority)
         {
-        	return priority >> 0xd & 7;
+        	return (byte)(priority >> 0xd & 7);
         }
 
         public static OperationPriority GetOperationPri(uint priority)
@@ -67,7 +68,7 @@
 
         public static uint SetDominantPri(uint priority, DominantPriority dominantPri)
         {
-        	return priority & 0xf0000000 | priority & 0x1ffffff | (dominantPri & 7) << 0x19;
+        	return priority & 0xf0000000 | priority & 0x1ffffff | ((int)dominantPri & 7) << 0x19;
         }
 
         public static uint SetSpPri(uint priority, byte spPri)

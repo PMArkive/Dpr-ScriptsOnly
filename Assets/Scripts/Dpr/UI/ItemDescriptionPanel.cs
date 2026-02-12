@@ -40,7 +40,7 @@ namespace Dpr.UI
         [SerializeField]
         protected Sprite appealPointFullSprite;
         protected bool isShowWazaDescription;
-        protected bool isShowWazaContest;
+        protected internal bool isShowWazaContest;
         protected ItemInfo currentItemInfo;
 
         // TODO

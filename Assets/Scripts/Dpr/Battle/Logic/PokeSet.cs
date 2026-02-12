@@ -32,7 +32,7 @@
 
         public void SeekStart()
         {
-        	this.m_getIdx = 0;
+        	this.m_getIdx = (byte)0;
         }
 
         public BTL_POKEPARAM SeekNext()
@@ -40,7 +40,7 @@
         	if (this.m_count <= this.m_getIdx) {
         	  return 0;
         	}
-        	this.m_getIdx = this.m_getIdx + 1;
+        	this.m_getIdx = (byte)(this.m_getIdx + 1);
         	if ((uint)this.m_getIdx < this.m_bpp.Length) {
         	  return this.m_bpp + (ulong)this.m_getIdx * 8[0];
         	}
@@ -78,7 +78,7 @@
 
         public void SetDefaultTargetCount(byte cnt)
         {
-        	this.m_targetPosCount = cnt;
+        	this.m_targetPosCount = (byte)(cnt);
         }
 
         public bool IsRemovedAll()

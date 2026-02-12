@@ -26,13 +26,13 @@
         {
         	var bVar1 = gaugeMax;
         	if (gaugeInit <= gaugeMax) {
-        	  bVar1 = gaugeInit;
+        	  bVar1 = (byte)(gaugeInit);
         	}
-        	this.m_gaugeMax = gaugeMax;
-        	this.m_gaugeInit = gaugeInit;
-        	this.m_repairTurnMax = repairTurn;
-        	this.m_repairTurnCount = repairTurn;
-        	this.m_gaugeNow = bVar1;
+        	this.m_gaugeMax = (byte)(gaugeMax);
+        	this.m_gaugeInit = (byte)(gaugeInit);
+        	this.m_repairTurnMax = (byte)(repairTurn);
+        	this.m_repairTurnCount = (byte)(repairTurn);
+        	this.m_gaugeNow = (byte)(bVar1);
         }
 
         public void SetAppear()
@@ -63,40 +63,40 @@
 
         public byte GetGauseMax()
         {
-        	return this.m_gaugeMax;
+        	return (byte)(this.m_gaugeMax);
         }
 
         public byte GetGaugeNow()
         {
-        	return this.m_gaugeNow;
+        	return (byte)(this.m_gaugeNow);
         }
 
         public byte GetGauseInit()
         {
-        	return this.m_gaugeInit;
+        	return (byte)(this.m_gaugeInit);
         }
 
         public void InitGauge()
         {
         	if (this.m_gaugeInit <= this.m_gaugeMax) {
         	}
-        	this.m_gaugeNow = this.m_gaugeInit;
+        	this.m_gaugeNow = (byte)(this.m_gaugeInit);
         }
 
         public void SetGauge(byte value)
         {
         	if (value <= this.m_gaugeMax) {
-        	  this.m_gaugeMax = value;
+        	  this.m_gaugeMax = (byte)(value);
         	}
-        	this.m_gaugeNow = this.m_gaugeMax;
+        	this.m_gaugeNow = (byte)(this.m_gaugeMax);
         }
 
         public void AddGauge(byte value)
         {
         	if (this.m_gaugeNow + value <= this.m_gaugeMax) {
-        	  this.m_gaugeMax = this.m_gaugeNow + value;
+        	  this.m_gaugeMax = (byte)(this.m_gaugeNow + value);
         	}
-        	this.m_gaugeNow = this.m_gaugeMax;
+        	this.m_gaugeNow = (byte)(this.m_gaugeMax);
         }
 
         public void SubGauge(byte value)
@@ -105,7 +105,7 @@
         	if ((uint)(value * 0x1000000) <= (uint)this.m_gaugeNow * 0x1000000) {
         	  uVar1 = (char)((uint)this.m_gaugeNow * 0x1000000 + value * -0x1000000 >> 0x18);
         	}
-        	this.m_gaugeNow = uVar1;
+        	this.m_gaugeNow = (byte)(uVar1);
         }
 
         public bool IsGaugeZero()
@@ -120,25 +120,25 @@
 
         public byte GetRepairTurnCount()
         {
-        	return this.m_repairTurnCount;
+        	return (byte)(this.m_repairTurnCount);
         }
 
         public void DecrementRepairTurnCount()
         {
         	if (this.m_repairTurnCount != 0) {
-        	  this.m_repairTurnCount = this.m_repairTurnCount + -1;
+        	  this.m_repairTurnCount = (byte)(this.m_repairTurnCount + -1);
         	}
         }
 
         public void SetRepairTurnCountMax()
         {
-        	this.m_repairTurnCount = this.m_repairTurnMax;
+        	this.m_repairTurnCount = (byte)(this.m_repairTurnMax);
         }
 
         public void DecrementRepairTurnCountMax()
         {
         	if (this.m_repairTurnMax != 0) {
-        	  this.m_repairTurnMax = this.m_repairTurnMax + -1;
+        	  this.m_repairTurnMax = (byte)(this.m_repairTurnMax + -1);
         	}
         }
     }

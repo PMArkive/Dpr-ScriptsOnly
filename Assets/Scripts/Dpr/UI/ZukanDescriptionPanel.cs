@@ -118,17 +118,19 @@ namespace Dpr.UI
 		public Vector3 GetModelViewPosition()
 		{
 			this.modelViewRectTransform.position;
+			return null;
 		}
 		
 		public Vector3 GetInfoButtonPosition()
 		{
-			Transform.get_position(Component.get_transform(this[0]),0);
+			Transform.get_position(this.pokemonInfoButton.transform,0);
+			return null;
 		}
 		
 		public void SetArrowsActive(bool isUpDownActive, bool isLeftRightActive)
 		{
-			this.arrowUpDownObject.SetActive(isUpDownActive & 1);
-			this.arrowLeftRightObject.SetActive(isLeftRightActive & 1);
+			this.arrowUpDownObject.SetActive((isUpDownActive ? 1 : 0) & 1);
+			this.arrowLeftRightObject.SetActive((isLeftRightActive ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -178,7 +180,7 @@ namespace Dpr.UI
 		
 		public void ResumeLanguageButtonSelect()
 		{
-			this.Length.ResumeMoveSelect();
+			this.languageButtonSelector.ResumeMoveSelect();
 		}
 		
 		// TODO

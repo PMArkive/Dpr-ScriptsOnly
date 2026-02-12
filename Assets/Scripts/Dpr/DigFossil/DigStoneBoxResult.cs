@@ -159,7 +159,7 @@ namespace Dpr.DigFossil
 			
 			private void PlayBoxOpenAnimation()
 			{
-				Playables_PlayableGraph.Play(ref this.graph);
+				PlayableGraph.Play(ref this.graph);
 			}
 			
 			// TODO

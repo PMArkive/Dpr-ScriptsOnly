@@ -9,17 +9,17 @@
 
         public void Add(byte robberPokeID, byte targetPokeID, BtlPokePos targetPos)
         {
-        	if ((int)this.Length.Length <= (int)(uint)this.robberCount) {
+        	if ((int)this.robberPokeID.Length <= (int)(uint)this.robberCount) {
         	}
-        	if (this.robberCount < this.Length.Length) {
-        	  this.Length + (ulong)this.robberCount[0] = robberPokeID;
+        	if (this.robberCount < this.robberPokeID.Length) {
+        	  this.robberPokeID + (ulong)this.robberCount[0] = robberPokeID;
         	  if ((uint)this.robberCount < this.targetPokeID.Length) {
         	    this.targetPokeID + (ulong)this.robberCount[0] = targetPokeID
         	    ;
-        	    if ((uint)this.robberCount < this[0].Length) {
-        	      this[0] + (ulong)this.robberCount[0] =
+        	    if ((uint)this.robberCount < this.targetPos.Length) {
+        	      this.targetPos + (ulong)this.robberCount[0] =
         	           targetPos;
-        	      this.robberCount = this.robberCount + '\x01';
+        	      this.robberCount = (byte)(this.robberCount + '\x01');
         	    }
         	  }
         	}

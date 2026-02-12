@@ -14,7 +14,7 @@ namespace Dpr.UI
 		
 		public bool IsUnderGroundItem()
 		{
-			return ShopUgExchangeItemItem_Param.GetItemNo(this._param) >> 0x1f & 1;
+			return this._param.GetItemNo() >> 0x1f & 1;
 		}
 		
 		// TODO

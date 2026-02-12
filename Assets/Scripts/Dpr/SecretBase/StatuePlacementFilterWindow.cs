@@ -59,9 +59,9 @@ namespace Dpr.SecretBase
 		{
 			this.currentState = (State)0;
 			this.isReset = 0x100;
-			SecretBase_StatuePlacementFilterWindow.ShowTopItemList();
+			ShowTopItemList();
 			this.window.SetActive(1);
-			SecretBase_StatuePlacementFilterInfo.Apply(this.filterInfo,0xffffffff);
+			this.filterInfo.Apply(0xffffffff);
 		}
 		
 		public void Close()
@@ -90,10 +90,10 @@ namespace Dpr.SecretBase
 		{
 			if (this.isDisplay) {
 			  if ((int)this.currentState == 1) {
-			    SecretBase_StatuePlacementFilterWindow.OnUpdate_DetailSelect();
+			    OnUpdate_DetailSelect();
 			  }
 			  if ((int)this.currentState == 0) {
-			    SecretBase_StatuePlacementFilterWindow.OnUpdate_TopSelect();
+			    OnUpdate_TopSelect();
 			  }
 			}
 		}

@@ -16,8 +16,8 @@ namespace Dpr.SubContents
 		
 		private void OnDestroy()
 		{
-			this.Length = 0;
-			this[0] = 0;
+			this.OnCheckEnd = null;
+			this.OnTextUpdate = null;
 			this.OnToBattleScale = null;
 			this.OnToMenuScale = null;
 		}

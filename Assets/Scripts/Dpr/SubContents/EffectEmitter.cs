@@ -27,7 +27,7 @@ namespace Dpr.SubContents
 		
 		private void OnCompleteLoad()
 		{
-			if (this.loadedCount <= this[0]) {
+			if (this.loadedCount <= this.loadCount) {
 			  this.bReady = true;
 			}
 		}

@@ -65,7 +65,7 @@ namespace Dpr.UI
 		
 		public void Select(bool enabled)
 		{
-			this._selectBg.enabled = enabled & 1;
+			this._selectBg.enabled = (enabled ? 1 : 0) & 1;
 			SetSelectIndex(this._selectIndex,0);
 		}
 

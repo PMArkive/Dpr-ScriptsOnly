@@ -57,7 +57,7 @@ namespace Dpr.SealPreview
 		
 		public SequenceCameraObject GetSequenceCameraObject()
 		{
-			return this.Length;
+			return this.sequenceCameraObject;
 		}
 
 		private enum CameraMode : int

@@ -51,9 +51,9 @@
 
         public static bool IsTeam(int team)
         {
-        	var iVar1 = Box_BoxWork.GetTeamPokeBoxTray(team);
+        	var iVar1 = GetTeamPokeBoxTray(team);
         	if ((iVar1 < 0x28) &&
-        	   (iVar1 = Box_BoxWork.GetTeamPokeBoxPos(team & 0xffffffff), iVar1 < 0x1e)) {
+        	   (iVar1 = GetTeamPokeBoxPos(team & 0xffffffff), iVar1 < 0x1e)) {
         	  return true;
         	}
         	return false;
@@ -62,9 +62,9 @@
         public static bool IsTeamPos(int team, int pos)
         {
         	if ((team < 6) || (pos < 6)) {
-        	  var iVar1 = Box_BoxWork.GetTeamPokeBoxTray(team,pos);
+        	  var iVar1 = GetTeamPokeBoxTray(team,pos);
         	  if ((iVar1 < 0x28) &&
-        	     (iVar1 = Box_BoxWork.GetTeamPokeBoxPos(team,pos), iVar1 < 0x1e)) {
+        	     (iVar1 = GetTeamPokeBoxPos(team,pos), iVar1 < 0x1e)) {
         	    return true;
         	  }
         	}

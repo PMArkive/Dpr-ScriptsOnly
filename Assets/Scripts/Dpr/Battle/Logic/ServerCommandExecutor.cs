@@ -209,23 +209,29 @@ namespace Dpr.Battle.Logic
 
         public void EndWeather()
         {
-        	this.Length.Length.EndWeather();
+        	this.m_pBattleEnv.m_fieldStatus.EndWeather();
         }
 
         // TODO
         public BtlWeather TurnCheckWeather() { return BtlWeather.BTL_WEATHER_TURBULENCE; }
 
-        // TODO
-        public void SetBattleFlag(BattleFlags.Flag flag) { }
+        public void SetBattleFlag(BattleFlags.Flag flag)
+        {
+        	this.m_pBattleEnv.m_flags.Set(flag);
+        }
 
-        // TODO
-        public void RemoveBattleFlag(BattleFlags.Flag flag) { }
+        public void RemoveBattleFlag(BattleFlags.Flag flag)
+        {
+        	this.m_pBattleEnv.m_flags.Set(flag);
+        }
 
         // TODO
         public void IncBattleCount(BattleCounter.UniqueCounter counterID) { }
 
-        // TODO
-        public void DecBattleCount(BattleCounter.UniqueCounter counterID) { }
+        public void DecBattleCount(BattleCounter.UniqueCounter counterID)
+        {
+        	this.m_pBattleEnv.m_counter.Dec(counterID);
+        }
 
         // TODO
         public void IncBattleCount(BattleCounter.ClientCounter counterID, BTL_CLIENT_ID clientID) { }
@@ -295,12 +301,12 @@ namespace Dpr.Battle.Logic
 
         public void IncGGauge(BTL_CLIENT_ID clientID)
         {
-        	GGauge.IncValue(this.Length.GetGGauge(clientID),0);
+        	GGauge.IncValue(this.m_pBattleEnv.GetGGauge(clientID),0);
         }
 
         public void EmptyGGauge(BTL_CLIENT_ID clientID)
         {
-        	GGauge.SetEmpty(this.Length.GetGGauge(clientID),0);
+        	GGauge.SetEmpty(this.m_pBattleEnv.GetGGauge(clientID),0);
         }
 
         // TODO
@@ -315,8 +321,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public void PlayedTalkEvent(byte talkID) { }
 
-        // TODO
-        public void AddEscapeInfo(BTL_CLIENT_ID clientID) { }
+        public void AddEscapeInfo(BTL_CLIENT_ID clientID)
+        {
+        	this.m_pBattleEnv.m_escapeInfo.Add(clientID);
+        }
 
         // TODO
         public bool AddWazaHandler(byte pokeID, WazaNo waza, uint subPri) { return false; }

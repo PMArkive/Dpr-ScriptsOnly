@@ -25,7 +25,7 @@ namespace Dpr.GMS
 		private Action onCancelList;
 		private GMSMode gmsMode = GMSMode.Top;
 		private int currentBrowsingPointDataIndex;
-		private bool bIsShowPointHistoryView = true;
+		internal bool bIsShowPointHistoryView = true;
 		
 		// TODO
 		public void Initialize(Action<PointHistoryDataModel> onSelectPointData, Action onReleaseInput, Action onCancelSelect) { }
@@ -36,8 +36,27 @@ namespace Dpr.GMS
 		// TODO
 		public void Setup(GMSPointDataContainer dataContainer, int startTradeListIndex, int startBrowsingListIndex) { }
 		
-		// TODO
-		public void OnFinalize() { }
+		public void OnFinalize()
+		{
+			this.browsingPointScrollView.onRequiredItem = 0;
+			this.browsingPointScrollView.onMoveScrollView = 0;
+			this.browsingPointScrollView.onSelect = 0;
+			this.browsingPointScrollView.onCancel = 0;
+			this.browsingPointScrollView.onReleaseInput = null;
+			this.browsingPointHistoryScrollView.onRequiredItem = 0;
+			this.browsingPointHistoryScrollView.onMoveScrollView = 0;
+			this.browsingPointHistoryScrollView.onSelect = 0;
+			this.browsingPointHistoryScrollView.onCancel = 0;
+			this.browsingPointHistoryScrollView.onReleaseInput = null;
+			this.tradePointScrollView.onRequiredItem = 0;
+			this.tradePointScrollView.onMoveScrollView = 0;
+			this.tradePointScrollView.onSelect = 0;
+			this.tradePointScrollView.onCancel = 0;
+			this.tradePointScrollView.onReleaseInput = null;
+			this.onSelectPointData = null;
+			this.onReleaseInput = null;
+			this.onCancelList = null;
+		}
 		
 		// TODO
 		public void SetInputEnabled(bool enabled) { }
@@ -81,8 +100,8 @@ namespace Dpr.GMS
 		
 		private void SetShowHistoryFlag(bool flag)
 		{
-			this.bIsShowPointHistoryView = flag & 1;
-			this.listMaskImage.enabled = flag & 1;
+			this.bIsShowPointHistoryView = (flag ? 1 : 0) & 1;
+			this.listMaskImage.enabled = (flag ? 1 : 0) & 1;
 		}
 		
 		// TODO

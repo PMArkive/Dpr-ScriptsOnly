@@ -509,14 +509,8 @@ namespace Dpr.FureaiHiroba
                 DelPoke(pokeWalkMng.GetDelPoke());
         }
 
-        public void SubPoke()
-        {
-        	if (this.pokeWalkMng.PokeWalkers.Length != 0) {
-        	  var uVar2 = System_Linq_Enumerable__Last<object>
-        	                    (this.pokeWalkMng.PokeWalkers);
-        	  FureaiHiroba_PokeWalkManager.SubPoke(this.pokeWalkMng,uVar2);
-        	}
-        }
+        // TODO
+        public void SubPoke() { }
 
         private void Debug_EnterPokeCreate()
         {

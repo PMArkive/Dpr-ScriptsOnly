@@ -5,6 +5,7 @@ namespace Dpr.Battle.Logic
 		public static bool CheckFreeFallUserPoke(BTL_POKEPARAM poke)
 		{
 			poke.IsUsingFreeFall();
+			return false;
 		}
 		
 		public static bool CheckFreeFallPoke(BTL_POKEPARAM poke)

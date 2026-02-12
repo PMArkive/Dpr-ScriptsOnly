@@ -23,29 +23,8 @@ namespace Dpr.Battle.Logic
         // TODO
         private static void revertItem(PokeParty pSrcParty, PokeParty pOrgParty) { }
 
-        private static void adjustMaxHP(PokeParty pSrcParty, PokeParty pOrgParty)
-        {
-        	if (this.Length != 0) {
-        	  var iVar9 = 0;
-        	  do {
-        	    var uVar6 = pSrcParty.GetMemberPointerConst(iVar9);
-        	    var uVar7 = iVar9.GetMemberPointer();
-        	    var uVar8 = uVar7.IsHpZero();
-        	    if (!uVar8) {
-        	      var uVar2 = uVar6.GetMaxHp();
-        	      var uVar3 = uVar7.GetMaxHp();
-        	      if (uVar2 <= uVar3 && uVar3 - uVar2 != 0) {
-        	        var iVar4 = uVar6.GetLevel();
-        	        var iVar5 = uVar7.GetLevel();
-        	        if (iVar4 == iVar5) {
-        	          uVar7.RecoverHp(uVar3 - uVar2);
-        	        }
-        	      }
-        	    }
-        	    iVar9 = iVar9 + 1;
-        	  } while (this.Length != iVar9);
-        	}
-        }
+        // TODO
+        private static void adjustMaxHP(PokeParty pSrcParty, PokeParty pOrgParty) { }
 
         // TODO
         private static void resetForm(PokeParty party, PokeParty orgParty) { }
@@ -61,10 +40,10 @@ namespace Dpr.Battle.Logic
 
         private unsafe static uint GetRecTurnCount(byte* recordData, uint recordDataSize)
         {
-        	if (this != 0) {
+        	if (recordData != 0) {
         	var uVar1 = new rec_Reader();
-        	  rec_Reader.Init(uVar1,this,recordData);
-        	  uVar1 = rec_Reader.GetTurnCount(uVar1);
+        	  uVar1.Init(recordData,recordDataSize);
+        	  uVar1 = uVar1.GetTurnCount();
         	  return uVar1;
         	}
         	return 0;

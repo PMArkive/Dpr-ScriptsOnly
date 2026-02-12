@@ -21,7 +21,7 @@ namespace Dpr.DigFossil
 		
 		public void Hide()
 		{
-			GameObject.SetActive(this.Length.gameObject,0,0);
+			GameObject.SetActive(this.image.gameObject,0,0);
 		}
 		
 		public DigResultItem()

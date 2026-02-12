@@ -33,13 +33,13 @@ namespace Dpr.Battle.Logic
         private BattleSimulator m_battleSimulator;
         private BattleDriver m_battleDriver;
         private ServerCommandQueue m_serverCmdQueue;
-        private GameTimer m_gameTimer;
+        internal GameTimer m_gameTimer;
         private ServerSendData.CLIENT_LIMIT_TIME m_syncClientTime;
         private ServerSendData.RAIDBOSS_CAPTURE_RESULT m_raidBossCaptureResult;
         private uint m_turnCount;
         private ushort m_EnemyPokeHPBase;
         private SEL_ITEM_WORK[] m_selItemWork = Arrays.InitializeWithDefaultInstances<SEL_ITEM_WORK>((int)BTL_CLIENT_ID.BTL_CLIENT_NUM);
-        private byte m_myID;
+        internal byte m_myID;
         private byte m_myType;
         private byte m_myState;
         private bool m_commWaitInfoOn;
@@ -299,7 +299,7 @@ namespace Dpr.Battle.Logic
         private void changeMainProc(ClientMainProc proc)
         {
         	this.m_mainProc = proc;
-        	this.m_myState = 0;
+        	this.m_myState = (byte)0;
         }
 
         // TODO
@@ -401,7 +401,7 @@ namespace Dpr.Battle.Logic
         public unsafe void* GetRecordData(ref uint size)
         {
         	if (this.m_recData != null) {
-        	  rec_Data.GetDataPtr(this.m_recData,size);
+        	  this.m_recData.GetDataPtr(size);
         	}
         	return default;
         }
@@ -444,6 +444,7 @@ namespace Dpr.Battle.Logic
         public bool Main()
         {
         	this.m_mainProc.Invoke();
+        	return false;
         }
 
         public void NotifyFadeoutStartForRecPlay()
@@ -504,9 +505,9 @@ namespace Dpr.Battle.Logic
 
         private bool SubProc_AI_Setup(ref int seq)
         {
-        	this.m_cmdLimitTime = this.m_mainModule.m_LimitTimeCommand;
-        	this.m_gameLimitTime = this.m_mainModule.m_LimitTimeGame;
-        	this.m_clientLimitTime = this.m_mainModule.m_LimitTimeClient;
+        	this.m_cmdLimitTime = (ushort)(this.m_mainModule.m_LimitTimeCommand);
+        	this.m_gameLimitTime = (ushort)(this.m_mainModule.m_LimitTimeGame);
+        	this.m_clientLimitTime = (ushort)(this.m_mainModule.m_LimitTimeClient);
         	return true;
         }
 
@@ -1459,17 +1460,17 @@ namespace Dpr.Battle.Logic
         {
         	uint uVar3;
         	if (this.m_sendDataContainer.GetLatestData() == 0) {
-        	  this.m_returnDataSerialNumber = 0x310000;
+        	  this.m_returnDataSerialNumber = (ushort)0x310000;
         	  this.m_returnDataPtr = 0;
         	  uVar3 = 0;
         	}
         	else {
         	  var uVar2 = SendData.GetSerialNumber(this.m_sendDataContainer.GetLatestData(),0);
-        	  this.m_returnDataSerialNumber = uVar2;
+        	  this.m_returnDataSerialNumber = (ushort)(uVar2);
         	  var uVar1 = SendData.GetServerSequence(this.m_sendDataContainer.GetLatestData(),0);
-        	  this.m_returnDataServerSeq = uVar1;
+        	  this.m_returnDataServerSeq = (ServerSequence)(uVar1);
         	  uVar1 = SendData.GetServerRequest(this.m_sendDataContainer.GetLatestData(),0);
-        	  this.m_returnDataServerRequest = uVar1;
+        	  this.m_returnDataServerRequest = (ServerRequest)(uVar1);
         	  var uVar5 = SendData.GetData(this.m_sendDataContainer.GetLatestData(),0);
         	  this.m_returnDataPtr = uVar5;
         	  uVar3 = SendData.GetDataSize(this.m_sendDataContainer.GetLatestData(),0);
@@ -2184,9 +2185,9 @@ namespace Dpr.Battle.Logic
         private byte GetVariableArgsCount()
         {
         	if (this.m_tmpVariableArgs != null) {
-        	  return this.m_tmpVariableArgs.Length;
+        	  return (byte)(this.m_tmpVariableArgs.m_cnt);
         	}
-        	return this.m_stdVariableArgs.Length;
+        	return (byte)(this.m_stdVariableArgs.m_cnt);
         }
 
         private int GetVariableArgs(byte idx)
@@ -2200,7 +2201,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetClientID()
         {
-        	return this.m_myID;
+        	return (byte)(this.m_myID);
         }
 
         // TODO
@@ -2209,10 +2210,14 @@ namespace Dpr.Battle.Logic
         public BtlWeather GetWeather()
         {
         	this.m_fldSim.GetWeather();
+        	return (BtlWeather)0;
         }
 
-        // TODO
-        public uint GetTurnCount() { return 0; }
+        public uint GetTurnCount()
+        {
+        	this.m_pBattleEnv.m_counter.Get(0);
+        	return 0;
+        }
 
         // TODO
         public BtlPokePos GetProcPokePos() { return BtlPokePos.POS_1ST_0; }
@@ -2220,6 +2225,7 @@ namespace Dpr.Battle.Logic
         public bool IsUnselectableWaza(BTL_POKEPARAM bpp, WazaNo waza)
         {
         	is_unselectable_waza();
+        	return false;
         }
 
         // TODO
@@ -2320,7 +2326,7 @@ namespace Dpr.Battle.Logic
 
             public byte GetCount()
             {
-            	return this.Length;
+            	return (byte)(this.m_cnt);
             }
 
             public int GetArg(byte idx)
@@ -2370,7 +2376,7 @@ namespace Dpr.Battle.Logic
             private MainModule m_mainModule;
             private POKECON m_pokeCon;
             private BattleViewBase m_viewCore;
-            private byte m_myID;
+            internal byte m_myID;
             private byte m_numCoverPos;
             private byte m_searchIdx;
             private int m_step;
@@ -2394,12 +2400,12 @@ namespace Dpr.Battle.Logic
             public void Start(MainModule mainModule, POKECON pokeCon, BattleViewBase viewCore, byte myID, byte numCoverPos)
             {
             	this.m_mainModule = mainModule;
-            	this.Length = pokeCon;
-            	this[0] = viewCore;
-            	this.m_numCoverPos = numCoverPos;
-            	this.m_myID = myID;
+            	this.m_pokeCon = pokeCon;
+            	this.m_viewCore = viewCore;
+            	this.m_numCoverPos = (byte)(numCoverPos);
+            	this.m_myID = (byte)(myID);
             	this.m_step = 0;
-            	this.m_searchIdx = 0;
+            	this.m_searchIdx = (byte)0;
             }
 
             // TODO

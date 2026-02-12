@@ -77,10 +77,8 @@ namespace Dpr.UI
 		// TODO
 		private void OnFinishSellProcess() { }
 		
-		private bool IsItemEmpty()
-		{
-			return this.itemInfoList.Length < 1;
-		}
+		// TODO
+		private bool IsItemEmpty() { return default; }
 		
 		// TODO
 		private bool CheckIsEmptySelectItem() { return default; }

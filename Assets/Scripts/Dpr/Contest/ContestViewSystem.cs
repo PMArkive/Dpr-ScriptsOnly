@@ -40,7 +40,7 @@ namespace Dpr.Contest
 		private string seqFilePath = string.Empty;
 		private bool m_seqKeepResource;
 		private bool canOpenMsgWindowFlag = true;
-		private bool ready;
+		internal bool ready;
 		
 		public bool IsReady { get => ready; }
 		public bool IsLoaded { get => m_iPtrSequenceSystem != null && m_iPtrSequenceSystem.IsLoadedSequenceFile; }
@@ -107,7 +107,8 @@ namespace Dpr.Contest
 		
 		private bool __WaitLoadSequence__()
 		{
-			Sequence_SequenceSystem.get_IsPreLoaded(this.m_iPtrSequenceSystem);
+			this.m_iPtrSequenceSystem.IsPreLoaded;
+			return false;
 		}
 		
 		public bool IsStencilEnable { get; set; }
@@ -119,21 +120,25 @@ namespace Dpr.Contest
 		public byte GetBtlvPosToClientId(BtlvPos vpos)
 		{
 			var uVar1 = new NotImplementedException();
+			return 0;
 		}
 		
 		public byte GetClientID()
 		{
 			var uVar1 = new NotImplementedException();
+			return 0;
 		}
 		
 		public byte GetEnemyClientID(byte idx)
 		{
 			var uVar1 = new NotImplementedException();
+			return 0;
 		}
 		
 		public MainModule GetMainModule()
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		// TODO
@@ -158,6 +163,7 @@ namespace Dpr.Contest
 		public ushort GetTrainerType(byte clientID)
 		{
 			var uVar1 = new NotImplementedException();
+			return 0;
 		}
 		
 		// TODO
@@ -191,6 +197,7 @@ namespace Dpr.Contest
 		public BattleCharacterSystem GetCharacterSystem()
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		// TODO
@@ -199,35 +206,40 @@ namespace Dpr.Contest
 		public PartyDesc __GetPartySetupParam__(byte clientId)
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		public BOPokemon GetPokeModel(BtlvPos vPos)
 		{
 			if ((int)this.currentViewSystemType != 0) {
-			  Contest_SceneObjectManager.GetUserWazaModelPokemon(this.Length);
+			  this.objManager.GetUserWazaModelPokemon();
 			}
-			Contest_SceneObjectManager.GetPokemonByPosID(this.Length,vPos);
-			return default;
+			this.objManager.GetPokemonByPosID(vPos);
+			return null;
 		}
 		
 		public Size GetPokeSize(BattleViewSystem.BattleViewSide side, bool isGPoke = false)
 		{
 			var uVar1 = new NotImplementedException();
+			return (Size)0;
 		}
 		
 		public BattleViewCharacter GetTrainerModel(BtlvPos vPos)
 		{
-			Contest_SceneObjectManager.GetTrainerByPosID(this.Length,vPos);
+			this.objManager.GetTrainerByPosID(vPos);
+			return null;
 		}
 		
 		public bool __IsCanChangePinch__()
 		{
 			var uVar1 = new NotImplementedException();
+			return false;
 		}
 		
 		public bool __IsReqCheckPinch__()
 		{
 			var uVar1 = new NotImplementedException();
+			return false;
 		}
 		
 		public void ResetAll()
@@ -277,16 +289,33 @@ namespace Dpr.Contest
 			return 0;
 		}
 		
-		// TODO
-		public BtlvPos SeqComFunc_GetTargetPokeSub(SEQ_DEF_POS target) { return default; }
+		public BtlvPos SeqComFunc_GetTargetPokeSub(SEQ_DEF_POS target)
+		{
+			if ((int)this.currentViewSystemType == 1) {
+			  return this.objManager.userIndex;
+			}
+			if (2 < (int)target - 1U) {
+			  target = (SEQ_DEF_POS)0;
+			}
+			return target;
+		}
 		
 		public BtlvPos SeqComFunc_GetTargetPoke_Org(int idx)
 		{
 			var uVar1 = new NotImplementedException();
+			return (BtlvPos)0;
 		}
 		
-		// TODO
-		public BtlvPos SeqComFunc_GetTargetPoke(SEQ_DEF_POS target, int index = 0) { return default; }
+		public BtlvPos SeqComFunc_GetTargetPoke(SEQ_DEF_POS target, int index = 0)
+		{
+			if ((int)this.currentViewSystemType == 1) {
+			  return this.objManager.userIndex;
+			}
+			if (2 < (int)target - 1U) {
+			  target = (SEQ_DEF_POS)0;
+			}
+			return target;
+		}
 		
 		public bool SeqComFunc_IsFlipEffect(BtlvPos target, BtlvPos subTarget)
 		{
@@ -322,29 +351,30 @@ namespace Dpr.Contest
 		
 		public void __ClearSetWords__()
 		{
-			Message_MessageMsgFile.ClearWordParam(this.contestMsgFile);
+			this.contestMsgFile.ClearWordParam();
 		}
 		
 		public MessageTextParseDataModel __GetTextParseData__(string labelName)
 		{
-			if (Message_MessageMsgFile.GetTextDataModel(this.contestMsgFile,labelName) != 0) {
-			  Message_MessageTextParseDataModel.ApplyFormat(Message_MessageMsgFile.GetTextDataModel(this.contestMsgFile,labelName),0);
+			if (this.contestMsgFile.GetTextDataModel(labelName) != 0) {
+			  MessageTextParseDataModel.ApplyFormat(this.contestMsgFile.GetTextDataModel(labelName),0);
 			}
-			return Message_MessageMsgFile.GetTextDataModel(this.contestMsgFile,labelName);
+			return this.contestMsgFile.GetTextDataModel(labelName);
 		}
 		
 		public AContestPlayerData __GetPlayerData__(int index)
 		{
 			if ((int)this.currentViewSystemType != 0) {
-			  Contest_SceneObjectManager.GetUserPlayerData(this.Length);
+			  this.objManager.GetUserPlayerData();
 			}
-			Contest_SceneObjectManager.GetPlayerDataByPosID(this.Length,index);
-			return default;
+			this.objManager.GetPlayerDataByPosID(index);
+			return null;
 		}
 		
 		public AContestPlayerData __GetUserData_()
 		{
-			Contest_SceneObjectManager.GetUserPlayerData(this.Length);
+			this.objManager.GetUserPlayerData();
+			return null;
 		}
 		
 		// TODO
@@ -365,7 +395,7 @@ namespace Dpr.Contest
 		
 		public void SetCanOpenMsgWindowFlag(bool flag)
 		{
-			this.canOpenMsgWindowFlag = flag & 1;
+			this.canOpenMsgWindowFlag = (flag ? 1 : 0) & 1;
 		}
 		
 		// TODO
@@ -379,11 +409,13 @@ namespace Dpr.Contest
 		public BattleWeatherSystem GetBattleWeatherSystem()
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		public BattleGroundEffectSystem GetBattleGroundEffectSystem()
 		{
 			var uVar1 = new NotImplementedException();
+			return null;
 		}
 		
 		// TODO

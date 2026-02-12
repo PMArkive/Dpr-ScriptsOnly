@@ -28,7 +28,7 @@ namespace Dpr.UI
 		[SerializeField]
 		private UIContMatchingPlayerBoard[] _playerBoardArray;
 		[SerializeField]
-		private MultiModelView modelView;
+		internal MultiModelView modelView;
 		[SerializeField]
 		private UIRemainingCountDown remainigCountDown;
 		[SerializeField]
@@ -37,7 +37,7 @@ namespace Dpr.UI
 		private GameObject timerObj;
 
 		private CountDownTimer countTimer = new CountDownTimer();
-		private ShowMessageWindow msgWindow = new ShowMessageWindow();
+		internal ShowMessageWindow msgWindow = new ShowMessageWindow();
 		private KeyGuideCreater _keyGuideCreator = new KeyGuideCreater();
 		private MessageMsgFile msgFile;
 		private MsgWindowManager msgWindowManager;
@@ -59,6 +59,7 @@ namespace Dpr.UI
 		public bool HasViewModelByIndex(int index)
 		{
 			this.modelView.HasViewModelByIndex(index);
+			return false;
 		}
 		
 		// TODO
@@ -155,11 +156,13 @@ namespace Dpr.UI
 		public string GetCountDownMinutStr()
 		{
 			this.countTimer.GetMinuteStr();
+			return default;
 		}
 		
 		public string GetCountDownSecondStr()
 		{
 			this.countTimer.GetSecondStr();
+			return default;
 		}
 		
 		// TODO
@@ -189,18 +192,20 @@ namespace Dpr.UI
 		public void SetTimerObjActive(bool active)
 		{
 			if (((this.timerObj.activeSelf ^ active) & 1) != 0) {
-			  this.timerObj.SetActive(active & 1);
+			  this.timerObj.SetActive((active ? 1 : 0) & 1);
 			}
 		}
 		
 		public bool IsWindowOpen()
 		{
-			SubContents_ShowMessageWindow.get_IsOpen(this.msgWindow);
+			this.msgWindow.IsOpen;
+			return false;
 		}
 		
 		public MsgWindowDataModel.MsgWindowState GetMsgState()
 		{
-			SubContents_ShowMessageWindow.get_MsgWindowState(this.msgWindow);
+			this.msgWindow.MsgWindowState;
+			return (MsgWindowState)0;
 		}
 		
 		// TODO
@@ -223,9 +228,9 @@ namespace Dpr.UI
 		
 		public void CloseMessageWindow()
 		{
-			if ((SubContents_ShowMessageWindow.get_IsOpen(this.msgWindow) & 1) != 0) {
-			  Contest_ContestUtils.EmitLog(StringLiteral_11384,3);
-			  SubContents_ShowMessageWindow.CloseMsgWindow(this.msgWindow);
+			if ((this.msgWindow.IsOpen & 1) != 0) {
+			  ContestUtils.EmitLog(StringLiteral_11384,3);
+			  this.msgWindow.CloseMsgWindow();
 			}
 		}
 		
@@ -234,7 +239,7 @@ namespace Dpr.UI
 		
 		public void CloseContextMenu()
 		{
-			Contest_ContestUtils.EmitLog(StringLiteral_11386,3);
+			ContestUtils.EmitLog(StringLiteral_11386,3);
 			this.msgWindowManager.CloseContextMenu();
 		}
 	}

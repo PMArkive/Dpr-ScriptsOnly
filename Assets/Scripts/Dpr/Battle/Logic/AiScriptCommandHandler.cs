@@ -9,7 +9,7 @@ namespace Dpr.Battle.Logic
         private BattleSimulator m_pBattleSimulator;
         private CommandParam m_commandParam;
         private WazaNo[][] m_usedWaza;
-        private bool m_isEscapeSelected;
+        internal bool m_isEscapeSelected;
         private Random m_randGenerator;
 
         // TODO
@@ -17,11 +17,11 @@ namespace Dpr.Battle.Logic
 
         public void Dispose()
         {
-        	this[0] = 0;
+        	this.m_pBattleSimulator = null;
         	if (this.m_commandParam != null) {
         	  this.m_commandParam.clientID = 5;
-        	  this.m_commandParam.Length = 0;
-        	  this.m_commandParam[0] = 0;
+        	  this.m_commandParam.attackPoke = 0;
+        	  this.m_commandParam.defensePoke = 0;
         	  this.m_commandParam.currentBenchPoke = 0;
         	  this.m_commandParam.currentWazaIndex = 0;
         	  this.m_commandParam.currentWazaNo = 0;
@@ -51,35 +51,60 @@ namespace Dpr.Battle.Logic
         	return this.m_mainModule;
         }
 
-        // TODO
-        public BattleSimulator GetBattleSimulator() { return null; }
+        public BattleSimulator GetBattleSimulator()
+        {
+        	return this.m_pBattleSimulator;
+        }
 
-        // TODO
-        public POKECON GetPokeCon() { return null; }
+        public POKECON GetPokeCon()
+        {
+        	return this.m_pBattleEnv.m_pokecon;
+        }
 
         public BattleEnv GetBattleEnv()
         {
-        	return this.Length;
+        	return this.m_pBattleEnv;
         }
 
         public BTL_POKEPARAM GetAttackPokeParam()
         {
-        	return this.m_commandParam.Length;
+        	return this.m_commandParam.attackPoke;
         }
 
         public BTL_POKEPARAM GetDefensePokeParam()
         {
-        	return this.m_commandParam[0];
+        	return this.m_commandParam.defensePoke;
         }
 
-        // TODO
-        public BtlPokePos GetAttackPokePos() { return BtlPokePos.POS_1ST_0; }
+        public BtlPokePos GetAttackPokePos()
+        {
+        	if (this.m_commandParam.attackPoke != 0) {
+        	  var uVar1 = this.m_commandParam.attackPoke.GetID();
+        	  this.m_mainModule = this.m_mainModule.PokeIDtoPokePos(this.m_pBattleEnv.m_pokecon,uVar1);
+        	  return this.m_mainModule;
+        	}
+        	return (BtlPokePos)5;
+        }
 
-        // TODO
-        public BtlPokePos GetDefensePokePos() { return BtlPokePos.POS_1ST_0; }
+        public BtlPokePos GetDefensePokePos()
+        {
+        	if (this.m_commandParam.defensePoke != 0) {
+        	  var uVar1 = this.m_commandParam.defensePoke.GetID();
+        	  this.m_mainModule = this.m_mainModule.PokeIDtoPokePos(this.m_pBattleEnv.m_pokecon,uVar1);
+        	  return this.m_mainModule;
+        	}
+        	return (BtlPokePos)5;
+        }
 
-        // TODO
-        private BtlPokePos GetPokePos(BTL_POKEPARAM pokeParam) { return BtlPokePos.POS_1ST_0; }
+        private BtlPokePos GetPokePos(BTL_POKEPARAM pokeParam)
+        {
+        	if (pokeParam != null) {
+        	  var uVar1 = pokeParam.GetID();
+        	  this.m_mainModule = this.m_mainModule.PokeIDtoPokePos(this.m_pBattleEnv.m_pokecon,uVar1);
+        	  return this.m_mainModule;
+        	}
+        	return (BtlPokePos)5;
+        }
 
         public BTL_POKEPARAM GetBenchPokeParam()
         {
@@ -88,7 +113,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetCurrentWazaIndex()
         {
-        	return this.m_commandParam.currentWazaIndex;
+        	return (byte)(this.m_commandParam.currentWazaIndex);
         }
 
         public WazaNo GetCurrentWazaNo()
@@ -98,7 +123,7 @@ namespace Dpr.Battle.Logic
 
         public ushort GetCurrentItemNo()
         {
-        	return this.m_commandParam.currentItemNo;
+        	return (ushort)(this.m_commandParam.currentItemNo);
         }
 
         // TODO

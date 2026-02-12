@@ -20,7 +20,7 @@ namespace Dpr.UI
 		{
 			var uVar1 = UnityEngine_Component__GetComponentInChildren<object>
 			                  (this);
-			this[0] = uVar1;
+			this._animator = uVar1;
 		}
 		
 		// TODO

@@ -27,8 +27,8 @@
         	if (0x1d < pokeID) {
         	  return false;
         	}
-        	if ((uint)pokeID < this.m_data.Length.Length) {
-        	  return this.m_data.Length + (ulong)pokeID[0] != 0;
+        	if ((uint)pokeID < this.m_data.currentDeadFlag.Length) {
+        	  return this.m_data.currentDeadFlag + (ulong)pokeID[0] != 0;
         	}
         }
 

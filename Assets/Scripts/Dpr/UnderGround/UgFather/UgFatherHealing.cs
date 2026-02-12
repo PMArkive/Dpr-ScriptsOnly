@@ -25,8 +25,8 @@ namespace Dpr.UnderGround.UgFather
 		private void EventEnd()
 		{
 			this.state = (State)0;
-			if (this[0] != 0) {
-			  UnderGround_UgFather_UgFatherBase_OnEventEnd.Invoke();
+			if (this.onEventEndCallback != 0) {
+			  OnEventEnd.Invoke();
 			}
 		}
 

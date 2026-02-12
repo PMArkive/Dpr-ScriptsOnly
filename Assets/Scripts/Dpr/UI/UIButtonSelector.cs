@@ -22,7 +22,7 @@ namespace Dpr.UI
 		
 		public void SetActive(bool isActive)
 		{
-			GameObject.SetActive(this.buttonsParentTransform.gameObject,isActive & 1,0);
+			GameObject.SetActive(this.buttonsParentTransform.gameObject,(isActive ? 1 : 0) & 1,0);
 		}
 		
 		// TODO
@@ -37,17 +37,15 @@ namespace Dpr.UI
 		// TODO
 		public int GetButtonCount() { return default; }
 		
-		public int GetActiveButtonCount()
-		{
-			return this.activeButtons.Length;
-		}
+		// TODO
+		public int GetActiveButtonCount() { return default; }
 		
 		// TODO
 		public bool MoveSelect(int value) { return default; }
 		
 		public void ResumeMoveSelect()
 		{
-			this.Length.ResumeMoveState();
+			this.indexSelector.ResumeMoveState();
 		}
 		
 		// TODO

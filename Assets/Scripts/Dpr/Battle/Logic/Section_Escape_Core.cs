@@ -13,6 +13,7 @@ namespace Dpr.Battle.Logic
 		private bool putSpEscapeMessage(BTL_POKEPARAM escapePoke)
 		{
 			this.m_pEventLauncher.Event_NigeruExMessage(escapePoke);
+			return false;
 		}
 		
 		// TODO

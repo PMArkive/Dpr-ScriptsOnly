@@ -30,11 +30,11 @@ namespace Dpr.GMS
 		private int currentSelectIndex;
 		private bool bIsPlayingInput;
 		private bool bInputEnabled;
-		private Action<AUIGMSScrollItem> onRequiredItem;
-		private Action<int> onMoveScrollView;
-		private Action onSelect;
-		private Action onCancel;
-		private Action onReleaseInput;
+		internal Action<AUIGMSScrollItem> onRequiredItem;
+		internal Action<int> onMoveScrollView;
+		internal Action onSelect;
+		internal Action onCancel;
+		internal Action onReleaseInput;
 		
 		// TODO
 		public void Initialize(Action<AUIGMSScrollItem> onRequiredItem, Action<int> onMoveScrollView, Action onSelect, Action onCancel, Action onReleaseInput) { }
@@ -60,7 +60,7 @@ namespace Dpr.GMS
 		
 		public void SetInputEnabled(bool enabled)
 		{
-			this.bInputEnabled = enabled & 1;
+			this.bInputEnabled = (enabled ? 1 : 0) & 1;
 		}
 		
 		// TODO

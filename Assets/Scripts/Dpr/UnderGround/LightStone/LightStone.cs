@@ -34,8 +34,8 @@ namespace Dpr.UnderGround.LightStone
 			  if (((int)this.state == 3) && (this.lightStoneEffect != null)) {
 			    0.Stop(this.lightStoneEffect,0);
 			  }
-			  ExtensionMethods.SetActive(this.Length,0);
-			  ExtensionMethods.SetActive(this[0],0);
+			  ExtensionMethods.SetActive(this.root,0);
+			  ExtensionMethods.SetActive(this.monsterRoot,0);
 			}
 		}
 		
@@ -57,24 +57,24 @@ namespace Dpr.UnderGround.LightStone
 		{
 			if ((int)this.state != 3) {
 			  if ((int)this.state == 1) {
-			    var uVar2 = GameObject.get_activeInHierarchy(Component.get_gameObject(this[0]),0);
+			    var uVar2 = GameObject.get_activeInHierarchy(this.monsterRoot.gameObject,0);
 			    if (uVar2) {
-			      UnderGround_LightStone_LightStone.PlayPokeSE();
-			      UnderGround_LightStone_LightStone.PLayDigAnimation();
+			      PlayPokeSE();
+			      PLayDigAnimation();
 			      this.nextState = (State)3;
 			    }
 			  }
 			}
-			UnderGround_LightStone_LightStone.FindLightStone();
+			FindLightStone();
 		}
 		
 		public void DigStart()
 		{
 			if ((int)this.state == 1) {
-			  var uVar2 = GameObject.get_activeInHierarchy(Component.get_gameObject(this[0]),0);
+			  var uVar2 = GameObject.get_activeInHierarchy(this.monsterRoot.gameObject,0);
 			  if (uVar2) {
-			    UnderGround_LightStone_LightStone.PlayPokeSE();
-			    UnderGround_LightStone_LightStone.PLayDigAnimation();
+			    PlayPokeSE();
+			    PLayDigAnimation();
 			    this.nextState = (State)3;
 			  }
 			}
@@ -89,8 +89,8 @@ namespace Dpr.UnderGround.LightStone
 		public bool IsAliveModel()
 		{
 			if ((int)this.state == 1) {
-			  Component.get_gameObject(this[0]) = GameObject.get_activeInHierarchy(Component.get_gameObject(this[0]),0);
-			  return Component.get_gameObject(this[0]);
+			  this.monsterRoot.gameObject = GameObject.get_activeInHierarchy(Component.get_gameObject(this.monsterRoot),0);
+			  return this.monsterRoot.gameObject;
 			}
 			return false;
 		}
@@ -107,22 +107,26 @@ namespace Dpr.UnderGround.LightStone
 		private void SetState(State state)
 		{
 			if (this.state != state) {
-			  this.state = state;
+			  this.state = (State)(state);
 			  switch(state) {
 			  case 0:
 			    if (((int)this.state == 3) && (this.lightStoneEffect != null)) {
 			      0.Stop(this.lightStoneEffect,0);
 			    }
-			    ExtensionMethods.SetActive(this.Length,0);
-			    ExtensionMethods.SetActive(this[0],0);
+			    ExtensionMethods.SetActive(this.root,0);
+			    ExtensionMethods.SetActive(this.monsterRoot,0);
+			    break;
 			  case 1:
-			    ExtensionMethods.SetActive(this[0],1);
+			    ExtensionMethods.SetActive(this.monsterRoot,1);
+			    break;
 			  case 3:
-			    GameObject.SetActive(Component.get_gameObject(this[0]),0,0);
-			    UnderGround_LightStone_LightStone.PlayLightStoneEffect(0x3dcccccd,this);
+			    GameObject.SetActive(this.monsterRoot.gameObject,0,0);
+			    PlayLightStoneEffect(0x3dcccccd,this);
+			    break;
 			  case 4:
 			    if (this.lightStoneEffect != null) {
 			      0.Stop(this.lightStoneEffect,0);
+			      break;
 			    }
 			  }
 			}

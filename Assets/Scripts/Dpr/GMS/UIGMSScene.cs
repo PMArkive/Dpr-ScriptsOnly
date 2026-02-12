@@ -50,18 +50,18 @@ namespace Dpr.GMS
 		
 		public void Setup(int maxPutNum)
 		{
-			GMS_UIGMSScene_PutPointObj.Setup(this.putCompObj);
-			GMS_UIGMSScene_PutPointObj.Setup(this.putCompAnimObj,maxPutNum);
+			this.putCompObj.Setup();
+			this.putCompAnimObj.Setup(maxPutNum);
 		}
 		
 		public void SetSceneBGTexture(Texture2D bgTexture)
 		{
-			UI_RawImage.set_texture(this.sceneBGRawImage,bgTexture);
+			this.sceneBGRawImage.texture = bgTexture;
 		}
 		
 		public void SetRenderTexture(RenderTexture rt)
 		{
-			UI_RawImage.set_texture(this.rtRawImage,rt);
+			this.rtRawImage.texture = rt;
 		}
 		
 		// TODO
@@ -75,18 +75,18 @@ namespace Dpr.GMS
 		
 		public void ShowPutNumText(int putNum, bool isComp)
 		{
-			GMS_UIGMSScene_PutPointObj.Show(this.putCompObj,putNum,isComp & 1);
+			this.putCompObj.Show(putNum,(isComp ? 1 : 0) & 1);
 		}
 		
 		public void HidePutNumText()
 		{
 			var uVar1 = this.putCompObj.putPointContent.activeSelf;
-			if (uVar1) {
+			if ((uVar1 & 1) != 0) {
 			  this.putCompObj.putPointContent.SetActive(0);
 			}
-			uVar1 = GameObject.get_activeSelf(this.putCompObj[0]);
-			if (uVar1) {
-			  GameObject.SetActive(this.putCompObj[0],0);
+			uVar1 = this.putCompObj.putPointCompContent.activeSelf;
+			if ((uVar1 & 1) != 0) {
+			  this.putCompObj.putPointCompContent.SetActive(0);
 			}
 		}
 		
@@ -94,20 +94,20 @@ namespace Dpr.GMS
 		{
 			if (((this.subkeyguideObj.isShow == 0 ^ active) & 1) != 0) {
 			}
-			active = active & 1;
+			active = (active ? 1 : 0) & 1;
 			this.subkeyguideObj.isShow = active;
 			this.subkeyguideObj.bgImg.enabled = active;
-			this.subkeyguideObj.Length.enabled = active;
-			Behaviour.set_enabled(this.subkeyguideObj[0],active);
+			this.subkeyguideObj.iconImg.enabled = active;
+			this.subkeyguideObj.text.enabled = active;
 		}
 		
 		public void StartSceneAnim(int putNum, bool isComp)
 		{
 			this.launchAnimCanvas.enabled = 1;
 			this.animState = (AnimState)0;
-			GMS_UIGMSScene_PutPointObj.Show(this.putCompAnimObj,putNum,isComp & 1);
+			this.putCompAnimObj.Show(putNum,(isComp ? 1 : 0) & 1);
 			this.launchAnimator.enabled = 1;
-			this.launchAnimator.Play(this.Length);
+			this.launchAnimator.Play(this.launchAnimHash);
 			this.bIsPlayLaunchAnim = true;
 		}
 		
@@ -147,11 +147,11 @@ namespace Dpr.GMS
 			{
 				if (((!this.isShow ^ enabled) & 1) != 0) {
 				}
-				enabled = enabled & 1;
+				enabled = (enabled ? 1 : 0) & 1;
 				this.isShow = enabled;
 				this.bgImg.enabled = enabled;
-				this.Length.enabled = enabled;
-				Behaviour.set_enabled(this[0],enabled);
+				this.iconImg.enabled = enabled;
+				this.text.enabled = enabled;
 			}
 		}
 
@@ -166,8 +166,8 @@ namespace Dpr.GMS
 			
 			public void Setup(int maxPutNum)
 			{
-				GMS_UIGMSScene_PutPointObj.Setup(this.putCompObj);
-				GMS_UIGMSScene_PutPointObj.Setup(this.putCompAnimObj,maxPutNum);
+				this.putCompObj.Setup();
+				this.putCompAnimObj.Setup(maxPutNum);
 			}
 			
 			// TODO
@@ -178,8 +178,8 @@ namespace Dpr.GMS
 				if ((this.putPointContent.activeSelf & 1) != 0) {
 				  this.putPointContent.SetActive(0);
 				}
-				if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
-				  GameObject.SetActive(this[0],0);
+				if ((this.putPointCompContent.activeSelf & 1) != 0) {
+				  this.putPointCompContent.SetActive(0);
 				}
 			}
 			
@@ -199,28 +199,28 @@ namespace Dpr.GMS
 			private void SetNormalUIActive(bool active)
 			{
 				if (((this.putPointContent.activeSelf ^ active) & 1) != 0) {
-				  this.putPointContent.SetActive(active & 1);
+				  this.putPointContent.SetActive((active ? 1 : 0) & 1);
 				}
 			}
 			
 			private void ShowCompleteUI()
 			{
-				if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
+				if ((this.putPointCompContent.activeSelf & 1) != 0) {
 				}
-				GameObject.SetActive(this[0],1);
+				this.putPointCompContent.SetActive(1);
 			}
 			
 			private void HideCompleteUI()
 			{
-				if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
-				  GameObject.SetActive(this[0],0);
+				if ((this.putPointCompContent.activeSelf & 1) != 0) {
+				  this.putPointCompContent.SetActive(0);
 				}
 			}
 			
 			private void SetCompleteUIActive(bool active)
 			{
-				if (((GameObject.get_activeSelf(this[0]) ^ active) & 1) != 0) {
-				  GameObject.SetActive(this[0],active & 1);
+				if (((this.putPointCompContent.activeSelf ^ active) & 1) != 0) {
+				  this.putPointCompContent.SetActive((active ? 1 : 0) & 1);
 				}
 			}
 		}

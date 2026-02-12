@@ -14,7 +14,7 @@
 
         public void Clear()
         {
-        	this[0] = 0;
+        	this.m_requestCount = (byte)0;
         }
 
         // TODO
@@ -40,11 +40,11 @@
 
         public BtlPokePos GetRequestPos(byte index)
         {
-        	if (this[0] <= index) {
+        	if (this.m_requestCount <= index) {
         	  return (BtlPokePos)5;
         	}
-        	if ((uint)index < this.Length.Length) {
-        	  return this.Length + (ulong)index[0];
+        	if ((uint)index < this.m_requestPos.Length) {
+        	  return this.m_requestPos + (ulong)index[0];
         	}
         }
     }

@@ -17,7 +17,7 @@ namespace Dpr.UI
 		
 		public void Select(bool enabled)
 		{
-			this._item.Select(enabled & 1);
+			this._item.Select((enabled ? 1 : 0) & 1);
 		}
 	}
 }

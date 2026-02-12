@@ -7,11 +7,14 @@
 
         public static void Clear(PokeDesc desc)
         {
-        	DEFAULT_POWERUP_DESC.Clear(this.defaultPowerUpDesc);
-        	this.Length = 0;
+        	DEFAULT_POWERUP_DESC.Clear(desc.defaultPowerUpDesc);
+        	desc.isGEnableByNPC = false;
         }
 
-        // TODO
-        public static void Copy(PokeDesc dest, in PokeDesc src) { }
+        public static void Copy(PokeDesc dest, in PokeDesc src)
+        {
+        	DEFAULT_POWERUP_DESC.Copy(dest.defaultPowerUpDesc,src + 0x10);
+        	dest.isGEnableByNPC = src.Length;
+        }
     }
 }

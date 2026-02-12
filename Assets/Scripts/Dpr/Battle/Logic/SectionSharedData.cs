@@ -16,8 +16,8 @@
         public void Initialize()
         {
         	this.m_actionSharedDataStack.Initialize();
-        	this.Length.Clear();
-        	PartyAllDeadRecorder.Clear(this[0]);
+        	this.m_interruptAccessor.Clear();
+        	this.m_partyAllDeadRecorder.Clear();
         	this.m_pokemonBattleInRegister.Clear();
         	if (0 < (int)this.m_itemChangeCounter.Length) {
         	  var uVar4 = 0;
@@ -31,7 +31,7 @@
         	    uVar5 = (ulong)this.m_itemChangeCounter.Length;
         	  } while ((long)uVar4 < (int)this.m_itemChangeCounter.Length);
         	}
-        	this.m_turnCheckStep = 0;
+        	this.m_turnCheckStep = (byte)0;
         	this.m_turnFlag = 0;
         }
 
@@ -42,11 +42,13 @@
 
         public InterruptAccessor GetInterruptAccessor()
         {
-        	return this.Length;
+        	return this.m_interruptAccessor;
         }
 
-        // TODO
-        public PartyAllDeadRecorder GetPartyAllDeadRecorder() { return default; }
+        public PartyAllDeadRecorder GetPartyAllDeadRecorder()
+        {
+        	return this.m_partyAllDeadRecorder;
+        }
 
         public PokemonBattleInRegister GetPokemonBattleInRegister()
         {
@@ -55,17 +57,17 @@
 
         public byte GetTurnCheckStep()
         {
-        	return this.m_turnCheckStep;
+        	return (byte)(this.m_turnCheckStep);
         }
 
         public void IncTurnCheckStep()
         {
-        	this.m_turnCheckStep = this.m_turnCheckStep + '\x01';
+        	this.m_turnCheckStep = (byte)(this.m_turnCheckStep + '\x01');
         }
 
         public void ResetTurnCheckStep()
         {
-        	this.m_turnCheckStep = 0;
+        	this.m_turnCheckStep = (byte)0;
         }
 
         public ushort GetItemChangeCount(byte pokeID)
@@ -75,7 +77,7 @@
         	  return 0;
         	}
         	if (uVar1 < this.m_itemChangeCounter.Length) {
-        	  return this.m_itemChangeCounter + (pokeID & 0xff) * 2[0];
+        	  return (ushort)(this.m_itemChangeCounter + (pokeID & 0xff) * 2[0]);
         	}
         }
 
@@ -107,18 +109,18 @@
 
         public bool GetTurnFlag(TurnFlag flag)
         {
-        	return (this.m_turnFlag & 1L << (flag & 0x3f)) != 0;
+        	return (this.m_turnFlag & 1L << ((int)flag & 0x3f)) != 0;
         }
 
         public void SetTurnFlag(TurnFlag flag)
         {
-        	this.m_turnFlag = this.m_turnFlag | 1L << (flag & 0x3f);
+        	this.m_turnFlag = this.m_turnFlag | 1L << ((int)flag & 0x3f);
         }
 
         public void ResetTurnFlag(TurnFlag flag)
         {
         	this.m_turnFlag =
-        	     this.m_turnFlag & (1L << (flag & 0x3f) ^ 0xffffffffffffffffU);
+        	     this.m_turnFlag & (1L << ((int)flag & 0x3f) ^ 0xffffffffffffffffU);
         }
 
         public void ClearTurnFlag()

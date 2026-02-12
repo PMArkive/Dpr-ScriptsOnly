@@ -85,7 +85,7 @@
 
         private void changeSequence(ServerSequence nextSeq)
         {
-        	this.m_currentSeq = nextSeq;
+        	this.m_currentSeq = (ServerSequence)(nextSeq);
         	this.m_seqStep = 0;
         }
 
@@ -94,7 +94,7 @@
 
         private void seq_BATTLE_START_SWITCH(ref int pSeqStep, ref ServerSequence pNextSeq)
         {
-        	this.Length.GetCompetitor(0);
+        	this.m_pMainModule.GetCompetitor(0);
         	pNextSeq = (ServerSequence)2;
         }
 
@@ -117,7 +117,7 @@
         	if (this.m_serverRequestGenerator.m_interruptCode != 0) {
         	  uVar2 = uVar1;
         	}
-        	pNextSeq = uVar2;
+        	pNextSeq = (ServerSequence)(uVar2);
         }
 
         // TODO
@@ -139,7 +139,7 @@
         	if (this.m_serverRequestGenerator.m_interruptCode != 0) {
         	  uVar2 = uVar1;
         	}
-        	pNextSeq = uVar2;
+        	pNextSeq = (ServerSequence)(uVar2);
         }
 
         // TODO
@@ -147,14 +147,14 @@
 
         private void seq_ACTION_SELECT_SWITCH(ref int pSeqStep, ref ServerSequence pNextSeq)
         {
-        	if ((this.Length.CheckGameLimitTimeOver() & 1) != 0) {
+        	if ((this.m_pMainModule.CheckGameLimitTimeOver() & 1) != 0) {
         	  pNextSeq = (ServerSequence)0x1d;
         	}
         	var uVar2 = 0x24;
-        	if ((this.Length.CheckRecPlayError() & 1) == 0) {
+        	if ((this.m_pMainModule.CheckRecPlayError() & 1) == 0) {
         	  uVar2 = 0xc;
         	}
-        	pNextSeq = uVar2;
+        	pNextSeq = (ServerSequence)(uVar2);
         }
 
         // TODO
@@ -186,7 +186,7 @@
 
         private void seq_COVER_SELECT_SWITCH(ref int pSeqStep, ref ServerSequence pNextSeq)
         {
-        	if ((this.Length.CheckRecPlayError() & 1) != 0) {
+        	if ((this.m_pMainModule.CheckRecPlayError() & 1) != 0) {
         	  pNextSeq = (ServerSequence)0x24;
         	}
         	pNextSeq = (ServerSequence)0x15;
@@ -212,7 +212,7 @@
 
         private void seq_INTERRUPT_POKECHANGE_POKESELECT_SWITCH(ref int pSeqStep, ref ServerSequence pNextSeq)
         {
-        	if ((this.Length.CheckRecPlayError() & 1) != 0) {
+        	if ((this.m_pMainModule.CheckRecPlayError() & 1) != 0) {
         	  pNextSeq = (ServerSequence)0x24;
         	}
         	pNextSeq = (ServerSequence)0x1a;
@@ -312,8 +312,10 @@
         // TODO
         private bool checkRaidBattleWin() { return false; }
 
-        // TODO
-        private BtlRule getRule() { return BtlRule.BTL_RULE_SINGLE; }
+        private BtlRule getRule()
+        {
+        	return this.m_pMainModule.m_rule;
+        }
 
         // TODO
         private void storeClientInstruction() { }

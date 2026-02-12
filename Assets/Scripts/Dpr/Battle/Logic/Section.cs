@@ -4,13 +4,13 @@ namespace Dpr.Battle.Logic
 {
 	public class Section
 	{
-		private MainModule m_pMainModule;
+		internal MainModule m_pMainModule;
 		private BattleEnv m_pBattleEnv;
 		private ServerCommandQueue m_pServerCmdQueue;
-		private ServerCommandPutter m_pServerCmdPutter;
+		internal ServerCommandPutter m_pServerCmdPutter;
 		private WazaCommandPutter m_pWazaCmdPutter;
 		private EventSystem m_pEventSystem;
-		private EventLauncher m_pEventLauncher;
+		internal EventLauncher m_pEventLauncher;
 		private SectionSharedData m_pSharedData;
 		private PokeActionContainer m_pPokemonActionContainer;
 		private PokeChangeRequest m_pPokeChangeRequest;
@@ -40,11 +40,13 @@ namespace Dpr.Battle.Logic
 		
 		protected BattleEnv GetBattleEnv()
 		{
-			return this.Length;
+			return this.m_pBattleEnv;
 		}
 		
-		// TODO
-		protected ServerCommandQueue GetServerCommandQueue() { return default; }
+		protected ServerCommandQueue GetServerCommandQueue()
+		{
+			return this.m_pServerCmdQueue;
+		}
 		
 		protected ServerCommandPutter GetServerCommandPutter()
 		{
@@ -129,11 +131,13 @@ namespace Dpr.Battle.Logic
 		protected BtlMultiMode GetMultiMode()
 		{
 			this.m_pMainModule.GetMultiMode();
+			return (BtlMultiMode)0;
 		}
 		
 		protected BtlCompetitor GetCompetitor()
 		{
 			this.m_pMainModule.GetCompetitor(1);
+			return (BtlCompetitor)0;
 		}
 		
 		protected bool CheckCommMode()
@@ -144,6 +148,7 @@ namespace Dpr.Battle.Logic
 		protected bool CheckStatusFlag(BTL_STATUS_FLAG flag)
 		{
 			this.m_pMainModule.GetSetupStatusFlag(flag);
+			return false;
 		}
 		
 		// TODO
@@ -172,6 +177,7 @@ namespace Dpr.Battle.Logic
 		protected byte GetFriendship(BTL_POKEPARAM poke)
 		{
 			this.m_pMainModule.GetPokeFriendship(poke);
+			return 0;
 		}
 		
 		// TODO

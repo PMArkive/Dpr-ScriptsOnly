@@ -1125,13 +1125,13 @@ namespace Dpr.EvScript
         private void SetEventListIndex(int idx)
         {
         	if (idx == -1) {
-        	  EvScript_EvDataManager.SetCloudScaleEnd();
+        	  SetCloudScaleEnd();
         	  this._eventListIndex = 0xffffffff;
         	}
         	if (this._eventListIndex != -1) {
         	  this._eventListIndex = idx;
         	}
-        	EvScript_EvDataManager.SetCloudScaleStart();
+        	SetCloudScaleStart();
         	this._eventListIndex = idx;
         }
 
@@ -1939,6 +1939,7 @@ namespace Dpr.EvScript
         	var uVar8 = FlagWork.GetSysFlag(0x82);
         	return (uVar2 & 1) + (uVar1 & 1) + (uVar3 & 1) + (uVar4 & 1) + (uVar5 & 1) + (uVar6 & 1) +
         	       (uVar7 & 1) + (uVar8 & 1);
+        	return 0;
         }
 
         // TODO
@@ -2737,18 +2738,18 @@ namespace Dpr.EvScript
         private bool Cmd_TalkObjStart()
         {
         	if ((int)this._procCmd == 0x343) {
-        	  EvScript_EvDataManager.NeckRotateHero();
-        	  EvScript_EvDataManager.NeckRotateTarget();
+        	  NeckRotateHero();
+        	  NeckRotateTarget();
         	  this._procCmd = (NAME)0;
         	  return true;
         	}
         	if ((int)this._procCmd == 0x8e) {
-        	  EvScript_EvDataManager.Cmd_ObjPauseAll();
+        	  Cmd_ObjPauseAll();
         	  this._procCmd = (NAME)0x343;
         	  return false;
         	}
         	if ((int)this._procCmd == 0x6d) {
-        	  EvScript_EvDataManager.PlaySe(StringLiteral_9145);
+        	  PlaySe(StringLiteral_9145);
         	  this._procCmd = (NAME)0x8e;
         	  return false;
         	}
@@ -2761,18 +2762,18 @@ namespace Dpr.EvScript
         	uint uVar2;
         	uint uVar3;
         	if ((int)this._procCmd == 0x343) {
-        	  EvScript_EvDataManager.NeckRotateHero();
+        	  NeckRotateHero();
         	  uVar3 = 1;
-        	  EvScript_EvDataManager.NeckRotateTarget(1);
+        	  NeckRotateTarget(1);
         	  uVar2 = 0;
         	}
         	else if ((int)this._procCmd == 0x8e) {
-        	  EvScript_EvDataManager.Cmd_ObjPauseAll();
+        	  Cmd_ObjPauseAll();
         	  uVar3 = 0;
         	  uVar2 = 0x343;
         	}
         	else if ((int)this._procCmd == 0x6d) {
-        	  EvScript_EvDataManager.PlaySe(StringLiteral_9145);
+        	  PlaySe(StringLiteral_9145);
         	  uVar3 = 0;
         	  uVar2 = 0x8e;
         	}
@@ -2780,7 +2781,7 @@ namespace Dpr.EvScript
         	  uVar3 = 0;
         	  uVar2 = 0x6d;
         	}
-        	this._procCmd = uVar2;
+        	this._procCmd = (NAME)(uVar2);
         	return uVar3;
         }
 
@@ -2793,14 +2794,14 @@ namespace Dpr.EvScript
         {
         	if ((int)this._procCmd != 0x8e) {
         	  if ((int)this._procCmd == 0x6d) {
-        	    EvScript_EvDataManager.PlaySe(StringLiteral_9145);
+        	    PlaySe(StringLiteral_9145);
         	    this._procCmd = (NAME)0x8e;
         	    return false;
         	  }
         	  this._procCmd = (NAME)0x6d;
         	  return false;
         	}
-        	EvScript_EvDataManager.Cmd_ObjPauseAll();
+        	Cmd_ObjPauseAll();
         	this._procCmd = (NAME)0;
         	return true;
         }
@@ -2831,7 +2832,7 @@ namespace Dpr.EvScript
 
         private bool CmdMapChangeNoneFade(EvScriptData ev)
         {
-        	EvScript_EvDataManager.CmdMapChange();
+        	CmdMapChange();
         	return true;
         }
 
@@ -4230,7 +4231,7 @@ namespace Dpr.EvScript
 
         private bool EvCmdObjPauseAll()
         {
-        	EvScript_EvDataManager.Cmd_ObjPauseAll();
+        	Cmd_ObjPauseAll();
         	return true;
         }
 
@@ -4263,7 +4264,7 @@ namespace Dpr.EvScript
 
         private bool EvCmdObjTurn()
         {
-        	EvScript_EvDataManager.Turn_HitObjectToHero();
+        	Turn_HitObjectToHero();
         	return true;
         }
 
@@ -4275,18 +4276,18 @@ namespace Dpr.EvScript
         	uint uVar2;
         	uint uVar3;
         	if ((int)this._procCmd == 0x343) {
-        	  EvScript_EvDataManager.NeckRotateHero();
+        	  NeckRotateHero();
         	  uVar3 = 1;
-        	  EvScript_EvDataManager.NeckRotateTarget(1);
+        	  NeckRotateTarget(1);
         	  uVar2 = 0;
         	}
         	else if ((int)this._procCmd == 0x8e) {
-        	  EvScript_EvDataManager.Cmd_ObjPauseAll();
+        	  Cmd_ObjPauseAll();
         	  uVar3 = 0;
         	  uVar2 = 0x343;
         	}
         	else if ((int)this._procCmd == 0x6d) {
-        	  EvScript_EvDataManager.PlaySe(StringLiteral_9145);
+        	  PlaySe(StringLiteral_9145);
         	  uVar3 = 0;
         	  uVar2 = 0x8e;
         	}
@@ -4294,7 +4295,7 @@ namespace Dpr.EvScript
         	  uVar3 = 0;
         	  uVar2 = 0x6d;
         	}
-        	this._procCmd = uVar2;
+        	this._procCmd = (NAME)(uVar2);
         	return uVar3;
         }
 
@@ -4326,13 +4327,13 @@ namespace Dpr.EvScript
 
         private bool EvMacro_TALK_END()
         {
-        	EvScript_EvDataManager.Cmd_ObjPauseClearAll();
+        	Cmd_ObjPauseClearAll();
         	return true;
         }
 
         private bool EvMacro_EVENT_END()
         {
-        	EvScript_EvDataManager.Cmd_ObjPauseClearAll();
+        	Cmd_ObjPauseClearAll();
         	return true;
         }
 
@@ -4909,7 +4910,7 @@ namespace Dpr.EvScript
 
         private bool EvMacro_WHITE_OUT()
         {
-        	Color.get_white(0);
+        	0.white;
         	Fader.fillColor = 0;
         	Fader.FadeOut(this._fadeSpeed);
         	return true;
@@ -4917,7 +4918,7 @@ namespace Dpr.EvScript
 
         private bool EvMacro_WHITE_IN()
         {
-        	Color.get_white(0);
+        	0.white;
         	Fader.fillColor = 0;
         	Fader.FadeIn(this._fadeSpeed);
         	return true;
@@ -4925,7 +4926,7 @@ namespace Dpr.EvScript
 
         private bool EvMacro_BLACK_OUT()
         {
-        	Color.get_black(0);
+        	0.black;
         	Fader.fillColor = 0;
         	Fader.FadeOut(this._fadeSpeed);
         	return true;
@@ -4933,7 +4934,7 @@ namespace Dpr.EvScript
 
         private bool EvMacro_BLACK_IN()
         {
-        	Color.get_black(0);
+        	0.black;
         	Fader.fillColor = 0;
         	Fader.FadeIn(this._fadeSpeed);
         	return true;
@@ -4941,13 +4942,13 @@ namespace Dpr.EvScript
 
         private bool EvMacro_MAP_CHANGE()
         {
-        	EvScript_EvDataManager.CmdMapChange(this._evData);
+        	CmdMapChange(this._evData);
         	return true;
         }
 
         private bool EvCmdMapChange()
         {
-        	EvScript_EvDataManager.CmdMapChange(this._evData);
+        	CmdMapChange(this._evData);
         	return true;
         }
 
@@ -5042,7 +5043,7 @@ namespace Dpr.EvScript
 
         private bool EvCmdPokemonName()
         {
-        	EvScript_EvDataManager.CmdPokemonName(this._evCommand);
+        	CmdPokemonName(this._evCommand);
         	return true;
         }
 
@@ -5119,19 +5120,19 @@ namespace Dpr.EvScript
 
         private bool EvCmdFirstPokemonName()
         {
-        	EvScript_EvDataManager.CmdFirstPokemonName(this._evCommand);
+        	CmdFirstPokemonName(this._evCommand);
         	return true;
         }
 
         private bool EvCmdRivalPokemonName()
         {
-        	EvScript_EvDataManager.CmdRivalPokemonName(this._evCommand);
+        	CmdRivalPokemonName(this._evCommand);
         	return true;
         }
 
         private bool EvCmdSupportPokemonName()
         {
-        	EvScript_EvDataManager.CmdSupportPokemonName(this._evCommand);
+        	CmdSupportPokemonName(this._evCommand);
         	return true;
         }
 
@@ -5176,13 +5177,13 @@ namespace Dpr.EvScript
 
         private bool EvCmdTrainerBattleSet()
         {
-        	EvScript_EvDataManager.CmdTrainerBtlSet(this._evData);
+        	CmdTrainerBtlSet(this._evData);
         	return true;
         }
 
         private bool EvCmdTrainerMultiBattleSet()
         {
-        	EvScript_EvDataManager.CmdTrainerBtlSetMulti(this._evData);
+        	CmdTrainerBtlSetMulti(this._evData);
         	return true;
         }
 
@@ -5202,7 +5203,7 @@ namespace Dpr.EvScript
 
         private bool EvCmdTrainerBgmSet()
         {
-        	EvScript_EvDataManager.CmdTrainerBgmSet(this._evCommand);
+        	CmdTrainerBgmSet(this._evCommand);
         	return true;
         }
 
@@ -5965,7 +5966,7 @@ namespace Dpr.EvScript
 
         private bool EvCmdSxyExitPosChange()
         {
-        	EvScript_EvDataManager.CmdSxyExitPosChange(this._evCommand);
+        	CmdSxyExitPosChange(this._evCommand);
         	return true;
         }
 
@@ -6011,7 +6012,7 @@ namespace Dpr.EvScript
 
         private bool EvCmdInitGhostGym()
         {
-        	EvScript_EvDataManager.EvCmdInitFldLift();
+        	EvCmdInitFldLift();
         	return true;
         }
 
@@ -7137,7 +7138,7 @@ namespace Dpr.EvScript
 
         private bool EvCmdPofinAddCheck()
         {
-        	EvScript_EvDataManager.EvCmdPofinCheck();
+        	EvCmdPofinCheck();
         	return true;
         }
 
@@ -7330,7 +7331,8 @@ namespace Dpr.EvScript
 
         private bool EvCmd_HERO_MOVE_GRID_CENTER()
         {
-        	EvScript_EvDataManager.CmdPlayerMoveGridCenter(this._evCommand);
+        	CmdPlayerMoveGridCenter(this._evCommand);
+        	return false;
         }
 
         // TODO
@@ -7344,7 +7346,7 @@ namespace Dpr.EvScript
 
         private bool EvCmd__GET_REL_POS_HERO()
         {
-        	EvScript_EvDataManager.CmdGetRelPosHero(this._evData);
+        	CmdGetRelPosHero(this._evData);
         	return true;
         }
 
@@ -7380,7 +7382,8 @@ namespace Dpr.EvScript
 
         private bool EvCmd_OPEN_CUSTUM_WIN()
         {
-        	EvScript_EvDataManager.CustumWindow(this._evCommand);
+        	CustumWindow(this._evCommand);
+        	return false;
         }
 
         // TODO
@@ -7388,13 +7391,13 @@ namespace Dpr.EvScript
 
         private bool EvCmd_VISIBLE_OBJ_PROP()
         {
-        	EvScript_EvDataManager.CmdVisibleObjProp(this._evData,1);
+        	CmdVisibleObjProp(this._evData,1);
         	return true;
         }
 
         private bool EvCmd_INVISIBLE_OBJ_PROP()
         {
-        	EvScript_EvDataManager.CmdVisibleObjProp(this._evData);
+        	CmdVisibleObjProp(this._evData);
         	return true;
         }
 
@@ -7458,7 +7461,7 @@ namespace Dpr.EvScript
 
         private bool EvCmd_TURN_HERO_TALK_OBJ()
         {
-        	EvScript_EvDataManager.Turn_HeroToHitObject();
+        	Turn_HeroToHitObject();
         	return true;
         }
 
@@ -7509,7 +7512,8 @@ namespace Dpr.EvScript
 
         private bool EvCmd_HERO_MOVE_GRID_CENTER_FRONT()
         {
-        	EvScript_EvDataManager.HeroMoveGridCenterFront(this._deltatime);
+        	HeroMoveGridCenterFront(this._deltatime);
+        	return false;
         }
 
         // TODO
@@ -7955,7 +7959,8 @@ namespace Dpr.EvScript
 
         private bool EvCmd_OPEN_CUSTUM_WIN_WORD_SET()
         {
-        	EvScript_EvDataManager.CustumWindow(this._evCommand,1);
+        	CustumWindow(this._evCommand,1);
+        	return false;
         }
 
         // TODO
@@ -8028,14 +8033,14 @@ namespace Dpr.EvScript
         {
         	if ((int)this._procCmd != 0x8e) {
         	  if ((int)this._procCmd == 0x6d) {
-        	    EvScript_EvDataManager.PlaySe(StringLiteral_9145);
+        	    PlaySe(StringLiteral_9145);
         	    this._procCmd = (NAME)0x8e;
         	    return false;
         	  }
         	  this._procCmd = (NAME)0x6d;
         	  return false;
         	}
-        	EvScript_EvDataManager.Cmd_ObjPauseAll();
+        	Cmd_ObjPauseAll();
         	this._procCmd = (NAME)0;
         	return true;
         }

@@ -511,7 +511,7 @@ namespace Dpr.UnderGround
         	  if (this.OnLeaveTargetPlayer != null) {
         	    this.OnLeaveTargetPlayer.Invoke();
         	  }
-        	  UnderGround_UgFieldManager.ClearLeaveCheckTarget();
+        	  ClearLeaveCheckTarget();
         	}
         }
 

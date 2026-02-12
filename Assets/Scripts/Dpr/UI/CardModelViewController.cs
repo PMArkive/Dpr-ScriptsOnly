@@ -112,7 +112,7 @@ namespace Dpr.UI
 		private void PlayPlayerModelWaitMotion()
 		{
 			if ((this.playerModelAnimationLayer != null) && (this.playerModelWaitAnimationIndex != -1)) {
-			  Playables_AnimationLayer.Play(0,0,this.playerModelAnimationLayer,this.playerModelWaitAnimationIndex);
+			  0.Play(0,this.playerModelAnimationLayer,this.playerModelWaitAnimationIndex);
 			}
 		}
 	}

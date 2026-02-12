@@ -32,8 +32,8 @@ namespace Dpr.Battle.View.Objects
 		
 		public void Stop(float fadeTime = 0.0f)
 		{
-			if (this[0] != 0) {
-			  EffectInstance.Stop(this[0],0);
+			if (this._effectInstance != null) {
+			  this._effectInstance.Stop(0);
 			}
 		}
 		

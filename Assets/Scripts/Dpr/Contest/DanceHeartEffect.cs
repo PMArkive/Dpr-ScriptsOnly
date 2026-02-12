@@ -31,44 +31,19 @@ namespace Dpr.Contest
 		
 		public void SetNormalHeartFxData(EffectData fxData)
 		{
-			this[0] = fxData;
+			this.heartFxData = fxData;
 		}
 		
 		public void SetLargeHeartFxData(EffectData fxData)
 		{
-			this[0] = fxData;
+			this.heartFxData = fxData;
 		}
 		
 		// TODO
 		public void OnFinalize() { }
 		
-		public void Create()
-		{
-			var uVar1 = Contest_DanceHeartEffect.CheckHeartFxInst();
-			if (this.fxInst == null) {
-			  if (this.onComplete != null) {
-			    this.onComplete.Invoke();
-			  }
-			}
-			else {
-			  var uVar2 = Component.gameObject;
-			  var uVar3 = uVar2.activeSelf;
-			  if ((uVar3 & 1) == 0) {
-			    ExtensionMethods.SetActive(1);
-			  }
-			  if (this.fxInst != null) {
-			    uVar2 = UnityEngine_Component__get_gameObject
-			                      (this.fxInst.Length,0);
-			    uVar3 = uVar2.activeSelf;
-			    if ((uVar3 & 1) == 0) {
-			      uVar2.SetActive(1);
-			    }
-			  }
-			  if (!uVar1) {
-			    this.fxInst.Play(0);
-			  }
-			}
-		}
+		// TODO
+		public void Create() { }
 		
 		// TODO
 		private bool CheckHeartFxInst() { return default; }
@@ -76,9 +51,9 @@ namespace Dpr.Contest
 		public void OnUpdate(float deltaTime)
 		{
 			if (this.isPlayerHeart) {
-			  Contest_DanceHeartEffect.OnPlayerHeartUpdate();
+			  OnPlayerHeartUpdate();
 			}
-			Contest_DanceHeartEffect.OnNPCHeartUpdate();
+			OnNPCHeartUpdate();
 		}
 		
 		// TODO
@@ -102,16 +77,7 @@ namespace Dpr.Contest
 		// TODO
 		public void Stop() { }
 		
-		private void SetGoActive(bool active)
-		{
-			if (this.fxInst != null) {
-			  var uVar2 = UnityEngine_Component__get_gameObject
-			                    (this.fxInst.Length,0);
-			  var uVar1 = uVar2.activeSelf;
-			  if (((uVar1 ^ active) & 1) != 0) {
-			    uVar2.SetActive(active & 1);
-			  }
-			}
-		}
+		// TODO
+		private void SetGoActive(bool active) { }
 	}
 }

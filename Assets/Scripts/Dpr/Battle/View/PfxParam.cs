@@ -75,7 +75,7 @@ namespace Dpr.Battle.View
 		public void SetDefaultColorFilter()
 		{
 			this.isColorFilterEnabled = false;
-			this[0] = 0;
+			this.colorFilterR = 0;
 			this.colorFilterB = 0;
 		}
 		

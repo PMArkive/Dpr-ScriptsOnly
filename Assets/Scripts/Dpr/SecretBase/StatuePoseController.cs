@@ -11,7 +11,7 @@ namespace Dpr.SecretBase
 		
 		public void Initialize(StatueEffectData statueData, SkinnedMeshRenderer[] renderers)
 		{
-			this[0] = statueData;
+			this.statueData = statueData;
 			this.renderers = renderers;
 			this.step = (Step)0;
 			if (0 < (int)renderers.Length) {

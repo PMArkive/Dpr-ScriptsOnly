@@ -59,10 +59,8 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public void Kill(bool immediate = true) { }
 		
-		public override bool IsActive()
-		{
-			this._effect.Length.IsAlive();
-		}
+		// TODO
+		public override bool IsActive() { return default; }
 		
 		// TODO
 		public override void OnUpdatePreJob(float deltaTime) { }

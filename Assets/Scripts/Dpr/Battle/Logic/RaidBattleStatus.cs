@@ -39,7 +39,7 @@
         public void IncAllDeadCount()
         {
         	if (this.m_allDeadCount < 4) {
-        	  this.m_allDeadCount = this.m_allDeadCount + 1;
+        	  this.m_allDeadCount = (byte)(this.m_allDeadCount + 1);
         	}
         }
 
@@ -59,10 +59,12 @@
 
         public void PlayBtlEffectKill()
         {
-        	this[0] = 1;
+        	this.m_isPlayBtlEffectKill = true;
         }
 
-        // TODO
-        public bool IsPlayBtlEffectKill() { return false; }
+        public bool IsPlayBtlEffectKill()
+        {
+        	return this.m_isPlayBtlEffectKill;
+        }
     }
 }

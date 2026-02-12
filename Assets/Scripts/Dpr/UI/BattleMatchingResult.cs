@@ -13,7 +13,7 @@ namespace Dpr.UI
 		
 		public void Initialize(Action onFinishState)
 		{
-			this.Length = onFinishState;
+			this._onFinishState = onFinishState;
 		}
 		
 		// TODO

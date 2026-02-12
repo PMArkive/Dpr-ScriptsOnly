@@ -18,7 +18,7 @@ namespace Dpr.UI
 		
 		public void SetBaseSprite(Sprite sprite)
 		{
-			UI_Image.set_sprite(this.Length,sprite);
+			this.baseImage.sprite = sprite;
 		}
 	}
 }

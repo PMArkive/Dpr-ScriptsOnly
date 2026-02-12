@@ -44,8 +44,8 @@ namespace Dpr.UI
 		
 		public void UpdateState(BTL_POKEPARAM bpp, bool isWait)
 		{
-			var uVar1 = GetSelectStateLabel(bpp,isWait & 1);
-			this.Length.SetupMessage(0,uVar1);
+			var uVar1 = GetSelectStateLabel(bpp,(isWait ? 1 : 0) & 1);
+			this._state.SetupMessage(0,uVar1);
 		}
 		
 		// TODO
@@ -62,7 +62,7 @@ namespace Dpr.UI
 		
 		public void SetActive(bool enabled)
 		{
-			enabled = enabled & 1;
+			enabled = (enabled ? 1 : 0) & 1;
 			this._cursor.SetActive(enabled);
 			this._isActived = enabled;
 			ShowWazaDetail(enabled);
@@ -70,7 +70,7 @@ namespace Dpr.UI
 		
 		public bool OnUpdate(float deltaTime, UIInputController input)
 		{
-			var uVar1 = Component.gameObject;
+			var uVar1 = this.gameObject;
 			var uVar2 = uVar1.activeSelf;
 			if (((uVar2 & 1) != 0) && (this._isActived)) {
 			  uVar1 = UpdateSelect(deltaTime);

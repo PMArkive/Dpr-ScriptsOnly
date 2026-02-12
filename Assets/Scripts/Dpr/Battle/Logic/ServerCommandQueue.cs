@@ -212,11 +212,11 @@
         	if ((int)format == 0x10) {
         	  return 9;
         	}
-        	var bVar1 = 9;
+        	var bVar1 = (byte)9;
         	if ((int)format != 0x20) {
-        	  bVar1 = format & 0xf;
+        	  bVar1 = (byte)((int)format & 0xf);
         	}
-        	return bVar1;
+        	return (byte)(bVar1);
         }
 
         public ServerCommandQueue()
@@ -240,7 +240,7 @@
 
         public unsafe void* GetData()
         {
-        	return this.Length;
+        	return this.m_buffer;
         }
 
         public uint GetDataSize()

@@ -32,7 +32,7 @@ namespace Dpr.Battle.Logic
 
         public Sex GetSex()
         {
-        	return this.Length ^ 1;
+        	return this.sex ^ 1;
         }
 
         public int GetHatVariation()
@@ -57,8 +57,8 @@ namespace Dpr.Battle.Logic
         	byte bVar3 = default;
         	var uVar4 = poke.StartFastMode();
         	var iVar5 = poke.GetID();
-        	if ((this[0] == iVar5) &&
-        	   (bVar2 = this.Length, bVar3 = poke.GetParentSex(),
+        	if ((this.id == iVar5) &&
+        	   (bVar2 = this.sex, bVar3 = poke.GetParentSex(),
         	   (bVar2 ^ 1) == bVar3)) {
         	  var uVar7 = poke.GetParentName();
         	  uVar6 = String.op_Equality(this.name,uVar7);
@@ -88,18 +88,18 @@ namespace Dpr.Battle.Logic
         public void SetCyclingRoad()
         {
         	var uVar1 = 0xd;
-        	if (this.Length != '\x01') {
+        	if (this.sex != '\x01') {
         	  uVar1 = 0x71;
         	}
-        	this.fashion = uVar1;
+        	this.fashion = (byte)(uVar1);
         }
 
         public static void GetParamFromSysFlag(out byte hat, out byte shoes)
         {
         	var bVar1 = FlagWork.GetSysFlag(0x30b);
         	var bVar2 = FlagWork.GetFlag(0x4a);
-        	hat = ~bVar1 & 1;
-        	shoes = ~bVar2 & 1;
+        	hat = (byte)(~bVar1 & 1);
+        	shoes = (byte)(~bVar2 & 1);
         }
     }
 }

@@ -24,8 +24,8 @@ namespace Dpr.Contest
 		private LaunchSkillNetData launchSkillData;
 		private ResultScoreNetData resultScoreData;
 		private StationWaitFrameData waitFrameData;
-		private NetworkManager networkManager;
-		private WaitTimer repeatSendSpanTimer = new WaitTimer();
+		internal NetworkManager networkManager;
+		internal WaitTimer repeatSendSpanTimer = new WaitTimer();
 		private uint[] attributeValueArray;
 		private uint[] attributeMinValueArray;
 		private uint[] attributeMaxValueArray;
@@ -49,16 +49,16 @@ namespace Dpr.Contest
 		
 		public void Reset()
 		{
-			Contest_ContestUtils.EmitLog(StringLiteral_8824,3);
+			ContestUtils.EmitLog(StringLiteral_8824,3);
 			this.repeatSendSpanTimer.ResetTimer();
-			Contest_ContestMatchingNetwork.SetAllMainFlag();
-			Contest_ContestMatchingNetwork.SetAllSubFlag();
+			SetAllMainFlag();
+			SetAllSubFlag();
 		}
 		
 		public void OnFinalize()
 		{
 			if (this.bIsInitialize) {
-			  Contest_ContestMatchingNetwork.ReleaseNetworkCallback();
+			  ReleaseNetworkCallback();
 			  this.onRecievePacket = null;
 			  this.onSessionEvent = null;
 			  this.onFinishedSession = null;
@@ -99,6 +99,7 @@ namespace Dpr.Contest
 		public bool IsGamerActive(int stationIndex)
 		{
 			this.networkManager.IsGamerActive(stationIndex);
+			return false;
 		}
 		
 		// TODO
@@ -114,7 +115,7 @@ namespace Dpr.Contest
 		
 		public void SetStepID(MultiContestStepID stepID)
 		{
-			this.currentStepID = stepID;
+			this.currentStepID = (MultiContestStepID)(stepID);
 		}
 		
 		// TODO
@@ -151,13 +152,14 @@ namespace Dpr.Contest
 		{
 			if ((this.repeatSendSpanTimer.IsFinishWait() & 1) != 0) {
 			  this.repeatSendSpanTimer.ResetTimer();
-			  Contest_ContestMatchingNetwork.SendNoticeData(noticeID);
+			  SendNoticeData(noticeID);
 			}
 		}
 		
 		public bool IsFinishWait(float deltaTime)
 		{
 			this.repeatSendSpanTimer.IsFinishWait();
+			return false;
 		}
 		
 		public void ResetTimer()
@@ -196,11 +198,12 @@ namespace Dpr.Contest
 		
 		public bool CloseSession()
 		{
-			Contest_ContestUtils.EmitLog(StringLiteral_8824,3);
+			ContestUtils.EmitLog(StringLiteral_8824,3);
 			this.repeatSendSpanTimer.ResetTimer();
-			Contest_ContestMatchingNetwork.SetAllMainFlag();
-			Contest_ContestMatchingNetwork.SetAllSubFlag();
+			SetAllMainFlag();
+			SetAllSubFlag();
 			this.networkManager.CloseSession();
+			return false;
 		}
 		
 		// TODO

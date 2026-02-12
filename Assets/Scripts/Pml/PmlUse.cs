@@ -178,6 +178,7 @@ namespace Pml
         public uint RandFunc()
         {
         	Random.Range(0x80000000,0x7fffffff);
+        	return 0;
         }
 
         // TODO

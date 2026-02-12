@@ -23,7 +23,7 @@
 
         public bool WaitLoadScript()
         {
-        	return this.Length != 0;
+        	return this.m_script != null;
         }
 
         // TODO
@@ -31,20 +31,20 @@
 
         public bool Execute()
         {
-        	if (this.Length != 0) {
-        	  this.Length.Execute();
+        	if (this.m_script != null) {
+        	  this.m_script.Execute();
         	}
         	return true;
         }
 
         public void GetResult(Result dest)
         {
-        	this.Length.GetResult(dest);
+        	this.m_script.GetResult(dest);
         }
 
         public void UnLoadScript()
         {
-        	this.Length = 0;
+        	this.m_script = null;
         }
 
         public class Result

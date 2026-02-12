@@ -16,15 +16,15 @@ namespace Dpr.SubContents
 		
 		public void StopTimeLine()
 		{
-			if (this.Length != 0) {
-			  this.Length.Invoke();
+			if (this.OnStopTimeLine != null) {
+			  this.OnStopTimeLine.Invoke();
 			}
 		}
 		
 		public void ResumeTimeLine()
 		{
-			if (this[0] != 0) {
-			  Action.Invoke(this[0]);
+			if (this.OnResumeTimeLine != null) {
+			  this.OnResumeTimeLine.Invoke();
 			}
 		}
 	}

@@ -57,7 +57,7 @@ namespace Dpr.GMS
 		
 		public void SetMsgSpeed(MSGSPEED msgSpeed)
 		{
-			SubContents_ShowMessageWindow.SetMsgSpeed(this.msgWindow,msgSpeed);
+			this.msgWindow.SetMsgSpeed(msgSpeed);
 		}
 		
 		// TODO
@@ -74,7 +74,7 @@ namespace Dpr.GMS
 		
 		public void CloseMsgWindow()
 		{
-			SubContents_ShowMessageWindow.CloseMsgWindow(this.msgWindow);
+			this.msgWindow.CloseMsgWindow();
 		}
 		
 		// TODO

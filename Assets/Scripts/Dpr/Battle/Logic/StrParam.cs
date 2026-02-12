@@ -16,7 +16,7 @@
         public void Clear()
         {
         	this.m_param.ID = 0;
-        	var lVar4 = this.m_param.Length;
+        	var lVar4 = this.m_param.args;
         	if (0 < (int)lVar4.Length) {
         	  var uVar5 = 0;
         	  var uVar6 = lVar4.Length & 0xffffffff;
@@ -26,7 +26,7 @@
         	    var lVar1 = uVar5 * 4;
         	    uVar5 = uVar5 + 1;
         	    lVar4 + lVar1[0] = 0;
-        	    lVar4 = this.m_param.Length;
+        	    lVar4 = this.m_param.args;
         	    uVar6 = (ulong)lVar4.Length;
         	  } while ((long)uVar5 < (int)lVar4.Length);
         	}
@@ -47,7 +47,7 @@
 
         public ushort GetStrID()
         {
-        	return this.m_param.ID;
+        	return (ushort)(this.m_param.ID);
         }
 
         public BtlStrType GetStrType()
@@ -62,20 +62,20 @@
         {
         	var uVar1 = (uint)index & 0xff;
         	if (uVar1 < this.m_param.argCnt) {
-        	  if (this.m_param.Length.Length <= uVar1) {
+        	  if (this.m_param.args.Length <= uVar1) {
         	  }
-        	  this.m_param.Length + (index & 0xff) * 4[0] = value;
+        	  this.m_param.args + (index & 0xff) * 4[0] = value;
         	}
         }
 
         public ushort GetArgsCount()
         {
-        	return this.m_param.argCnt;
+        	return (ushort)(this.m_param.argCnt);
         }
 
         public int[] GetArgs()
         {
-        	return this.m_param.Length;
+        	return this.m_param.args;
         }
 
         // TODO
@@ -114,7 +114,7 @@
             public void Clear()
             {
             	this.m_param.ID = 0;
-            	var lVar4 = this.m_param.Length;
+            	var lVar4 = this.m_param.args;
             	if (0 < (int)lVar4.Length) {
             	  var uVar5 = 0;
             	  var uVar6 = lVar4.Length & 0xffffffff;
@@ -124,7 +124,7 @@
             	    var lVar1 = uVar5 * 4;
             	    uVar5 = uVar5 + 1;
             	    lVar4 + lVar1[0] = 0;
-            	    lVar4 = this.m_param.Length;
+            	    lVar4 = this.m_param.args;
             	    uVar6 = (ulong)lVar4.Length;
             	  } while ((long)uVar5 < (int)lVar4.Length);
             	}

@@ -11,6 +11,7 @@ namespace Dpr.Battle.Logic
 		{
 			this.m_pServerCmdPutter.IncFieldTurnCount(effect)
 			;
+			return false;
 		}
 		
 		// TODO

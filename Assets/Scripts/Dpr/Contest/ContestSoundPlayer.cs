@@ -93,7 +93,7 @@ namespace Dpr.Contest
 		public void PlayTitleBgm()
 		{
 			this.audioManager.SetBgmEvent(0x14ada707,0);
-			Contest_ContestSoundPlayer.PlayBGM(0x3f0a5f97);
+			PlayBGM(0x3f0a5f97);
 		}
 		
 		// TODO

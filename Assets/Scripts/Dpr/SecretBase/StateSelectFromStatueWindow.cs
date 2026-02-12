@@ -12,7 +12,7 @@ namespace Dpr.SecretBase
 		
 		public void Enter_SelectFromStatueWindow(PlacementData data)
 		{
-			this[0] = data;
+			this.placement = data;
 		}
 		
 		// TODO

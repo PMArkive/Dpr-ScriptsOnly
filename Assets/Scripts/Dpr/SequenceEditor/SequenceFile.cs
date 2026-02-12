@@ -13,7 +13,7 @@ namespace Dpr.SequenceEditor
 		
 		public static Macro Cast(Macro macro)
 		{
-			return this.Length;
+			return macro._groupData;
 		}
 		
 		public List<Group> GroupData { get => _groupData; set => _groupData = value; }

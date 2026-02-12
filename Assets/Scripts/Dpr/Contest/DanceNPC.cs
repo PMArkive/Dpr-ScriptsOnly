@@ -43,7 +43,7 @@ namespace Dpr.Contest
 		
 		public override void Reset()
 		{
-			Contest_ADancePlayer.Reset();
+			ADancePlayer.Reset();
 			this.currentActionID = 0;
 			this.bIsStandbySkill = false;
 			this.bTapActionEnable = false;
@@ -51,7 +51,7 @@ namespace Dpr.Contest
 		
 		public void ChangeTutorialSetting(bool flag)
 		{
-			this.bIsTutorial = flag & 1;
+			this.bIsTutorial = (flag ? 1 : 0) & 1;
 		}
 		
 		// TODO
@@ -141,7 +141,7 @@ namespace Dpr.Contest
 		public override void LaunchSkill()
 		{
 			this.bTapActionEnable = false;
-			Contest_PlayerDanceDataModel.LaunchSkill(this.Length);
+			this.danceData.LaunchSkill();
 		}
 		
 		// TODO

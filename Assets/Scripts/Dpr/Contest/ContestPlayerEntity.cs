@@ -74,6 +74,7 @@ namespace Dpr.Contest
 		{
 			return this.playerData.danceDataModel.danceScore + this.playerData.visualDataModel.heartNum +
 			       this.playerData.danceDataModel.skillScore;
+			return 0;
 		}
 		
 		// TODO
@@ -119,14 +120,14 @@ namespace Dpr.Contest
 		
 		public void OnFinishWazaAnimation()
 		{
-			Objects_BattleViewCharacter.SetVisible(this.wazaPoke,0);
-			Objects_BOPokemon.SetVisibleTame(this.wazaPoke,0);
-			BattlePokemonEntity.SetRenderActive(Objects_BOPokemon.get_Entity(this.wazaPoke),0,0);
+			this.wazaPoke.SetVisible(0);
+			this.wazaPoke.SetVisibleTame(0);
+			BattlePokemonEntity.SetRenderActive(this.wazaPoke.Entity,0,0);
 		}
 		
 		public void SetModelRenderActive(bool active)
 		{
-			BattlePokemonEntity.SetRenderActive(Objects_BOPokemon.get_Entity(this.boPokemon),active & 1,0);
+			BattlePokemonEntity.SetRenderActive(this.boPokemon.Entity,(active ? 1 : 0) & 1,0);
 		}
 		
 		// TODO

@@ -71,8 +71,8 @@ namespace Dpr.UI
 		private float noTouchTime;
 		private Camera screenCamera;
 		private RaycastHit[] raycastHits;
-		private Animator badgeCaseAnimator;
-		private Animator badgeAnimator;
+		internal Animator badgeCaseAnimator;
+		internal Animator badgeAnimator;
 		private bool isDisposed;
 		private bool isShowBadge;
 		private bool IsBadgeGet;

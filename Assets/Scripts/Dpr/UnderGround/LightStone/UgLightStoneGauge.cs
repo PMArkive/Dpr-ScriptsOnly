@@ -14,18 +14,18 @@ namespace Dpr.UnderGround.LightStone
 		
 		private void Start()
 		{
-			this.Length.Initialize();
-			this.Length.SetDenominato(0x28);
-			this.Length.SetNumerator(0);
-			UI_Image.set_fillAmount(0,this[0]);
+			this.lightStoneCount.Initialize();
+			this.lightStoneCount.SetDenominato(0x28);
+			this.lightStoneCount.SetNumerator(0);
+			0.fillAmount = this.gauge;
 		}
 		
 		public void Initialize()
 		{
-			this.Length.Initialize();
-			this.Length.SetDenominato(0x28);
-			this.Length.SetNumerator(0);
-			UI_Image.set_fillAmount(0,this[0]);
+			this.lightStoneCount.Initialize();
+			this.lightStoneCount.SetDenominato(0x28);
+			this.lightStoneCount.SetNumerator(0);
+			0.fillAmount = this.gauge;
 		}
 		
 		// TODO

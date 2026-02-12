@@ -41,6 +41,7 @@ namespace Dpr.Battle.Logic
 			uVar1 = FX32.POW(uVar1,uVar2);
 			var uVar3 = FX32.Div(0x10000000,uVar1);
 			FX32.Whole(uVar3);
+			return 0;
 		}
 		
 		// TODO

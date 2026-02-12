@@ -24,7 +24,7 @@
         {
         	if (this.m_data.add_counter != 0) {
         	  this.m_data.add_counter = 0;
-        	  this.m_data[0] = 0;
+        	  this.m_data.turn_counter = 0;
         	  BTL_SICKCONT.set_type(this.m_data + 0x18,0);
         	  return true;
         	}
@@ -48,12 +48,12 @@
 
         public uint GetCurrentTurnCount()
         {
-        	return this.m_data[0];
+        	return this.m_data.turn_counter;
         }
 
         public uint GetRemainingTurn()
         {
-        	return (BTL_SICKCONT.get_turn_count(this.m_data + 0x18) & 0xff) - this.m_data[0];
+        	return (BTL_SICKCONT.get_turn_count(this.m_data + 0x18) & 0xff) - this.m_data.turn_counter;
         }
 
         // TODO
@@ -64,12 +64,12 @@
 
         public void IncTurnCount()
         {
-        	this.m_data[0] = this.m_data[0] + 1;
+        	this.m_data.turn_counter = this.m_data.turn_counter + 1;
         }
 
         public bool IsTurnPassed()
         {
-        	return (uint)BTL_SICKCONT.get_turn_count(this.m_data + 0x18) <= this.m_data[0];
+        	return (uint)BTL_SICKCONT.get_turn_count(this.m_data + 0x18) <= this.m_data.turn_counter;
         }
 
         public BTL_SICKCONT GetContParam()

@@ -6,7 +6,7 @@
         private BattleViewBase m_pViewSystem;
         private TrainerMessageManager m_pMessageManager;
         private int m_seq;
-        private bool m_isFinished;
+        internal bool m_isFinished;
         private byte m_clientId;
         private TrainerMessageID m_messageId;
 
@@ -33,8 +33,8 @@
         {
         	this.m_seq = 0;
         	this.m_isFinished = false;
-        	this.m_clientId = clientId;
-        	this.m_messageId = messageId;
+        	this.m_clientId = (byte)(clientId);
+        	this.m_messageId = (TrainerMessageID)(messageId);
         }
 
         // TODO

@@ -92,6 +92,7 @@ namespace Dpr.Demo
 		{
 			DOTweenModuleUI.DOFade(0,0x3e4ccccd,this.Blur);
 			this.PokemonViewer.HidePokeView();
+			return null;
 		}
 		
 		// TODO

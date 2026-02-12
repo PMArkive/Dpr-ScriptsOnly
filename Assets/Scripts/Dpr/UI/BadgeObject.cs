@@ -36,12 +36,14 @@ namespace Dpr.UI
 		// TODO
 		public void Dispose() { }
 		
-		// TODO
-		public Transform GetTransform() { return default; }
+		public Transform GetTransform()
+		{
+			return this.nodeTransform;
+		}
 		
 		public void SetActive(bool isActive)
 		{
-			this.Length.SetActive(isActive & 1);
+			this.gameObject.SetActive((isActive ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -52,22 +54,24 @@ namespace Dpr.UI
 		
 		public Vector3 GetPosition()
 		{
-			Transform.get_position(this[0]);
+			this.nodeTransform.position;
+			return null;
 		}
 		
 		public void SetPosition(Vector3 pos)
 		{
-			Transform.position = this[0];
+			this.nodeTransform.set_position();
 		}
 		
 		public Quaternion GetRotation()
 		{
-			Transform.get_rotation(this[0]);
+			this.nodeTransform.rotation;
+			return null;
 		}
 		
 		public void SetRotation(Quaternion quaternion)
 		{
-			Transform.rotation = this[0];
+			this.nodeTransform.set_rotation();
 		}
 		
 		// TODO

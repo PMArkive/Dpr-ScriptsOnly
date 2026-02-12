@@ -139,7 +139,7 @@ namespace Dpr.FureaiHiroba
 
         private void OnDestroy()
         {
-        	this.Length = 0;
+        	this.bln = null;
         }
 
         // TODO

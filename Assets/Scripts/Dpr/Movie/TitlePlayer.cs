@@ -77,7 +77,7 @@ namespace Dpr.Movie
         {
         	var lVar1 = this._moviePlayer._switchVideoPlayer;
         	if (lVar1 != null) {
-        	  Switch_SwitchVideoPlayer.Stop(lVar1);
+        	  lVar1.Stop();
         	  this._moviePlayer._isPlaying = 0;
         	}
         }

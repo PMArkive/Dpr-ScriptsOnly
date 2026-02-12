@@ -92,7 +92,8 @@ namespace Dpr.SecretBase
 		
 		public bool IsLoadCompleted()
 		{
-			SecretBase_StatuePlacementManger.IsLoadCompleted(this.placementManager);
+			this.placementManager.IsLoadCompleted();
+			return false;
 		}
 		
 		// TODO
@@ -153,10 +154,10 @@ namespace Dpr.SecretBase
 		public void ResetLookAt()
 		{
 			GameObject.SetActive(this.fieldView.gameObject,0,0);
-			SecretBase_SecretBaseCamera.ResetLookAt(this.secretBaseCamera);
+			this.secretBaseCamera.ResetLookAt();
 			this.fieldView.gameObject = Dpr_SecretBase_StatuePlacementManger__SetSelectPedestalMode
 			                  (this.placementManager,0,0);
-			SecretBase_StatuePlacementEditController.SetDisplayStatueCursor(this.fieldView.gameObject,1);
+			SetDisplayStatueCursor(this.fieldView.gameObject,1);
 		}
 		
 		// TODO

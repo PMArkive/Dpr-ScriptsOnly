@@ -19,7 +19,7 @@ namespace Dpr.Battle.Logic
 			    uVar5 = (ulong)this.frontPoke.Length;
 			  } while ((long)uVar4 < (int)this.frontPoke.Length);
 			}
-			this.Length = 0;
+			this.lastWaza = (ushort)0;
 		}
 	}
 }

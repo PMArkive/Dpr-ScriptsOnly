@@ -36,13 +36,13 @@ namespace Dpr.NetworkUtils
 		public void OnUpdate(float deltaTime)
 		{
 			float fVar2 = default;
-			if (this[0] != 0) {
-			  var fVar1 = (float)Time.get_realtimeSinceStartup(0);
+			if (this.isCountDown) {
+			  var fVar1 = (float)0.realtimeSinceStartup;
 			  this.realTime = fVar1;
-			  this.Length = this.Length - (fVar1 - fVar2);
-			  if (this.Length - (fVar1 - fVar2) + 1.0 <= 0.0) {
-			    this.Length = 0;
-			    this[0] = 0;
+			  this.remaingTime = this.remaingTime - (fVar1 - fVar2);
+			  if (this.remaingTime - (fVar1 - fVar2) + 1.0 <= 0.0) {
+			    this.remaingTime = 0;
+			    this.isCountDown = false;
 			  }
 			}
 		}

@@ -19,7 +19,7 @@ namespace Dpr.NetworkUtils
         private IlcaNetSessionSetting sessionSetting = new IlcaNetSessionSetting();
         private IlcaNetSessionState nowSessionState;
         private MonoBehaviour callObjPtr;
-        private bool bRunningSession;
+        internal bool bRunningSession;
         private bool canCallOnFinishedSession = true;
         
         // TODO
@@ -74,7 +74,7 @@ namespace Dpr.NetworkUtils
         
         public void SetCallOnFinishedSessionFlag(bool flag)
         {
-        	this.canCallOnFinishedSession = flag & 1;
+        	this.canCallOnFinishedSession = (flag ? 1 : 0) & 1;
         }
 
         // TODO

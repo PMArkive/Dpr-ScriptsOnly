@@ -18,7 +18,7 @@ namespace Dpr.UI
 		private bool isContestPanel;
 
 		private WazaNo[] detailWazaNos;
-		private int selectIndex;
+		internal int selectIndex;
 		private int newWazaIndex = -1;
 		private UIInputController inputController = new UIInputController();
 		
@@ -43,6 +43,7 @@ namespace Dpr.UI
 		public bool MoveIndex(int value)
 		{
 			this.wazaScrollView.MoveSelect(value);
+			return false;
 		}
 		
 		public void ResumeMoveIndex()
@@ -52,7 +53,7 @@ namespace Dpr.UI
 		
 		public void SetCursorActive(bool isActive)
 		{
-			this.cursor.SetActive(isActive & 1);
+			this.cursor.SetActive((isActive ? 1 : 0) & 1);
 		}
 		
 		public int GetSelectedIndex()
@@ -60,7 +61,7 @@ namespace Dpr.UI
 			return this.selectIndex;
 		}
 		
-		public WazaNo GetSelectedWazaNo()
+		public unsafe WazaNo GetSelectedWazaNo()
 		{
 			if (this.selectIndex < this.detailWazaNos.Length) {
 			  return *(uint *)

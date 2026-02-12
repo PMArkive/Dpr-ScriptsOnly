@@ -22,9 +22,9 @@ namespace Dpr.UI
 		
 		public void Initialize(Action<PokemonParam, int, int> onClosed)
 		{
-			0.alpha = this.Length;
+			0.alpha = this._canvasGroup;
 			this._onClosed = Action<PokemonParam;
-			var uVar1 = Component.gameObject;
+			var uVar1 = this.gameObject;
 			uVar1.SetActive(0);
 			this._cursor.SetActive(0);
 		}

@@ -17,11 +17,13 @@ namespace Dpr.Battle.Logic
 		public static WazaDamageType GetDamageType(WazaNo srcWaza)
 		{
 			WAZADATA.GetDamageType(srcWaza);
+			return (WazaDamageType)0;
 		}
 		
 		public static byte GetPower(WazaNo srcWaza)
 		{
 			WAZADATA.GetGPower(srcWaza);
+			return 0;
 		}
 	}
 }

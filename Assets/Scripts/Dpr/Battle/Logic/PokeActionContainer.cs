@@ -15,12 +15,12 @@ namespace Dpr.Battle.Logic
 
         public void Clear()
         {
-        	this.Length = 0;
+        	this.m_count = (byte)0;
         }
 
         public byte GetCount()
         {
-        	return this.Length;
+        	return (byte)(this.m_count);
         }
 
         // TODO

@@ -42,6 +42,7 @@
         {
         	return this.m_itemJudge.m_targetScriptBit | this.m_wazaJudge.m_targetScriptBit |
         	       this.m_pokeChangeJudge.m_targetScriptBit;
+        	return 0;
         }
 
         public bool IsActionSelectFinished()

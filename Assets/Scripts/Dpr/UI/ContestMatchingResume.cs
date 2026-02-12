@@ -16,14 +16,14 @@ namespace Dpr.UI
 		private UISelectorWindow selectorWindowPtr;
 		private WaitTimer waitTimer;
 		private Action<ContestMatching.FinishPattern> onFinish;
-		private ResumeState currentState;
+		internal ResumeState currentState;
 		private int loadCount;
-		private bool bIsActive;
+		internal bool bIsActive;
 		
 		public void Initialize(ContestMatchingUI contestMatchingUI, ContestMatchingNetwork network, Action<ContestMatching.FinishPattern> onFinish)
 		{
 			this.contestMatchingUIPtr = contestMatchingUI;
-			this.Length = network;
+			this.networkPtr = network;
 			this.onFinish = onFinish;
 			this.currentState = (ResumeState)0;
 		}
@@ -105,7 +105,7 @@ namespace Dpr.UI
 		// TODO
 		public void OnReceiveReadyData(int stationIndex, NoticeID noticeID) { }
 
-		private enum ResumeState : int
+		internal enum ResumeState : int
 		{
 			LoadModel = 0,
 			CheckEntry = 1,

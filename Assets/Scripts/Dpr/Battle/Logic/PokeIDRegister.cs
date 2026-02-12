@@ -17,7 +17,7 @@ namespace Dpr.Battle.Logic
 		
 		public byte GetCount()
 		{
-			return this.m_count;
+			return (byte)(this.m_count);
 		}
 		
 		// TODO

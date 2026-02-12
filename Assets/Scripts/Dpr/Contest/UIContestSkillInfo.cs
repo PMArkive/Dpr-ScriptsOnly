@@ -65,13 +65,13 @@ namespace Dpr.Contest
 			  if ((this.acceptChainGaugeObj.activeSelf & 1) == 0) {
 			    this.acceptChainGaugeObj.SetActive(1);
 			  }
-			  UI_Image.set_fillAmount(0x3f800000,this.acceptChainGaugeImage);
+			  0x3f800000.fillAmount = this.acceptChainGaugeImage;
 			}
 			if (isShowChainCount) {
-			  Contest_UIContestSkillInfo.ShowChainCount(chainCount,isShowChainCountFx & 1);
-			  Contest_UIContestSkillInfo.HideUserContestSkill();
+			  ShowChainCount(chainCount,(isShowChainCountFx ? 1 : 0) & 1);
+			  HideUserContestSkill();
 			}
-			Contest_UIContestSkillInfo.ShowLaunchSkillLog(playerIndex,isSameUserWazaType & 1);
+			ShowLaunchSkillLog(playerIndex,(isSameUserWazaType ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -80,12 +80,12 @@ namespace Dpr.Contest
 		private void PlayChainCountFx()
 		{
 			this.chainCountContentRect.position;
-			SubContents_EffectEmitter.PlayFx(this.fxEmitter,0x19,0);
+			this.fxEmitter.PlayFx(0x19,0);
 		}
 		
 		private void StopChainCountFx()
 		{
-			SubContents_EffectEmitter.StopFx(0,this.fxEmitter,0x19);
+			0.StopFx(this.fxEmitter,0x19);
 		}
 		
 		// TODO
@@ -101,8 +101,8 @@ namespace Dpr.Contest
 		{
 			if (((!this.bIsShowCommand ^ active) & 1) != 0) {
 			}
-			this.bIsShowCommand = active & 1;
-			ExtensionMethods.SetActive(this.commandIconTransform,active & 1);
+			this.bIsShowCommand = (active ? 1 : 0) & 1;
+			ExtensionMethods.SetActive(this.commandIconTransform,(active ? 1 : 0) & 1);
 		}
 		
 		private void ShowAcceptChainGauge()
@@ -110,7 +110,7 @@ namespace Dpr.Contest
 			if ((this.acceptChainGaugeObj.activeSelf & 1) == 0) {
 			  this.acceptChainGaugeObj.SetActive(1);
 			}
-			UI_Image.set_fillAmount(0x3f800000,this.acceptChainGaugeImage);
+			0x3f800000.fillAmount = this.acceptChainGaugeImage;
 		}
 		
 		public bool IsShowLog { get => showLogCount > 0; }
@@ -145,7 +145,7 @@ namespace Dpr.Contest
 		private void SetAcceptChainGaugeActive(bool active)
 		{
 			if (((this.acceptChainGaugeObj.activeSelf ^ active) & 1) != 0) {
-			  this.acceptChainGaugeObj.SetActive(active & 1);
+			  this.acceptChainGaugeObj.SetActive((active ? 1 : 0) & 1);
 			}
 		}
 	}

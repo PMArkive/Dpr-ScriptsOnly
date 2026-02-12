@@ -21,7 +21,7 @@ namespace Dpr.GMS
 		
 		public void CopySendCoreData(in byte[] coreData)
 		{
-			Array.Copy(coreData,this.Length,0x148);
+			Array.Copy(coreData,this.coreData,0x148);
 		}
 	}
 }

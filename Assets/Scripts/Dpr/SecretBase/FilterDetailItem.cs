@@ -22,7 +22,7 @@ namespace Dpr.SecretBase
 		
 		public void SetSelect(bool isEnable)
 		{
-			this._body.SetActive(isEnable & 1);
+			this._body.SetActive((isEnable ? 1 : 0) & 1);
 		}
 		
 		public int GetIndex()

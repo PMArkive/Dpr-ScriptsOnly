@@ -132,23 +132,8 @@ namespace Dpr.Battle.Logic
 		// TODO
 		private static void player_param(BATTLE_SETUP_PARAM dst, PokeParty party) { }
 		
-		private static void clearEgg(PokeParty party)
-		{
-			if (this.Length != 0) {
-			  var uVar3 = 0;
-			  do {
-			    while( true ) {
-			      var uVar1 = uVar3.GetMemberPointerConst();
-			      var uVar2 = uVar1.IsEgg(2);
-			      if (!uVar2) break;
-			      uVar3.RemoveMember();
-			      if (this.Length <= uVar3) {
-			      }
-			    }
-			    uVar3 = uVar3 + 1;
-			  } while (uVar3 < this.Length);
-			}
-		}
+		// TODO
+		private static void clearEgg(PokeParty party) { }
 		
 		// TODO
 		private static void player_balldeco(BATTLE_SETUP_PARAM dst, PokeParty party) { }

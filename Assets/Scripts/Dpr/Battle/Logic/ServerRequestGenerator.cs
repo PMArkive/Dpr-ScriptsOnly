@@ -16,7 +16,7 @@
         private ServerSendData.POKECHANGE_REQUEST* m_sendData_PokeChangeRequest;
         private bool m_isBattleInEventOccured;
         private bool m_isEscapeSucceeded;
-        private InterruptCode m_interruptCode;
+        internal InterruptCode m_interruptCode;
 
         // TODO
         public ServerRequestGenerator(in SetupParam setupParam) { }

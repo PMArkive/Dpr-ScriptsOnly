@@ -77,6 +77,7 @@ namespace Dpr.UI
 			    break;
 			  case 1:
 			    this.selectCategoryAndRank.OnUpdate();
+			    break;
 			  case 2:
 			    if (this.preparation != null) {
 			      ContestMatchingPreparation.OnUpdate();
@@ -94,6 +95,7 @@ namespace Dpr.UI
 			    break;
 			  case 5:
 			    UpdateExit();
+			    break;
 			  }
 			}
 		}
@@ -106,8 +108,8 @@ namespace Dpr.UI
 		
 		private void SendNextStepDataToAll()
 		{
-			if ((Contest_ContestMatchingNetwork.IsHost(this.network) & 1) != 0) {
-			  Contest_ContestMatchingNetwork.SendNoticeDataToAll(this.network,8);
+			if ((this.network.IsHost() & 1) != 0) {
+			  this.network.SendNoticeDataToAll(8);
 			}
 		}
 		
@@ -210,7 +212,7 @@ namespace Dpr.UI
 		
 		private void OnFinishSession()
 		{
-			Contest_ContestUtils.EmitLog(StringLiteral_11292,3);
+			ContestUtils.EmitLog(StringLiteral_11292,3);
 		}
 		
 		// TODO

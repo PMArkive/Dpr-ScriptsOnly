@@ -51,7 +51,7 @@ namespace Dpr.Battle.View.Systems
 		
 		private bool CheckAlreadyChanged()
 		{
-			return this.Length != 0;
+			return this._iPtrWeatherEffectMain != null;
 		}
 		
 		// TODO

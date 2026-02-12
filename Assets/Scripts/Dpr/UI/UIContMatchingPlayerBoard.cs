@@ -37,14 +37,14 @@ namespace Dpr.UI
 		{
 			var uVar1 = GameObject.get_activeSelf(this.preparationIconImage.gameObject,0);
 			if (((uVar1 ^ active) & 1) != 0) {
-			  GameObject.SetActive(this.preparationIconImage.gameObject,active & 1,0);
+			  GameObject.SetActive(this.preparationIconImage.gameObject,(active ? 1 : 0) & 1,0);
 			}
 		}
 		
 		public void SetLoadingMonboObjActive(bool active)
 		{
-			if (((GameObject.get_activeSelf(this[0]) ^ active) & 1) != 0) {
-			  GameObject.SetActive(this[0],active & 1);
+			if (((this.loadingMonboObj.activeSelf ^ active) & 1) != 0) {
+			  this.loadingMonboObj.SetActive((active ? 1 : 0) & 1);
 			}
 		}
 	}

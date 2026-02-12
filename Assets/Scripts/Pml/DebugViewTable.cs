@@ -39,6 +39,7 @@ namespace Pml
 		private static int GetIndexFromTable(string[] table, string s)
 		{
 			System_Array__IndexOf<string>(table,s);
+			return 0;
 		}
 		
 		// TODO: cctor

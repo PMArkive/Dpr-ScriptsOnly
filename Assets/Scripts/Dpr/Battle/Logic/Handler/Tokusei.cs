@@ -271,6 +271,7 @@ namespace Dpr.Battle.Logic.Handler
 		public static ushort calcTokHandlerSubPriority(BTL_POKEPARAM bpp)
 		{
 			bpp.GetValue_Base(0xc);
+			return 0;
 		}
 		
 		// TODO
@@ -1794,8 +1795,8 @@ namespace Dpr.Battle.Logic.Handler
 		
 		public static bool checkMirrorArmorCause(RankEffectCause cause)
 		{
-			if (1 < (cause & 0xff) - 5) {
-			  return (cause & 0xff) - 8 < 3;
+			if (1 < ((int)cause & 0xff) - 5) {
+			  return ((int)cause & 0xff) - 8 < 3;
 			}
 			return true;
 		}

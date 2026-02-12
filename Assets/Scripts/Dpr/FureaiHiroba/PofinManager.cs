@@ -107,7 +107,7 @@ namespace Dpr.FureaiHiroba
 		
 		public void SetFureaiPoke(List<FureaiPokeModel> fureaiPokes)
 		{
-			var uVar1 = new PofinPlayingPokeManager(fureaiPokes,this.PosList,this.Length,0);
+			var uVar1 = new PofinPlayingPokeManager(fureaiPokes,this.PosList,this.PofinMachineParent,0);
 			this.pokeManager = uVar1;
 			this.calc.SetPokeModel(fureaiPokes);
 		}

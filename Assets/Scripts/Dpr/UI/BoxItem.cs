@@ -44,7 +44,7 @@ namespace Dpr.UI
 		
 		public virtual PokemonIcon GetSwapRoot()
 		{
-			return this.Length;
+			return this._root;
 		}
 		
 		// TODO
@@ -70,7 +70,7 @@ namespace Dpr.UI
 		
 		public void SetExternalSelectIcon(bool isSelect)
 		{
-			GameObject.SetActive(this._imageSelect.gameObject,isSelect & 1,0);
+			GameObject.SetActive(this._imageSelect.gameObject,(isSelect ? 1 : 0) & 1,0);
 		}
 
 		public class Param

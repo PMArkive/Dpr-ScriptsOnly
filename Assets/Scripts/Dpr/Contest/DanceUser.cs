@@ -29,26 +29,26 @@ namespace Dpr.Contest
 		{
 			this.bIsActive = 1;
 			this.canInput = true;
-			Contest_ContestInput.Subscribe(this.input);
+			this.input.Subscribe();
 		}
 		
 		public override void DeActivate()
 		{
 			this.bIsActive = 0;
 			this.canInput = false;
-			Contest_ContestInput.Remove(this.input);
+			this.input.Remove();
 		}
 		
 		protected override void Dispose()
 		{
 			this.bIsActive = 0;
 			this.canInput = false;
-			Contest_ContestInput.Remove(this.input);
+			this.input.Remove();
 		}
 		
 		public override void Reset()
 		{
-			Contest_ADancePlayer.Reset();
+			ADancePlayer.Reset();
 			this.currentActionID = 0;
 			this.canInput = false;
 			this.bIsActive = 0;
@@ -56,7 +56,7 @@ namespace Dpr.Contest
 		
 		public void ChangeTutorialSetting(bool flag)
 		{
-			this.bAutoMode = flag & 1;
+			this.bAutoMode = (flag ? 1 : 0) & 1;
 		}
 		
 		// TODO
@@ -80,7 +80,7 @@ namespace Dpr.Contest
 		{
 			this.canInput = false;
 			if (this.bIsActive != 0) {
-			  Contest_PlayerDanceDataModel.LaunchSkill(this.Length);
+			  this.danceData.LaunchSkill();
 			}
 		}
 		
@@ -93,7 +93,7 @@ namespace Dpr.Contest
 		public override void ActivateSkillEffect(double elapsedTime, Action onFinishSkillEffect)
 		{
 			this.canInput = true;
-			Contest_PlayerDanceDataModel.ActivateSkillEffect(this.Length,elapsedTime);
+			this.danceData.ActivateSkillEffect(elapsedTime);
 		}
 		
 		// TODO

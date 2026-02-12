@@ -220,8 +220,8 @@ namespace Dpr.Battle.View.Systems
 
         public void CMD_UI_SelectTarget_Start(byte poke_index, BTL_POKEPARAM bpp, BTL_ACTION_PARAM_OBJ dest)
         {
-        	UI_BUITargetSelect.Initialize(this._targetSelect);
-        	UI_BattleViewUICanvasBase.Show(this._targetSelect,0);
+        	this._targetSelect.Initialize();
+        	this._targetSelect.Show(0);
         }
 
         // TODO
@@ -229,7 +229,7 @@ namespace Dpr.Battle.View.Systems
 
         public void CMD_UI_SelectTarget_ForceQuit()
         {
-        	UI_BattleViewUICanvasBase.Hide(this._targetSelect,0,0);
+        	this._targetSelect.Hide(0,0);
         }
 
         // TODO
@@ -397,14 +397,8 @@ namespace Dpr.Battle.View.Systems
         // TODO
         public bool HUD_IsPinch(BtlvPos vPos) { return false; }
 
-        public bool HUD_IsShowing(BtlvPos vPos)
-        {
-        	if (vPos < this[0].Length) {
-        	  return *(byte *)
-        	          (this[0] + (int)vPos * 8[0] + 0x61);
-        	}
-        	return false;
-        }
+        // TODO
+        public bool HUD_IsShowing(BtlvPos vPos) { return false; }
 
         // TODO
         public void DispBallBar(BtlvPos vPos, bool isDisp) { }
@@ -511,7 +505,7 @@ namespace Dpr.Battle.View.Systems
 
         public void SetVisible(BtlvPos vPos, bool isVibivle, bool isWithBallPlate, bool isForced = false)
         {
-        	Systems_BattleViewUISystem.SetVisibleForced(vPos,isVibivle,isWithBallPlate & 1);
+        	SetVisibleForced(vPos,isVibivle,(isWithBallPlate ? 1 : 0) & 1);
         }
 
         // TODO

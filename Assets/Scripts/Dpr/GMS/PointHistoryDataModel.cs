@@ -18,8 +18,8 @@ namespace Dpr.GMS
 		
 		public void SetMonsNickname(string nickName)
 		{
-			Text_StringBuilder.Clear(this.receiveMonsNicknameSb);
-			Text_StringBuilder.Append(this.receiveMonsNicknameSb,nickName);
+			this.receiveMonsNicknameSb.Clear();
+			this.receiveMonsNicknameSb.Append(nickName);
 		}
 		
 		// TODO
@@ -27,8 +27,8 @@ namespace Dpr.GMS
 		
 		public void SetMonsName(string monsName)
 		{
-			Text_StringBuilder.Clear(this.receiveMonsNameSb);
-			Text_StringBuilder.Append(this.receiveMonsNameSb,monsName);
+			this.receiveMonsNameSb.Clear();
+			this.receiveMonsNameSb.Append(monsName);
 		}
 		
 		// TODO
@@ -36,8 +36,8 @@ namespace Dpr.GMS
 		
 		public void SetParentName(string parentName)
 		{
-			Text_StringBuilder.Clear(this.receiveMonsParentNameSb);
-			Text_StringBuilder.Append(this.receiveMonsParentNameSb,parentName);
+			this.receiveMonsParentNameSb.Clear();
+			this.receiveMonsParentNameSb.Append(parentName);
 		}
 		
 		// TODO
@@ -45,8 +45,8 @@ namespace Dpr.GMS
 		
 		public void SetDateTimeStr(string dateTimeStr)
 		{
-			Text_StringBuilder.Clear(this.dateTimeSb);
-			Text_StringBuilder.Append(this.dateTimeSb,dateTimeStr);
+			this.dateTimeSb.Clear();
+			this.dateTimeSb.Append(dateTimeStr);
 		}
 		
 		public bool IsNew { get => bIsNew; }
@@ -68,21 +68,21 @@ namespace Dpr.GMS
 			this.dataIndex = 0xffffffff;
 			this.currentPointData = 0;
 			this.sendMonsIconSpr = 0;
-			this.Length = 0;
-			this[0] = 0;
+			this.receiveMonsIconSpr = 0;
+			this.receiveMonsSexIconSpr = 0;
 			this.receiveMonsLangIconSpr = 0;
 			this.receiveMonsParentLangIconSpr = 0;
 			if (this.receiveMonsNameSb != 0) {
-			  Text_StringBuilder.Clear(this.receiveMonsNameSb);
+			  this.receiveMonsNameSb.Clear();
 			}
 			if (this.receiveMonsNicknameSb != 0) {
-			  Text_StringBuilder.Clear(this.receiveMonsNicknameSb);
+			  this.receiveMonsNicknameSb.Clear();
 			}
 			if (this.receiveMonsParentNameSb != 0) {
-			  Text_StringBuilder.Clear(this.receiveMonsParentNameSb);
+			  this.receiveMonsParentNameSb.Clear();
 			}
 			if (this.dateTimeSb != 0) {
-			  Text_StringBuilder.Clear(this.dateTimeSb);
+			  this.dateTimeSb.Clear();
 			}
 		}
 	}

@@ -25,11 +25,11 @@ namespace Dpr.Contest
 			var uVar1 = ComponentExtensions.FindDeep(StringLiteral_8986,1);
 			uVar1 = UnityEngine_GameObject__GetComponent<object>
 			                  (uVar1);
-			this.Length = uVar1;
+			this.bestCntText = uVar1;
 			uVar1 = ComponentExtensions.FindDeep(StringLiteral_8987,1);
 			uVar1 = UnityEngine_GameObject__GetComponent<object>
 			                  (uVar1);
-			this[0] = uVar1;
+			this.greaCntText = uVar1;
 			uVar1 = ComponentExtensions.FindDeep(StringLiteral_8988,1);
 			uVar1 = UnityEngine_GameObject__GetComponent<object>
 			                  (uVar1);
@@ -54,13 +54,13 @@ namespace Dpr.Contest
 		
 		public void SetTitleSpr(Sprite contestTitleSpr, Sprite rankTitleSpr)
 		{
-			UI_Image.set_sprite(this.contestTitleImage,contestTitleSpr);
-			UI_Image.set_sprite(this.rankTitleImage,rankTitleSpr);
+			this.contestTitleImage.sprite = contestTitleSpr;
+			this.rankTitleImage.sprite = rankTitleSpr;
 		}
 		
 		public void SetMedalSpr(Sprite medalSpr)
 		{
-			UI_Image.set_sprite(this.medalImage,medalSpr);
+			this.medalImage.sprite = medalSpr;
 			this.medalImage.enabled = 1;
 		}
 	}

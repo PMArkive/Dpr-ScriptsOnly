@@ -21,17 +21,17 @@
 
         public static byte GetType1(PokeTypePair pair)
         {
-        	return pair & 0x1f;
+        	return (byte)(pair & 0x1f);
         }
 
         public static byte GetType2(PokeTypePair pair)
         {
-        	return pair >> 5 & 0x1f;
+        	return (byte)(pair >> 5 & 0x1f);
         }
 
         public static byte GetTypeEx(PokeTypePair pair)
         {
-        	return pair >> 10 & 0x1f;
+        	return (byte)(pair >> 10 & 0x1f);
         }
 
         public static void Split(PokeTypePair pair, out byte type1, out byte type2, out byte typeEx)
@@ -73,7 +73,7 @@
 
         public static PokeTypePair Replace(PokeTypePair pair, byte targetType, byte newType)
         {
-        	targetType = targetType & 0xff;
+        	targetType = (byte)(targetType & 0xff);
         	var uVar1 = newType;
         	if ((pair & 0x1f) != targetType) {
         	  uVar1 = pair;
@@ -83,7 +83,7 @@
         	  uVar2 = pair >> 5 & 0x7ff;
         	}
         	if (((pair & 0xffff) >> 10 & 0x1f) != targetType) {
-        	  newType = pair >> 10 & 0x3f;
+        	  newType = (byte)(pair >> 10 & 0x3f);
         	}
         	return uVar1 & 0x1f | (uVar2 & 0x1f) << 5 | (newType & 0x1f) << 10;
         }

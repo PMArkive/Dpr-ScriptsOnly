@@ -53,7 +53,7 @@ namespace Dpr.UI
 		
 		public void SetWindowActive(bool active)
 		{
-			this.bActive = active & 1;
+			this.bActive = (active ? 1 : 0) & 1;
 		}
 		
 		// TODO
@@ -65,23 +65,16 @@ namespace Dpr.UI
 		// TODO
 		private void SetCategoryAndRankText(string categoryName, string rankName) { }
 		
-		private void SetFrameActive(WindowFrameType frameType, bool active)
-		{
-			if (this[0].Length <= frameType) {
-			}
-			var uVar1 = GameObject.get_activeSelf(this[0] + (int)frameType * 8[0],0);
-			if (((uVar1 ^ active) & 1) != 0) {
-			  GameObject.SetActive(this[0] + (int)frameType * 8[0],active & 1,0);
-			}
-		}
+		// TODO
+		private void SetFrameActive(WindowFrameType frameType, bool active) { }
 		
 		private void SetObjectActive(bool active)
 		{
-			var uVar2 = Component.gameObject;
+			var uVar2 = this.gameObject;
 			var uVar1 = uVar2.activeSelf;
 			if (((uVar1 ^ active) & 1) != 0) {
 			  this.bIsOpen = true;
-			  uVar2 = Component.gameObject;
+			  uVar2 = this.gameObject;
 			  uVar2.SetActive(this.bIsOpen);
 			}
 		}
@@ -111,7 +104,7 @@ namespace Dpr.UI
 		{
 			this.windowState = (WindowState)0;
 			this.bIsOpen = false;
-			var uVar1 = Component.gameObject;
+			var uVar1 = this.gameObject;
 			uVar1.SetActive(0);
 			if (this.onClosed != null) {
 			  this.onClosed.Invoke();
@@ -133,7 +126,7 @@ namespace Dpr.UI
 		private void SetCursorView(bool active)
 		{
 			if (((this.arrowParent.activeSelf ^ active) & 1) != 0) {
-			  this.arrowParent.SetActive(active & 1);
+			  this.arrowParent.SetActive((active ? 1 : 0) & 1);
 			}
 		}
 

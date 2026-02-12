@@ -19,7 +19,7 @@ namespace Dpr.DigFossil
 		public void SetSprite(in Sprite inMain, in Sprite inTop, in Sprite inUnder, in Sprite inTopCorner, in Sprite inUnderCorner)
 		{
 			long uVar1 = default;
-			DigFossil_DigBuildup.SetTexture(DigFossil_DigBuildup.SetTexture(uVar1,ref this.topCorner,inTopCorner),ref this.underCorner,inUnderCorner);
+			SetTexture(SetTexture(uVar1,ref this.topCorner,inTopCorner),ref this.underCorner,inUnderCorner);
 		}
 		
 		// TODO

@@ -54,12 +54,12 @@ namespace Dpr.UI
 		
 		public void OnSwapStart()
 		{
-			GameObject.SetActive(this[0],1);
+			this.swapSelectedObject.SetActive(1);
 		}
 		
 		public void OnSwapEnd()
 		{
-			GameObject.SetActive(this[0],0);
+			this.swapSelectedObject.SetActive(0);
 		}
 		
 		public void OnNotSelectable()

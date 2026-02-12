@@ -24,10 +24,10 @@ namespace Dpr.Battle.Logic
 		
 		public static bool CheckTurnEnd(InterruptCode interruptCode)
 		{
-			if (((interruptCode & 0xff) < 6) && ((1 << (ulong)(interruptCode & 0x1f) & 0x31U) != 0)) {
+			if ((((int)interruptCode & 0xff) < 6) && ((1 << (int)((int)interruptCode & 0x1f) & 0x31U) != 0)) {
 			  return true;
 			}
-			return (interruptCode & 0xff) == 6;
+			return ((int)interruptCode & 0xff) == 6;
 		}
 		
 		// TODO
@@ -36,12 +36,14 @@ namespace Dpr.Battle.Logic
 		public static byte GetFriendship(MainModule mainModule, BTL_POKEPARAM poke)
 		{
 			mainModule.GetPokeFriendship(poke);
+			return 0;
 		}
 		
 		public static bool CheckPlayersPoke(MainModule mainModule, BTL_POKEPARAM poke)
 		{
 			var uVar1 = poke.GetID();
 			mainModule.IsPlayersPokeID(uVar1);
+			return false;
 		}
 		
 		// TODO

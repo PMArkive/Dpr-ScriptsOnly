@@ -100,12 +100,12 @@ namespace Dpr.UI
 
         public void SetEnable(bool enabled)
         {
-        	GameObject.SetActive(this.Length.gameObject,enabled & 1,0);
+        	GameObject.SetActive(this._root.gameObject,(enabled ? 1 : 0) & 1,0);
         }
 
         public void EnablePairIcon(bool enabled)
         {
-        	GameObject.SetActive(this._pair.gameObject,enabled & 1,0);
+        	GameObject.SetActive(this._pair.gameObject,(enabled ? 1 : 0) & 1,0);
         }
 
         // TODO
@@ -156,6 +156,7 @@ namespace Dpr.UI
         public Vector3 GetSwapPosition()
         {
         	Transform.get_position(this._pokemonIcon.transform,0);
+        	return null;
         }
 
         // TODO

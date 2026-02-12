@@ -17,7 +17,7 @@ namespace Dpr.Battle.View.UI
         [Header("[TransitionParams]")]
         [SerializeField]
         protected TransitionParams _transitionParams = TransitionParams.Factory();
-        private RectTransform _cachedRectTransform;
+        internal RectTransform _cachedRectTransform;
         protected CanvasGroup _canvasGroup;
         protected Action _onShowComplete;
         protected Action _onHideComplete;

@@ -102,7 +102,7 @@ namespace Dpr.GMS
 		
 		public void ShowMatchingIcon()
 		{
-			GMS_UINetworkIcon.ShowMatchingIcon(this.uiNetworkIcon);
+			this.uiNetworkIcon.ShowMatchingIcon();
 		}
 		
 		public void HideMatchingIcon()
@@ -112,7 +112,7 @@ namespace Dpr.GMS
 		
 		public void ShowAttentionIcon()
 		{
-			GMS_UINetworkIcon.ShowAttentionIcon(this.uiNetworkIcon);
+			this.uiNetworkIcon.ShowAttentionIcon();
 		}
 		
 		public void HideAttentionIcon()

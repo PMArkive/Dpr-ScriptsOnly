@@ -46,6 +46,7 @@ namespace Dpr.UI
 		private float GetRTPCValue(AudioInstance audioInstance, uint paramId, int gaugeIndex)
 		{
 			paramId.GetRTPCValue(gaugeIndex);
+			return 0;
 		}
 		
 		private float ToLevelValue(float value, float min = _minDecibel, float max = _maxDecibel)

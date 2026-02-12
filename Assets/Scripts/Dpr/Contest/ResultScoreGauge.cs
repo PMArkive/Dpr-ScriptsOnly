@@ -20,7 +20,7 @@ namespace Dpr.Contest
 		
 		public void SetGaugeRatio(float ratio)
 		{
-			UI_Image.fillAmount = this.gaugeImage;
+			this.gaugeImage.set_fillAmount();
 		}
 		
 		public void ShowMedal(Sprite medalSpr, int animHash)
@@ -28,7 +28,7 @@ namespace Dpr.Contest
 			this.medalAnimator.enabled = 1;
 			this.medalAnimator.enabled = 1;
 			this.medalAnimator.Play(animHash);
-			UI_Image.set_sprite(this.medalImage,medalSpr);
+			this.medalImage.sprite = medalSpr;
 			this.medalImage.enabled = 1;
 		}
 	}

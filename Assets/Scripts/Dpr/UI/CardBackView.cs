@@ -47,8 +47,8 @@ namespace Dpr.UI
 		
 		public void SetCardImageSprite(Sprite cardSprite, Sprite titleSprite)
 		{
-			UI_Image.set_sprite(this.Length,cardSprite);
-			UI_Image.set_sprite(this[0],titleSprite);
+			this.cardImage.sprite = cardSprite;
+			this.titleImage.sprite = titleSprite;
 		}
 		
 		// TODO

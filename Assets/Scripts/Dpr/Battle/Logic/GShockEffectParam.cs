@@ -117,8 +117,10 @@ namespace Dpr.Battle.Logic
 			return this.m_pWazaParam;
 		}
 		
-		// TODO
-		public BTL_POKEPARAM GetAttacker() { return default; }
+		public BTL_POKEPARAM GetAttacker()
+		{
+			return this.m_pAttaker;
+		}
 		
 		public BTL_POKEPARAM GetDefender()
 		{
@@ -165,7 +167,7 @@ namespace Dpr.Battle.Logic
 			if ((int)sick == 0) {
 			}
 			if ((uint)(byte)pos < this.m_posData.Length) {
-			  this.m_posData + (pos & 0xff) * 8[0].Length = sick;
+			  this.m_posData + ((int)pos & 0xff) * 8[0].Length = sick;
 			  SetEffected(pos,0x33);
 			}
 		}

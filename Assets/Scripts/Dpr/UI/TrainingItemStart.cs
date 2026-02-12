@@ -7,13 +7,13 @@ namespace Dpr.UI
 		
 		public override void Enable(bool enabled)
 		{
-			this._isEnabled = enabled & 1;
+			this._isEnabled = (enabled ? 1 : 0) & 1;
 			SetAnimState();
 		}
 		
 		public override void Select(bool enabled)
 		{
-			this._isSelected = enabled & 1;
+			this._isSelected = (enabled ? 1 : 0) & 1;
 			SetAnimState();
 		}
 		

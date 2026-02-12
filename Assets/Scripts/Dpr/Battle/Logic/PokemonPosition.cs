@@ -77,7 +77,7 @@
         public static BtlPokePos GetValidPosMax(BtlRule rule)
         {
         	if ((int)rule < 4) {
-        	  return 0x1040301 >> (ulong)((rule & 3) << 3);
+        	  return 0x1040301 >> (int)(((int)rule & 3) << 3);
         	}
         	return (BtlPokePos)3;
         }
@@ -152,10 +152,10 @@
         private static byte PosToSidePosIndex_Raid(BtlPokePos pos)
         {
         	var uVar1 = 0;
-        	if ((pos & 0xff) != 4) {
+        	if (((int)pos & 0xff) != 4) {
         	  uVar1 = pos;
         	}
-        	return uVar1;
+        	return (byte)(uVar1);
         }
 
         // TODO

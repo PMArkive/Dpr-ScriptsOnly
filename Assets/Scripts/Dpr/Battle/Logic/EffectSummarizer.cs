@@ -17,10 +17,10 @@ namespace Dpr.Battle.Logic
 		{
 			var uVar1 = this.m_pQueue.ReservePutPos(0xb5)
 			;
-			this.Length = uVar1;
+			this.m_reservedPos_Effect = (ushort)(uVar1);
 			uVar1 = this.m_pQueue.ReservePutPos(0xb9)
 			;
-			this.m_reservedPos_Message = uVar1;
+			this.m_reservedPos_Message = (ushort)(uVar1);
 		}
 		
 		// TODO

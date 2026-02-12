@@ -36,34 +36,14 @@ namespace Dpr.Battle.Logic
         	}
         }
 
-        private void setPauseFlag(TimerType type, TimerControlLevel level, bool flag)
-        {
-        	if (type < this[0].Length) {
-        	  if ((uint)level < this[0] + (int)type * 8[0].Length) {
-        	    this[0] + (int)type * 8[0] + (ulong)level[0] = flag & 1;
-        	  }
-        	}
-        }
+        // TODO
+        private void setPauseFlag(TimerType type, TimerControlLevel level, bool flag) { }
 
         // TODO
         private bool isPause(TimerType type) { return false; }
 
-        private void clearPauseFlag(TimerType type)
-        {
-        	if (type < this[0].Length) {
-        	  var uVar3 = 0;
-        	  do {
-        	    this[0] = this[0] + (int)type * 8[0];
-        	    var uVar1 = this[0].Length;
-        	    if ((int)uVar1 <= (long)uVar3) {
-        	    }
-        	    if (uVar1 <= uVar3) break;
-        	    this[0] = this[0] + uVar3;
-        	    uVar3 = uVar3 + 1;
-        	    this[0][0] = 0;
-        	  } while (type < this[0].Length);
-        	}
-        }
+        // TODO
+        private void clearPauseFlag(TimerType type) { }
 
         public enum TimerType : int
         {

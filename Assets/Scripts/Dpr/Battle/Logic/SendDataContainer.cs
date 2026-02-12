@@ -38,10 +38,10 @@ namespace Dpr.Battle.Logic
         private void IncAddIndex()
         {
         	var uVar3 = 0;
-        	if (this.Length != 0) {
-        	  uVar3 = this.m_addIndex + 1 / this.Length;
+        	if (this.m_bufferNum != 0) {
+        	  uVar3 = this.m_addIndex + 1 / this.m_bufferNum;
         	}
-        	this.m_addIndex = this.m_addIndex + 1 - uVar3 * this.Length;
+        	this.m_addIndex = this.m_addIndex + 1 - uVar3 * this.m_bufferNum;
         }
 
         public bool IsDataExist(uint dataSerialNumber)

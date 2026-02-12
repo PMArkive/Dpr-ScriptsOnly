@@ -38,38 +38,14 @@ namespace Dpr.Battle.Logic
         // TODO
         public static void BITFLG_Construction(byte[] flags) { }
 
-        public static void BITFLG_Set(byte[] flags, uint index)
-        {
-        	var uVar1 = flags >> 3 & 0xff;
-        	if ((int)uVar1 < (int)this.Length) {
-        	  if (this.Length <= uVar1) {
-        	  }
-        	  this + (ulong)uVar1[0] =
-        	       this + (ulong)uVar1[0] | (byte)(1 << (ulong)(flags & 7));
-        	}
-        }
+        // TODO
+        public static void BITFLG_Set(byte[] flags, uint index) { }
 
-        public static bool BITFLG_Check(byte[] flags, uint index)
-        {
-        	var uVar1 = flags >> 3 & 0xff;
-        	if ((int)this.Length <= (int)uVar1) {
-        	  return false;
-        	}
-        	if (uVar1 < this.Length) {
-        	  return (1 << (ulong)(flags & 7) & (uint)this + (ulong)uVar1[0]) != 0;
-        	}
-        }
+        // TODO
+        public static bool BITFLG_Check(byte[] flags, uint index) { return false; }
 
-        public static void BITFLG_Off(byte[] flags, uint index)
-        {
-        	var uVar1 = flags >> 3 & 0xff;
-        	if ((int)uVar1 < (int)this.Length) {
-        	  if (this.Length <= uVar1) {
-        	  }
-        	  this + (ulong)uVar1[0] =
-        	       this + (ulong)uVar1[0] & ((byte)(1 << (ulong)(flags & 8)) ^ 0xff);
-        	}
-        }
+        // TODO
+        public static void BITFLG_Off(byte[] flags, uint index) { }
 
         public static uint ABS(int value)
         {
@@ -280,7 +256,7 @@ namespace Dpr.Battle.Logic
         	if ((uVar1 & 0xffff) == 0) {
         	  uVar1 = 1;
         	}
-        	return uVar1;
+        	return (ushort)(uVar1);
         }
 
         // TODO
@@ -393,7 +369,7 @@ namespace Dpr.Battle.Logic
 
         public static byte RULE_HandPokeIndex(BtlRule rule, byte numCoverPos)
         {
-        	return numCoverPos;
+        	return (byte)(numCoverPos);
         }
 
         public static uint calcWinMoney_Sub(in BSP_TRAINER_DATA trData, in PokeParty party)

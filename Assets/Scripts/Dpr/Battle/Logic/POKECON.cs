@@ -33,12 +33,12 @@ namespace Dpr.Battle.Logic
 
         private void storeAllPokeParam()
         {
-        	if (0 < this[0].Length) {
+        	if (0 < this.m_activePokeParam.Length) {
         	  var uVar1 = 0;
         	  do {
         	    storePokeParam(uVar1);
         	    uVar1 = (ulong)((int)uVar1 + 1);
-        	  } while ((long)uVar1 < (long)this[0].Length);
+        	  } while ((long)uVar1 < (long)this.m_activePokeParam.Length);
         	}
         }
 

@@ -216,30 +216,30 @@ namespace Dpr.SubContents
         public static void PlayVoicePikaBui_Yobiyose(MonsNo monsNo, VoicePlayerAmbient voicePlayer)
         {
         	if ((int)monsNo == 0x85) {
-        	  SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,0x85,0,0x21);
+        	  voicePlayer.PlayVoice(0x85,0,0x21);
         	}
         	if ((int)monsNo == 0x19) {
-        	  SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,0x19,0,0x1f);
+        	  voicePlayer.PlayVoice(0x19,0,0x1f);
         	}
         }
 
         public static void PlayVoicePikaBui_Kaisan(MonsNo monsNo, VoicePlayerAmbient voicePlayer)
         {
         	if ((int)monsNo == 0x85) {
-        	  SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,0x85,0,0x23);
+        	  voicePlayer.PlayVoice(0x85,0,0x23);
         	}
         	if ((int)monsNo == 0x19) {
-        	  SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,0x19,0,0x20);
+        	  voicePlayer.PlayVoice(0x19,0,0x20);
         	}
         }
 
         public static void PlayVoicePikaBui_Roar(MonsNo monsNo, VoicePlayerAmbient voicePlayer)
         {
         	if ((int)monsNo == 0x85) {
-        	  SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,0x85,0,0x1b);
+        	  voicePlayer.PlayVoice(0x85,0,0x1b);
         	}
         	if ((int)monsNo == 0x19) {
-        	  SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,0x19);
+        	  voicePlayer.PlayVoice(0x19);
         	}
         }
 
@@ -249,9 +249,9 @@ namespace Dpr.SubContents
         public static void PlayVoicePikaBui_Touch(MonsNo monsNo, VoicePlayerAmbient voicePlayer)
         {
         	if ((int)monsNo == 0x19) {
-        	  SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,0x19,0,0x12);
+        	  voicePlayer.PlayVoice(0x19,0,0x12);
         	}
-        	SubContents_VoicePlayerAmbient.PlayVoice(voicePlayer,monsNo,0,0x14);
+        	voicePlayer.PlayVoice(monsNo,0,0x14);
         }
 
         // TODO

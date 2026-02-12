@@ -43,12 +43,12 @@ namespace Dpr.Demo
 		
 		public void ToBattleScale(int index)
 		{
-			SubContents_TimeLineBinder.ChangePokeBattleScale(this.timeLine);
+			this.timeLine.ChangePokeBattleScale();
 		}
 		
 		public void ToMenuScale(int index)
 		{
-			SubContents_TimeLineBinder.ChangePokeMenuScale(this.timeLine);
+			this.timeLine.ChangePokeMenuScale();
 		}
 		
 		// TODO

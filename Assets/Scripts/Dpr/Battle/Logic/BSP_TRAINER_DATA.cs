@@ -41,7 +41,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetGoldParam()
         {
-        	return this.mCore.gold;
+        	return (byte)(this.mCore.gold);
         }
 
         public string GetModelID()
@@ -109,12 +109,12 @@ namespace Dpr.Battle.Logic
 
         public TrainerTable.SheetTrainerType GetTrTypeData()
         {
-        	return this.mCore.Length;
+        	return this.mCore.tr_type_data;
         }
 
         public TrainerTable.SheetTrainerData GetTrainerData()
         {
-        	return this.mCore[0];
+        	return this.mCore.trainer_data;
         }
 
         public TowerTrainerTable.SheetTrainerData GetInstTrainerData()

@@ -20,7 +20,7 @@ namespace Dpr.Contest
 			  return *
 			          (this.playerDataModelArray + (int)this.userIndex * 8 + 0x20);
 			}
-			return default;
+			return null;
 		}
 		
 		public int GetPersonalTotalScore()

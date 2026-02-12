@@ -51,10 +51,10 @@ namespace Dpr.Contest
 		
 		public void OnFinalize()
 		{
-			Contest_ContestDataModel.UnloadResource();
-			Contest_ContestDataModel.UnloadAssetBundle();
+			UnloadResource();
+			UnloadAssetBundle();
 			this.nameMsgFile = null;
-			this[0] = 0;
+			this.wazaNameMsgFile = null;
 		}
 		
 		// TODO
@@ -111,10 +111,8 @@ namespace Dpr.Contest
 			return this.mainBgmEventID;
 		}
 		
-		public string GetStagePath()
-		{
-			return this.currentArenaData[0];
-		}
+		// TODO
+		public string GetStagePath() { return default; }
 		
 		// TODO
 		public EnvironmentSettings GetStageRenderSetting() { return default; }
@@ -247,15 +245,11 @@ namespace Dpr.Contest
 			return true;
 		}
 		
-		public ContestConfigDatas.SheetTapScoreData[] GetScoreDataArray()
-		{
-			return this.contestConfigDatas.Length;
-		}
+		// TODO
+		public ContestConfigDatas.SheetTapScoreData[] GetScoreDataArray() { return default; }
 		
-		public ContestConfigDatas.SheetTapTimingData[] GetTapTimingDataArray()
-		{
-			return this.contestConfigDatas[0];
-		}
+		// TODO
+		public ContestConfigDatas.SheetTapTimingData[] GetTapTimingDataArray() { return default; }
 		
 		// TODO
 		public float GetValidTapTimeRange() { return default; }

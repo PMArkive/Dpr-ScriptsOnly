@@ -16,7 +16,7 @@ namespace Dpr.Battle.Logic
 		
 		public void Request(InterruptCode interrupt)
 		{
-			this.m_interrupt = interrupt;
+			this.m_interrupt = (InterruptCode)(interrupt);
 		}
 		
 		// TODO

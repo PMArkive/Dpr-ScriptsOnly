@@ -14,7 +14,7 @@ namespace Dpr.Contest
 		
 		public void Lock()
 		{
-			this.Length = 1;
+			this.isLock = true;
 		}
 		
 		public void Reset()
@@ -25,11 +25,11 @@ namespace Dpr.Contest
 		public void OnUpdate(float deltaTime)
 		{
 			ulong uVar1 = default;
-			if ((this.Length != 0) &&
+			if ((this.isLock) &&
 			   (uVar1 = this.waitTimer.IsFinishWait(),
 			   (uVar1 & 1) != 0)) {
 			  this.waitTimer.ResetTimer();
-			  this.Length = 0;
+			  this.isLock = false;
 			}
 		}
 	}

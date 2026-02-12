@@ -46,31 +46,33 @@ namespace Dpr.Battle.Logic
         {
         	if ((int)this.m_state != 0) {
         	}
-        	this.m_processingRequest = serverReq;
+        	this.m_processingRequest = (ServerRequest)(serverReq);
         	this.m_state = (State)1;
-        	this.Length.Store();
-        	SendData.Clear(this[0]);
+        	this.m_sendData.Store();
+        	this.m_returnData.Clear();
         	this.m_isRetDataPrepared = false;
         }
 
         // TODO
         public bool WaitCmd() { return false; }
 
-        // TODO
-        public SendData GetReturnData() { return null; }
+        public SendData GetReturnData()
+        {
+        	return this.m_returnData;
+        }
 
         public void ResetCmd()
         {
         	this.m_state = (State)0;
         	if (this.m_isCommMode) {
-        	  Net_Client.ClearBattleCommandRecvData(this.m_iPtrNetClient);
+        	  this.m_iPtrNetClient.ClearBattleCommandRecvData();
         	}
         }
 
         public void ClearRecvData()
         {
         	if (this.m_isCommMode) {
-        	  Net_Client.ClearBattleCommandRecvData(this.m_iPtrNetClient);
+        	  this.m_iPtrNetClient.ClearBattleCommandRecvData();
         	}
         }
 
@@ -82,7 +84,7 @@ namespace Dpr.Battle.Logic
 
         public void ResetRecvBuffer()
         {
-        	this.Length.Clear();
+        	this.m_sendData.Clear();
         }
 
         // TODO
@@ -97,7 +99,7 @@ namespace Dpr.Battle.Logic
         public RaidActionIconID GetRaidAction(BTL_CLIENT_ID clientID)
         {
         	if (this.m_iPtrNetClient != null) {
-        	  return Net_Client.GetRaidAction(this.m_iPtrNetClient,clientID);
+        	  return this.m_iPtrNetClient.GetRaidAction(clientID);
         	}
         	return (ulong)this.m_raidActionIcon;
         }
@@ -108,7 +110,7 @@ namespace Dpr.Battle.Logic
         public void ClearRaidAction()
         {
         	if (this.m_iPtrNetClient != null) {
-        	  Net_Client.ClearRaidAction(this.m_iPtrNetClient);
+        	  this.m_iPtrNetClient.ClearRaidAction();
         	}
         	this.m_raidActionIcon = (RaidActionIconID)0;
         }
@@ -116,7 +118,7 @@ namespace Dpr.Battle.Logic
         public bool CheckTrainerActionRequest(BTL_CLIENT_ID clientID)
         {
         	if (this.m_iPtrNetClient != null) {
-        	  Net_Client.CheckTrainerAction(this.m_iPtrNetClient,clientID);
+        	  this.m_iPtrNetClient.CheckTrainerAction(clientID);
         	}
         	return false;
         }
@@ -127,7 +129,7 @@ namespace Dpr.Battle.Logic
         public void ClearTrainerActionRequest()
         {
         	if (this.m_iPtrNetClient != null) {
-        	  Net_Client.ClearTrainerAction(this.m_iPtrNetClient);
+        	  this.m_iPtrNetClient.ClearTrainerAction();
         	}
         }
 

@@ -72,7 +72,7 @@ namespace Dpr.Contest
 		
 		public void OnFinalize()
 		{
-			SubContents_EffectEmitter.OnFinalize(this.fxEmitter);
+			this.fxEmitter.OnFinalize();
 		}
 		
 		// TODO

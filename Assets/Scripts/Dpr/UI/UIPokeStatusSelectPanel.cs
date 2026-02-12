@@ -31,14 +31,14 @@ namespace Dpr.UI
 		private void SetInfoStatusRootActive(bool active)
 		{
 			if (((this._infoStatusRoot.activeSelf ^ active) & 1) != 0) {
-			  this._infoStatusRoot.SetActive(active & 1);
+			  this._infoStatusRoot.SetActive((active ? 1 : 0) & 1);
 			}
 		}
 		
 		public void SetArrowAcitve(bool active)
 		{
 			if (((this._selectArrowRoot.activeSelf ^ active) & 1) != 0) {
-			  this._selectArrowRoot.SetActive(active & 1);
+			  this._selectArrowRoot.SetActive((active ? 1 : 0) & 1);
 			}
 		}
 		

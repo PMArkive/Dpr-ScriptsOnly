@@ -47,7 +47,7 @@ namespace Dpr.Battle.View.Objects
 		
 		private void OnDestroy()
 		{
-			this[0] = 0;
+			this._cellingObjects = null;
 		}
 		
 		// TODO

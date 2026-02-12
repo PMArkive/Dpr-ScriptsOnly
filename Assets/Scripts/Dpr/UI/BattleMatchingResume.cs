@@ -18,8 +18,8 @@ namespace Dpr.UI
 		
 		public void Initialize(Action onFinishState, Action<bool> onSelect, Action onLeve)
 		{
-			this.Length = onFinishState;
-			this[0] = onSelect;
+			this._onFinishState = onFinishState;
+			this._onSelect = onSelect;
 			this._onLeve = onLeve;
 		}
 		

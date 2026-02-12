@@ -17,6 +17,7 @@ namespace Dpr.Battle.Logic
 		private uint damageWithFriend(DamageCalcResult pDamageRec, ActionDesc pActionDesc, WazaParam pWazaParam, BTL_POKEPARAM pAttacker, HITCHECK_PARAM pHitCheckParam, PokeSet pDamagedPokeSet, bool isPluralHitWaza)
 		{
 			damageSide();
+			return 0;
 		}
 		
 		// TODO

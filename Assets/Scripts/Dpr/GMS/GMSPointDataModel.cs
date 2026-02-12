@@ -7,9 +7,9 @@ namespace Dpr.GMS
 		private Vector2 screenPos;
 		private Vector3 normal;
 		private int dataCount;
-		private int markIndex;
+		internal int markIndex;
 		private bool bIsView;
-		private bool bHasData;
+		internal bool bHasData;
 		private bool bHasNewData;
 		
 		// TODO
@@ -39,7 +39,7 @@ namespace Dpr.GMS
 			  return *
 			          (this.historyDataArray + (int)this.markIndex * 8 + 0x20);
 			}
-			return default;
+			return null;
 		}
 		
 		// TODO
@@ -73,7 +73,7 @@ namespace Dpr.GMS
 			          (this.historyDataArray + (int)this.markIndex * 8[0]
 			          + 0x18);
 			}
-			return default;
+			return null;
 		}
 		
 		public Vector3 Normal { get => normal; }
@@ -83,7 +83,7 @@ namespace Dpr.GMS
 		public void ChangeViewStatus(bool canView)
 		{
 			if (((!this.bIsView ^ canView) & 1) == 0) {
-			  this.bIsView = canView & 1;
+			  this.bIsView = (canView ? 1 : 0) & 1;
 			}
 		}
 		

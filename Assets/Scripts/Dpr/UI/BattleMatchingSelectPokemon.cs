@@ -22,7 +22,7 @@ namespace Dpr.UI
 		
 		public void Initialize(Action onFinishState, Action onSelect, Action<ushort> onCountDown)
 		{
-			this[0] = onFinishState;
+			this._onFinishState = onFinishState;
 			this._onSelect = onSelect;
 			this._onCountDown = onCountDown;
 		}
@@ -67,7 +67,7 @@ namespace Dpr.UI
 		private void Timeup()
 		{
 			if ((int)this._currentState == 1) {
-			  this.Length.TimeUp();
+			  this._pokemonSelectUIPtr.TimeUp();
 			}
 		}
 		

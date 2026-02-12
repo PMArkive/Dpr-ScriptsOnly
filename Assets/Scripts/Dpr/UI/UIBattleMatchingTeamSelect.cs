@@ -97,7 +97,7 @@ namespace Dpr.UI
 		
 		public void RemainingWarningText(bool warning = true)
 		{
-			this._timer.RemainingWarningText(warning & 1);
+			this._timer.RemainingWarningText((warning ? 1 : 0) & 1);
 		}
 		
 		public void UpdateUITimeText(string minutes, string seconds)
@@ -178,8 +178,8 @@ namespace Dpr.UI
 		
 		private void Decide()
 		{
-			if ((SubContents_ShowMessageWindow.get_IsOpen(this._msgWindow) & 1) != 0) {
-			  SubContents_ShowMessageWindow.CloseMsgWindow(this._msgWindow);
+			if ((this._msgWindow.IsOpen & 1) != 0) {
+			  this._msgWindow.CloseMsgWindow();
 			}
 			this._cancelFade = false;
 			Close();
@@ -202,8 +202,8 @@ namespace Dpr.UI
 		
 		private void CloseMessageWindow()
 		{
-			if ((SubContents_ShowMessageWindow.get_IsOpen(this._msgWindow) & 1) != 0) {
-			  SubContents_ShowMessageWindow.CloseMsgWindow(this._msgWindow);
+			if ((this._msgWindow.IsOpen & 1) != 0) {
+			  this._msgWindow.CloseMsgWindow();
 			}
 		}
 		

@@ -44,7 +44,7 @@
 
         public byte GetClientNum()
         {
-        	return this.m_clientNum;
+        	return (byte)(this.m_clientNum);
         }
 
         // TODO
@@ -53,14 +53,14 @@
         // TODO
         public BTL_CLIENT_ID GetClientByOrder(byte order) { return BTL_CLIENT_ID.BTL_CLIENT_PLAYER; }
 
-        public BTL_CLIENT_ID GetAssignedClient()
+        public unsafe BTL_CLIENT_ID GetAssignedClient()
         {
         	if (this.m_clientNum == 0) {
         	  return (BTL_CLIENT_ID)5;
         	}
-        	if ((uint)this.m_assignedClientIdx < this[0].Length) {
+        	if ((uint)this.m_assignedClientIdx < this.m_clientInfo.Length) {
         	  return *(uint *)
-        	          (this[0] + (ulong)this.m_assignedClientIdx * 8[0] +
+        	          (this.m_clientInfo + (ulong)this.m_assignedClientIdx * 8[0] +
         	          0x10);
         	}
         	return (BTL_CLIENT_ID)0;
@@ -76,8 +76,8 @@
         	  uVar3 = this.m_assignedClientIdx + 1 / this.m_clientNum;
         	}
         	this.m_assignedClientIdx + 1 = this.m_assignedClientIdx + 1 - uVar3 * this.m_clientNum;
-        	if (this.m_assignedClientIdx + 1 < this[0].Length) {
-        	  this.m_assignedClientIdx = (char)this.m_assignedClientIdx + 1;
+        	if (this.m_assignedClientIdx + 1 < this.m_clientInfo.Length) {
+        	  this.m_assignedClientIdx = (byte)((char)this.m_assignedClientIdx + 1);
         	  this.m_passedTurnCount = 0;
         	  return true;
         	}
@@ -86,16 +86,16 @@
         private byte getNextAssignTarget(byte currentIdx)
         {
         	if (this.m_clientNum != 0) {
-        	  currentIdx = (currentIdx & 0xff) + 1;
+        	  currentIdx = (byte)((currentIdx & 0xff) + 1);
         	  var uVar2 = 0;
         	  if (this.m_clientNum != 0) {
         	    uVar2 = currentIdx / this.m_clientNum;
         	  }
-        	  currentIdx = currentIdx - uVar2 * this.m_clientNum;
-        	  if (this[0].Length <= currentIdx) {
+        	  currentIdx = (byte)(currentIdx - uVar2 * this.m_clientNum);
+        	  if (this.m_clientInfo.Length <= currentIdx) {
         	  }
         	}
-        	return currentIdx;
+        	return (byte)(currentIdx);
         }
 
         private bool isAssignEnable(in ClientInfo clientInfo)

@@ -11,12 +11,12 @@ namespace Dpr.UI
 		
 		public void Select()
 		{
-			GameObject.SetActive(this[0],1);
+			this.buttonEffectObject.SetActive(1);
 		}
 		
 		public void Unselect()
 		{
-			GameObject.SetActive(this[0],0);
+			this.buttonEffectObject.SetActive(0);
 		}
 	}
 }

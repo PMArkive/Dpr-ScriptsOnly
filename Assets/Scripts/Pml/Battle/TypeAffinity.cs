@@ -37,7 +37,7 @@ namespace Pml.Battle
         	  }
         	  uVar1 = uVar2 & 0x1f;
         	  uVar2 = uVar2 + 1;
-        	} while ((1 << (ulong)uVar1 & value) == 0);
+        	} while ((1 << (int)uVar1 & value) == 0);
         	return uVar2;
         }
 

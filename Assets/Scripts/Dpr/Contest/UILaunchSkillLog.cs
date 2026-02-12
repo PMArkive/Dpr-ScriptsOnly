@@ -31,7 +31,7 @@ namespace Dpr.Contest
 			this.timer = 0;
 			this.bShow = false;
 			this.appealObj.SetActive(0);
-			Contest_UILaunchSkillLog.Hide();
+			Hide();
 		}
 		
 		// TODO

@@ -14,7 +14,7 @@ namespace Dpr.SecretBase
 		
 		public void SetRotateNode(Transform node)
 		{
-			this[0] = node;
+			this.rotateNode = node;
 		}
 		
 		// TODO

@@ -13,13 +13,13 @@ namespace Dpr.Contest
 		private ResultDataModel resultDataModel;
 		private ResultState currentState;
 		private bool bRunning;
-		private bool restartContest;
+		internal bool restartContest;
 		private bool isTutorial;
 		private WaitForSeconds waitStartResult;
 		
 		public void SetScriptableObject(ResultSettings resultSettings)
 		{
-			this.Length = resultSettings;
+			this.resultSettings = resultSettings;
 		}
 		
 		// TODO
@@ -39,7 +39,7 @@ namespace Dpr.Contest
 		
 		public void LoadResource(ResultID resultID)
 		{
-			Contest_ResultAnnouncement.LoadResultFx(this[0]);
+			this.resultAnnounce.LoadResultFx();
 		}
 		
 		// TODO
@@ -48,20 +48,82 @@ namespace Dpr.Contest
 		// TODO
 		private IEnumerator IE_StartSection(ResultState firstState) { return default; }
 		
-		// TODO
-		public bool UpdateSection(float deltaTime) { return default; }
+		public bool UpdateSection(float deltaTime)
+		{
+			switch(this.currentState) {
+			case 1:
+			  var iVar1 = this.resultAnnounce.currentState;
+			  if ((int)iVar1 == 3) {
+			    this.resultAnnounce.UpdateWait();
+			    var cVar2 = this.resultAnnounce.bRunning;
+			  }
+			  else if ((int)iVar1 == 2) {
+			    this.resultAnnounce.UpdateRankupAnim();
+			    cVar2 = this.resultAnnounce.bRunning;
+			  }
+			  else {
+			    if ((int)iVar1 == 1) {
+			      this.resultAnnounce.UpdateGauge();
+			    }
+			    cVar2 = this.resultAnnounce.bRunning;
+			  }
+			  if (!cVar2) {
+			    this.currentState = (ResultState)2;
+			    this.totalScores.StartAnimation();
+			  }
+			  break;
+			case 2:
+			  UpdateTotalScores();
+			  return this.bRunning;
+			case 3:
+			  this.personalPerformance.UpdatePokeMotion();
+			  if ((int)this.personalPerformance.currentState == 1) {
+			    this.personalPerformance.UpdateKeywait();
+			  }
+			  if (!this.personalPerformance.bRunning) {
+			    this.currentState = (ResultState)5;
+			    this.bRunning = false;
+			    return false;
+			  }
+			  break;
+			case 4:
+			  UpdateTutorialMode();
+			  return this.bRunning;
+			}
+			return this.bRunning;
+		}
 		
-		// TODO
-		private void UpdateAnnouncement(float deltaTime) { }
+		private void UpdateAnnouncement(float deltaTime)
+		{
+			var iVar1 = this.resultAnnounce.currentState;
+			if ((int)iVar1 == 3) {
+			  this.resultAnnounce.UpdateWait();
+			  var cVar2 = this.resultAnnounce.bRunning;
+			}
+			else if ((int)iVar1 == 2) {
+			  this.resultAnnounce.UpdateRankupAnim();
+			  cVar2 = this.resultAnnounce.bRunning;
+			}
+			else {
+			  if ((int)iVar1 == 1) {
+			    this.resultAnnounce.UpdateGauge();
+			  }
+			  cVar2 = this.resultAnnounce.bRunning;
+			}
+			if (!cVar2) {
+			  this.currentState = (ResultState)2;
+			  this.totalScores.StartAnimation();
+			}
+		}
 		
 		// TODO
 		private void UpdateTotalScores(float deltaTime) { }
 		
 		private void UpdatePersonalPerformance()
 		{
-			Contest_ResultPersonalPerformance.UpdatePokeMotion(this.personalPerformance);
+			this.personalPerformance.UpdatePokeMotion();
 			if ((int)this.personalPerformance.currentState == 1) {
-			  Contest_ResultPersonalPerformance.UpdateKeywait(this.personalPerformance);
+			  this.personalPerformance.UpdateKeywait();
 			  var cVar1 = this.personalPerformance.bRunning;
 			}
 			else {
@@ -78,18 +140,23 @@ namespace Dpr.Contest
 		
 		private void ChangeState(ResultState stateID)
 		{
-			this.currentState = stateID;
+			this.currentState = (ResultState)(stateID);
 			switch(stateID) {
 			case 1:
-			  Contest_ResultAnnouncement.StartAnimation(this[0]);
+			  this.resultAnnounce.StartAnimation();
+			  break;
 			case 2:
-			  Contest_ResultTotalScores.StartAnimation(this.totalScores);
+			  this.totalScores.StartAnimation();
+			  break;
 			case 3:
-			  Contest_ResultPersonalPerformance.StartAnimation(this.personalPerformance);
+			  this.personalPerformance.StartAnimation();
+			  break;
 			case 4:
-			  Contest_ResultTutorialMode.StartAnimation(this.tutorialMode);
+			  this.tutorialMode.StartAnimation();
+			  break;
 			case 5:
 			  this.bRunning = false;
+			  break;
 			}
 		}
 		

@@ -10,6 +10,7 @@ namespace Dpr.Battle.Logic
 		private ushort recalcDrainVolume(BTL_POKEPARAM attacker, BTL_POKEPARAM target, ushort drainHP)
 		{
 			this.m_pEventLauncher.Event_RecalcDrainVolume();
+			return 0;
 		}
 		
 		// TODO

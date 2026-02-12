@@ -84,7 +84,7 @@ namespace Dpr.NetworkUtils
 		
 		public INetData GetNetData()
 		{
-			return this.Length;
+			return this.netData;
 		}
 		
 		// TODO

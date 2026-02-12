@@ -43,8 +43,10 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public void SetTranslationVec(Vector3 translation) { }
 		
-		// TODO
-		public Vector3 GetTranslationVec() { return default; }
+		public Vector3 GetTranslationVec()
+		{
+			return this.m_translation;
+		}
 		
 		public void SetTranslationOffset(Vector3 translation)
 		{

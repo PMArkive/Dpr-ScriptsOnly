@@ -17,8 +17,8 @@ namespace Dpr.DigFossil
 		
 		private void Start()
 		{
-			GameObject.SetActive(this.Length.gameObject,0,0);
-			GameObject.SetActive(Component.get_gameObject(this[0]),0,0);
+			GameObject.SetActive(this.overUIImage.gameObject,0,0);
+			GameObject.SetActive(this.overEffectImage.gameObject,0,0);
 		}
 		
 		// TODO
@@ -26,8 +26,8 @@ namespace Dpr.DigFossil
 		
 		public void Close()
 		{
-			GameObject.SetActive(this.Length.gameObject,0,0);
-			GameObject.SetActive(Component.get_gameObject(this[0]),0,0);
+			GameObject.SetActive(this.overUIImage.gameObject,0,0);
+			GameObject.SetActive(this.overEffectImage.gameObject,0,0);
 		}
 		
 		// TODO

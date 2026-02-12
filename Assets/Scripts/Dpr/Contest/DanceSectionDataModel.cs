@@ -59,13 +59,13 @@ namespace Dpr.Contest
 		
 		public void CreateGameParameterFromContestDataModel(ContestDataModel contestDataModel)
 		{
-			var uVar1 = Contest_ContestDataModel.GetScoreDataArray(contestDataModel);
-			Contest_DanceSectionDataModel.CreateTapScoreTable(uVar1);
-			uVar1 = Contest_ContestDataModel.GetTapTimingDataArray(contestDataModel);
-			Contest_DanceSectionDataModel.CreateTapTimingData(uVar1);
-			uVar1 = Contest_ContestDataModel.GetScoreDataArray(contestDataModel);
-			Contest_DanceSectionDataModel.CreateChangeTensionDataTable(uVar1);
-			uVar1 = Contest_ContestDataModel.GetComboBonusDataArray(contestDataModel);
+			var uVar1 = contestDataModel.GetScoreDataArray();
+			CreateTapScoreTable(uVar1);
+			uVar1 = contestDataModel.GetTapTimingDataArray();
+			CreateTapTimingData(uVar1);
+			uVar1 = contestDataModel.GetScoreDataArray();
+			CreateChangeTensionDataTable(uVar1);
+			uVar1 = contestDataModel.GetComboBonusDataArray();
 			var uVar2 = new Contest_ComboBonusDataModel(uVar1);
 			this.comboBonus = uVar2;
 		}
@@ -85,8 +85,10 @@ namespace Dpr.Contest
 			this.comboBonus = uVar1;
 		}
 		
-		// TODO
-		public PlayerDanceDataModel GetUserDanceData() { return default; }
+		public PlayerDanceDataModel GetUserDanceData()
+		{
+			return this.userDataModel;
+		}
 		
 		// TODO
 		public PlayerDanceDataModel GetPlayerDanceDataByIndex(int index) { return default; }
@@ -127,8 +129,10 @@ namespace Dpr.Contest
 		// TODO
 		private int GetHeartGaugeScore(TensionID tensionID, NoteTapTimingID timingID) { return default; }
 		
-		// TODO
-		public float GetHeartGaugeRatio() { return default; }
+		public float GetHeartGaugeRatio()
+		{
+			return (float)this.userDataModel.heartGaugeValue / 100.0;
+		}
 		
 		public float BeatSec { get => ONE_MINUTE / musicBpm; }
 		public bool IsFinishCreate { get => currentNoteDataList.Count <= currentDataIndex; }
@@ -206,7 +210,7 @@ namespace Dpr.Contest
 		public int LastUsePlayerIndex { get => lastUsePlayerIndex; }
 		public float DownVolumePersent { get => downVolumePersent; }
 		
-		public bool IsShowChainCount()
+		public unsafe bool IsShowChainCount()
 		{
 			if (this.objManager.userIndex < this.comboBonusDataArray.Length) {
 			  return *(byte *)
@@ -240,8 +244,12 @@ namespace Dpr.Contest
 		
 		public bool IsAlreadyUseUserSkill { get => userDataModel.IsAlreadyUseSkill; }
 		
-		// TODO
-		public bool CheckSamePrevWazaType() { return default; }
+		public bool CheckSamePrevWazaType()
+		{
+			return this.comboBonus.prevWazaType ==
+			       this.userDataModel.contestSkill.wazaType;
+			return false;
+		}
 		
 		// TODO
 		public bool CheckSameUserWazaType(int palyerIndex) { return default; }

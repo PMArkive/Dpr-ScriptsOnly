@@ -28,17 +28,17 @@ namespace Dpr.Battle.Logic
         private PokeParty m_tmpParty;
         private MyStatus m_playerStatus;
         private bool[] m_fClientQuit;
-        private BtlRule m_rule;
+        internal BtlRule m_rule;
         private uint m_regularMoney;
         private uint m_bonusMoney;
         private uint m_loseMoney;
         private MSGSPEED m_msgSpeed;
-        private ushort m_LimitTimeGame;
-        private ushort m_LimitTimeClient;
-        private ushort m_LimitTimeCommand;
+        internal ushort m_LimitTimeGame;
+        internal ushort m_LimitTimeClient;
+        internal ushort m_LimitTimeCommand;
         private BtlResult m_serverResult;
         private ResultCause m_serverResultCause;
-        private byte m_myClientID;
+        internal byte m_myClientID;
         private BtlPokePos m_myOrgPos;
         private BATTLERULE m_changeMode;
         private byte m_MultiAIDataSeq;
@@ -46,7 +46,7 @@ namespace Dpr.Battle.Logic
         private byte[] m_MultiAIClientID;
         private bool m_fCommError;
         private bool m_fCommErrorMainQuit;
-        private bool m_fWazaEffectEnable;
+        internal bool m_fWazaEffectEnable;
         private bool m_fGetMoneyFixed;
         private bool m_fLoseMoneyFixed;
         private bool m_padding;
@@ -107,7 +107,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetFairyGymResult()
         {
-        	return this.m_setupParam.fairyGymResult;
+        	return (byte)(this.m_setupParam.fairyGymResult);
         }
 
         public BattleViewBase GetBattleViewSystem()
@@ -168,7 +168,7 @@ namespace Dpr.Battle.Logic
         private bool callMainLoop()
         {
         	if (this.m_mainLoop != 0) {
-        	  var uVar1 = MainModule_pMainProc.Invoke();
+        	  var uVar1 = pMainProc.Invoke();
         	  return uVar1;
         	}
         	return true;
@@ -183,7 +183,7 @@ namespace Dpr.Battle.Logic
         private bool callSubProc()
         {
         	if (this.m_subProc != 0) {
-        	  return MainModule_pSubProc.Invoke(this.m_subProc,ref this.m_subSeq);
+        	  return pSubProc.Invoke(this.m_subProc,ref this.m_subSeq);
         	}
         	return true;
         }
@@ -223,16 +223,16 @@ namespace Dpr.Battle.Logic
 
         private bool setup_alone_double_multi_00(ref int seq)
         {
-        	this.m_myClientID = 0;
+        	this.m_myClientID = (byte)0;
         	return true;
         }
 
         private bool setup_alone_double_multi_01(ref int seq)
         {
         	var uVar1 = this.m_setupParam.commPos;
-        	this.m_myClientID = uVar1;
-        	uVar1 = GetClientPokePos(uVar1);
-        	this.m_myOrgPos = uVar1;
+        	this.m_myClientID = (byte)(uVar1);
+        	uVar1 = (BtlPokePos)(GetClientPokePos(uVar1));
+        	this.m_myOrgPos = (BtlPokePos)(uVar1);
         	setupCommon_srcParty(this.m_setupParam);
         	return true;
         }
@@ -419,7 +419,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetMaxFollowPokeLevel()
         {
-        	return this.m_setupParam.maxFollowPokeLevel;
+        	return (byte)(this.m_setupParam.maxFollowPokeLevel);
         }
 
         public bool NeedReduleHighLevelCaptureRate()
@@ -429,12 +429,12 @@ namespace Dpr.Battle.Logic
 
         public byte GetCaptureLevelCap()
         {
-        	return this.m_setupParam.captureLevelCap;
+        	return (byte)(this.m_setupParam.captureLevelCap);
         }
 
         public byte GetExpLevelCap()
         {
-        	return this.m_setupParam.expLevelCap;
+        	return (byte)(this.m_setupParam.expLevelCap);
         }
 
         public bool IsIrekaeMode()
@@ -486,7 +486,7 @@ namespace Dpr.Battle.Logic
         	uint uVar1 = default;
         	if (((int)this.m_rule != 2) &&
         	   (uVar1 = this.m_setupParam.competitor, uVar1 < 4)) {
-        	  return 0xdU >> (ulong)(uVar1 & 0xf) & 1;
+        	  return 0xdU >> (int)(uVar1 & 0xf) & 1;
         	}
         	return false;
         }
@@ -526,8 +526,8 @@ namespace Dpr.Battle.Logic
         public BtlCompetitor GetCompetitor(bool isDemoCaptureConvert = true)
         {
         	var iVar1 = (BtlCompetitor)0;
-        	if ((this.m_setupParam.competitor == 4 & isDemoCaptureConvert) == 0) {
-        	  iVar1 = this.m_setupParam.competitor;
+        	if ((this.m_setupParam.competitor == 4 & (isDemoCaptureConvert ? 1 : 0)) == 0) {
+        	  iVar1 = (BtlCompetitor)(this.m_setupParam.competitor);
         	}
         	return iVar1;
         }
@@ -553,16 +553,18 @@ namespace Dpr.Battle.Logic
 
         public BTL_FIELD_SITUATION GetFieldSituation()
         {
-        	return this.m_setupParam[0];
+        	return this.m_setupParam.fieldSituation;
         }
 
         public BtlWeather GetDefaultWeather()
         {
-        	return this.m_setupParam[0].Length;
+        	return this.m_setupParam.fieldSituation.weather;
         }
 
-        // TODO
-        public byte GetDefaultGround() { return 0; }
+        public byte GetDefaultGround()
+        {
+        	return (byte)(this.m_setupParam.fieldSituation.ground);
+        }
 
         public BattleEffectComponentData GetBattleEffectData()
         {
@@ -574,7 +576,7 @@ namespace Dpr.Battle.Logic
         	if ((this.m_setupParam.competitor & 0xfffffffb) != 0) {
         	  return 0;
         	}
-        	return this.m_setupParam.forceQuitTurnCount;
+        	return (byte)(this.m_setupParam.forceQuitTurnCount);
         }
 
         public MyStatus GetPlayerStatus()
@@ -685,6 +687,7 @@ namespace Dpr.Battle.Logic
         public bool IsOpponentClientID(byte clientID1, byte clientID2)
         {
         	BattleRule.IsOpponentClient(this.m_rule,clientID1,clientID2);
+        	return false;
         }
 
         // TODO
@@ -734,7 +737,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetPlayerClientID()
         {
-        	return this.m_myClientID;
+        	return (byte)(this.m_myClientID);
         }
 
         // TODO
@@ -783,13 +786,14 @@ namespace Dpr.Battle.Logic
         {
         	if (((int)this.m_serverResult != 8) && (!isForceSetEnable)) {
         	}
-        	this.m_serverResult = result;
-        	this.m_serverResultCause = resultCause;
+        	this.m_serverResult = (BtlResult)(result);
+        	this.m_serverResultCause = (ResultCause)(resultCause);
         }
 
         public BtlResult GetBattleResult()
         {
         	checkWinner(this.m_myClientID);
+        	return (BtlResult)0;
         }
 
         public ResultCause GetBattleResultCause()
@@ -936,7 +940,7 @@ namespace Dpr.Battle.Logic
         {
         	var iVar1 = (BtlCompetitor)0;
         	if (this.m_setupParam.competitor != 4) {
-        	  iVar1 = this.m_setupParam.competitor;
+        	  iVar1 = (BtlCompetitor)(this.m_setupParam.competitor);
         	}
         	BattleRule.IsResultStrictJudge(this.m_rule,iVar1);
         	return false;
@@ -1013,8 +1017,8 @@ namespace Dpr.Battle.Logic
         private void Kentei_ClearField(BATTLE_SETUP_PARAM sp)
         {
         	this.m_setupParam.kenteiResult.UseWazaNum = 0;
-        	this.m_setupParam.kenteiResult.Length = 0;
-        	this.m_setupParam.kenteiResult[0] = 0;
+        	this.m_setupParam.kenteiResult.VoidAtcNum = 0;
+        	this.m_setupParam.kenteiResult.ResistNum = 0;
         	this.m_setupParam.kenteiResult.TurnNum = 0;
         }
 
@@ -1148,7 +1152,7 @@ namespace Dpr.Battle.Logic
         	  var uVar2 = this.m_setupParam.playerRating.Length;
         	  if ((int)uVar1 < (int)uVar2) {
         	    if (uVar1 < uVar2) {
-        	      return this.m_setupParam.playerRating + (clientID & 0xff) * 2[0];
+        	      return (ushort)(this.m_setupParam.playerRating + (clientID & 0xff) * 2[0]);
         	    }
         	  }
         	}
@@ -1204,7 +1208,7 @@ namespace Dpr.Battle.Logic
 
         public RaidBattleParam GetRaidBattleParam()
         {
-        	return this.m_setupParam.Length;
+        	return this.m_setupParam.raidBattleParam;
         }
 
         // TODO
@@ -1242,7 +1246,7 @@ namespace Dpr.Battle.Logic
         	var uVar1 = bpp.WAZA_IsUsable(wazaNo);
         	if ((wazaNo != 0xa5) && (!uVar1)) {
         	}
-        	this.m_setupParam.tvNaviData.Length = wazaNo;
+        	this.m_setupParam.tvNaviData.lastWaza = wazaNo;
         }
 
         public void NotifyPokemonDead(byte pokeID)
@@ -1260,16 +1264,18 @@ namespace Dpr.Battle.Logic
         {
         	if (this.m_setupParam.recordDataMode == '\x01') {
         	  this.m_randomSeed = this.m_setupParam.recRandSeed;
-        	  Random.Initialize(this[0],this.m_setupParam.recRandSeed);
+        	  this.m_randSys.Initialize(this.m_setupParam.recRandSeed);
         	}
-        	Random.Initialize(this[0]);
-        	this.m_randomSeed = this[0].Length;
+        	this.m_randSys.Initialize();
+        	this.m_randomSeed = this.m_randSys.m_seed;
         	this.m_setupParam.recRandSeed =
-        	     this[0].Length;
+        	     this.m_randSys.m_seed;
         }
 
-        // TODO
-        public bool IsRaidBossRare() { return false; }
+        public bool IsRaidBossRare()
+        {
+        	return this.m_setupParam.raidBattleParam.isBossRare;
+        }
 
         // TODO
         public bool IsGEnableByNPC(byte pokeID) { return false; }

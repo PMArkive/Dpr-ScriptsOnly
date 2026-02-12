@@ -75,7 +75,7 @@ namespace Dpr.Contest
 		
 		public void SetTapEnabled(bool enabled)
 		{
-			this.canTap = enabled & 1;
+			this.canTap = (enabled ? 1 : 0) & 1;
 		}
 		
 		public void ChangeStateMiss()

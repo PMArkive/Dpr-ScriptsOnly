@@ -71,8 +71,8 @@ namespace Dpr.Contest
 		private void LoadFx()
 		{
 			this.loadCount = 0;
-			Contest_NotesLane.LoadTapGradeFx();
-			Contest_NotesLane.LoadLongTapFx();
+			LoadTapGradeFx();
+			LoadLongTapFx();
 		}
 		
 		// TODO
@@ -162,7 +162,7 @@ namespace Dpr.Contest
 		
 		public void SetHeartGaugeRatio(float ratio)
 		{
-			UI_Image.fillAmount = this.heartGaugeImage;
+			this.heartGaugeImage.set_fillAmount();
 		}
 		
 		// TODO

@@ -25,7 +25,7 @@ namespace Dpr.DigFossil
 		
 		public void SetActive(bool bisActive)
 		{
-			ExtensionMethods.SetActive(this.Length,bisActive & 1);
+			ExtensionMethods.SetActive(this.curtain,(bisActive ? 1 : 0) & 1);
 		}
 		
 		// TODO

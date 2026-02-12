@@ -40,10 +40,10 @@ namespace Dpr.UI
 		
 		public void SetCardImageSprite(Sprite cardSprite, Sprite titleSprite, Sprite cover1Sprite, Sprite cover2Sprite)
 		{
-			UI_Image.set_sprite(this.Length,cardSprite);
-			UI_Image.set_sprite(this[0],titleSprite);
-			UI_Image.set_sprite(this.cover1Image,cover1Sprite);
-			UI_Image.set_sprite(this.cover2Image,cover2Sprite);
+			this.cardImage.sprite = cardSprite;
+			this.titleImage.sprite = titleSprite;
+			this.cover1Image.sprite = cover1Sprite;
+			this.cover2Image.sprite = cover2Sprite;
 		}
 		
 		// TODO

@@ -49,7 +49,7 @@ namespace Dpr.UI
 		
 		public void EnableSwapMode(bool enabled)
 		{
-			GameObject.SetActive(this._cursorSwap.gameObject,enabled & 1,0);
+			GameObject.SetActive(this._cursorSwap.gameObject,(enabled ? 1 : 0) & 1,0);
 		}
 		
 		// TODO

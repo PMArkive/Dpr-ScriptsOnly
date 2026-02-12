@@ -28,11 +28,11 @@ namespace Dpr.Battle.Logic
 		public void AddCause(Cause cause)
 		{
 			if (this.m_isAvailable) {
-			  if ((long)(ulong)this.Length < (long)this.m_causes.Length) {
-			    this.Length = this.Length + 1;
-			    if (this.m_causes.Length <= this.Length) {
+			  if ((long)(ulong)this.m_numCause < (long)this.m_causes.Length) {
+			    this.m_numCause = this.m_numCause + 1;
+			    if (this.m_causes.Length <= this.m_numCause) {
 			    }
-			    this.m_causes + (ulong)this.Length * 4[0] = cause;
+			    this.m_causes + (ulong)this.m_numCause * 4[0] = cause;
 			  }
 			}
 		}

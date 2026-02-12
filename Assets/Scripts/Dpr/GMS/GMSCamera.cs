@@ -98,13 +98,13 @@ namespace Dpr.GMS
 		
 		public void LockMove()
 		{
-			GMS_GMSWork.EmitLog(StringLiteral_9399,3);
+			GMSWork.EmitLog(StringLiteral_9399,3);
 			this.bLockOperation = true;
 		}
 		
 		public void UnlockMove()
 		{
-			GMS_GMSWork.EmitLog(StringLiteral_9400,3);
+			GMSWork.EmitLog(StringLiteral_9400,3);
 			this.currentMovedIndex = 0xffffffff;
 			this.bLockOperation = false;
 		}
@@ -126,7 +126,7 @@ namespace Dpr.GMS
 		// TODO
 		public void ResetDistance([Optional] Action onComplete, bool isImmediately = false, bool playSe = true) { }
 		
-		private float GetGoalDistanceValue()
+		private unsafe float GetGoalDistanceValue()
 		{
 			if (this.distanceLevel < this.distanceConfig.Length) {
 			  return *(uint *)

@@ -28,11 +28,11 @@ namespace Dpr.Battle.Logic
         {
         	this.attackerPos = (BtlPokePos)0x505;
         	this.effectWazaID = (WazaNo)0;
-        	this.effectIndex = 0;
+        	this.effectIndex = (byte)0;
         	this.fDone = false;
-        	this.commandQueuePos = 0xffff;
+        	this.commandQueuePos = (ushort)0xffff;
         	this.isSyncDamageEffect = false;
-        	this.subEff_pokeID_2 = 0;
+        	this.subEff_pokeID_2 = (byte)0;
         }
 
         // TODO
@@ -40,12 +40,12 @@ namespace Dpr.Battle.Logic
 
         public void ChangeAttackerPos(BtlPokePos atkPos)
         {
-        	this.attackerPos = atkPos;
+        	this.attackerPos = (BtlPokePos)(atkPos);
         }
 
         public void ChangeEffectWazaID(WazaNo waza)
         {
-        	this.effectWazaID = waza;
+        	this.effectWazaID = (WazaNo)(waza);
         }
 
         public WazaNo GetEffectWazaID()
@@ -77,7 +77,7 @@ namespace Dpr.Battle.Logic
 
         public void SetEffectIndex(byte index)
         {
-        	this.effectIndex = index;
+        	this.effectIndex = (byte)(index);
         }
 
         // TODO
@@ -85,8 +85,8 @@ namespace Dpr.Battle.Logic
 
         public void ClearSubEffectParams()
         {
-        	this.subEff_pokeID_4 = 0;
-        	this.subEff_pokeCnt = 0;
+        	this.subEff_pokeID_4 = (byte)0;
+        	this.subEff_pokeCnt = (byte)0;
         }
 
         public bool IsSubEffectParamsValid()
@@ -96,12 +96,12 @@ namespace Dpr.Battle.Logic
 
         public bool IsGShockOccur()
         {
-        	return this.Length;
+        	return this.isGShockOccur;
         }
 
         public void SetGShockOccur()
         {
-        	this.Length = 1;
+        	this.isGShockOccur = true;
         }
 
         public void SetSyncDamageEffectEnable()

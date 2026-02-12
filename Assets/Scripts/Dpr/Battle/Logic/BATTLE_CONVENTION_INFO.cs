@@ -20,8 +20,8 @@ namespace Dpr.Battle.Logic
 			this.CommBattle = 0;
 			this.Bp = 0;
 			this.Sparing = 0;
-			this.Length = 0;
-			this[0] = 0;
+			this.BattleHouse = 0;
+			this.CaptureNum = 0;
 		}
 	}
 }

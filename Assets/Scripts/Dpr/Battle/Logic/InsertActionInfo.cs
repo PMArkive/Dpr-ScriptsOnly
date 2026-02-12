@@ -11,7 +11,7 @@
         public void Clear()
         {
         	this.isTokuseiWindowDisplay = false;
-        	this.Length.Clear();
+        	this.prevActionMessage.Clear();
         }
     }
 }

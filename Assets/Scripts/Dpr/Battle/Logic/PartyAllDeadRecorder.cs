@@ -29,7 +29,7 @@ namespace Dpr.Battle.Logic
 			  return 5;
 			}
 			if ((uint)clientID < this.m_partyAllDeadOrder.Length) {
-			  return this.m_partyAllDeadOrder + (ulong)clientID[0];
+			  return (byte)(this.m_partyAllDeadOrder + (ulong)clientID[0]);
 			}
 		}
 	}

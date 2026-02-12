@@ -138,7 +138,7 @@ namespace Dpr.Battle.View.Objects
 		
 		public void SetRTPC_IsPlayPinchSound(bool value)
 		{
-			this.m_isPlayPinchSoundRTPC = value & 1;
+			this.m_isPlayPinchSoundRTPC = (value ? 1 : 0) & 1;
 		}
 		
 		public bool GetIsPlayPinchSound()
@@ -148,7 +148,7 @@ namespace Dpr.Battle.View.Objects
 		
 		public void SetIsPlayPinchSound(bool value)
 		{
-			this.m_isPlayPinchSound = value & 1;
+			this.m_isPlayPinchSound = (value ? 1 : 0) & 1;
 		}
 		
 		// TODO
@@ -174,7 +174,7 @@ namespace Dpr.Battle.View.Objects
 		
 		public void DisableSleepEye(bool value)
 		{
-			this.m_disableSleepEye = value & 1;
+			this.m_disableSleepEye = (value ? 1 : 0) & 1;
 		}
 		
 		// TODO

@@ -183,7 +183,7 @@ namespace Dpr.DigFossil
 		
 		private void SetState(GameState newState)
 		{
-			this.gameState = newState;
+			this.gameState = (GameState)(newState);
 		}
 		
 		// TODO
@@ -200,8 +200,8 @@ namespace Dpr.DigFossil
 		
 		private void SetDisplayDebugInfo(bool isDisplay)
 		{
-			ExtensionMethods.SetActive(this.tableTypeText,isDisplay & 1);
-			ExtensionMethods.SetActive(this.tonariNumText,isDisplay & 1);
+			ExtensionMethods.SetActive(this.tableTypeText,(isDisplay ? 1 : 0) & 1);
+			ExtensionMethods.SetActive(this.tonariNumText,(isDisplay ? 1 : 0) & 1);
 		}
 		
 		// TODO

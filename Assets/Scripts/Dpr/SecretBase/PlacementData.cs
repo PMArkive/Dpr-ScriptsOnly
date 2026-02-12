@@ -174,7 +174,7 @@ namespace Dpr.SecretBase
 			private void Update()
 			{
 				if (this.isPlaying) {
-				  SecretBase_PlacementData_NGMotionMono.PlayUpdate();
+				  PlayUpdate();
 				}
 			}
 		}
@@ -196,7 +196,7 @@ namespace Dpr.SecretBase
 			private void Update()
 			{
 				if (this.isPlaying) {
-				  SecretBase_PlacementData_NGMotionMono.PlayUpdate();
+				  PlayUpdate();
 				}
 			}
 			

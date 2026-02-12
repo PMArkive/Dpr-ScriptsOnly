@@ -94,7 +94,7 @@ namespace Dpr.Battle.View.Systems
 		public override void OnLateUpdate(float deltaTime)
 		{
 			if (this.Cameras != 0) {
-			  SequenceEditor_SequenceCameraSystem.OnLateUpdate();
+			  SequenceCameraSystem.OnLateUpdate();
 			}
 		}
 		

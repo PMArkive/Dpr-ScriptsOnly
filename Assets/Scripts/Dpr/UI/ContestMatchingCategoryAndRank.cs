@@ -80,8 +80,8 @@ namespace Dpr.UI
 			this.bIsOpenConfirmMsg = false;
 			var uVar1 = StringLiteral_11295;
 			var uVar2 = String.Concat(StringLiteral_11377,uVar1,StringLiteral_423);
-			Contest_ContestUtils.EmitLog(uVar2,3);
-			SubContents_ShowMessageWindow.ShowMessage(this.contestMatchingUIPtr.msgWindow,uVar1,0,1,0);
+			ContestUtils.EmitLog(uVar2,3);
+			this.contestMatchingUIPtr.msgWindow.ShowMessage(uVar1,0,1,0);
 		}
 		
 		// TODO

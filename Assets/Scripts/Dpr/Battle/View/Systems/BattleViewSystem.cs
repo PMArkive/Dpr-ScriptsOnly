@@ -369,7 +369,7 @@ namespace Dpr.Battle.View.Systems
 
         public void StartWeather(BtlWeather weather)
         {
-        	Systems_BattleWeatherSystem.Request(this.m_iPtrWeatherSystem,weather,0);
+        	this.m_iPtrWeatherSystem.Request(weather,0);
         }
 
         // TODO
@@ -428,7 +428,7 @@ namespace Dpr.Battle.View.Systems
         private void PlaySequenceStartDemo(bool isKeepResource = true)
         {
         	this.m_sequenceSeq = (SequenceSeq)3;
-        	this.m_seqKeepResource = isKeepResource & 1;
+        	this.m_seqKeepResource = (isKeepResource ? 1 : 0) & 1;
         	this.m_isSoundPlayingFinishCheckInvalid = false;
         	this.m_soundPlayingFinishWaitCount = 0;
         }

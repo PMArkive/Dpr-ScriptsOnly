@@ -35,12 +35,12 @@ namespace Dpr.UI
 		
 		public void Select()
 		{
-			this.Length.Select(1);
+			this.pokemonStatusWazaItem.Select(1);
 		}
 		
 		public void UnSelect()
 		{
-			this.Length.Select(0);
+			this.pokemonStatusWazaItem.Select(0);
 		}
 		
 		// TODO
@@ -49,7 +49,9 @@ namespace Dpr.UI
 		// TODO
 		public void Setup(WazaNo wazaNo, bool isNew, bool isContest = false) { }
 		
-		// TODO
-		public RectTransform GetCursorTransform() { return default; }
+		public RectTransform GetCursorTransform()
+		{
+			return this.cursorRectTransform;
+		}
 	}
 }

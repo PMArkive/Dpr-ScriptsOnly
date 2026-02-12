@@ -24,21 +24,8 @@ namespace Dpr
         // TODO
         public static void SetupBattleWild(BATTLE_SETUP_PARAM battleSetupParam, PokeParty iPtrEnemyParty, ArenaID arenaID, MapAttributeEx mapAttrib, SYS_WEATHER weatherType, [Optional, DefaultParameterValue(false)] bool isSwim, [Optional, DefaultParameterValue(false)] bool isFishing, [Optional, DefaultParameterValue(TrainerID.NONE)] TrainerID partnerID, [Optional, DefaultParameterValue(false)] bool isCaptureDemo, [Optional, DefaultParameterValue(-1)] int safariBallNum, [Optional, DefaultParameterValue(false)] bool isSymbol, [Optional, DefaultParameterValue(false)] bool isMitu, [Optional] string overlapBgm, BattleSetupEffectId overlapSetupEffectId = BattleSetupEffectId.DEFAULT, bool isCantUseBall = false) { }
 
-        private static bool IsUseSetupEffectVariation(PokeParty party)
-        {
-        	if (this.Length != 0) {
-        	  var iVar4 = 0;
-        	  do {
-        	    var uVar3 = iVar4.GetMemberPointerConst();
-        	    var uVar2 = uVar3.GetTalentPowerMaxNum();
-        	    if (1 < uVar2) {
-        	      return true;
-        	    }
-        	    iVar4 = iVar4 + 1;
-        	  } while (this.Length != iVar4);
-        	}
-        	return false;
-        }
+        // TODO
+        private static bool IsUseSetupEffectVariation(PokeParty party) { return false; }
 
         // TODO
         public static void SetupBattleTrainer(BATTLE_SETUP_PARAM battleSetupParam, ArenaID arenaID, MapAttributeEx mapAttrib, SYS_WEATHER weatherType, BtlRule rule, TrainerID enemyID0, TrainerID enemyID1 = TrainerID.NONE, TrainerID partnerID = TrainerID.NONE) { }
@@ -84,7 +71,7 @@ namespace Dpr
         	var uVar1 = playerParty.GetMemberPointerConst(memberIdx);
         	uVar1.GetMonsNo();
         	uVar1.GetFormNo();
-        	return isLevelUp & 1;
+        	return (isLevelUp ? 1 : 0) & 1;
         }
 
         // TODO

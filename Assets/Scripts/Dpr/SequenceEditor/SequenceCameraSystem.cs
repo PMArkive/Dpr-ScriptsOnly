@@ -90,8 +90,8 @@ namespace Dpr.SequenceEditor
 		
 		public void SetCameraAnimationSpeed(float speed)
 		{
-			if (this.Length != 0) {
-			  Playables_CameraFilePlayable.SetSpeed(this.Length);
+			if (this.m_pCamearaAnimeComponent != null) {
+			  this.m_pCamearaAnimeComponent.SetSpeed();
 			}
 		}
 		
@@ -103,15 +103,17 @@ namespace Dpr.SequenceEditor
 		
 		public void SetCameraAnimationCheckGround(bool value)
 		{
-			this[0] = value & 1;
+			this._isCheckGround = (value ? 1 : 0) & 1;
 		}
 		
-		// TODO
-		public bool GetCameraAnimationCheckGround() { return default; }
+		public bool GetCameraAnimationCheckGround()
+		{
+			return this._isCheckGround;
+		}
 		
 		public void SetCameraPosOverCheck(bool value)
 		{
-			this._isPosOverCheck = value & 1;
+			this._isPosOverCheck = (value ? 1 : 0) & 1;
 		}
 		
 		public bool GetCameraPosOverCheck()

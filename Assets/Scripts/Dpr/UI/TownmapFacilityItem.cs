@@ -9,7 +9,7 @@ namespace Dpr.UI
 		
 		public void Setup(string messageLabel)
 		{
-			this.Length.SetupMessage(0,messageLabel);
+			this._text.SetupMessage(0,messageLabel);
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Dpr.Contest
 	{
 		protected ContestWazaInfo.SheetContestWazaData skillData;
 		protected PlayerDanceDataModel targetData;
-		protected PokeType wazaType;
+		protected internal PokeType wazaType;
 		protected double launchElapsedTime;
 		protected double lifeTime;
 		protected bool active;
@@ -28,8 +28,8 @@ namespace Dpr.Contest
 		public void CreateSkill(ContestWazaInfo.SheetContestWazaData skillData, PokeType wazaType, PlayerDanceDataModel target)
 		{
 			this.skillData = skillData;
-			this.Length = target;
-			this[0] = wazaType;
+			this.targetData = target;
+			this.wazaType = (PokeType)(wazaType);
 		}
 
 		public abstract int CalcAppealPoint();

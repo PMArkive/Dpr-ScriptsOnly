@@ -34,11 +34,15 @@ namespace Dpr.Battle.Logic
             return m_pMainModule;
         }
 
-        // TODO
-        public virtual BattleEnv GetBattleEnv() { return null; }
+        public virtual BattleEnv GetBattleEnv()
+        {
+        	return this.m_pBattleEnv;
+        }
 
-        // TODO
-        public virtual POKECON GetBattleContainer() { return null; }
+        public virtual POKECON GetBattleContainer()
+        {
+        	return this.m_pBattleEnv.m_pokecon;
+        }
 
         // TODO
         public virtual BTL_POKEPARAM GetBattlePokeParam(BtlvPos pos) { return null; }
@@ -63,11 +67,13 @@ namespace Dpr.Battle.Logic
 
         public virtual BTL_CLIENT GetClient()
         {
-        	return this.Length;
+        	return this.m_iPtrClient;
         }
 
-        // TODO
-        public virtual FieldStatus GetFieldStatus() { return null; }
+        public virtual FieldStatus GetFieldStatus()
+        {
+        	return this.m_pBattleEnv.m_fieldStatus;
+        }
 
         // TODO
         public virtual SideEffectStatus GetSideEffectStatus(BtlSide side, BtlSideEffect effect) { return default; }
@@ -135,8 +141,13 @@ namespace Dpr.Battle.Logic
         	return false;
         }
 
-        // TODO
-        public virtual byte GetClientID() { return 0; }
+        public virtual byte GetClientID()
+        {
+        	if (this.m_iPtrClient != null) {
+        	  return (byte)(this.m_iPtrClient.m_myID);
+        	}
+        	return 0;
+        }
 
         public virtual byte GetFriendCleintID()
         {
@@ -369,8 +380,8 @@ namespace Dpr.Battle.Logic
 
         public virtual uint GetTurnCount()
         {
-        	if (this.Length != 0) {
-        	  this.Length.GetTurnCount();
+        	if (this.m_iPtrClient != null) {
+        	  this.m_iPtrClient.GetTurnCount();
         	}
         	return 0;
         }
@@ -411,11 +422,17 @@ namespace Dpr.Battle.Logic
         // TODO
         public virtual bool IsPlayerSide(BtlvPos pos) { return false; }
 
-        // TODO
-        public virtual uint GetGameTime() { return 0; }
+        public virtual uint GetGameTime()
+        {
+        	this.m_iPtrClient.m_gameTimer.GetTime(0);
+        	return 0;
+        }
 
-        // TODO
-        public virtual uint GetCommandTime() { return 0; }
+        public virtual uint GetCommandTime()
+        {
+        	this.m_iPtrClient.m_gameTimer.GetTime(2);
+        	return 0;
+        }
 
         // TODO
         public virtual uint GetClientTime(BTL_CLIENT_ID clientID) {return default; }
@@ -494,7 +511,7 @@ namespace Dpr.Battle.Logic
         {
         	if (pAttacker != null) {
         	  var uVar1 = WAZADATA.GetType(pAttacker);
-        	  return uVar1;
+        	  return (byte)(uVar1);
         	}
         	return 0;
         }
@@ -516,7 +533,7 @@ namespace Dpr.Battle.Logic
         	if (this.m_pMainModule != null) {
         	  this.m_pMainModule.GetClientPublicInformation(clientID);
         	}
-        	return default;
+        	return null;
         }
 
         // TODO
@@ -1368,8 +1385,8 @@ namespace Dpr.Battle.Logic
             {
             	this.effort_agi = 0;
             	this.exp = 0;
-            	this.Length = 0;
-            	this[0] = 0;
+            	this.effort_pow = 0;
+            	this.effort_sp_pow = 0;
             }
 
             // TODO
@@ -1385,8 +1402,8 @@ namespace Dpr.Battle.Logic
             {
             	this.effort_agi = 0;
             	this.exp = 0;
-            	this.Length = 0;
-            	this[0] = 0;
+            	this.effort_pow = 0;
+            	this.effort_sp_pow = 0;
             }
         }
 
@@ -1399,8 +1416,8 @@ namespace Dpr.Battle.Logic
             {
             	this.effort_agi = 0;
             	this.exp = 0;
-            	this.Length = 0;
-            	this[0] = 0;
+            	this.effort_pow = 0;
+            	this.effort_sp_pow = 0;
             }
 
             // TODO
@@ -1471,8 +1488,8 @@ namespace Dpr.Battle.Logic
             public void Reset()
             {
             	this.pMyStatus = null;
-            	this.Length = 0;
-            	this[0] = 0;
+            	this.ipName = 0;
+            	this.ipNameLabel = 0;
             	this.gender = (Sex)0;
             	this.pokeLanguageID = (MsgLangId)1;
             }
@@ -1498,8 +1515,8 @@ namespace Dpr.Battle.Logic
             public void Reset()
             {
             	this.pMyStatus = null;
-            	this.Length = 0;
-            	this[0] = 0;
+            	this.ipName = 0;
+            	this.ipNameLabel = 0;
             	this.gender = (Sex)0;
             	this.pokeLanguageID = (MsgLangId)1;
             }
@@ -1518,8 +1535,8 @@ namespace Dpr.Battle.Logic
                 public void Reset()
                 {
                 	this.pMyStatus = null;
-                	this.Length = 0;
-                	this[0] = 0;
+                	this.ipName = 0;
+                	this.ipNameLabel = 0;
                 	this.gender = (Sex)0;
                 	this.pokeLanguageID = (MsgLangId)1;
                 }

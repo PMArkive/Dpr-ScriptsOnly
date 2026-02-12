@@ -32,8 +32,8 @@ namespace Pml.Item
         	var lVar1 = GetUgItemDataRaw();
         	if (lVar1 != null) {
         	}
-        	this.m_ugItemTable.get_Item(0);
-        	return default;
+        	this.m_ugItemTable[0];
+        	return null;
         }
 
         // TODO
@@ -57,10 +57,8 @@ namespace Pml.Item
         // TODO
         private UgItemTable.Sheettable GetUgItemDataRaw(int ugItemId) { return null; }
 
-        public int GetNumStatueKInd()
-        {
-        	return this.m_stoneStatuEeffect.Length.Length + -1;
-        }
+        // TODO
+        public int GetNumStatueKInd() { return 0; }
 
         public bool IsTama(int ugItemId)
         {

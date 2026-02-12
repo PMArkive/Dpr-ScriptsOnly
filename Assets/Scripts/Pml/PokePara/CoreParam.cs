@@ -221,7 +221,7 @@ namespace Pml.PokePara
 
         public void AddExp(uint value)
         {
-        	SetExp(Accessor.GetExp(this[0]) + value);
+        	SetExp(this.m_accessor.GetExp() + value);
         }
 
         // TODO
@@ -240,17 +240,17 @@ namespace Pml.PokePara
         {
         	switch(powerId) {
         	case 0:
-        	  return Accessor.GetTalentHp(this[0]);
+        	  return this.m_accessor.GetTalentHp();
         	case 1:
-        	  return Accessor.GetTalentAtk(this[0]);
+        	  return this.m_accessor.GetTalentAtk();
         	case 2:
-        	  return Accessor.GetTalentDef(this[0]);
+        	  return this.m_accessor.GetTalentDef();
         	case 3:
-        	  return Accessor.GetTalentSpAtk(this[0]);
+        	  return this.m_accessor.GetTalentSpAtk();
         	case 4:
-        	  return Accessor.GetTalentSpDef(this[0]);
+        	  return this.m_accessor.GetTalentSpDef();
         	case 5:
-        	  return Accessor.GetTalentAgi(this[0]);
+        	  return this.m_accessor.GetTalentAgi();
         	default:
         	  GFL.ASSERT(0);
         	  return 0;
@@ -270,24 +270,29 @@ namespace Pml.PokePara
         	case 0:
         	  break;
         	case 1:
-        	  Accessor.SetTalentAtk(this[0],uVar2);
+        	  this.m_accessor.SetTalentAtk(uVar2);
         	  UpdateAtk();
+        	  break;
         	case 2:
-        	  Accessor.SetTalentDef(this[0],uVar2);
+        	  this.m_accessor.SetTalentDef(uVar2);
         	  UpdateDef();
+        	  break;
         	case 3:
-        	  Accessor.SetTalentSpAtk(this[0],uVar2);
+        	  this.m_accessor.SetTalentSpAtk(uVar2);
         	  UpdateSpAtk();
+        	  break;
         	case 4:
-        	  Accessor.SetTalentSpDef(this[0],uVar2);
+        	  this.m_accessor.SetTalentSpDef(uVar2);
         	  UpdateSpDef();
+        	  break;
         	case 5:
-        	  Accessor.SetTalentAgi(this[0],uVar2);
+        	  this.m_accessor.SetTalentAgi(uVar2);
         	  UpdateAgi();
+        	  break;
         	default:
         	  GFL.ASSERT(0);
         	}
-        	Accessor.SetTalentHp(this[0],uVar2);
+        	this.m_accessor.SetTalentHp(uVar2);
         	uVar2 = GetMaxHp();
         	var uVar3 = GetHp();
         	UpdateMaxHP();
@@ -301,7 +306,8 @@ namespace Pml.PokePara
         	if (uVar2 <= uVar4) {
         	  uVar1 = (uVar3 - uVar2) + uVar4;
         	}
-        	Accessor.SetHp(this[0],uVar1);
+        	this.m_accessor.SetHp(uVar1);
+        	break;
         }
 
         // TODO
@@ -310,7 +316,7 @@ namespace Pml.PokePara
         public bool IsTrainingDone(PowerID powerId)
         {
         	if ((int)(int)powerId < 6) {
-        	  return (Accessor.GetTrainingFlag(this[0]) & 1 << (ulong)(powerId & 0x1f) & 0xff) != 0;
+        	  return (this.m_accessor.GetTrainingFlag() & 1 << (int)((int)powerId & 0x1f) & 0xff) != 0;
         	}
         	GFL.ASSERT(0);
         	return false;
@@ -323,17 +329,17 @@ namespace Pml.PokePara
         {
         	switch(powerId) {
         	case 0:
-        	  return Accessor.GetEffortHp(this[0]);
+        	  return this.m_accessor.GetEffortHp();
         	case 1:
-        	  return Accessor.GetEffortAtk(this[0]);
+        	  return this.m_accessor.GetEffortAtk();
         	case 2:
-        	  return Accessor.GetEffortDef(this[0]);
+        	  return this.m_accessor.GetEffortDef();
         	case 3:
-        	  return Accessor.GetEffortSpAtk(this[0]);
+        	  return this.m_accessor.GetEffortSpAtk();
         	case 4:
-        	  return Accessor.GetEffortSpDef(this[0]);
+        	  return this.m_accessor.GetEffortSpDef();
         	case 5:
-        	  return Accessor.GetEffortAgi(this[0]);
+        	  return this.m_accessor.GetEffortAgi();
         	default:
         	  GFL.ASSERT(0);
         	  return 0;
@@ -358,24 +364,29 @@ namespace Pml.PokePara
         	case 0:
         	  break;
         	case 1:
-        	  Accessor.SetEffortAtk(this[0],uVar2);
+        	  this.m_accessor.SetEffortAtk(uVar2);
         	  UpdateAtk();
+        	  break;
         	case 2:
-        	  Accessor.SetEffortDef(this[0],uVar2);
+        	  this.m_accessor.SetEffortDef(uVar2);
         	  UpdateDef();
+        	  break;
         	case 3:
-        	  Accessor.SetEffortSpAtk(this[0],uVar2);
+        	  this.m_accessor.SetEffortSpAtk(uVar2);
         	  UpdateSpAtk();
+        	  break;
         	case 4:
-        	  Accessor.SetEffortSpDef(this[0],uVar2);
+        	  this.m_accessor.SetEffortSpDef(uVar2);
         	  UpdateSpDef();
+        	  break;
         	case 5:
-        	  Accessor.SetEffortAgi(this[0],uVar2);
+        	  this.m_accessor.SetEffortAgi(uVar2);
         	  UpdateAgi();
+        	  break;
         	default:
         	  GFL.ASSERT(0);
         	}
-        	Accessor.SetEffortHp(this[0],uVar2);
+        	this.m_accessor.SetEffortHp(uVar2);
         	var uVar3 = GetMaxHp();
         	var uVar4 = GetHp();
         	UpdateMaxHP();
@@ -389,7 +400,8 @@ namespace Pml.PokePara
         	if (uVar3 <= uVar5) {
         	  uVar1 = (uVar4 - uVar3) + uVar5;
         	}
-        	Accessor.SetHp(this[0],uVar1);
+        	this.m_accessor.SetHp(uVar1);
+        	break;
         }
 
         // TODO
@@ -429,37 +441,38 @@ namespace Pml.PokePara
         public void ChangeEffortG(byte value)
         {
         	if (9 < (value & 0xff)) {
-        	  value = 10;
+        	  value = (byte)10;
         	}
-        	Accessor.SetEffortG(this[0],value);
+        	this.m_accessor.SetEffortG(value);
         }
 
         public byte GetEffortG()
         {
-        	Accessor.GetEffortG(this[0]);
+        	this.m_accessor.GetEffortG();
+        	return 0;
         }
 
         public void AddEffortG(uint value)
         {
-        	var uVar2 = Accessor.GetEffortG(this[0]) + value;
+        	var uVar2 = this.m_accessor.GetEffortG() + value;
         	if (9 < (uVar2 & 0xff)) {
         	  uVar2 = 10;
         	}
-        	Accessor.SetEffortG(this[0],uVar2);
+        	this.m_accessor.SetEffortG(uVar2);
         }
 
         public void SubEffortG(uint value)
         {
-        	if (value < (Accessor.GetEffortG(this[0]) & 0xff)) {
-        	  Accessor.GetEffortG(this[0]) = Accessor.GetEffortG(this[0]) - value;
-        	  if (9 < (Accessor.GetEffortG(this[0]) & 0xff)) {
-        	    Accessor.GetEffortG(this[0]) = 10;
+        	if (value < (this.m_accessor.GetEffortG() & 0xff)) {
+        	  this.m_accessor.GetEffortG() = Accessor.GetEffortG(this.m_accessor) - value;
+        	  if (9 < (this.m_accessor.GetEffortG() & 0xff)) {
+        	    this.m_accessor.GetEffortG() = 10;
         	  }
         	}
         	else {
-        	  Accessor.GetEffortG(this[0]) = 0;
+        	  this.m_accessor.GetEffortG() = 0;
         	}
-        	Accessor.SetEffortG(this[0],Accessor.GetEffortG(this[0]),0);
+        	this.m_accessor.SetEffortG(Accessor.GetEffortG(this.m_accessor),0);
         }
 
         // TODO
@@ -470,17 +483,18 @@ namespace Pml.PokePara
 
         public bool IsSpecialGEnable()
         {
-        	Accessor.IsSpecialGEnable(this[0]);
+        	this.m_accessor.IsSpecialGEnable();
+        	return false;
         }
 
         public void SetSpecialGEnable()
         {
-        	Accessor.SetSpecialGFlag(this[0],1);
+        	this.m_accessor.SetSpecialGFlag(1);
         }
 
         public void SetSpecialGDisable()
         {
-        	Accessor.SetSpecialGFlag(this[0],0);
+        	this.m_accessor.SetSpecialGFlag(0);
         }
 
         public MonsNo GetMonsNo()
@@ -585,9 +599,9 @@ namespace Pml.PokePara
         	if (3 < ((uint)wazaIndex & 0xff)) {
         	  GFL.ASSERT(0);
         	}
-        	Accessor.SetWazaNo(this[0],wazaIndex,0);
-        	Accessor.SetWazaPPUpCount(this[0],wazaIndex & 0xffffffff,0);
-        	Accessor.SetPP(this[0],wazaIndex & 0xffffffff,0);
+        	this.m_accessor.SetWazaNo(wazaIndex,0);
+        	this.m_accessor.SetWazaPPUpCount(wazaIndex & 0xffffffff,0);
+        	this.m_accessor.SetPP(wazaIndex & 0xffffffff,0);
         }
 
         // TODO
@@ -600,29 +614,29 @@ namespace Pml.PokePara
         	}
         	if ((pos1 & 0xff) == (pos2 & 0xff)) {
         	}
-        	var uVar4 = Accessor.GetWazaNo(this[0],pos2);
-        	Accessor.SetWazaNo(this[0],pos1,uVar4);
-        	uVar4 = Accessor.GetPP(this[0],pos2);
-        	Accessor.SetPP(this[0],pos1,uVar4);
-        	uVar4 = Accessor.GetWazaPPUpCount(this[0],pos2);
-        	Accessor.SetWazaPPUpCount(this[0],pos1,uVar4);
-        	Accessor.SetWazaNo(this[0],pos2,Accessor.GetWazaNo(this[0],pos1),0);
-        	Accessor.SetWazaPPUpCount(this[0],pos2,Accessor.GetWazaPPUpCount(this[0],pos1),0);
-        	Accessor.SetPP(this[0],pos2,Accessor.GetPP(this[0],pos1),0);
+        	var uVar4 = this.m_accessor.GetWazaNo(pos2);
+        	this.m_accessor.SetWazaNo(pos1,uVar4);
+        	uVar4 = this.m_accessor.GetPP(pos2);
+        	this.m_accessor.SetPP(pos1,uVar4);
+        	uVar4 = this.m_accessor.GetWazaPPUpCount(pos2);
+        	this.m_accessor.SetWazaPPUpCount(pos1,uVar4);
+        	this.m_accessor.SetWazaNo(pos2,Accessor.GetWazaNo(this.m_accessor,pos1),0);
+        	this.m_accessor.SetWazaPPUpCount(pos2,Accessor.GetWazaPPUpCount(this.m_accessor,pos1),0);
+        	this.m_accessor.SetPP(pos2,Accessor.GetPP(this.m_accessor,pos1),0);
         }
 
         public void CloseUpWazaPos()
         {
-        	if (Accessor.GetWazaNo(this[0],0) == 0) {
+        	if (this.m_accessor.GetWazaNo(0) == 0) {
         	  ExchangeWazaPos(0,1);
         	  ExchangeWazaPos(1,2);
         	  ExchangeWazaPos(2,3);
         	}
-        	if (Accessor.GetWazaNo(this[0],1) == 0) {
+        	if (this.m_accessor.GetWazaNo(1) == 0) {
         	  ExchangeWazaPos(1,2);
         	  ExchangeWazaPos(2,3);
         	}
-        	if (Accessor.GetWazaNo(this[0],2) != 0) {
+        	if (this.m_accessor.GetWazaNo(2) != 0) {
         	}
         	ExchangeWazaPos(2,3);
         }
@@ -641,7 +655,8 @@ namespace Pml.PokePara
 
         public WazaNo GetTamagoWazaNo(byte index)
         {
-        	Accessor.GetTamagoWazaNo(this[0],index);
+        	this.m_accessor.GetTamagoWazaNo(index);
+        	return (WazaNo)0;
         }
 
         public void SetTamagoWazaNo(byte index, WazaNo wazano)
@@ -654,10 +669,10 @@ namespace Pml.PokePara
 
         public void ClearTamagoWaza()
         {
-        	Accessor.SetTamagoWazaNo(this[0],0,0);
-        	Accessor.SetTamagoWazaNo(this[0],1,0);
-        	Accessor.SetTamagoWazaNo(this[0],2,0);
-        	Accessor.SetTamagoWazaNo(this[0],3,0);
+        	this.m_accessor.SetTamagoWazaNo(0,0);
+        	this.m_accessor.SetTamagoWazaNo(1,0);
+        	this.m_accessor.SetTamagoWazaNo(2,0);
+        	this.m_accessor.SetTamagoWazaNo(3,0);
         }
 
         // TODO
@@ -666,23 +681,23 @@ namespace Pml.PokePara
         public WazaLearningResult AddWazaIfEmptyExist(WazaNo wazano)
         {
         	uint uVar2;
-        	if ((Accessor.GetWazaNo(this[0],0) != wazano) &&
-        	   (Accessor.GetWazaNo(this[0],0) = Accessor.GetWazaNo(this[0],1),
-        	   Accessor.GetWazaNo(this[0],0) != wazano)) {
-        	  if (Accessor.GetWazaNo(this[0],2) == wazano) {
+        	if ((this.m_accessor.GetWazaNo(0) != wazano) &&
+        	   (this.m_accessor.GetWazaNo(0) = Accessor.GetWazaNo(this.m_accessor,1),
+        	   this.m_accessor.GetWazaNo(0) != wazano)) {
+        	  if (this.m_accessor.GetWazaNo(2) == wazano) {
         	    return (WazaLearningResult)2;
         	  }
-        	  if (Accessor.GetWazaNo(this[0],3) != wazano) {
-        	    if (Accessor.GetWazaNo(this[0],0) == 0) {
+        	  if (this.m_accessor.GetWazaNo(3) != wazano) {
+        	    if (this.m_accessor.GetWazaNo(0) == 0) {
         	      uVar2 = 0;
         	    }
         	    else {
         	      uVar2 = 1;
-        	      if (Accessor.GetWazaNo(this[0],1) != 0) {
+        	      if (this.m_accessor.GetWazaNo(1) != 0) {
         	        uVar2 = 2;
-        	        if (Accessor.GetWazaNo(this[0],2) != 0) {
+        	        if (this.m_accessor.GetWazaNo(2) != 0) {
         	          uVar2 = 3;
-        	          if (Accessor.GetWazaNo(this[0],3) != 0) {
+        	          if (this.m_accessor.GetWazaNo(3) != 0) {
         	            return (WazaLearningResult)1;
         	          }
         	        }
@@ -697,13 +712,13 @@ namespace Pml.PokePara
 
         public WazaLearningResult LearnNewWazaOnCurrentLevel(ref uint sameLevelIndex, ref WazaNo newWazano, [Optional] WazaLearnWork work)
         {
-        	if ((Accessor.HaveCalcData(this[0]) & 1) == 0) {
+        	if ((this.m_accessor.HaveCalcData() & 1) == 0) {
         	  var uVar1 = CalcLevel();
         	  uVar1 = uVar1 & 0xff;
         	}
         	else {
         	}
-        	LearnNewWazaOnLevel(Accessor.GetLevel(this[0]),sameLevelIndex,newWazano,work);
+        	LearnNewWazaOnLevel(this.m_accessor.GetLevel(),sameLevelIndex,newWazano,work);
         	return (WazaLearningResult)0;
         }
 
@@ -741,14 +756,14 @@ namespace Pml.PokePara
         public void ReduceWazaPP(byte wazaIndex, byte value)
         {
         	var uVar1 = 0;
-        	if ((uint)(value * 0x1000000) <= (uint)(Accessor.GetPP(this[0],wazaIndex) * 0x1000000)) {
-        	  uVar1 = Accessor.GetPP(this[0],wazaIndex) * 0x1000000 + value * -0x1000000;
+        	if ((uint)(value * 0x1000000) <= (uint)(this.m_accessor.GetPP(wazaIndex) * 0x1000000)) {
+        	  uVar1 = this.m_accessor.GetPP(wazaIndex) * 0x1000000 + value * -0x1000000;
         	}
         	var uVar3 = GetWazaMaxPP(wazaIndex & 0xffffffff);
         	if (uVar1 >> 0x18 <= uVar3) {
         	  uVar3 = uVar1 >> 0x18;
         	}
-        	Accessor.SetPP(this[0],wazaIndex & 0xffffffff,uVar3);
+        	this.m_accessor.SetPP(wazaIndex & 0xffffffff,uVar3);
         }
 
         public void RecoverWazaPP(byte wazaIndex)
@@ -775,18 +790,18 @@ namespace Pml.PokePara
 
         public bool CanUsePointUp(byte wazaIndex)
         {
-        	return Accessor.GetWazaPPUpCount(this[0],wazaIndex) < 3;
+        	return this.m_accessor.GetWazaPPUpCount(wazaIndex) < 3;
         }
 
         public void UsePointUp(byte wazaIndex)
         {
         	var uVar4 = wazaIndex & 0xffffffff;
         	var iVar3 = 3;
-        	if ((Accessor.GetWazaPPUpCount(this[0],uVar4) + 1U & 0xff) < 3) {
-        	  iVar3 = Accessor.GetWazaPPUpCount(this[0],uVar4) + 1;
+        	if ((this.m_accessor.GetWazaPPUpCount(uVar4) + 1U & 0xff) < 3) {
+        	  iVar3 = this.m_accessor.GetWazaPPUpCount(uVar4) + 1;
         	}
-        	Accessor.SetWazaPPUpCount(this[0],uVar4,iVar3);
-        	RecoverWazaPP(uVar4,Accessor.GetPP(this[0],uVar4) - Accessor.GetPP(this[0],wazaIndex));
+        	this.m_accessor.SetWazaPPUpCount(uVar4,iVar3);
+        	RecoverWazaPP(uVar4,this.m_accessor.GetPP(uVar4) - Accessor.GetPP(this.m_accessor,wazaIndex));
         }
 
         public uint GetWazaPPUpCount(byte wazaIndex)
@@ -797,9 +812,9 @@ namespace Pml.PokePara
         public void SetWazaPPUpCount(byte wazaIndex, byte value)
         {
         	if (2 < (value & 0xff)) {
-        	  value = 3;
+        	  value = (byte)3;
         	}
-        	Accessor.SetWazaPPUpCount(this[0],wazaIndex,value);
+        	this.m_accessor.SetWazaPPUpCount(wazaIndex,value);
         }
 
         // TODO
@@ -807,22 +822,23 @@ namespace Pml.PokePara
 
         public bool GetWazaRecordFlag(byte recordIndex)
         {
-        	Accessor.GetWazaRecordFlag(this[0],recordIndex);
+        	this.m_accessor.GetWazaRecordFlag(recordIndex);
+        	return false;
         }
 
         public void SetWazaRecordFlag(byte recordIndex)
         {
-        	Accessor.SetWazaRecordFlag(this[0],recordIndex,1);
+        	this.m_accessor.SetWazaRecordFlag(recordIndex,1);
         }
 
         public void RemoveWazaRecordFlag(byte recordIndex)
         {
-        	Accessor.SetWazaRecordFlag(this[0],recordIndex,0);
+        	this.m_accessor.SetWazaRecordFlag(recordIndex,0);
         }
 
         public void ClearWazaRecordFlag()
         {
-        	Accessor.ClearWazaRecordFlag(this[0]);
+        	this.m_accessor.ClearWazaRecordFlag();
         }
 
         public void ClearBankUniqueID()
@@ -832,12 +848,13 @@ namespace Pml.PokePara
 
         public ulong GetBankUniqueID()
         {
-        	Accessor.GetBankUniqueID(this[0]);
+        	this.m_accessor.GetBankUniqueID();
+        	return 0;
         }
 
         public void SetBankUniqueID(ulong value)
         {
-        	Accessor.SetBankUniqueID(this[0],value);
+        	this.m_accessor.SetBankUniqueID(value);
         }
 
         public Sex GetSex()
@@ -856,12 +873,13 @@ namespace Pml.PokePara
 
         public Seikaku GetSeikaku()
         {
-        	Accessor.GetSeikaku(this[0]);
+        	this.m_accessor.GetSeikaku();
+        	return (Seikaku)0;
         }
 
         public void ChangeSeikaku(Seikaku seikaku)
         {
-        	Accessor.SetSeikaku(this[0],seikaku);
+        	this.m_accessor.SetSeikaku(seikaku);
         }
 
         // TODO
@@ -872,26 +890,28 @@ namespace Pml.PokePara
 
         public Seikaku GetSeikakuHosei()
         {
-        	Accessor.GetSeikakuHosei(this[0]);
+        	this.m_accessor.GetSeikakuHosei();
+        	return (Seikaku)0;
         }
 
         public void ChangeSeikakuHosei(Seikaku seikaku)
         {
-        	Accessor.SetSeikakuHosei(this[0],seikaku);
+        	this.m_accessor.SetSeikakuHosei(seikaku);
         	UpdateCalcDatas(1);
         }
 
         public TokuseiNo GetTokuseiNo()
         {
-        	Accessor.GetTokuseiNo(this[0]);
+        	this.m_accessor.GetTokuseiNo();
+        	return (TokuseiNo)0;
         }
 
         public byte GetTokuseiIndex()
         {
-        	if ((Accessor.IsTokusei3(this[0]) & 1) != 0) {
+        	if ((this.m_accessor.IsTokusei3() & 1) != 0) {
         	  return 2;
         	}
-        	return Accessor.IsTokusei2(this[0]) & 1;
+        	return (byte)(this.m_accessor.IsTokusei2() & 1);
         }
 
         // TODO
@@ -899,10 +919,10 @@ namespace Pml.PokePara
 
         public void FlipTokuseiIndex()
         {
-        	if ((Accessor.IsTokusei3(this[0]) & 1) != 0) {
+        	if ((this.m_accessor.IsTokusei3() & 1) != 0) {
         	  GFL.ASSERT(0);
         	}
-        	if ((Accessor.IsTokusei2(this[0]) & 1) != 0) {
+        	if ((this.m_accessor.IsTokusei2() & 1) != 0) {
         	  SetTokuseiIndex();
         	}
         	SetTokuseiIndex(1);
@@ -916,12 +936,13 @@ namespace Pml.PokePara
 
         public void SetFavoriteFlag(bool flag)
         {
-        	Accessor.SetFavoriteFlag(this[0],flag & 1);
+        	this.m_accessor.SetFavoriteFlag((flag ? 1 : 0) & 1);
         }
 
         public bool GetFavoriteFlag()
         {
-        	Accessor.IsFavorite(this[0]);
+        	this.m_accessor.IsFavorite();
+        	return false;
         }
 
         // TODO
@@ -937,7 +958,8 @@ namespace Pml.PokePara
 
         public bool HaveNickName()
         {
-        	Accessor.HaveNickName(this[0]);
+        	this.m_accessor.HaveNickName();
+        	return false;
         }
 
         public string GetNickName()
@@ -956,7 +978,8 @@ namespace Pml.PokePara
 
         public uint GetFriendship()
         {
-        	Accessor.GetFriendship(this[0]);
+        	this.m_accessor.GetFriendship();
+        	return 0;
         }
 
         public void SetFriendship(uint value)
@@ -964,24 +987,24 @@ namespace Pml.PokePara
         	if (0xfe < value) {
         	  value = 0xff;
         	}
-        	Accessor.SetFriendship(this[0],value);
+        	this.m_accessor.SetFriendship(value);
         	UpdateCalcDatas(1);
         }
 
         public void AddFriendship(uint value)
         {
-        	var uVar2 = Accessor.GetFriendship(this[0]) + value;
+        	var uVar2 = this.m_accessor.GetFriendship() + value;
         	if (0xfe < uVar2) {
         	  uVar2 = 0xff;
         	}
-        	Accessor.SetFriendship(this[0],uVar2);
+        	this.m_accessor.SetFriendship(uVar2);
         	UpdateCalcDatas(1);
         }
 
         public void SubFriendship(uint value)
         {
-        	var uVar3 = Accessor.GetFriendship(this[0]) - value;
-        	if (Accessor.GetFriendship(this[0]) < value) {
+        	var uVar3 = this.m_accessor.GetFriendship() - value;
+        	if (this.m_accessor.GetFriendship() < value) {
         	  uVar3 = 0;
         	}
         	else {
@@ -989,13 +1012,13 @@ namespace Pml.PokePara
         	    uVar3 = 0xff;
         	  }
         	}
-        	Accessor.SetFriendship(this[0],uVar3);
+        	this.m_accessor.SetFriendship(uVar3);
         	UpdateCalcDatas(1);
         }
 
         public uint GetOriginalFriendship()
         {
-        	return Accessor.GetOriginalFriendship(this[0]);
+        	return this.m_accessor.GetOriginalFriendship();
         }
 
         public void SetOriginalFriendship(uint value)
@@ -1003,38 +1026,39 @@ namespace Pml.PokePara
         	if (0xfe < value) {
         	  value = 0xff;
         	}
-        	Accessor.SetOriginalFriendship(this[0],value);
+        	this.m_accessor.SetOriginalFriendship(value);
         }
 
         public void AddOriginalFriendship(uint value)
         {
-        	var uVar2 = value + (uint)Accessor.GetOriginalFriendship(this[0]);
+        	var uVar2 = value + (uint)this.m_accessor.GetOriginalFriendship();
         	if (0xfe < uVar2) {
         	  uVar2 = 0xff;
         	}
-        	Accessor.SetOriginalFriendship(this[0],uVar2);
+        	this.m_accessor.SetOriginalFriendship(uVar2);
         }
 
         public void SubOriginalFriendship(uint value)
         {
-        	var uVar2 = (Accessor.GetOriginalFriendship(this[0]) & 0xff) - value;
-        	if ((Accessor.GetOriginalFriendship(this[0]) & 0xff) < value) {
-        	  Accessor.SetOriginalFriendship(this[0],0);
+        	var uVar2 = (this.m_accessor.GetOriginalFriendship() & 0xff) - value;
+        	if ((this.m_accessor.GetOriginalFriendship() & 0xff) < value) {
+        	  this.m_accessor.SetOriginalFriendship(0);
         	}
         	if (0xff < uVar2) {
         	  uVar2 = 0xff;
         	}
-        	Accessor.SetOriginalFriendship(this[0],uVar2);
+        	this.m_accessor.SetOriginalFriendship(uVar2);
         }
 
         public ushort GetOthersFriendshipTrainerID()
         {
-        	Accessor.GetOthersFriendshipTrainerID(this[0]);
+        	this.m_accessor.GetOthersFriendshipTrainerID();
+        	return 0;
         }
 
         public uint GetOthersFriendship()
         {
-        	return Accessor.GetOthersFriendship(this[0]);
+        	return this.m_accessor.GetOthersFriendship();
         }
 
         public void SetOthersFriendship(uint value)
@@ -1042,28 +1066,28 @@ namespace Pml.PokePara
         	if (0xfe < value) {
         	  value = 0xff;
         	}
-        	Accessor.SetOthersFriendship(this[0],value);
+        	this.m_accessor.SetOthersFriendship(value);
         }
 
         public void AddOthersFriendship(uint value)
         {
-        	var uVar2 = value + (uint)Accessor.GetOthersFriendship(this[0]);
+        	var uVar2 = value + (uint)this.m_accessor.GetOthersFriendship();
         	if (0xfe < uVar2) {
         	  uVar2 = 0xff;
         	}
-        	Accessor.SetOthersFriendship(this[0],uVar2);
+        	this.m_accessor.SetOthersFriendship(uVar2);
         }
 
         public void SubOthersFriendship(uint value)
         {
-        	var uVar2 = (Accessor.GetOthersFriendship(this[0]) & 0xff) - value;
-        	if ((Accessor.GetOthersFriendship(this[0]) & 0xff) < value) {
-        	  Accessor.SetOthersFriendship(this[0],0);
+        	var uVar2 = (this.m_accessor.GetOthersFriendship() & 0xff) - value;
+        	if ((this.m_accessor.GetOthersFriendship() & 0xff) < value) {
+        	  this.m_accessor.SetOthersFriendship(0);
         	}
         	if (0xff < uVar2) {
         	  uVar2 = 0xff;
         	}
-        	Accessor.SetOthersFriendship(this[0],uVar2);
+        	this.m_accessor.SetOthersFriendship(uVar2);
         }
 
         public bool IsEgg(EggCheckType type)
@@ -1112,7 +1136,7 @@ namespace Pml.PokePara
 
         public void RemoveItem()
         {
-        	Accessor.SetItemNo(this[0],0);
+        	this.m_accessor.SetItemNo(0);
         }
 
         // TODO
@@ -1141,8 +1165,8 @@ namespace Pml.PokePara
 
         public bool RegulateFormParams()
         {
-        	Accessor.GetMonsNo(this[0]);
-        	Accessor.GetFormNo(this[0]);
+        	this.m_accessor.GetMonsNo();
+        	this.m_accessor.GetFormNo();
         	return false;
         }
 
@@ -1151,7 +1175,8 @@ namespace Pml.PokePara
 
         public uint GetRareRnd()
         {
-        	Accessor.GetColorRnd(this[0]);
+        	this.m_accessor.GetColorRnd();
+        	return 0;
         }
 
         // TODO
@@ -1159,7 +1184,8 @@ namespace Pml.PokePara
 
         public uint GetID()
         {
-        	Accessor.GetID(this[0]);
+        	this.m_accessor.GetID();
+        	return 0;
         }
 
         public uint GetPersonalRnd()
@@ -1169,12 +1195,13 @@ namespace Pml.PokePara
 
         public uint GetCheckSum()
         {
-        	Accessor.GetCheckSum(this[0]);
+        	this.m_accessor.GetCheckSum();
+        	return 0;
         }
 
         public void SetID(uint id)
         {
-        	Accessor.SetID(this[0],id);
+        	this.m_accessor.SetID(id);
         }
 
         // TODO
@@ -1216,41 +1243,41 @@ namespace Pml.PokePara
         {
         	switch(memoriesKind) {
         	case 0:
-        	  return Accessor.GetTamagoGetYear(this[0]);
+        	  return this.m_accessor.GetTamagoGetYear();
         	case 1:
-        	  return Accessor.GetTamagoGetMonth(this[0]);
+        	  return this.m_accessor.GetTamagoGetMonth();
         	case 2:
-        	  return Accessor.GetTamagoGetDay(this[0]);
+        	  return this.m_accessor.GetTamagoGetDay();
         	case 3:
-        	  return Accessor.GetGetPlace(this[0]);
+        	  return this.m_accessor.GetGetPlace();
         	case 4:
-        	  return Accessor.GetBirthYear(this[0]);
+        	  return this.m_accessor.GetBirthYear();
         	case 5:
-        	  return Accessor.GetBirthMonth(this[0]);
+        	  return this.m_accessor.GetBirthMonth();
         	case 6:
-        	  return Accessor.GetBirthDay(this[0]);
+        	  return this.m_accessor.GetBirthDay();
         	case 7:
-        	  return Accessor.GetBirthPlace(this[0]);
+        	  return this.m_accessor.GetBirthPlace();
         	case 8:
-        	  return Accessor.GetGetBall(this[0]);
+        	  return this.m_accessor.GetGetBall();
         	case 9:
-        	  return Accessor.GetGetLevel(this[0]);
+        	  return this.m_accessor.GetGetLevel();
         	case 10:
-        	  return (ulong)(Accessor.GetMemoriesLevel(this[0]) & 0xff);
+        	  return (ulong)(this.m_accessor.GetMemoriesLevel() & 0xff);
         	case 0xb:
-        	  return (ulong)(Accessor.GetMemoriesCode(this[0]) & 0xff);
+        	  return (ulong)(this.m_accessor.GetMemoriesCode() & 0xff);
         	case 0xc:
-        	  return (ulong)(Accessor.GetMemoriesData(this[0]) & 0xffff);
+        	  return (ulong)(this.m_accessor.GetMemoriesData() & 0xffff);
         	case 0xd:
-        	  return (ulong)(Accessor.GetMemoriesFeel(this[0]) & 0xff);
+        	  return (ulong)(this.m_accessor.GetMemoriesFeel() & 0xff);
         	case 0xe:
-        	  return (ulong)(Accessor.GetOthersMemoriesLevel(this[0]) & 0xff);
+        	  return (ulong)(this.m_accessor.GetOthersMemoriesLevel() & 0xff);
         	case 0xf:
-        	  return (ulong)(Accessor.GetOthersMemoriesCode(this[0]) & 0xff);
+        	  return (ulong)(this.m_accessor.GetOthersMemoriesCode() & 0xff);
         	case 0x10:
-        	  return (ulong)(Accessor.GetOthersMemoriesData(this[0]) & 0xffff);
+        	  return (ulong)(this.m_accessor.GetOthersMemoriesData() & 0xffff);
         	case 0x11:
-        	  return (ulong)(Accessor.GetOthersMemoriesFeel(this[0]) & 0xff);
+        	  return (ulong)(this.m_accessor.GetOthersMemoriesFeel() & 0xff);
         	default:
         	  GFL.ASSERT(0);
         	  return 0;
@@ -1261,91 +1288,113 @@ namespace Pml.PokePara
         {
         	switch(memoriesKind) {
         	case 0:
-        	  Accessor.SetTamagoGetYear(this[0],value);
+        	  this.m_accessor.SetTamagoGetYear(value);
+        	  break;
         	case 1:
-        	  Accessor.SetTamagoGetMonth(this[0],value);
+        	  this.m_accessor.SetTamagoGetMonth(value);
+        	  break;
         	case 2:
-        	  Accessor.SetTamagoGetDay(this[0],value);
+        	  this.m_accessor.SetTamagoGetDay(value);
+        	  break;
         	case 3:
-        	  Accessor.SetGetPlace(this[0],value);
+        	  this.m_accessor.SetGetPlace(value);
+        	  break;
         	case 4:
-        	  Accessor.SetBirthYear(this[0],value);
+        	  this.m_accessor.SetBirthYear(value);
+        	  break;
         	case 5:
-        	  Accessor.SetBirthMonth(this[0],value);
+        	  this.m_accessor.SetBirthMonth(value);
+        	  break;
         	case 6:
-        	  Accessor.SetBirthDay(this[0],value);
+        	  this.m_accessor.SetBirthDay(value);
+        	  break;
         	case 7:
-        	  Accessor.SetBirthPlace(this[0],value);
+        	  this.m_accessor.SetBirthPlace(value);
+        	  break;
         	case 8:
-        	  Accessor.SetGetBall(this[0],value);
+        	  this.m_accessor.SetGetBall(value);
+        	  break;
         	case 9:
-        	  Accessor.SetGetLevel(this[0],value);
+        	  this.m_accessor.SetGetLevel(value);
+        	  break;
         	case 10:
-        	  Accessor.SetMemoriesLevel(this[0],value);
+        	  this.m_accessor.SetMemoriesLevel(value);
+        	  break;
         	case 0xb:
-        	  Accessor.SetMemoriesCode(this[0],value);
+        	  this.m_accessor.SetMemoriesCode(value);
+        	  break;
         	case 0xc:
-        	  Accessor.SetMemoriesData(this[0],value);
+        	  this.m_accessor.SetMemoriesData(value);
+        	  break;
         	case 0xd:
-        	  Accessor.SetMemoriesFeel(this[0],value);
+        	  this.m_accessor.SetMemoriesFeel(value);
+        	  break;
         	case 0xe:
-        	  Accessor.SetOthersMemoriesLevel(this[0],value);
+        	  this.m_accessor.SetOthersMemoriesLevel(value);
+        	  break;
         	case 0xf:
-        	  Accessor.SetOthersMemoriesCode(this[0],value);
+        	  this.m_accessor.SetOthersMemoriesCode(value);
+        	  break;
         	case 0x10:
-        	  Accessor.SetOthersMemoriesData(this[0],value);
+        	  this.m_accessor.SetOthersMemoriesData(value);
+        	  break;
         	case 0x11:
-        	  Accessor.SetOthersMemoriesFeel(this[0],value);
+        	  this.m_accessor.SetOthersMemoriesFeel(value);
+        	  break;
         	default:
         	  GFL.ASSERT(0);
+        	  break;
         	}
         }
 
         public string GetPastParentsName()
         {
-        	Accessor.GetPastParentsName(this[0]);
+        	this.m_accessor.GetPastParentsName();
+        	return default;
         }
 
         public void SetPastParentsName(string name)
         {
-        	Accessor.SetPastParentsName(this[0],name);
+        	this.m_accessor.SetPastParentsName(name);
         }
 
         public Sex GetPastParentsSex()
         {
-        	Accessor.GetPastParentsSex(this[0]);
+        	this.m_accessor.GetPastParentsSex();
+        	return (Sex)0;
         }
 
         public void SetPastParentsSex(Sex sex)
         {
-        	Accessor.SetPastParentsSex(this[0],sex);
+        	this.m_accessor.SetPastParentsSex(sex);
         }
 
         public byte GetPastParentsLangID()
         {
-        	Accessor.GetPastParentsLangID(this[0]);
+        	this.m_accessor.GetPastParentsLangID();
+        	return 0;
         }
 
         public void SetPastParentsLangID(byte langID)
         {
-        	Accessor.SetPastParentsLangID(this[0],langID);
+        	this.m_accessor.SetPastParentsLangID(langID);
         }
 
         public byte GetCondition(Condition cond)
         {
         	switch(cond) {
         	case 0:
-        	  return Accessor.GetStyle(this[0]);
+        	  return (byte)(this.m_accessor.GetStyle());
         	case 1:
-        	  return Accessor.GetBeautiful(this[0]);
+        	  return (byte)(this.m_accessor.GetBeautiful());
         	case 2:
-        	  return Accessor.GetCute(this[0]);
+        	  return (byte)(this.m_accessor.GetCute());
         	case 3:
-        	  return Accessor.GetClever(this[0]);
+        	  return (byte)(this.m_accessor.GetClever());
         	case 4:
-        	  return Accessor.GetStrong(this[0]);
+        	  return (byte)(this.m_accessor.GetStrong());
         	case 5:
-        	  return Accessor.GetFur(this[0]);
+        	  return (byte)(this.m_accessor.GetFur());
         	default:
         	  GFL.ASSERT(0);
         	  return 0;
@@ -1356,17 +1405,23 @@ namespace Pml.PokePara
         {
         	switch(cond) {
         	case 0:
-        	  Accessor.SetStyle(this[0],value);
+        	  this.m_accessor.SetStyle(value);
+        	  break;
         	case 1:
-        	  Accessor.SetBeautiful(this[0],value);
+        	  this.m_accessor.SetBeautiful(value);
+        	  break;
         	case 2:
-        	  Accessor.SetCute(this[0],value);
+        	  this.m_accessor.SetCute(value);
+        	  break;
         	case 3:
-        	  Accessor.SetClever(this[0],value);
+        	  this.m_accessor.SetClever(value);
+        	  break;
         	case 4:
-        	  Accessor.SetStrong(this[0],value);
+        	  this.m_accessor.SetStrong(value);
+        	  break;
         	case 5:
-        	  Accessor.SetFur(this[0],value);
+        	  this.m_accessor.SetFur(value);
+        	  break;
         	default:
         	}
         }
@@ -1380,8 +1435,8 @@ namespace Pml.PokePara
         public void SetBoxMark(BoxMark mark, BoxMarkColor color)
         {
         	if (((int)mark < 6) && ((int)color < 3)) {
-        	  var uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),mark,color,0);
-        	  Accessor.SetBoxMark(this[0],uVar1);
+        	  var uVar1 = BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),mark,color,0);
+        	  this.m_accessor.SetBoxMark(uVar1);
         	}
         	GFL.ASSERT(0);
         }
@@ -1389,31 +1444,32 @@ namespace Pml.PokePara
         public void RemoveBoxMark(BoxMark mark)
         {
         	if ((int)mark < 6) {
-        	  var uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),mark,0,0);
-        	  Accessor.SetBoxMark(this[0],uVar1);
+        	  var uVar1 = BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),mark,0,0);
+        	  this.m_accessor.SetBoxMark(uVar1);
         	}
         	GFL.ASSERT(0);
         }
 
         public BoxMarkColor GetBoxMark(BoxMark mark)
         {
-        	BoxMarkController.GetBoxMarkColor(Accessor.GetBoxMark(this[0]),mark,0);
+        	BoxMarkController.GetBoxMarkColor(this.m_accessor.GetBoxMark(),mark,0);
+        	return (BoxMarkColor)0;
         }
 
         public void RemoveAllBoxMark()
         {
-        	var uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),0,0,0);
-        	Accessor.SetBoxMark(this[0],uVar1);
-        	uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),1,0,0);
-        	Accessor.SetBoxMark(this[0],uVar1);
-        	uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),2,0,0);
-        	Accessor.SetBoxMark(this[0],uVar1);
-        	uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),3,0,0);
-        	Accessor.SetBoxMark(this[0],uVar1);
-        	uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),4,0,0);
-        	Accessor.SetBoxMark(this[0],uVar1);
-        	uVar1 = BoxMarkController.SetBoxMarkColor(Accessor.GetBoxMark(this[0]),5,0,0);
-        	Accessor.SetBoxMark(this[0],uVar1);
+        	var uVar1 = BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),0,0,0);
+        	this.m_accessor.SetBoxMark(uVar1);
+        	uVar1 = (ushort)(BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),1,0,0));
+        	this.m_accessor.SetBoxMark(uVar1);
+        	uVar1 = (ushort)(BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),2,0,0));
+        	this.m_accessor.SetBoxMark(uVar1);
+        	uVar1 = (ushort)(BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),3,0,0));
+        	this.m_accessor.SetBoxMark(uVar1);
+        	uVar1 = (ushort)(BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),4,0,0));
+        	this.m_accessor.SetBoxMark(uVar1);
+        	uVar1 = (ushort)(BoxMarkController.SetBoxMarkColor(this.m_accessor.GetBoxMark(),5,0,0));
+        	this.m_accessor.SetBoxMark(uVar1);
         }
 
         // TODO
@@ -1434,12 +1490,13 @@ namespace Pml.PokePara
 
         public uint GetCassetteVersion()
         {
-        	Accessor.GetCassetteVersion(this[0]);
+        	this.m_accessor.GetCassetteVersion();
+        	return 0;
         }
 
         public void SetCassetteVersion(uint version)
         {
-        	Accessor.SetCassetteVersion(this[0],version);
+        	this.m_accessor.SetCassetteVersion(version);
         }
 
         public uint GetGetBall()
@@ -1454,38 +1511,40 @@ namespace Pml.PokePara
 
         public byte GetBattleRomMark()
         {
-        	Accessor.GetBattleRomMark(this[0]);
+        	this.m_accessor.GetBattleRomMark();
+        	return 0;
         }
 
         public void SetBattleRomMark(byte battleRomMark)
         {
-        	Accessor.SetBattleRomMark(this[0],battleRomMark);
+        	this.m_accessor.SetBattleRomMark(battleRomMark);
         }
 
         public byte GetNadenadeValue()
         {
-        	Accessor.GetNadenadeValue(this[0]);
+        	this.m_accessor.GetNadenadeValue();
+        	return 0;
         }
 
         public void SetNadenadeValue(byte value)
         {
-        	Accessor.SetNadenadeValue(this[0],value);
+        	this.m_accessor.SetNadenadeValue(value);
         }
 
         public void AddNadenadeValue(byte value)
         {
-        	Accessor.SetNadenadeValue(this[0],Accessor.GetNadenadeValue(this[0]) + value,0);
+        	this.m_accessor.SetNadenadeValue(Accessor.GetNadenadeValue(this.m_accessor) + value,0);
         }
 
         public void SubNadenadeValue(byte value)
         {
-        	if ((Accessor.GetNadenadeValue(this[0]) & 0xff) < (value & 0xff)) {
-        	  Accessor.SetNadenadeValue(this[0],0);
+        	if ((this.m_accessor.GetNadenadeValue() & 0xff) < (value & 0xff)) {
+        	  this.m_accessor.SetNadenadeValue(0);
         	}
-        	if ((~(Accessor.GetNadenadeValue(this[0]) - value) & 0xff) != 0) {
-        	  Accessor.SetNadenadeValue(this[0],Accessor.GetNadenadeValue(this[0]) - value,0);
+        	if ((~(this.m_accessor.GetNadenadeValue() - value) & 0xff) != 0) {
+        	  this.m_accessor.SetNadenadeValue(Accessor.GetNadenadeValue(this.m_accessor) - value,0);
         	}
-        	Accessor.SetNadenadeValue(this[0],0xff);
+        	this.m_accessor.SetNadenadeValue(0xff);
         }
 
         // TODO
@@ -1499,17 +1558,18 @@ namespace Pml.PokePara
 
         public bool HaveRibbon(uint ribbonNo)
         {
-        	Accessor.HaveRibbon(this[0],ribbonNo);
+        	this.m_accessor.HaveRibbon(ribbonNo);
+        	return false;
         }
 
         public void SetRibbon(uint ribbonNo)
         {
-        	Accessor.SetRibbon(this[0],ribbonNo);
+        	this.m_accessor.SetRibbon(ribbonNo);
         }
 
         public void RemoveRibbon(uint ribbonNo)
         {
-        	Accessor.RemoveRibbon(this[0],ribbonNo);
+        	this.m_accessor.RemoveRibbon(ribbonNo);
         }
 
         public void RemoveAllRibbon()
@@ -1531,17 +1591,18 @@ namespace Pml.PokePara
 
         public bool IsEquipRibbonExist()
         {
-        	return Accessor.GetEquipRibbonNo(this[0]) != -1;
+        	return this.m_accessor.GetEquipRibbonNo() != -1;
         }
 
         public byte GetEquipRibbonNo()
         {
-        	Accessor.GetEquipRibbonNo(this[0]);
+        	this.m_accessor.GetEquipRibbonNo();
+        	return 0;
         }
 
         public void SetEquipRibbonNo(byte ribbonNo)
         {
-        	Accessor.SetEquipRibbonNo(this[0],ribbonNo);
+        	this.m_accessor.SetEquipRibbonNo(ribbonNo);
         }
 
         public bool HavePokerusJustNow()
@@ -1556,8 +1617,8 @@ namespace Pml.PokePara
 
         public bool HavePokerusPast()
         {
-        	if (Accessor.GetPokerus(this[0]) != 0) {
-        	  return (Accessor.GetPokerus(this[0]) & 0xf) == 0;
+        	if (this.m_accessor.GetPokerus() != 0) {
+        	  return (this.m_accessor.GetPokerus() & 0xf) == 0;
         	}
         	return false;
         }
@@ -1572,17 +1633,17 @@ namespace Pml.PokePara
 
         public void DecreasePokerusDayCount(int passedDayCount)
         {
-        	if ((Accessor.GetPokerus(this[0]) & 0xff) != 0) {
+        	if ((this.m_accessor.GetPokerus() & 0xff) != 0) {
         	  var uVar1 = 0x10;
-        	  if ((Accessor.GetPokerus(this[0]) & 0xf0) != 0) {
-        	    uVar1 = Accessor.GetPokerus(this[0]) & 0xfffffff0;
+        	  if ((this.m_accessor.GetPokerus() & 0xf0) != 0) {
+        	    uVar1 = this.m_accessor.GetPokerus() & 0xfffffff0;
         	  }
-        	  var uVar2 = (Accessor.GetPokerus(this[0]) & 0xf) - passedDayCount;
-        	  if ((int)(Accessor.GetPokerus(this[0]) & 0xf) < passedDayCount || 4 < passedDayCount) {
+        	  var uVar2 = (this.m_accessor.GetPokerus() & 0xf) - passedDayCount;
+        	  if ((int)(this.m_accessor.GetPokerus() & 0xf) < passedDayCount || 4 < passedDayCount) {
         	    uVar2 = 0;
         	  }
         	  GFL.ASSERT(((uVar1 | uVar2) & 0xff) != 0,0);
-        	  Accessor.SetPokerus(this[0],uVar1 | uVar2);
+        	  this.m_accessor.SetPokerus(uVar1 | uVar2);
         	}
         }
 

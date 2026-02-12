@@ -42,7 +42,7 @@ namespace Dpr.Battle.View.Systems
 		
 		private bool CheckAlreadyChanged()
 		{
-			if (this[0] != 0) {
+			if (this._iPtrGroundEffectMain != null) {
 			  return true;
 			}
 			return this._iPtrGroundEffectCamera != null;

@@ -55,7 +55,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetWeatherCausePokeID()
         {
-        	return this.m_data[0];
+        	return (byte)(this.m_data.weatherCausePokeID);
         }
 
         public uint GetWeatherWholeTurn()
@@ -73,16 +73,16 @@ namespace Dpr.Battle.Logic
 
         public uint GetWeatherTurnUpCount()
         {
-        	return this.m_data.Length;
+        	return this.m_data.weatherTurnUpCount;
         }
 
         public void SetWeather(BtlWeather weather, ushort turn, ushort turnUpCount, byte causePokeID)
         {
         	this.m_data.weather = weather;
         	this.m_data.weatherTurn = turn & 0xffff;
-        	this.m_data.Length = turnUpCount & 0xffff;
+        	this.m_data.weatherTurnUpCount = turnUpCount & 0xffff;
         	this.m_data.weatherTurnCount = 0;
-        	this.m_data[0] = causePokeID;
+        	this.m_data.weatherCausePokeID = causePokeID;
         }
 
         public void EndWeather()
@@ -90,7 +90,7 @@ namespace Dpr.Battle.Logic
         	this.m_data.weather = 0;
         	this.m_data.weatherTurn = 0;
         	this.m_data.weatherTurnCount = 0;
-        	this.m_data[0] = 0x1f;
+        	this.m_data.weatherCausePokeID = 0x1f;
         }
 
         public BtlWeather TurnCheckWeather()
@@ -100,7 +100,7 @@ namespace Dpr.Battle.Logic
         	  if (this.m_data.weatherTurn <= this.m_data.weatherTurnCount) {
         	    var uVar1 = this.m_data.weather;
         	    this.m_data.weather = 0;
-        	    this.m_data[0] = 0x1f;
+        	    this.m_data.weatherCausePokeID = 0x1f;
         	    return uVar1;
         	  }
         	}
@@ -110,6 +110,7 @@ namespace Dpr.Battle.Logic
         public bool AddEffect(EffectType effect, in BTL_SICKCONT cont)
         {
         	addEffectCore();
+        	return false;
         }
 
         // TODO
@@ -178,7 +179,7 @@ namespace Dpr.Battle.Logic
 
         public byte GetGround()
         {
-        	return this.m_data.currentGround;
+        	return (byte)(this.m_data.currentGround);
         }
 
         // TODO

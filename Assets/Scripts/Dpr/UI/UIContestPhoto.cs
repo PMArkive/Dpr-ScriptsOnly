@@ -71,7 +71,7 @@ namespace Dpr.UI
         	uVar1 = UnityEngine_GameObject__GetComponent<object>
         	                  (uVar1);
         	this.messageTxt = uVar1;
-        	Contest_StageEffect.Initialize(this._stageFx);
+        	this._stageFx.Initialize();
         }
 
         // TODO
@@ -197,8 +197,8 @@ namespace Dpr.UI
 
             public void Hide()
             {
-            	if (this.Length != 0) {
-            	  GameObject.SetActive(this.Length.gameObject,0,0);
+            	if (this.fxInst != null) {
+            	  GameObject.SetActive(this.fxInst.gameObject,0,0);
             	}
             }
 
@@ -219,8 +219,8 @@ namespace Dpr.UI
 
             public void Hide()
             {
-            	if (this.Length != 0) {
-            	  GameObject.SetActive(this.Length.gameObject,0,0);
+            	if (this.fxInst != null) {
+            	  GameObject.SetActive(this.fxInst.gameObject,0,0);
             	}
             }
 
@@ -239,8 +239,8 @@ namespace Dpr.UI
 
             public void Hide()
             {
-            	if (this.Length != 0) {
-            	  GameObject.SetActive(this.Length.gameObject,0,0);
+            	if (this.fxInst != null) {
+            	  GameObject.SetActive(this.fxInst.gameObject,0,0);
             	}
             }
         }

@@ -45,7 +45,7 @@ namespace Dpr.Battle.Logic
 
         private void copyBattleEnv()
         {
-        	this.Length.CopyFrom(ref this.m_pSrcBattleEnv);
+        	this.m_battleEnv.CopyFrom(ref this.m_pSrcBattleEnv);
         }
 
         // TODO

@@ -25,6 +25,7 @@ namespace Dpr.Contest
 		public Vector3 GetPmIconPos()
 		{
 			this.pmIconRect.position;
+			return null;
 		}
 		
 		// TODO
@@ -54,11 +55,11 @@ namespace Dpr.Contest
 			uVar1 = ComponentExtensions.FindDeep(_StringLiteral_8917,1);
 			uVar1 = UnityEngine_GameObject__GetComponent<object>
 			                  (uVar1);
-			this.Length = uVar1;
+			this.wazaNameText = uVar1;
 			uVar1 = ComponentExtensions.FindDeep(StringLiteral_8918,1);
 			uVar1 = UnityEngine_GameObject__GetComponent<object>
 			                  (uVar1);
-			this[0] = uVar1;
+			this.playerNameText = uVar1;
 			uVar1 = ComponentExtensions.FindDeep(_StringLiteral_8919,1);
 			var uVar2 = UnityEngine_GameObject__GetComponent<object>
 			                  (uVar1);
@@ -82,7 +83,7 @@ namespace Dpr.Contest
 		
 		public void SetMonsterIconSpr(Sprite iconSpr)
 		{
-			UI_Image.set_sprite(this.pmIconImage,iconSpr);
+			this.pmIconImage.sprite = iconSpr;
 		}
 		
 		// TODO
@@ -106,7 +107,7 @@ namespace Dpr.Contest
 		{
 			var uVar1 = GameObject.get_activeSelf(this.tensionIconImage.gameObject,0);
 			if (((uVar1 ^ active) & 1) != 0) {
-			  GameObject.SetActive(this.tensionIconImage.gameObject,active & 1,0);
+			  GameObject.SetActive(this.tensionIconImage.gameObject,(active ? 1 : 0) & 1,0);
 			}
 		}
 		

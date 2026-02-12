@@ -28,14 +28,14 @@ namespace Dpr.Contest
 		
 		public void SetNormalHeartFxData(EffectData fxData)
 		{
-			this[0] = fxData;
-			Contest_VisualHeartEffect.Create();
+			this.heartFxData = fxData;
+			Create();
 		}
 		
 		public void SetLargeHeartFxData(EffectData fxData)
 		{
-			this[0] = fxData;
-			Contest_VisualHeartEffect.Create();
+			this.heartFxData = fxData;
+			Create();
 		}
 		
 		// TODO

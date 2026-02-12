@@ -7,7 +7,7 @@
         private BtlAiScriptNo m_minScriptNo;
         private BtlAiScriptNo m_maxScriptNo;
         private BtlAiScriptNo m_currentScriptNo;
-        private uint m_targetScriptBit;
+        internal uint m_targetScriptBit;
         private byte m_myClientID;
 
         // TODO
@@ -28,8 +28,10 @@
         // TODO
         public virtual void Dispose() { }
 
-        // TODO
-        protected byte GetMyClientID() { return 0; }
+        protected byte GetMyClientID()
+        {
+        	return (byte)(this.m_myClientID);
+        }
 
         public void ChangeAiBit(uint targetScriptBit)
         {
@@ -43,7 +45,7 @@
 
         protected BtlAiScriptNo GetCurrentScriptNo()
         {
-        	return this.Length;
+        	return this.m_currentScriptNo;
         }
 
         // TODO
@@ -56,10 +58,10 @@
         {
         	if (minScriptNo <= maxScriptNo) {
         	  do {
-        	    if ((this.m_targetScriptBit & 1 << (ulong)(minScriptNo & 0x1f)) != 0) {
+        	    if ((this.m_targetScriptBit & 1 << (int)((int)minScriptNo & 0x1f)) != 0) {
         	      return minScriptNo;
         	    }
-        	    minScriptNo = minScriptNo + 1;
+        	    minScriptNo = (BtlAiScriptNo)(minScriptNo + 1);
         	  } while (minScriptNo <= maxScriptNo);
         	}
         	return (BtlAiScriptNo)8;
@@ -67,7 +69,7 @@
 
         protected bool IsAllScriptFinished()
         {
-        	return this.m_maxScriptNo < this.Length;
+        	return this.m_maxScriptNo < this.m_currentScriptNo;
         }
     }
 }

@@ -18,13 +18,13 @@ namespace Dpr.UI
 		
 		public void Clear()
 		{
-			UI_Image.set_sprite(this.Length,0);
+			this.iconImage.sprite = 0;
 		}
 		
 		public void SetEnable(bool isEnable)
 		{
-			this.Length.enabled = isEnable & 1;
-			Behaviour.set_enabled(this[0],isEnable & 1);
+			this.iconImage.enabled = (isEnable ? 1 : 0) & 1;
+			this.typeIconImage.enabled = (isEnable ? 1 : 0) & 1;
 		}
 	}
 }

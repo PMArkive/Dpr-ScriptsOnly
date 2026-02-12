@@ -10,7 +10,7 @@
 
         public BTL_PARTY GetParty()
         {
-        	return this.Length;
+        	return this.m_party;
         }
 
         // TODO
@@ -41,8 +41,10 @@
         	return this.m_clientID;
         }
 
-        // TODO
-        public byte GetNumSelect() { return 0; }
+        public byte GetNumSelect()
+        {
+        	return (byte)(this.m_numSelect);
+        }
 
         public void DisablePutPosSequence()
         {

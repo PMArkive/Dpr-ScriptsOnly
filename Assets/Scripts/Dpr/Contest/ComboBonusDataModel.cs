@@ -15,7 +15,7 @@ namespace Dpr.Contest
 		
 		public void Reset()
 		{
-			this.Length = 0x12;
+			this.prevWazaType = 0x12;
 		}
 		
 		// TODO
@@ -23,12 +23,12 @@ namespace Dpr.Contest
 		
 		public void SetWazaType(PokeType wazaType)
 		{
-			this.Length = wazaType;
+			this.prevWazaType = wazaType;
 		}
 		
 		public void ResetWazaType()
 		{
-			this.Length = 0x12;
+			this.prevWazaType = 0x12;
 		}
 		
 		// TODO

@@ -25,7 +25,7 @@ namespace Dpr.DigFossil
 		public void Initialize(IDigCursor cursor)
 		{
 			this.cursor = cursor;
-			DigFossil_DigToolSwitch.SetTool(1);
+			SetTool(1);
 		}
 		
 		// TODO

@@ -23,11 +23,11 @@ namespace Dpr.Contest
 		private BOPokemon userPokemon;
 		private WaitForSeconds waitDelayMoveFrame;
 		private WaitForSeconds waitCameraAnim;
-		private State currentState;
+		internal State currentState;
 		private string playVoiceEventName;
 		private bool isPlayVoice;
 		private bool bIsUserWin;
-		private bool bRunning;
+		internal bool bRunning;
 		
 		// TODO
 		public void Initialize() { }
@@ -37,9 +37,9 @@ namespace Dpr.Contest
 		
 		public void OnFinalize()
 		{
-			Contest_ResultPersonalPerformance.CloseKeyguid();
-			Contest_ContestInput.Remove(this.input);
-			this.Length = 0;
+			CloseKeyguid();
+			this.input.Remove();
+			this.objManagerPtr = null;
 			this.waitCameraAnim = null;
 			this.waitDelayMoveFrame = null;
 		}
@@ -91,9 +91,9 @@ namespace Dpr.Contest
 		
 		public bool OnUpdate()
 		{
-			Contest_ResultPersonalPerformance.UpdatePokeMotion();
+			UpdatePokeMotion();
 			if ((int)this.currentState == 1) {
-			  Contest_ResultPersonalPerformance.UpdateKeywait();
+			  UpdateKeywait();
 			}
 			return this.bRunning;
 		}
@@ -104,7 +104,7 @@ namespace Dpr.Contest
 		// TODO
 		private void UpdatePokeMotion() { }
 
-		private enum State : int
+		internal enum State : int
 		{
 			WaitStart = 0,
 			Keywait = 1,

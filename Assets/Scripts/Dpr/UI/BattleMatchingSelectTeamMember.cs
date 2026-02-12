@@ -52,7 +52,7 @@ namespace Dpr.UI
 		
 		private void SetKeyGuide(bool complete = false)
 		{
-			this._battleMatchingUIPtr.SetKeyGuide(1,1,0,complete & 1);
+			this._battleMatchingUIPtr.SetKeyGuide(1,1,0,(complete ? 1 : 0) & 1);
 		}
 	}
 }

@@ -57,7 +57,7 @@ namespace Dpr.UI
 			  uVar1 = WazaDataSystem.IsValid(uVar1);
 			  return uVar1;
 			}
-			Contest_ContestUtils.EmitLog(StringLiteral_11793,3);
+			ContestUtils.EmitLog(StringLiteral_11793,3);
 			return false;
 		}
 		

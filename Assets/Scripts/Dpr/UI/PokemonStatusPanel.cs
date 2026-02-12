@@ -34,12 +34,12 @@ namespace Dpr.UI
 
         public virtual void Clear()
         {
-        	this.Length = 0;
+        	this._pokemonParam = null;
         }
 
         public virtual void Setup(PokemonParam pokemonParam)
         {
-        	this.Length = pokemonParam;
+        	this._pokemonParam = pokemonParam;
         }
 
         // TODO

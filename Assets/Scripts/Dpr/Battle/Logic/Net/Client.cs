@@ -43,9 +43,9 @@ namespace Dpr.Battle.Logic.Net
 
         public void Initialize()
         {
-        	this.clientId = 5;
-        	this.Length = 0;
-        	this[0] = 0;
+        	this.clientId = (byte)5;
+        	this.cmdSeqNo = 0;
+        	this.isChecked = false;
         }
 
         // TODO
@@ -58,7 +58,7 @@ namespace Dpr.Battle.Logic.Net
 
         public bool HasErrorOccured(ErrorKind kind = ErrorKind.Invalid)
         {
-        	var uVar1 = 1 << (ulong)(kind & 0x1f);
+        	var uVar1 = 1 << (int)((int)kind & 0x1f);
         	if ((int)kind == 0) {
         	  uVar1 = 0xffffffff;
         	}
@@ -89,11 +89,11 @@ namespace Dpr.Battle.Logic.Net
         public void Update()
         {
         	if (((this.m_ErrorKindBit == 0) &&
-        	    (Net_Client.sendToServerVersionCoreAll(), !this.isFinishedSession)
+        	    (sendToServerVersionCoreAll(), !this.isFinishedSession)
         	    ) && (0 < this.sendToClientReq.Length)) {
         	  var uVar2 = 0;
         	  do {
-        	    var iVar1 = Net_Client.sendToClientCore(uVar2);
+        	    var iVar1 = sendToClientCore(uVar2);
         	    if (iVar1 < 0) {
         	    }
         	    uVar2 = uVar2 + 1;
@@ -122,12 +122,12 @@ namespace Dpr.Battle.Logic.Net
 
         private static bool IsErrorKindBit(int errorKindBits, ErrorKind kind)
         {
-        	return (1 << (ulong)(kind & 0x1f) & errorKindBits) != 0;
+        	return (1 << (int)((int)kind & 0x1f) & errorKindBits) != 0;
         }
 
         public void NotifyNetworkError(ErrorKind kind, int arg = 0)
         {
-        	this.m_ErrorKindBit = this.m_ErrorKindBit | 1 << (ulong)(kind & 0x1f);
+        	this.m_ErrorKindBit = this.m_ErrorKindBit | 1 << (int)((int)kind & 0x1f);
         }
 
         public bool IsClientCommunicationExist(BTL_CLIENT_ID clientId)
@@ -322,8 +322,8 @@ namespace Dpr.Battle.Logic.Net
 
             public void Set(ulong pSendBuf, int sendSize)
             {
-            	this.clientId = clientId;
-            	this.Length = cmdSeqNo;
+            	this.clientId = (byte)(clientId);
+            	this.cmdSeqNo = cmdSeqNo;
             }
 
             // TODO

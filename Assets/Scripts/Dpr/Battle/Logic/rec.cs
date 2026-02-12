@@ -11,19 +11,19 @@
         	if (!fChapter) {
         	  uVar1 = 0;
         	}
-        	return uVar1 | (type & 7) << 4 | numClient & 0xf;
+        	return (byte)(uVar1 | ((int)type & 7) << 4 | numClient & 0xf);
         }
 
         public static void ReadRecFieldTag(byte tagCode, out FieldType type, out byte numClient, out bool fChapter)
         {
         	numClient = (byte)tagCode & 0xf;
-        	type = (tagCode & 0xff) >> 4 & 7;
+        	type = (FieldType)((tagCode & 0xff) >> 4 & 7);
         	fChapter = (byte)(tagCode >> 7) & 1;
         }
 
         public static byte MakeClientActionTag(byte clientID, byte numAction)
         {
-        	return numAction | clientID << 5;
+        	return (byte)(numAction | clientID << 5);
         }
 
         public static void ReadClientActionTag(byte tagCode, out byte clientID, out byte numAction)
@@ -38,13 +38,13 @@
         	if (!isRecordTargetData) {
         	  uVar1 = 0;
         	}
-        	return uVar1 | timing & 0x7f;
+        	return (byte)(uVar1 | (int)timing & 0x7f);
         }
 
         public static void ReadRecTimingCode(byte timingCode, ref Timing timing, ref bool isRecordTargetData)
         {
         	isRecordTargetData = (byte)(timingCode >> 7) & 1;
-        	timing = timingCode & 0x7f;
+        	timing = (Timing)(timingCode & 0x7f);
         }
 
         public enum FieldType : int
@@ -112,7 +112,7 @@
             public void* GetDataPtr(ref uint size)
             {
             	size = (uint)this.m_writePtr;
-            	return this.Length;
+            	return this.m_buf;
             }
         }
 
@@ -146,17 +146,17 @@
 
             public void Reset()
             {
-            	if (0 < (int)this[0].Length) {
+            	if (0 < (int)this.m_readPtr.Length) {
             	  var uVar4 = 0;
-            	  var uVar5 = this[0].Length & 0xffffffff;
+            	  var uVar5 = this.m_readPtr.Length & 0xffffffff;
             	  do {
             	    if (uVar5 <= uVar4) {
             	    }
             	    var lVar1 = uVar4 * 4;
             	    uVar4 = uVar4 + 1;
-            	    this[0] + lVar1[0] = 0;
-            	    uVar5 = (ulong)this[0].Length;
-            	  } while ((long)uVar4 < (int)this[0].Length);
+            	    this.m_readPtr + lVar1[0] = 0;
+            	    uVar5 = (ulong)this.m_readPtr.Length;
+            	  } while ((long)uVar4 < (int)this.m_readPtr.Length);
             	}
             }
 

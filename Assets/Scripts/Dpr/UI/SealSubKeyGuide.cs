@@ -19,7 +19,7 @@ namespace Dpr.UI
 		
 		public void SetDisablePreviewGuide(bool isEnable)
 		{
-			this.disableKeyGuidePreviewImage.enabled = isEnable & 1;
+			this.disableKeyGuidePreviewImage.enabled = (isEnable ? 1 : 0) & 1;
 		}
 	}
 }

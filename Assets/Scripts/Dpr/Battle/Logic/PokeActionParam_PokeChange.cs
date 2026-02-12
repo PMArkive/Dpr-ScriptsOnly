@@ -11,7 +11,7 @@
 
         public void Clear()
         {
-        	this.posIdx = 0;
+        	this.posIdx = (byte)0;
         	this.depleteFlag = false;
         }
     }

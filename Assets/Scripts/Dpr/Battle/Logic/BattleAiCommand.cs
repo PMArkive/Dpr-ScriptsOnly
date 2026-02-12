@@ -235,10 +235,8 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IFN_CONTFLG(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        private static long CMDFUNC_CHECK_WEATHER(AiScriptCommandHandler handle, long[] args)
-        {
-        	return BattleSimulator.GetWeather(this[0]);
-        }
+        // TODO
+        private static long CMDFUNC_CHECK_WEATHER(AiScriptCommandHandler handle, long[] args) { return 0; }
 
         // TODO
         private static long CMDFUNC_IF_SIDEEFF(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -368,6 +366,7 @@ namespace Dpr.Battle.Logic
         {
         	var uVar1 = handle.GetBppByAISide(ai_side);
         	uVar1.GetValue(valueID);
+        	return 0;
         }
 
         // TODO
@@ -578,16 +577,8 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_TYPE_EX(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        private static long CMDFUNC_IF_EXIST_GROUND(AiScriptCommandHandler handle, long[] args)
-        {
-        	if (this.Length.Length != 0) {
-        	  if (handle.Length == 0) {
-        	  }
-        	  this.Length.Length = this.Length.Length.CheckEffect(8,handle[0]);
-        	  this.Length.Length = this.Length.Length & 1;
-        	}
-        	return this.Length.Length;
-        }
+        // TODO
+        private static long CMDFUNC_IF_EXIST_GROUND(AiScriptCommandHandler handle, long[] args) { return 0; }
 
         // TODO
         private static long CMDFUNC_GET_WEIGHT(AiScriptCommandHandler handle, long[] args) { return 0; }

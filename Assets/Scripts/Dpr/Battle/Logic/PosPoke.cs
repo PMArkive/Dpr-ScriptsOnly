@@ -9,17 +9,26 @@
         private void setLastPos(int i, BtlPokePos pos)
         {
         	if (-1 < (int)i) {
-        	  if ((int)i < (int)this.Length.Length) {
-        	    if (i < this.Length.Length) {
-        	      this.Length + (int)i[0] = pos;
+        	  if ((int)i < (int)this.m_lastPosInst.Length) {
+        	    if (i < this.m_lastPosInst.Length) {
+        	      this.m_lastPosInst + (int)i[0] = pos;
         	    }
         	  }
         	}
-        	this[0] = pos;
+        	this.m_lastPosDmy = (BtlPokePos)(pos);
         }
 
-        // TODO
-        private BtlPokePos getLastPos(int i) { return BtlPokePos.POS_1ST_0; }
+        private BtlPokePos getLastPos(int i)
+        {
+        	if (-1 < (int)i) {
+        	  if ((int)i < (int)this.m_lastPosInst.Length) {
+        	    if (i < this.m_lastPosInst.Length) {
+        	      return this.m_lastPosInst + (int)i[0];
+        	    }
+        	  }
+        	}
+        	return this.m_lastPosDmy;
+        }
 
         // TODO
         public PosPoke() { }
@@ -66,8 +75,16 @@
         // TODO
         public BtlPokePos GetPokeExistPos(byte pokeID) { return BtlPokePos.POS_1ST_0; }
 
-        // TODO
-        public BtlPokePos GetPokeLastPos(byte pokeID) { return BtlPokePos.POS_1ST_0; }
+        public BtlPokePos GetPokeLastPos(byte pokeID)
+        {
+        	var uVar1 = (uint)pokeID & 0xff;
+        	if ((int)this.m_lastPosInst.Length <= (int)uVar1) {
+        	  return this.m_lastPosDmy;
+        	}
+        	if (uVar1 < this.m_lastPosInst.Length) {
+        	  return this.m_lastPosInst + (pokeID & 0xff)[0];
+        	}
+        }
 
         // TODO
         public byte GetExistPokeID(BtlPokePos pos) { return 0; }

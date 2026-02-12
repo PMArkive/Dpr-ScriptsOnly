@@ -20,7 +20,7 @@ namespace Dpr.UI
 		
 		public void Initialize(Action onFinishState, Action onLeave)
 		{
-			this[0] = onFinishState;
+			this._onFinishState = onFinishState;
 			this._onLeave = onLeave;
 		}
 		

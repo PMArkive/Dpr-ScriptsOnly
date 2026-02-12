@@ -28,7 +28,7 @@ namespace Dpr.DigFossil
 		public void Initialize(IDigMessage message)
 		{
 			this.message = message;
-			DigFossil_DigItemResult.DestroyResultItems();
+			DestroyResultItems();
 		}
 		
 		// TODO

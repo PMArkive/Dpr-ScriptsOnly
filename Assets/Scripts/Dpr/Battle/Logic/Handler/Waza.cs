@@ -556,50 +556,50 @@ namespace Dpr.Battle.Logic.Handler
 			if ((int)wazano < 0x81) {
 			  if ((int)wazano < 0x24) {
 			    if ((int)wazano == 0x14) {
-			      pStrID = 0x43e;
+			      pStrID = (ushort)0x43e;
 			      return true;
 			    }
 			    if ((int)wazano == 0x23) {
-			      pStrID = 0x448;
+			      pStrID = (ushort)0x448;
 			      return true;
 			    }
 			  }
 			  else {
 			    if ((int)wazano == 0x53) {
-			      pStrID = 0x460;
+			      pStrID = (ushort)0x460;
 			      return true;
 			    }
 			    if ((int)wazano == 0x80) {
-			      pStrID = 0x452;
+			      pStrID = (ushort)0x452;
 			      return true;
 			    }
 			  }
 			}
 			else if ((int)wazano < 0x149) {
 			  if ((int)wazano == 0xfa) {
-			    pStrID = 0x45c;
+			    pStrID = (ushort)0x45c;
 			    return true;
 			  }
 			  if ((int)wazano == 0x148) {
-			    pStrID = 0x468;
+			    pStrID = (ushort)0x468;
 			    return true;
 			  }
 			}
 			else {
 			  if ((int)wazano == 0x1cf) {
-			    pStrID = 0x464;
+			    pStrID = (ushort)0x464;
 			    return true;
 			  }
 			  if ((int)wazano == 0x263) {
-			    pStrID = 0x680;
+			    pStrID = (ushort)0x680;
 			    return true;
 			  }
 			  if ((int)wazano == 0x30b) {
-			    pStrID = 0x7b6;
+			    pStrID = (ushort)0x7b6;
 			    return true;
 			  }
 			}
-			pStrID = 0x7de;
+			pStrID = (ushort)0x7de;
 			return false;
 		}
 		
@@ -628,7 +628,7 @@ namespace Dpr.Battle.Logic.Handler
 			if ((uVar1 & 0xffff) == 0) {
 			  uVar1 = 1;
 			}
-			return uVar1;
+			return (ushort)(uVar1);
 		}
 		
 		// TODO
@@ -1062,8 +1062,8 @@ namespace Dpr.Battle.Logic.Handler
 		public static void technoBaster_GetParam(ref PokeType pType, ref byte pEffectIdx, ItemNo item)
 		{
 			if ((item - 0x74U & 0xffff) < 4) {
-			  pType = (char)(0xe090c0a >> (ulong)((item - 0x74U & 3) << 3));
-			  pEffectIdx = (char)item + -0x73;
+			  pType = (PokeType)((char)(0xe090c0a >> (int)((item - 0x74U & 3) << 3)));
+			  pEffectIdx = (byte)((char)item + -0x73);
 			}
 		}
 		

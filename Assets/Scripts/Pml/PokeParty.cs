@@ -40,12 +40,12 @@ namespace Pml
 
         public uint GetMemberCount()
         {
-        	return this.Length;
+        	return this.m_memberCount;
         }
 
         public void SetMemberCount(uint count)
         {
-        	this.Length = count;
+        	this.m_memberCount = count;
         }
 
         // TODO
@@ -65,7 +65,7 @@ namespace Pml
 
         public bool IsFull()
         {
-        	return this.Length == 6;
+        	return this.m_memberCount == 6;
         }
 
         // TODO
@@ -97,7 +97,7 @@ namespace Pml
 
         public void SetMarkingIndex(uint pos)
         {
-        	this.markingIndex = pos;
+        	this.markingIndex = (byte)(pos);
         }
 
         public uint GetMarkingIndex()
@@ -112,7 +112,7 @@ namespace Pml
         	  return false;
         	}
         	iVar1 = GetMemberCountEx(5);
-        	return 1 < (uint)(this.Length - iVar1);
+        	return 1 < (uint)(this.m_memberCount - iVar1);
         }
 
         // TODO

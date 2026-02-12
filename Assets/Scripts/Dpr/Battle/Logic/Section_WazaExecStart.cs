@@ -28,7 +28,7 @@ namespace Dpr.Battle.Logic
 		private BtlPokePos correctReqWazaTargetPos(WazaNo orgWaza, BtlPokePos defaultTargetPos)
 		{
 			var iVar1 = WAZADATA.GetWazaTarget(orgWaza);
-			if (((defaultTargetPos & 0xff) == 5) && (iVar1 == 3)) {
+			if ((((int)defaultTargetPos & 0xff) == 5) && (iVar1 == 3)) {
 			  return this.m_pMainModule.GetOpponentPokePos(5,0);
 			}
 			return (ulong)defaultTargetPos;
@@ -48,6 +48,7 @@ namespace Dpr.Battle.Logic
 		private bool checkWazaMsgCustom(BTL_POKEPARAM pAttacker, WazaNo orgWazaID, WazaNo actWazaID, StrParam pStrParam)
 		{
 			this.m_pEventLauncher.Event_CheckWazaMsgCustom();
+			return false;
 		}
 		
 		// TODO

@@ -14,7 +14,7 @@ namespace Dpr.Contest
 		{
 			this.bRunning = false;
 			this.bPlayeSeq = false;
-			var uVar1 = Component.gameObject;
+			var uVar1 = this.gameObject;
 			uVar1.SetActive(1);
 		}
 		

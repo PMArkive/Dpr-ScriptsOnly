@@ -253,11 +253,13 @@
 
         public Section_AddSickCheckFail GetSection_AddSickCheckFail()
         {
-        	return this.Length;
+        	return this.m_section_AddSickCheckFail;
         }
 
-        // TODO
-        public Section_AddWazaDamageRecord GetSection_AddWazaDamageRecord() { return default; }
+        public Section_AddWazaDamageRecord GetSection_AddWazaDamageRecord()
+        {
+        	return this.m_section_AddWazaDamageRecord;
+        }
 
         public Section_AfterItemEquip GetSection_AfterItemEquip()
         {

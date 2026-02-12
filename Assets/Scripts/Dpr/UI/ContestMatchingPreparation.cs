@@ -44,7 +44,7 @@ namespace Dpr.UI
 		public void OnFinalize()
 		{
 			if (this.wazaViewSystem != null) {
-			  Contest_ContestViewSystem.OnFinalize(this.wazaViewSystem);
+			  this.wazaViewSystem.OnFinalize();
 			}
 			this.onFinish = null;
 		}
@@ -69,7 +69,7 @@ namespace Dpr.UI
 		
 		private void UpdateLoadingWazaSquence(float deltaTime)
 		{
-			if ((Contest_ContestViewSystem.get_IsLoaded(this.wazaViewSystem) & 1) != 0) {
+			if ((this.wazaViewSystem.IsLoaded & 1) != 0) {
 			  ChangeState(4);
 			}
 		}
@@ -106,8 +106,8 @@ namespace Dpr.UI
 			  ForceCloseUIWindow();
 			}
 			var uVar2 = String.Concat(StringLiteral_11377,uVar1,StringLiteral_423);
-			Contest_ContestUtils.EmitLog(uVar2,3);
-			SubContents_ShowMessageWindow.ShowMessage(this.contestMatchingUIPtr.msgWindow,uVar1,0,1,0);
+			ContestUtils.EmitLog(uVar2,3);
+			this.contestMatchingUIPtr.msgWindow.ShowMessage(uVar1,0,1,0);
 		}
 		
 		// TODO
@@ -139,10 +139,10 @@ namespace Dpr.UI
 		
 		private void OnChangeStateWaitAllMemberReady()
 		{
-			if ((Contest_ContestMatchingNetwork.IsHost(this.networkPtr) & 1) != 0) {
+			if ((this.networkPtr.IsHost() & 1) != 0) {
 			}
-			Contest_ContestMatchingNetwork.ResetTimer(this.networkPtr);
-			Contest_ContestMatchingNetwork.SendNoticeData(this.networkPtr,0);
+			this.networkPtr.ResetTimer();
+			this.networkPtr.SendNoticeData(0);
 		}
 		
 		// TODO
@@ -200,7 +200,7 @@ namespace Dpr.UI
 		
 		public void OnReceiveEntryPlayerData(int stationIndex)
 		{
-			Contest_ContestMatchingNetwork.SetMainFlag(this.networkPtr,stationIndex,1);
+			this.networkPtr.SetMainFlag(stationIndex,1);
 		}
 		
 		// TODO

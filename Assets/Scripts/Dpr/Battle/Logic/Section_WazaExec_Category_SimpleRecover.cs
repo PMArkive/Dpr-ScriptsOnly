@@ -12,6 +12,7 @@ namespace Dpr.Battle.Logic
 		private uint calcRecoverVolume(BTL_POKEPARAM attacker, BTL_POKEPARAM target, WazaNo wazano)
 		{
 			this.m_pEventLauncher.Event_CalcWazaRecoverHP();
+			return 0;
 		}
 		
 		// TODO

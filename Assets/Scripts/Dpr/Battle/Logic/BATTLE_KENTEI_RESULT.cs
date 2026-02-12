@@ -17,10 +17,10 @@ namespace Dpr.Battle.Logic
 		
 		public void Clear()
 		{
-			this.UseWazaNum = 0;
+			this.UseWazaNum = (ushort)0;
 			this.TurnNum = 0;
-			this.Length = 0;
-			this[0] = 0;
+			this.VoidAtcNum = (ushort)0;
+			this.ResistNum = (ushort)0;
 		}
 	}
 }

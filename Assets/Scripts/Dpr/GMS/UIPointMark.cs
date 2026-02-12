@@ -49,8 +49,8 @@ namespace Dpr.GMS
 		{
 			this.refPointData = null;
 			this.isModeBrowsing = false;
-			if ((this.Length.activeSelf & 1) != 0) {
-			  this.Length.SetActive(0);
+			if ((this.iconContent.activeSelf & 1) != 0) {
+			  this.iconContent.SetActive(0);
 			}
 			ExtensionMethods.SetActive(0);
 		}
@@ -58,15 +58,15 @@ namespace Dpr.GMS
 		public void OnChangeDistance(bool isMaxZoom)
 		{
 			if (this.isModeBrowsing) {
-			  this.isMaxZoom = isMaxZoom & 1;
+			  this.isMaxZoom = (isMaxZoom ? 1 : 0) & 1;
 			  if (this.isSelect) {
-			    GMS_UIPointMark.ChangeIconScale(isMaxZoom & 1);
+			    ChangeIconScale((isMaxZoom ? 1 : 0) & 1);
 			  }
 			  if ((this.refPointData != null) && (this.refPointData.bHasData != 0)) {
-			    GMS_UIPointMark.SetIconImageVisible(isMaxZoom & 1);
+			    SetIconImageVisible((isMaxZoom ? 1 : 0) & 1);
 			  }
-			  if ((this.Length.activeSelf & 1) != 0) {
-			    this.Length.SetActive(0);
+			  if ((this.iconContent.activeSelf & 1) != 0) {
+			    this.iconContent.SetActive(0);
 			  }
 			}
 		}
@@ -84,8 +84,8 @@ namespace Dpr.GMS
 			    var uVar3 = *
 			             (this.refPointData.historyDataArray + (int)this.refPointData.markIndex * 8[0] +
 			             0x18);
-			    UI_Image.set_sprite(this.monsIconImage,uVar3);
-			    UI_Image.set_sprite(this.monsShadowImage,uVar3);
+			    this.monsIconImage.sprite = uVar3;
+			    this.monsShadowImage.sprite = uVar3;
 			  }
 			}
 		}

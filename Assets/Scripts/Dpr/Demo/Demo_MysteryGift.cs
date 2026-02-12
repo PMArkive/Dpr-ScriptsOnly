@@ -22,7 +22,7 @@ namespace Dpr.Demo
 		
 		public override void Destroy()
 		{
-			Demo_DemoBase.Destroy();
+			DemoBase.Destroy();
 			this.timeLine = null;
 		}
 		

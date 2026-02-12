@@ -124,7 +124,7 @@ namespace Dpr.UI
 		
 		private void HidePoffin3DModel()
 		{
-			Demo_Demo_ModelViewer.ChangeModel(this.poffin3DModel,StringLiteral_398,1);
+			this.poffin3DModel.ChangeModel(StringLiteral_398,1);
 		}
 	}
 }

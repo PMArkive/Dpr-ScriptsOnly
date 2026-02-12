@@ -47,7 +47,7 @@ namespace Dpr.DigFossil
 		
 		public void SetDisplay(bool bIsDisplay)
 		{
-			this.root.SetActive(bIsDisplay & 1);
+			this.root.SetActive((bIsDisplay ? 1 : 0) & 1);
 		}
 		
 		// TODO
@@ -73,7 +73,7 @@ namespace Dpr.DigFossil
 		
 		public void SetTouchMode(bool bIsTouchMode)
 		{
-			this.bIsTouchMode = bIsTouchMode & 1;
+			this.bIsTouchMode = (bIsTouchMode ? 1 : 0) & 1;
 			if (bIsTouchMode) {
 			  GameObject.SetActive(this.cursor.gameObject,0,0);
 			}

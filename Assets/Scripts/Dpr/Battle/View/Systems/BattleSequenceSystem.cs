@@ -1398,12 +1398,12 @@ namespace Dpr.Battle.View.Systems
 		
 		protected override void OnUpdate(float deltaTime, int step = 1)
 		{
-			Systems_BattleSequenceSystem.OnUpdateCore(deltaTime,step,1);
+			OnUpdateCore(deltaTime,step,1);
 		}
 		
 		protected override void OnLateUpdate(float deltaTime, int step)
 		{
-			Systems_BattleSequenceSystem.OnUpdateCore(deltaTime,step);
+			OnUpdateCore(deltaTime,step);
 		}
 		
 		// TODO
@@ -1723,7 +1723,7 @@ namespace Dpr.Battle.View.Systems
 		
 		private void CNT_SEQ_FUNC_DEF_CloseMessage(SequenceFile pSeqFile, ISequenceViewSystem pViewSystem, CommandParam param)
 		{
-			var uVar1 = MsgWindowManager.get_IsOpen(0);
+			var uVar1 = 0.IsOpen;
 			if ((uVar1 & 1) != 0) {
 			  MsgWindowManager.CloseMsg(0);
 			}

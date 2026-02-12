@@ -47,8 +47,9 @@
 
         public bool GenerateOperations_ForEscape()
         {
-        	ServerCommandQueue.Initialize(this[0]);
+        	this.m_pQueue.Initialize();
         	escape(this);
+        	return false;
         }
 
         // TODO

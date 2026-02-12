@@ -44,18 +44,18 @@ namespace Dpr.GMS
 		
 		private void ResetTradeParam()
 		{
-			this[0] = 0;
+			this.gmsTradeResult = null;
 			this.isMovedCamera = false;
 			this.pointDataStatus = (PointDataStatus)3;
 			this.afterErrorDialogActID = (AfterErrorDialogActID)0;
-			if (0xe < this.Length ||
-			    (1 << (ulong)(this.Length & 0x1f) & 0x4009U) == 0) {
-			  GMS_GMSWork.EmitLog(_StringLiteral_9409,0);
+			if (0xe < (int)this.currentTradeState ||
+			    (1 << (int)((int)this.currentTradeState & 0x1f) & 0x4009U) == 0) {
+			  GMSWork.EmitLog(_StringLiteral_9409,0);
 			}
-			this.Length = 0;
-			GMS_UIPointMarkManager.HideAttentionIcon(this.uiGMSMark);
-			GMS_UIPointMarkManager.HideMatchingIcon(this.uiGMSMark);
-			SubContents_EffectEmitter.StopFx(0,this.effectEmitter,0x27);
+			this.currentTradeState = (TradeState)0;
+			this.uiGMSMark.HideAttentionIcon();
+			this.uiGMSMark.HideMatchingIcon();
+			0.StopFx(this.effectEmitter,0x27);
 		}
 		
 		// TODO
@@ -130,11 +130,11 @@ namespace Dpr.GMS
 		private void OnTradeFailed()
 		{
 			this.canUseGMSNetwork = false;
-			GMS_GMSSceneDataModel.ClearTradeDemoParam(this.dataModel);
-			GMS_GMSSceneDataModel.ClearTradeResultData(this.dataModel);
-			GMS_GMSController.ChangeTradeState(0xe);
+			this.dataModel.ClearTradeDemoParam();
+			this.dataModel.ClearTradeResultData();
+			ChangeTradeState(0xe);
 			var uVar1 = new Action(this);
-			GMS_GMSMessageWindow.ShowMessage(this.msgWindow,0xb,1,0,uVar1);
+			this.msgWindow.ShowMessage(0xb,1,0,uVar1);
 		}
 		
 		// TODO
@@ -142,13 +142,13 @@ namespace Dpr.GMS
 		
 		private void HideMatchingIcon()
 		{
-			GMS_UIPointMarkManager.HideMatchingIcon(this.uiGMSMark);
-			SubContents_EffectEmitter.StopFx(0,this.effectEmitter,0x27);
+			this.uiGMSMark.HideMatchingIcon();
+			0.StopFx(this.effectEmitter,0x27);
 		}
 		
 		private void HideAttentionIcon()
 		{
-			GMS_UIPointMarkManager.HideAttentionIcon(this.uiGMSMark);
+			this.uiGMSMark.HideAttentionIcon();
 		}
 		
 		// TODO
@@ -180,7 +180,7 @@ namespace Dpr.GMS
 		{
 			var uVar1 = ComponentExtensions.FindDeep(_StringLiteral_9435,1);
 			uVar1 = uVar1.transform;
-			SubContents_EffectEmitter.Initialize(this.effectEmitter,uVar1,GMS_GMSSceneDataModel.GetGMSEffects(this.dataModel),0);
+			this.effectEmitter.Initialize(uVar1,GMSSceneDataModel.GetGMSEffects(this.dataModel),0);
 		}
 		
 		// TODO
@@ -197,7 +197,7 @@ namespace Dpr.GMS
 		
 		private void ChangeSceneStateLaunchAnim()
 		{
-			GMS_UIGMSScene.StartSceneAnim(this.sceneUI,this.dataModel.nowTotalPutPointNum,GMS_GMSSceneDataModel.get_IsPutComp(this.dataModel) & 1,0);
+			this.sceneUI.StartSceneAnim(this.dataModel.nowTotalPutPointNum,GMSSceneDataModel.get_IsPutComp(this.dataModel) & 1,0);
 		}
 		
 		// TODO
@@ -206,14 +206,14 @@ namespace Dpr.GMS
 		private void OnClosedModeSelectMenu()
 		{
 			if (this.dataModel.selectGMSMode == 2) {
-			  GMS_GMSController.ConfirmExitGMSScene();
+			  ConfirmExitGMSScene();
 			}
 			if (this.dataModel.selectGMSMode != 1) {
 			  if (this.dataModel.selectGMSMode == 0) {
-			    GMS_GMSController.OpenSelectTradeMonsBox();
+			    OpenSelectTradeMonsBox();
 			  }
 			}
-			GMS_GMSController.StartBrowsingMode();
+			StartBrowsingMode();
 		}
 		
 		// TODO
@@ -221,13 +221,13 @@ namespace Dpr.GMS
 		
 		private bool CheckHasUnionPenalty()
 		{
-			if ((GMS_GMSSceneDataModel.HasUnionPenalty(this.dataModel) & 1) != 0) {
-			  GMS_GMSMessageWindow.ShowMessage(this.msgWindow,0x20,1,0,0,1);
+			if ((this.dataModel.HasUnionPenalty() & 1) != 0) {
+			  this.msgWindow.ShowMessage(0x20,1,0,0,1);
 			  if (this.dataModel.nowSceneState == 0x10) {
-			    GMS_GMSWork.EmitLog(_StringLiteral_9436,2);
+			    GMSWork.EmitLog(_StringLiteral_9436,2);
 			  }
 			  else {
-			    GMS_GMSSceneDataModel.SetSceneState(this.dataModel,0x10);
+			    this.dataModel.SetSceneState(0x10);
 			  }
 			  return true;
 			}
@@ -239,12 +239,12 @@ namespace Dpr.GMS
 		
 		private void ChangeSceneStateBackTitle()
 		{
-			GMS_UIGMSScene.StartOnBackTopAnim(this.sceneUI,this.dataModel.nowTotalPutPointNum,GMS_GMSSceneDataModel.get_IsPutComp(this.dataModel) & 1,0);
+			this.sceneUI.StartOnBackTopAnim(this.dataModel.nowTotalPutPointNum,GMSSceneDataModel.get_IsPutComp(this.dataModel) & 1,0);
 			if (this.dataModel.nowSceneState == 2) {
-			  GMS_GMSWork.EmitLog(_StringLiteral_9436,2);
+			  GMSWork.EmitLog(_StringLiteral_9436,2);
 			}
-			GMS_GMSSceneDataModel.SetSceneState(this.dataModel,2);
-			GMS_GMSController.ChangeSceneStateModeSelect();
+			this.dataModel.SetSceneState(2);
+			ChangeSceneStateModeSelect();
 		}
 		
 		// TODO
@@ -255,7 +255,7 @@ namespace Dpr.GMS
 		
 		private void ChangeSceneStateSaveTradeResult()
 		{
-			GMS_GMSSceneDataModel.SetGMSPlayerData(this.dataModel);
+			this.dataModel.SetGMSPlayerData();
 		}
 		
 		// TODO
@@ -267,8 +267,8 @@ namespace Dpr.GMS
 		private void ChangeSceneStateReward()
 		{
 			if (this.dataModel.hasAchievementReward != 0) {
-			  GMS_GMSSceneDataModel.GetAutoCloseMsgTimeShort(this.dataModel);
-			  GMS_GMSMessageWindow.ShowAutoCloseMessage(this.msgWindow,0x1a,0,1);
+			  this.dataModel.GetAutoCloseMsgTimeShort();
+			  this.msgWindow.ShowAutoCloseMessage(0x1a,0,1);
 			}
 		}
 		
@@ -297,11 +297,11 @@ namespace Dpr.GMS
 		
 		private void BackBoxMenu()
 		{
-			GMS_GMSController.OpenSelectTradeMonsBox();
+			OpenSelectTradeMonsBox();
 			if (this.dataModel.nowSceneState == 8) {
-			  GMS_GMSWork.EmitLog(_StringLiteral_9436,2);
+			  GMSWork.EmitLog(_StringLiteral_9436,2);
 			}
-			GMS_GMSSceneDataModel.SetSceneState(this.dataModel,8);
+			this.dataModel.SetSceneState(8);
 		}
 		
 		// TODO
@@ -316,9 +316,9 @@ namespace Dpr.GMS
 		private void UpdateAchievementAnim()
 		{
 			if (this.uiAchievementAnim.bIsActive != 0) {
-			  GMS_UIAchievementAnim.OnUpdate(this.uiAchievementAnim);
+			  this.uiAchievementAnim.OnUpdate();
 			}
-			GMS_GMSController.ChangeSceneState(0xc);
+			ChangeSceneState(0xc);
 		}
 		
 		// TODO
@@ -326,14 +326,14 @@ namespace Dpr.GMS
 		
 		private void UpdateSaveTradeResult()
 		{
-			var uVar1 = GMS_GMSController.WaitSave();
+			var uVar1 = WaitSave();
 			if (uVar1) {
 			}
 			if (this.dataModel.nowSceneState == 0xe) {
-			  GMS_GMSWork.EmitLog(_StringLiteral_9436,2);
+			  GMSWork.EmitLog(_StringLiteral_9436,2);
 			}
-			GMS_GMSSceneDataModel.SetSceneState(this.dataModel,0xe);
-			GMS_GMSController.ChangeSceneStateConfirmContinue();
+			this.dataModel.SetSceneState(0xe);
+			ChangeSceneStateConfirmContinue();
 		}
 		
 		// TODO
@@ -386,7 +386,7 @@ namespace Dpr.GMS
 			if ((this.dataModel.selectGMSMode == 1) &&
 			   (this.dataModel.nowTotalPutPointNum < 2)) {
 			}
-			GMS_GMSController.DecideSelectPoint();
+			DecideSelectPoint();
 		}
 		
 		// TODO
