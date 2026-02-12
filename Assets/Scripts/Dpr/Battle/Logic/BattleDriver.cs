@@ -93,8 +93,15 @@
         // TODO
         private void createServerCommandGenerator() { }
 
-        // TODO
-        public void Initialize() { }
+        public void Initialize()
+        {
+        	ServerCommandQueue.Initialize(this[0]);
+        	this.m_eventSystem.Initialize();
+        	this.m_sectionSharedData.Initialize();
+        	this.m_pokeActionContainer.Clear();
+        	this.m_pokeChangeRequest.Clear();
+        	this.m_captureInfo.Clear();
+        }
 
         public ServerCommandQueue GetServerCommandQueue()
         {

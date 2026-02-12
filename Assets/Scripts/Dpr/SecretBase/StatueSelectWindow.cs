@@ -39,11 +39,16 @@ namespace Dpr.SecretBase
 		// TODO
 		public void PreBuildLayout() { }
 		
-		// TODO
-		public void Show() { }
+		public void Show()
+		{
+			this.isBuildedLayout = true;
+			this.canvas.enabled = 1;
+		}
 		
-		// TODO
-		public void Close() { }
+		public void Close()
+		{
+			this.canvas.enabled = 0;
+		}
 		
 		// TODO
 		public void SetCursorFromRatio(float ratio, bool left) { }
@@ -57,8 +62,28 @@ namespace Dpr.SecretBase
 		// TODO
 		public void SortIcon(bool isDisable) { }
 		
-		// TODO
-		public static int Compare(StatueItem dataA, StatueItem dataB) { return default; }
+		public static int Compare(StatueItem dataA, StatueItem dataB)
+		{
+			ushort uVar7;
+			var uVar8 = a.Length;
+			var iVar5 = SecretBase_StatueEffectData.get_monsId(this.Length);
+			var iVar6 = SecretBase_StatueEffectData.get_monsId(uVar8);
+			if (iVar5 == iVar6) {
+			  var sVar2 = SecretBase_StatueEffectData.get_formNo(this.Length);
+			  var sVar3 = SecretBase_StatueEffectData.get_formNo(uVar8);
+			  if (sVar2 == sVar3) {
+			    uVar7 = SecretBase_StatueEffectData.get_rarity(this.Length);
+			    var bVar1 = SecretBase_StatueEffectData.get_rarity(uVar8);
+			    return (uVar7 & 0xff) - (uint)bVar1;
+			  }
+			  uVar7 = SecretBase_StatueEffectData.get_formNo(this.Length);
+			  var uVar4 = SecretBase_StatueEffectData.get_formNo(uVar8);
+			  return (uVar7 & 0xffff) - (uint)uVar4;
+			}
+			iVar5 = SecretBase_StatueEffectData.get_monsId(this.Length);
+			iVar6 = SecretBase_StatueEffectData.get_monsId(uVar8);
+			return iVar5 - iVar6;
+		}
 		
 		// TODO
 		public void SetFillter(int pokeType1, int pokeType2, int size, int category, int legend, int indexId, bool isDisable) { }
@@ -68,8 +93,28 @@ namespace Dpr.SecretBase
 
 		public class StatueItemCompare : IComparer<StatueItem>
 		{
-			// TODO
-			public int Compare(StatueItem a, StatueItem b) { return default; }
+			public int Compare(StatueItem a, StatueItem b)
+			{
+				ushort uVar7;
+				var uVar8 = a.Length;
+				var iVar5 = SecretBase_StatueEffectData.get_monsId(this.Length);
+				var iVar6 = SecretBase_StatueEffectData.get_monsId(uVar8);
+				if (iVar5 == iVar6) {
+				  var sVar2 = SecretBase_StatueEffectData.get_formNo(this.Length);
+				  var sVar3 = SecretBase_StatueEffectData.get_formNo(uVar8);
+				  if (sVar2 == sVar3) {
+				    uVar7 = SecretBase_StatueEffectData.get_rarity(this.Length);
+				    var bVar1 = SecretBase_StatueEffectData.get_rarity(uVar8);
+				    return (uVar7 & 0xff) - (uint)bVar1;
+				  }
+				  uVar7 = SecretBase_StatueEffectData.get_formNo(this.Length);
+				  var uVar4 = SecretBase_StatueEffectData.get_formNo(uVar8);
+				  return (uVar7 & 0xffff) - (uint)uVar4;
+				}
+				iVar5 = SecretBase_StatueEffectData.get_monsId(this.Length);
+				iVar6 = SecretBase_StatueEffectData.get_monsId(uVar8);
+				return iVar5 - iVar6;
+			}
 		}
 
 		private class NGMotionMono : MonoBehaviour

@@ -22,8 +22,10 @@ namespace Dpr.NetworkUtils
 		// TODO
 		public bool IsChangeCountDown() { return default; }
 		
-		// TODO
-		public void SetTimeCount(int timeCount) { }
+		public void SetTimeCount(int timeCount)
+		{
+			this.remainingCount = timeCount;
+		}
 		
 		// TODO
 		public string GetMinuteStr() { return default; }
@@ -31,7 +33,18 @@ namespace Dpr.NetworkUtils
 		// TODO
 		public string GetSecondStr() { return default; }
 		
-		// TODO
-		public void OnUpdate(float deltaTime) { }
+		public void OnUpdate(float deltaTime)
+		{
+			float fVar2 = default;
+			if (this[0] != 0) {
+			  var fVar1 = (float)Time.get_realtimeSinceStartup(0);
+			  this.realTime = fVar1;
+			  this.Length = this.Length - (fVar1 - fVar2);
+			  if (this.Length - (fVar1 - fVar2) + 1.0 <= 0.0) {
+			    this.Length = 0;
+			    this[0] = 0;
+			  }
+			}
+		}
 	}
 }

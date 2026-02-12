@@ -33,44 +33,66 @@ namespace Dpr.Battle.Logic
 			m_pSectionContainer = param.pSectionContainer;
 		}
 		
-		// TODO
-		protected MainModule GetMainModule() { return default; }
+		protected MainModule GetMainModule()
+		{
+			return this.m_pMainModule;
+		}
 		
-		// TODO
-		protected BattleEnv GetBattleEnv() { return default; }
+		protected BattleEnv GetBattleEnv()
+		{
+			return this.Length;
+		}
 		
 		// TODO
 		protected ServerCommandQueue GetServerCommandQueue() { return default; }
 		
-		// TODO
-		protected ServerCommandPutter GetServerCommandPutter() { return default; }
+		protected ServerCommandPutter GetServerCommandPutter()
+		{
+			return this.m_pServerCmdPutter;
+		}
 		
-		// TODO
-		protected WazaCommandPutter GetWazaCommandPutter() { return default; }
+		protected WazaCommandPutter GetWazaCommandPutter()
+		{
+			return this.m_pWazaCmdPutter;
+		}
 		
-		// TODO
-		protected EventSystem GetEventSystem() { return default; }
+		protected EventSystem GetEventSystem()
+		{
+			return this.m_pEventSystem;
+		}
 		
-		// TODO
-		protected EventLauncher GetEventLauncher() { return default; }
+		protected EventLauncher GetEventLauncher()
+		{
+			return this.m_pEventLauncher;
+		}
 		
-		// TODO
-		protected SectionSharedData GetSharedData() { return default; }
+		protected SectionSharedData GetSharedData()
+		{
+			return this.m_pSharedData;
+		}
 		
 		// TODO
 		protected ActionSharedData GetActionSharedData() { return default; }
 		
-		// TODO
-		protected PokeActionContainer GetPokemonActionContainer() { return default; }
+		protected PokeActionContainer GetPokemonActionContainer()
+		{
+			return this.m_pPokemonActionContainer;
+		}
 		
-		// TODO
-		protected PokeChangeRequest GetPokeChangeRequest() { return default; }
+		protected PokeChangeRequest GetPokeChangeRequest()
+		{
+			return this.m_pPokeChangeRequest;
+		}
 		
-		// TODO
-		protected CaptureInfo GetCaptureInfo() { return default; }
+		protected CaptureInfo GetCaptureInfo()
+		{
+			return this.m_pCaptureInfo;
+		}
 		
-		// TODO
-		protected SectionContainer GetSectionContainer() { return default; }
+		protected SectionContainer GetSectionContainer()
+		{
+			return this.m_pSectionContainer;
+		}
 		
 		// TODO
 		protected byte GetPokeID(BtlPokePos pos) { return default; }
@@ -99,20 +121,30 @@ namespace Dpr.Battle.Logic
 		// TODO
 		protected BTL_PARTY GetPokeParty(byte clientID) { return default; }
 		
-		// TODO
-		protected BtlRule GetRule() { return default; }
+		protected BtlRule GetRule()
+		{
+			return this.m_pMainModule.m_rule;
+		}
 		
-		// TODO
-		protected BtlMultiMode GetMultiMode() { return default; }
+		protected BtlMultiMode GetMultiMode()
+		{
+			this.m_pMainModule.GetMultiMode();
+		}
 		
-		// TODO
-		protected BtlCompetitor GetCompetitor() { return default; }
+		protected BtlCompetitor GetCompetitor()
+		{
+			this.m_pMainModule.GetCompetitor(1);
+		}
 		
-		// TODO
-		protected bool CheckCommMode() { return default; }
+		protected bool CheckCommMode()
+		{
+			return this.m_pMainModule.GetCommMode() != 0;
+		}
 		
-		// TODO
-		protected bool CheckStatusFlag(BTL_STATUS_FLAG flag) { return default; }
+		protected bool CheckStatusFlag(BTL_STATUS_FLAG flag)
+		{
+			this.m_pMainModule.GetSetupStatusFlag(flag);
+		}
 		
 		// TODO
 		protected bool CheckFriendPoke(BTL_POKEPARAM poke1, BTL_POKEPARAM poke2) { return default; }
@@ -132,11 +164,15 @@ namespace Dpr.Battle.Logic
 		// TODO
 		protected bool CheckTurnEnd(InterruptCode interruptCode) { return default; }
 		
-		// TODO
-		protected bool CheckPlayersClient(BTL_CLIENT_ID clientID) { return default; }
+		protected bool CheckPlayersClient(BTL_CLIENT_ID clientID)
+		{
+			return this.m_pMainModule.m_myClientID == clientID;
+		}
 		
-		// TODO
-		protected byte GetFriendship(BTL_POKEPARAM poke) { return default; }
+		protected byte GetFriendship(BTL_POKEPARAM poke)
+		{
+			this.m_pMainModule.GetPokeFriendship(poke);
+		}
 		
 		// TODO
 		protected bool CheckPlayersPoke(BTL_POKEPARAM poke) { return default; }
@@ -156,11 +192,19 @@ namespace Dpr.Battle.Logic
 		// TODO
 		protected bool CheckInvalidWaza(WazaNo waza) { return default; }
 		
-		// TODO
-		protected bool CheckWazaEffectEnable() { return default; }
+		protected bool CheckWazaEffectEnable()
+		{
+			return this.m_pMainModule.m_fWazaEffectEnable;
+		}
 		
-		// TODO
-		protected bool CheckSkyBattleFailWaza(WazaNo waza) { return default; }
+		protected bool CheckSkyBattleFailWaza(WazaNo waza)
+		{
+			if (((this.m_pMainModule.IsSkyBattle() & 1) != 0) &&
+			   (this.m_pMainModule.IsSkyBattle() = WAZADATA.GetFlag(waza,0xe), (MainModule.IsSkyBattle(this.m_pMainModule) & 1) != 0)) {
+			  return true;
+			}
+			return false;
+		}
 		
 		// TODO
 		protected WazaNo CheckEncoreWazaChange(PokeAction action) { return default; }

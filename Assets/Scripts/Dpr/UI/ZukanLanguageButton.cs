@@ -22,8 +22,10 @@ namespace Dpr.UI
 		// TODO
 		public int GetIndex() { return default; }
 		
-		// TODO
-		public void SetIndex(int index) { }
+		public void SetIndex(int index)
+		{
+			this[0] = index;
+		}
 		
 		// TODO
 		public RectTransform GetRectTransform() { return default; }

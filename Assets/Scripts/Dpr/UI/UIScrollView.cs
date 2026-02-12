@@ -50,14 +50,22 @@ namespace Dpr.UI
         // TODO
         private void Awake() { }
 
-        // TODO
-        public void Initialize(Action<IUIButton> onRequiedItemData, Action<IUIButton> onSelectItem, Action<IUIButton> onUnSelectItem) { }
+        public void Initialize(Action<IUIButton> onRequiedItemData, Action<IUIButton> onSelectItem, Action<IUIButton> onUnSelectItem)
+        {
+        	this.onRequiedItemData = onRequiedItemData;
+        	this.onSelectItem = onSelectItem;
+        	this.onUnSelectItem = onUnSelectItem;
+        	this.selectedItemNode = null;
+        	this.isActive = true;
+        }
 
         // TODO
         public void Setup(int itemCount, int selectIndex = 0, float scrollPos = 0.0f, bool isForceScroll = false) { }
 
-        // TODO
-        public void SetActive(bool isActive) { }
+        public void SetActive(bool isActive)
+        {
+        	this.isActive = isActive & 1;
+        }
 
         // TODO
         public float GetScrollPosition() { return 0.0f; }
@@ -71,8 +79,10 @@ namespace Dpr.UI
         // TODO
         public bool MovePage(bool isNext) { return false; }
 
-        // TODO
-        public void ResumeMoveSelect() { }
+        public void ResumeMoveSelect()
+        {
+        	this.indexSelector.ResumeMoveState();
+        }
 
         // TODO
         private void SetSelectIndex(int index) { }
@@ -92,8 +102,29 @@ namespace Dpr.UI
         // TODO
         private void RefreshScrollContentAnchorPosition() { }
 
-        // TODO
-        private void SetLayoutGroupPadding(int value) { }
+        private void SetLayoutGroupPadding(int value)
+        {
+        	uint uVar1;
+        	uint uVar3;
+        	uint uVar4;
+        	var uVar6 = this.layoutGroup.Length;
+        	if (!this.isHorizontal) {
+        	  uVar4 = uVar6.left;
+        	  uVar1 = uVar6.right;
+        	  uVar3 = uVar6.bottom;
+        	  uVar6 = new RectOffset();
+        	}
+        	else {
+        	  uVar1 = uVar6.right;
+        	  var uVar2 = uVar6.top;
+        	  uVar3 = uVar6.bottom;
+        	  uVar6 = new RectOffset();
+        	  uVar4 = value;
+        	  value = uVar2;
+        	}
+        	uVar6 = new RectOffset(uVar4,uVar1,value,uVar3);
+        	UI_LayoutGroup.set_padding(this.layoutGroup,uVar6);
+        }
 
         // TODO
         private void SetScrollRectAnchorPosition(float value) { }

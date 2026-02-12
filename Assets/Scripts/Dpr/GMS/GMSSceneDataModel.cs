@@ -81,8 +81,14 @@ namespace Dpr.GMS
 		// TODO
 		public void SetGMSMasterData(GMSMasterData gmsMasterData) { }
 		
-		// TODO
-		public void ResetData() { }
+		public void ResetData()
+		{
+			this.lockCheckAchievementFlag = false;
+			this.keyguidePattern = (KeyguidePattern)7;
+			var uVar1 = GMS_GMSSceneDataModel.CalcTotalPutPointNum();
+			this.nowTotalPutPointNum = uVar1;
+			GMS_GMSPointDataContainer.RemapRefDataIndex(this.dataContainer);
+		}
 		
 		// TODO
 		public void ResetPointDataStatus() { }
@@ -112,8 +118,13 @@ namespace Dpr.GMS
 		// TODO
 		public void ChangeGMSMode(GMSMode selectGMSMode) { }
 		
-		// TODO
-		public bool CanSnapPoint() { return default; }
+		public bool CanSnapPoint()
+		{
+			if ((int)this.selectGMSMode != 0) {
+			  return 0 < this.nowTotalPutPointNum;
+			}
+			return true;
+		}
 		
 		public bool CanControllCameraOnBrowsingMode { get => selectGMSMode != GMSMode.Browsing || nowTotalPutPointNum > 0; }
 		
@@ -132,8 +143,10 @@ namespace Dpr.GMS
 		// TODO
 		public string GetSpriteAtlasPath() { return default; }
 		
-		// TODO
-		public void SetSpriteAtlas(SpriteAtlas atlas) { }
+		public void SetSpriteAtlas(SpriteAtlas atlas)
+		{
+			this.graphicTextAtlas = atlas;
+		}
 		
 		// TODO
 		public Sprite GetSpriteByIndex(int index) { return default; }
@@ -219,14 +232,20 @@ namespace Dpr.GMS
 		// TODO
 		public int GetStartListIndex(GMSMode gmsMode) { return default; }
 		
-		// TODO
-		public int GetNowSelectModeListIndex() { return default; }
+		public int GetNowSelectModeListIndex()
+		{
+			GMS_GMSSceneDataModel.GetStartListIndex(this.selectGMSMode);
+		}
 		
-		// TODO
-		public void SetTradeListIndex(int index) { }
+		public void SetTradeListIndex(int index)
+		{
+			this.tradeListIndex = index;
+		}
 		
-		// TODO
-		public void SetBrowsingListIndex(int index) { }
+		public void SetBrowsingListIndex(int index)
+		{
+			this.browsingListIndex = index;
+		}
 		
 		public Demo_Trade TradeDemoParam { get => tradeDemoParam; }
 		
@@ -266,8 +285,10 @@ namespace Dpr.GMS
 		// TODO
 		public void DeleteSendPokeData() { }
 		
-		// TODO
-		public void ClearTradeResultData() { }
+		public void ClearTradeResultData()
+		{
+			GMS_TradeResultData.Clear(this.tradeResultData);
+		}
 		
 		private bool IsRankMax { get => achievementStep >= gmsMasterData.PutRank.Length - 1; }
 		
@@ -306,8 +327,11 @@ namespace Dpr.GMS
 		// TODO
 		private Keyguide.Param CreateKeyguidePatternDecide() { return default; }
 		
-		// TODO
-		private Keyguide.Param CreateKeyguidePatternEmpty() { return default; }
+		private Keyguide.Param CreateKeyguidePatternEmpty()
+		{
+			var uVar1 = new Keyguide_Param();
+			return uVar1;
+		}
 		
 		// TODO
 		public void CloseKeyguide() { }

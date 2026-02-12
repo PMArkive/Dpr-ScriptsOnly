@@ -8,8 +8,11 @@ namespace Dpr.UnderGround.UgFather
 
         protected OnEventEnd onEventEndCallback;
 
-        // TODO
-        public void Initialize(FieldCharacterEntity entity, OnEventEnd eventEndCallback) { }
+        public void Initialize(FieldCharacterEntity entity, OnEventEnd eventEndCallback)
+        {
+        	this.Length = entity;
+        	this[0] = eventEndCallback;
+        }
 		
 		// TODO
 		public virtual void OnTalkEvent() { }

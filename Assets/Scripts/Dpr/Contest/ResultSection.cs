@@ -17,8 +17,10 @@ namespace Dpr.Contest
 		private bool isTutorial;
 		private WaitForSeconds waitStartResult;
 		
-		// TODO
-		public void SetScriptableObject(ResultSettings resultSettings) { }
+		public void SetScriptableObject(ResultSettings resultSettings)
+		{
+			this.Length = resultSettings;
+		}
 		
 		// TODO
 		public void Initialize() { }
@@ -35,8 +37,10 @@ namespace Dpr.Contest
 		// TODO
 		public void Setup(bool isTutorial) { }
 		
-		// TODO
-		public void LoadResource(ResultID resultID) { }
+		public void LoadResource(ResultID resultID)
+		{
+			Contest_ResultAnnouncement.LoadResultFx(this[0]);
+		}
 		
 		// TODO
 		public void StartSection(ResultDataModel resultDataModel) { }
@@ -53,14 +57,41 @@ namespace Dpr.Contest
 		// TODO
 		private void UpdateTotalScores(float deltaTime) { }
 		
-		// TODO
-		private void UpdatePersonalPerformance() { }
+		private void UpdatePersonalPerformance()
+		{
+			Contest_ResultPersonalPerformance.UpdatePokeMotion(this.personalPerformance);
+			if ((int)this.personalPerformance.currentState == 1) {
+			  Contest_ResultPersonalPerformance.UpdateKeywait(this.personalPerformance);
+			  var cVar1 = this.personalPerformance.bRunning;
+			}
+			else {
+			  cVar1 = this.personalPerformance.bRunning;
+			}
+			if (cVar1) {
+			}
+			this.currentState = (ResultState)5;
+			this.bRunning = false;
+		}
 		
 		// TODO
 		private void UpdateTutorialMode(float deltaTime) { }
 		
-		// TODO
-		private void ChangeState(ResultState stateID) { }
+		private void ChangeState(ResultState stateID)
+		{
+			this.currentState = stateID;
+			switch(stateID) {
+			case 1:
+			  Contest_ResultAnnouncement.StartAnimation(this[0]);
+			case 2:
+			  Contest_ResultTotalScores.StartAnimation(this.totalScores);
+			case 3:
+			  Contest_ResultPersonalPerformance.StartAnimation(this.personalPerformance);
+			case 4:
+			  Contest_ResultTutorialMode.StartAnimation(this.tutorialMode);
+			case 5:
+			  this.bRunning = false;
+			}
+		}
 		
 		// TODO
 		private RankGaugeData CreateRankGaugeData() { return default; }

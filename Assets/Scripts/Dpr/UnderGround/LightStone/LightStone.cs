@@ -27,8 +27,17 @@ namespace Dpr.UnderGround.LightStone
 		// TODO
 		public void LoadModel(MonsNo monsNo) { }
 		
-		// TODO
-		public void ReturnUnUsed() { }
+		public void ReturnUnUsed()
+		{
+			if ((int)this.state != 0) {
+			  this.state = (State)0;
+			  if (((int)this.state == 3) && (this.lightStoneEffect != null)) {
+			    0.Stop(this.lightStoneEffect,0);
+			  }
+			  ExtensionMethods.SetActive(this.Length,0);
+			  ExtensionMethods.SetActive(this[0],0);
+			}
+		}
 		
 		// TODO
 		public void ReturnUnUsedWithAnimation() { }
@@ -39,14 +48,37 @@ namespace Dpr.UnderGround.LightStone
 		// TODO
 		public bool IsContact() { return default; }
 		
-		// TODO
-		public bool IsUnuse() { return default; }
+		public bool IsUnuse()
+		{
+			return (int)this.state == 0;
+		}
 		
-		// TODO
-		public void OnHit() { }
+		public void OnHit()
+		{
+			if ((int)this.state != 3) {
+			  if ((int)this.state == 1) {
+			    var uVar2 = GameObject.get_activeInHierarchy(Component.get_gameObject(this[0]),0);
+			    if (uVar2) {
+			      UnderGround_LightStone_LightStone.PlayPokeSE();
+			      UnderGround_LightStone_LightStone.PLayDigAnimation();
+			      this.nextState = (State)3;
+			    }
+			  }
+			}
+			UnderGround_LightStone_LightStone.FindLightStone();
+		}
 		
-		// TODO
-		public void DigStart() { }
+		public void DigStart()
+		{
+			if ((int)this.state == 1) {
+			  var uVar2 = GameObject.get_activeInHierarchy(Component.get_gameObject(this[0]),0);
+			  if (uVar2) {
+			    UnderGround_LightStone_LightStone.PlayPokeSE();
+			    UnderGround_LightStone_LightStone.PLayDigAnimation();
+			    this.nextState = (State)3;
+			  }
+			}
+		}
 		
 		// TODO
 		private void PLayDigAnimation() { }
@@ -54,8 +86,14 @@ namespace Dpr.UnderGround.LightStone
 		// TODO
 		public void FindLightStone() { }
 		
-		// TODO
-		public bool IsAliveModel() { return default; }
+		public bool IsAliveModel()
+		{
+			if ((int)this.state == 1) {
+			  Component.get_gameObject(this[0]) = GameObject.get_activeInHierarchy(Component.get_gameObject(this[0]),0);
+			  return Component.get_gameObject(this[0]);
+			}
+			return false;
+		}
 		
 		// TODO
 		private void PlaySmokeEffect(float delay) { }
@@ -66,8 +104,29 @@ namespace Dpr.UnderGround.LightStone
 		// TODO
 		private void PlayPokeSE() { }
 		
-		// TODO
-		private void SetState(State state) { }
+		private void SetState(State state)
+		{
+			if (this.state != state) {
+			  this.state = state;
+			  switch(state) {
+			  case 0:
+			    if (((int)this.state == 3) && (this.lightStoneEffect != null)) {
+			      0.Stop(this.lightStoneEffect,0);
+			    }
+			    ExtensionMethods.SetActive(this.Length,0);
+			    ExtensionMethods.SetActive(this[0],0);
+			  case 1:
+			    ExtensionMethods.SetActive(this[0],1);
+			  case 3:
+			    GameObject.SetActive(Component.get_gameObject(this[0]),0,0);
+			    UnderGround_LightStone_LightStone.PlayLightStoneEffect(0x3dcccccd,this);
+			  case 4:
+			    if (this.lightStoneEffect != null) {
+			      0.Stop(this.lightStoneEffect,0);
+			    }
+			  }
+			}
+		}
 
 		private enum State : int
 		{

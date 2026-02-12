@@ -37,8 +37,16 @@ namespace Dpr.Battle.Logic
         // TODO
         public static bool IsGWazaFight(PokeAction action) { return false; }
 
-        // TODO
-        public static bool IsRaidBossFight(PokeAction action) { return false; }
+        public static bool IsRaidBossFight(PokeAction action)
+        {
+        	ulong uVar1 = default;
+        	if (((this.bpp != null) &&
+        	    (uVar1 = this.bpp.IsRaidBoss(),
+        	    (uVar1 & 1) != 0)) && (this.Length == 1)) {
+        	  return true;
+        	}
+        	return false;
+        }
 
         // TODO
         public static bool IsRaidBossGWaza(PokeAction action) { return false; }

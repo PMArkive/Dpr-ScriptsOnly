@@ -18,7 +18,9 @@ namespace Dpr.DigFossil
 		// TODO
 		private void OnDestroy() { }
 		
-		// TODO
-		private void OnUpdate(float deltaTime) { }
+		private void OnUpdate(float deltaTime)
+		{
+			DigFossil_DigFossilController.OnUpdate(this.Length);
+		}
 	}
 }

@@ -40,8 +40,13 @@ namespace Dpr.Battle.View.Systems
 		// TODO
 		private IEnumerator PlayGroundEffect() { return default; }
 		
-		// TODO
-		private bool CheckAlreadyChanged() { return default; }
+		private bool CheckAlreadyChanged()
+		{
+			if (this[0] != 0) {
+			  return true;
+			}
+			return this._iPtrGroundEffectCamera != null;
+		}
 		
 		// TODO
 		private void Stop() { }

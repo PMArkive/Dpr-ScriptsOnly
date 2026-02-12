@@ -15,7 +15,12 @@ namespace Dpr.Battle.Logic
 		public ushort LosePokeNum;
 		public ushort UseWazaNum;
 		
-		// TODO
-		public void Clear() { }
+		public void Clear()
+		{
+			this.UseWazaNum = 0;
+			this.TurnNum = 0;
+			this.Length = 0;
+			this[0] = 0;
+		}
 	}
 }

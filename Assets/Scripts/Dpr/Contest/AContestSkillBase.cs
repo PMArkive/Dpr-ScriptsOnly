@@ -18,11 +18,19 @@ namespace Dpr.Contest
 		public SkillTypeID SkillType { get => (SkillTypeID)skillData.wazaType; }
 		public PokeType WazaType { get => wazaType; }
 		
-		// TODO
-		public void Reset() { }
+		public void Reset()
+		{
+			this.active = false;
+			this.launchElapsedTime = 0;
+			this.lifeTime = 0;
+		}
 		
-		// TODO
-		public void CreateSkill(ContestWazaInfo.SheetContestWazaData skillData, PokeType wazaType, PlayerDanceDataModel target) { }
+		public void CreateSkill(ContestWazaInfo.SheetContestWazaData skillData, PokeType wazaType, PlayerDanceDataModel target)
+		{
+			this.skillData = skillData;
+			this.Length = target;
+			this[0] = wazaType;
+		}
 
 		public abstract int CalcAppealPoint();
 		

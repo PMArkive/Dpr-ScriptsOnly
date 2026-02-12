@@ -11,8 +11,11 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public void Initialize(Transform cluster) { }
 		
-		// TODO
-		public void UnInitialize() { }
+		public void UnInitialize()
+		{
+			this[0] = 0;
+			this._refCounteds = null;
+		}
 		
 		// TODO
 		public Camera GetCamera(CameraType type) { return default; }

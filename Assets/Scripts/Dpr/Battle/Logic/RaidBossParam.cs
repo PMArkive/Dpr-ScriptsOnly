@@ -35,23 +35,35 @@ namespace Dpr.Battle.Logic
         // TODO
         public float GetHPCoef() { return 0f; }
 
-        // TODO
-        public GWall GetGWallConst() { return null; }
+        public GWall GetGWallConst()
+        {
+        	return this.m_gWall;
+        }
 
-        // TODO
-        public GWall GetGWall() { return null; }
+        public GWall GetGWall()
+        {
+        	return this.m_gWall;
+        }
 
         // TODO
         public byte GetGrade() { return 0; }
 
-        // TODO
-        public byte GetReinforceTurn() { return 0; }
+        public byte GetReinforceTurn()
+        {
+        	return this.m_reinforceTurn;
+        }
 
-        // TODO
-        public void SetReinforceTurn(byte turn) { }
+        public void SetReinforceTurn(byte turn)
+        {
+        	this.m_reinforceTurn = turn;
+        }
 
-        // TODO
-        public void DecReinforceTurn() { }
+        public void DecReinforceTurn()
+        {
+        	if (this.m_reinforceTurn != 0) {
+        	  this.m_reinforceTurn = this.m_reinforceTurn + -1;
+        	}
+        }
 
         // TODO
         public byte GetActionNum() { return 0; }
@@ -62,26 +74,57 @@ namespace Dpr.Battle.Logic
         // TODO
         public bool IsOnGWazaUseTurn() { return false; }
 
-        // TODO
-        public void DecGWazaUseTurn() { }
+        public void DecGWazaUseTurn()
+        {
+        	if (this.m_gWazaUseTurn != 0) {
+        	  this.m_gWazaUseTurn = this.m_gWazaUseTurn + -1;
+        	}
+        }
 
-        // TODO
-        public void SetGWazaUsed() { }
+        public void SetGWazaUsed()
+        {
+        	this.m_gWazaUsed = true;
+        }
 
-        // TODO
-        public void ResetGWazaUseSchedule(byte reUseTurn) { }
+        public void ResetGWazaUseSchedule(byte reUseTurn)
+        {
+        	this.m_gWazaUsed = false;
+        	this.m_gWazaUseTurn = reUseTurn;
+        }
 
-        // TODO
-        public byte GetAngryHPThreshold() { return 0; }
+        public byte GetAngryHPThreshold()
+        {
+        	if ((uint)this.m_angryLevel < this.Length[0].Length) {
+        	  return this.Length[0] + (ulong)this.m_angryLevel[0];
+        	}
+        }
 
-        // TODO
-        public void IncAngryLevel() { }
+        public void IncAngryLevel()
+        {
+        	if (this.m_angryLevel < 2) {
+        	  if (this.Length[0].Length <= (uint)this.m_angryLevel) {
+        	  }
+        	  if (this.Length[0] + (ulong)this.m_angryLevel[0] != 0) {
+        	    this.m_angryLevel = this.m_angryLevel + 1;
+        	    this.m_gWall.DecrementRepairTurnCountMax();
+        	  }
+        	}
+        }
 
-        // TODO
-        public bool IsAngryLevelMax() { return false; }
+        public bool IsAngryLevelMax()
+        {
+        	if (1 < this.m_angryLevel) {
+        	  return true;
+        	}
+        	if ((uint)this.m_angryLevel < this.Length[0].Length) {
+        	  return this.Length[0] + (ulong)this.m_angryLevel[0] == 0;
+        	}
+        }
 
-        // TODO
-        public bool IsAngry() { return false; }
+        public bool IsAngry()
+        {
+        	return this.m_angryLevel != 0;
+        }
 
         // TODO
         public WazaNo GetAngryWaza() { return WazaNo.NULL; }

@@ -27,8 +27,14 @@ namespace Pml.Item
         // TODO
         public int GetItemId(int ugItemId) { return 0; }
 
-        // TODO
-        public UgItemTable.Sheettable GetUgItemData(int ugItemId) { return null; }
+        public UgItemTable.Sheettable GetUgItemData(int ugItemId)
+        {
+        	var lVar1 = GetUgItemDataRaw();
+        	if (lVar1 != null) {
+        	}
+        	this.m_ugItemTable.get_Item(0);
+        	return default;
+        }
 
         // TODO
         public TamaTable.Sheettable GetTamaData(int ugItemId) { return null; }
@@ -51,16 +57,24 @@ namespace Pml.Item
         // TODO
         private UgItemTable.Sheettable GetUgItemDataRaw(int ugItemId) { return null; }
 
-        // TODO
-        public int GetNumStatueKInd() { return 0; }
+        public int GetNumStatueKInd()
+        {
+        	return this.m_stoneStatuEeffect.Length.Length + -1;
+        }
 
-        // TODO
-        public bool IsTama(int ugItemId) { return false; }
+        public bool IsTama(int ugItemId)
+        {
+        	var lVar1 = GetUgItemDataRaw();
+        	return 0 < lVar1.Length;
+        }
 
         // TODO
         public bool IsPedestal(int ugItemId) { return false; }
 
-        // TODO
-        public bool IsStatue(int ugItemId) { return false; }
+        public bool IsStatue(int ugItemId)
+        {
+        	var lVar1 = GetUgItemDataRaw();
+        	return 0 < lVar1[0];
+        }
     }
 }

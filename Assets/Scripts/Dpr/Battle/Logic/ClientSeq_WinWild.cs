@@ -42,8 +42,15 @@
         // TODO
         public void Update() { }
 
-        // TODO
-        private bool IsNusiWinEffectEnable() { return false; }
+        private bool IsNusiWinEffectEnable()
+        {
+        	ulong uVar3 = default;
+        	if ((POKECON.GetFrontPokeDataConst(this[0],0) != 0) && (uVar3 = BTL_POKEPARAM.IsDead(POKECON.GetFrontPokeDataConst(this[0],0),0), (uVar3 & 1) == 0)) {
+        	  var uVar1 = BTL_POKEPARAM.IsWazaHide(POKECON.GetFrontPokeDataConst(this[0],0),0);
+        	  return ~uVar1 & 1;
+        	}
+        	return false;
+        }
 
         public class SetupParam
         {

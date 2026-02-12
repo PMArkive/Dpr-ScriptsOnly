@@ -6,8 +6,17 @@
         private BtlPokePos[] m_lastPosInst;
         private BtlPokePos m_lastPosDmy;
 
-        // TODO
-        private void setLastPos(int i, BtlPokePos pos) { }
+        private void setLastPos(int i, BtlPokePos pos)
+        {
+        	if (-1 < (int)i) {
+        	  if ((int)i < (int)this.Length.Length) {
+        	    if (i < this.Length.Length) {
+        	      this.Length + (int)i[0] = pos;
+        	    }
+        	  }
+        	}
+        	this[0] = pos;
+        }
 
         // TODO
         private BtlPokePos getLastPos(int i) { return BtlPokePos.POS_1ST_0; }

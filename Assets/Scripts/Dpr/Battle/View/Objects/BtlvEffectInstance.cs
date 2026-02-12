@@ -59,8 +59,10 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public void Kill(bool immediate = true) { }
 		
-		// TODO
-		public override bool IsActive() { return default; }
+		public override bool IsActive()
+		{
+			this._effect.Length.IsAlive();
+		}
 		
 		// TODO
 		public override void OnUpdatePreJob(float deltaTime) { }
@@ -74,7 +76,12 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		protected override void UpdateSRT() { }
 		
-		// TODO
-		public void SetMultiplyColor(Vector4 color) { }
+		public void SetMultiplyColor(Vector4 color)
+		{
+			if (this._effect != null) {
+			  Color.op_Implicit(0);
+			  this._effect.SetMultiplyColor();
+			}
+		}
 	}
 }

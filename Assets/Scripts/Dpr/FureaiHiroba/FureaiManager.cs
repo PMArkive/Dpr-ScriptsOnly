@@ -486,8 +486,10 @@ namespace Dpr.FureaiHiroba
         // TODO
         public void PlayVoice_TemotiID(uint temoti) { }
 
-        // TODO
-        public List<FureaiPokeModel> GetWalkingPokes() { return null; }
+        public List<FureaiPokeModel> GetWalkingPokes()
+        {
+        	return this.pokeWalkMng.PokeWalkers;
+        }
 
         // TODO
         private void OnDestroy() { }
@@ -507,8 +509,14 @@ namespace Dpr.FureaiHiroba
                 DelPoke(pokeWalkMng.GetDelPoke());
         }
 
-        // TODO
-        public void SubPoke() { }
+        public void SubPoke()
+        {
+        	if (this.pokeWalkMng.PokeWalkers.Length != 0) {
+        	  var uVar2 = System_Linq_Enumerable__Last<object>
+        	                    (this.pokeWalkMng.PokeWalkers);
+        	  FureaiHiroba_PokeWalkManager.SubPoke(this.pokeWalkMng,uVar2);
+        	}
+        }
 
         private void Debug_EnterPokeCreate()
         {

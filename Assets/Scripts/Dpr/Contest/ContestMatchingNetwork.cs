@@ -47,11 +47,24 @@ namespace Dpr.Contest
 		// TODO
 		public void Initialize(Action<byte, PacketReader> onRecievePacket, Action<SessionEventData> onSessionEvent, Action onFinishedSession) { }
 		
-		// TODO
-		public void Reset() { }
+		public void Reset()
+		{
+			Contest_ContestUtils.EmitLog(StringLiteral_8824,3);
+			this.repeatSendSpanTimer.ResetTimer();
+			Contest_ContestMatchingNetwork.SetAllMainFlag();
+			Contest_ContestMatchingNetwork.SetAllSubFlag();
+		}
 		
-		// TODO
-		public void OnFinalize() { }
+		public void OnFinalize()
+		{
+			if (this.bIsInitialize) {
+			  Contest_ContestMatchingNetwork.ReleaseNetworkCallback();
+			  this.onRecievePacket = null;
+			  this.onSessionEvent = null;
+			  this.onFinishedSession = null;
+			  this.nowJoinMemberNum = 0;
+			}
+		}
 		
 		// TODO
 		public void ReleaseReceivePacket() { }
@@ -78,11 +91,15 @@ namespace Dpr.Contest
 		public int MyStationIndex { get => myStationIndex; }
 		public int JoinMemberNum { get => nowJoinMemberNum; }
 		
-		// TODO
-		public bool IsJoinedOtherPlayer() { return default; }
+		public bool IsJoinedOtherPlayer()
+		{
+			return 1 < this.nowJoinMemberNum;
+		}
 		
-		// TODO
-		public bool IsGamerActive(int stationIndex) { return default; }
+		public bool IsGamerActive(int stationIndex)
+		{
+			this.networkManager.IsGamerActive(stationIndex);
+		}
 		
 		// TODO
 		private void OnJoinMine() { }
@@ -95,8 +112,10 @@ namespace Dpr.Contest
 		
 		public MultiContestStepID CurrentStepID { get => currentStepID; }
 		
-		// TODO
-		public void SetStepID(MultiContestStepID stepID) { }
+		public void SetStepID(MultiContestStepID stepID)
+		{
+			this.currentStepID = stepID;
+		}
 		
 		// TODO
 		public bool GetMyMainFlag() { return default; }
@@ -128,14 +147,23 @@ namespace Dpr.Contest
 		// TODO
 		private bool CheckPlayerIndex(int index) { return default; }
 		
-		// TODO
-		public void RepeatSendNotice(NoticeID noticeID, float deltaTime) { }
+		public void RepeatSendNotice(NoticeID noticeID, float deltaTime)
+		{
+			if ((this.repeatSendSpanTimer.IsFinishWait() & 1) != 0) {
+			  this.repeatSendSpanTimer.ResetTimer();
+			  Contest_ContestMatchingNetwork.SendNoticeData(noticeID);
+			}
+		}
 		
-		// TODO
-		public bool IsFinishWait(float deltaTime) { return default; }
+		public bool IsFinishWait(float deltaTime)
+		{
+			this.repeatSendSpanTimer.IsFinishWait();
+		}
 		
-		// TODO
-		public void ResetTimer() { }
+		public void ResetTimer()
+		{
+			this.repeatSendSpanTimer.ResetTimer();
+		}
 		
 		// TODO
 		private void OnRecievePacket(PacketReader pr) { }
@@ -158,14 +186,22 @@ namespace Dpr.Contest
 		// TODO
 		public void RestartRequestAsync() { }
 		
-		// TODO
-		private IlcaNetSessionNetworkType GetNetworkType() { return default; }
+		private IlcaNetSessionNetworkType GetNetworkType()
+		{
+			return (int)this.connectType != 0;
+		}
 		
 		// TODO
 		private void SettingSessionAttribute() { }
 		
-		// TODO
-		public bool CloseSession() { return default; }
+		public bool CloseSession()
+		{
+			Contest_ContestUtils.EmitLog(StringLiteral_8824,3);
+			this.repeatSendSpanTimer.ResetTimer();
+			Contest_ContestMatchingNetwork.SetAllMainFlag();
+			Contest_ContestMatchingNetwork.SetAllSubFlag();
+			this.networkManager.CloseSession();
+		}
 		
 		// TODO
 		public void LeaveSession() { }

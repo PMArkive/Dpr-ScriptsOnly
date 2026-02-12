@@ -90,8 +90,10 @@ namespace Dpr.SecretBase
 		// TODO
 		public IEnumerator Load() { return default; }
 		
-		// TODO
-		public bool IsLoadCompleted() { return default; }
+		public bool IsLoadCompleted()
+		{
+			SecretBase_StatuePlacementManger.IsLoadCompleted(this.placementManager);
+		}
 		
 		// TODO
 		public void OnUpdate() { }
@@ -105,8 +107,12 @@ namespace Dpr.SecretBase
 		// TODO
 		public void Show() { }
 		
-		// TODO
-		public void Close() { }
+		public void Close()
+		{
+			ExtensionMethods.SetActive(this.placementManager,0);
+			ExtensionMethods.SetActive(this.keyGuideRoot,0);
+			this.statueNumView.SetActive(0);
+		}
 		
 		// TODO
 		private void StatueAndPedestalSetup() { }
@@ -144,8 +150,14 @@ namespace Dpr.SecretBase
 		// TODO
 		public void OperationTopView(int mask) { }
 		
-		// TODO
-		public void ResetLookAt() { }
+		public void ResetLookAt()
+		{
+			GameObject.SetActive(this.fieldView.gameObject,0,0);
+			SecretBase_SecretBaseCamera.ResetLookAt(this.secretBaseCamera);
+			this.fieldView.gameObject = Dpr_SecretBase_StatuePlacementManger__SetSelectPedestalMode
+			                  (this.placementManager,0,0);
+			SecretBase_StatuePlacementEditController.SetDisplayStatueCursor(this.fieldView.gameObject,1);
+		}
 		
 		// TODO
 		public void TargetLookAt(PlacementData target) { }

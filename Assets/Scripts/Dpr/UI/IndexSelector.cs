@@ -35,11 +35,24 @@ namespace Dpr.UI
         // TODO
         public bool Move(int moveValue) { return false; }
 
-        // TODO
-        public void ResumeMoveState() { }
+        public void ResumeMoveState()
+        {
+        	uint uVar1;
+        	if ((int)this.moveState == 1) {
+        	  uVar1 = 0;
+        	}
+        	else {
+        	  if ((int)this.moveState != 2) {
+        	  }
+        	  uVar1 = 3;
+        	}
+        	this.moveState = uVar1;
+        }
 
-        // TODO
-        public void SetCurrentIndex(int index) { }
+        public void SetCurrentIndex(int index)
+        {
+        	this.Length = index;
+        }
 
         private enum MoveState : int
         {

@@ -22,8 +22,13 @@ namespace Dpr.UnderGround.UgFather
 		// TODO
 		private void ChangeState(State state) { }
 		
-		// TODO
-		private void EventEnd() { }
+		private void EventEnd()
+		{
+			this.state = (State)0;
+			if (this[0] != 0) {
+			  UnderGround_UgFather_UgFatherBase_OnEventEnd.Invoke();
+			}
+		}
 
 		private enum State : int
 		{

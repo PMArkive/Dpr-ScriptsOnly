@@ -25,20 +25,39 @@ namespace Dpr.Contest
 		
 		public DanceTapData TapData { get => tapData; }
 		
-		// TODO
-		public override void Activate() { }
+		public override void Activate()
+		{
+			this.bIsActive = 1;
+			this.canInput = true;
+			Contest_ContestInput.Subscribe(this.input);
+		}
 		
-		// TODO
-		public override void DeActivate() { }
+		public override void DeActivate()
+		{
+			this.bIsActive = 0;
+			this.canInput = false;
+			Contest_ContestInput.Remove(this.input);
+		}
 		
-		// TODO
-		protected override void Dispose() { }
+		protected override void Dispose()
+		{
+			this.bIsActive = 0;
+			this.canInput = false;
+			Contest_ContestInput.Remove(this.input);
+		}
 		
-		// TODO
-		public override void Reset() { }
+		public override void Reset()
+		{
+			Contest_ADancePlayer.Reset();
+			this.currentActionID = 0;
+			this.canInput = false;
+			this.bIsActive = 0;
+		}
 		
-		// TODO
-		public void ChangeTutorialSetting(bool flag) { }
+		public void ChangeTutorialSetting(bool flag)
+		{
+			this.bAutoMode = flag & 1;
+		}
 		
 		// TODO
 		protected override void UpdateAction() { }
@@ -49,14 +68,21 @@ namespace Dpr.Contest
 		// TODO
 		private void UserInput() { }
 		
-		// TODO
-		protected override void OnForceLaunchSkill() { }
+		protected override void OnForceLaunchSkill()
+		{
+			this.bForceLaunchSkillFlag = 1;
+		}
 		
 		// TODO
 		public override void NoticeLaunchSkill(ADancePlayer player) { }
 		
-		// TODO
-		public override void LaunchSkill() { }
+		public override void LaunchSkill()
+		{
+			this.canInput = false;
+			if (this.bIsActive != 0) {
+			  Contest_PlayerDanceDataModel.LaunchSkill(this.Length);
+			}
+		}
 		
 		// TODO
 		private void AutoSuccessMode() { }
@@ -64,8 +90,11 @@ namespace Dpr.Contest
 		// TODO
 		private void UpdateSkillEffect() { }
 		
-		// TODO
-		public override void ActivateSkillEffect(double elapsedTime, Action onFinishSkillEffect) { }
+		public override void ActivateSkillEffect(double elapsedTime, Action onFinishSkillEffect)
+		{
+			this.canInput = true;
+			Contest_PlayerDanceDataModel.ActivateSkillEffect(this.Length,elapsedTime);
+		}
 		
 		// TODO
 		protected override void OnChangeMultiMode(bool isHost) { }

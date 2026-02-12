@@ -29,8 +29,13 @@
             m_pMessageManager = setupParam.pMessageManager;
         }
 
-        // TODO
-        public void Start(byte clientId, TrainerMessageID messageId) { }
+        public void Start(byte clientId, TrainerMessageID messageId)
+        {
+        	this.m_seq = 0;
+        	this.m_isFinished = false;
+        	this.m_clientId = clientId;
+        	this.m_messageId = messageId;
+        }
 
         // TODO
         public void Update() { }

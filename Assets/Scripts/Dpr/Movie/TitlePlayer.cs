@@ -73,11 +73,19 @@ namespace Dpr.Movie
         // TODO
         private void PlayMovie(MovieType type, bool loop) { }
 
-        // TODO
-        private void EndMovie() { }
+        private void EndMovie()
+        {
+        	var lVar1 = this._moviePlayer._switchVideoPlayer;
+        	if (lVar1 != null) {
+        	  Switch_SwitchVideoPlayer.Stop(lVar1);
+        	  this._moviePlayer._isPlaying = 0;
+        	}
+        }
 
-        // TODO
-        private bool IsPlayingMovie() { return false; }
+        private bool IsPlayingMovie()
+        {
+        	return this._moviePlayer._isPlaying;
+        }
 
         // TODO
         private void PlayOpeningBGM() { }

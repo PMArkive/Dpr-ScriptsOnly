@@ -79,8 +79,11 @@ namespace Dpr.GMS
 		// TODO
 		public void HideBrowsingHistoryList() { }
 		
-		// TODO
-		private void SetShowHistoryFlag(bool flag) { }
+		private void SetShowHistoryFlag(bool flag)
+		{
+			this.bIsShowPointHistoryView = flag & 1;
+			this.listMaskImage.enabled = flag & 1;
+		}
 		
 		// TODO
 		public void OnDeleteAllHistoryData(bool hasPutPoint) { }
@@ -142,8 +145,12 @@ namespace Dpr.GMS
 		// TODO
 		private void ResetPointNewFlag(int pointIndex) { }
 		
-		// TODO
-		private void OnReleaseListInput() { }
+		private void OnReleaseListInput()
+		{
+			if ((!this.bIsShowPointHistoryView) && (this.onReleaseInput != null)) {
+			  this.onReleaseInput.Invoke();
+			}
+		}
 
 		public enum ViewState : int
 		{

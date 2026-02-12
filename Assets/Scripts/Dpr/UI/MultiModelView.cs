@@ -38,8 +38,11 @@ namespace Dpr.UI
 		// TODO
 		private void CreateRenderTexture() { }
 		
-		// TODO
-		public void SetRawImage(RawImage[] rawImages) { }
+		public void SetRawImage(RawImage[] rawImages)
+		{
+			this.Length = rawImages;
+			Initialize();
+		}
 		
 		// TODO
 		private void SettingRawImages() { }

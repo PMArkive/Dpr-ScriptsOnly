@@ -53,11 +53,23 @@ namespace Dpr.UI
 		// TODO
 		public void SetupUITexts(UIText nameText, UIText classText, UIText heightText, UIText weightText, UIText descText, UIText formNameText) { }
 		
-		// TODO
-		public ModelSexType GetCurrentModelSexType() { return default; }
+		public ModelSexType GetCurrentModelSexType()
+		{
+			if (this.modelIndexSelector.Length < this.modelParams.Length) {
+			  return *(uint *)
+			          (this.modelParams + (int)this.modelIndexSelector.Length * 8[0] + 0x14);
+			}
+			return (ModelSexType)0;
+		}
 		
-		// TODO
-		public bool IsRareCurrentModel() { return default; }
+		public bool IsRareCurrentModel()
+		{
+			if (this.modelIndexSelector.Length < this.modelParams.Length) {
+			  return *(byte *)
+			          (this.modelParams + (int)this.modelIndexSelector.Length * 8[0] + 0x1c);
+			}
+			return false;
+		}
 		
 		// TODO
 		public void MoveModelSelect(int value) { }

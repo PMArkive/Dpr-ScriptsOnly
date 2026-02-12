@@ -9,8 +9,10 @@ namespace Dpr.Battle.Logic
 		// TODO
 		public void Execute(Result pResult, in Description description) { }
 		
-		// TODO
-		private uint calcRecoverVolume(BTL_POKEPARAM attacker, BTL_POKEPARAM target, WazaNo wazano) { return default; }
+		private uint calcRecoverVolume(BTL_POKEPARAM attacker, BTL_POKEPARAM target, WazaNo wazano)
+		{
+			this.m_pEventLauncher.Event_CalcWazaRecoverHP();
+		}
 		
 		// TODO
 		private void getRecoverMessage(StrParam pMessage, BTL_POKEPARAM pAttacker, BTL_POKEPARAM pTarget, WazaNo wazano) { }

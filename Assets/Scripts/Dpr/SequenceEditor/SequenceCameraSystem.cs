@@ -88,8 +88,12 @@ namespace Dpr.SequenceEditor
 		// TODO
 		public void DestroyCameraAnimation() { }
 		
-		// TODO
-		public void SetCameraAnimationSpeed(float speed) { }
+		public void SetCameraAnimationSpeed(float speed)
+		{
+			if (this.Length != 0) {
+			  Playables_CameraFilePlayable.SetSpeed(this.Length);
+			}
+		}
 		
 		// TODO
 		public void SetCameraAnimationScale(Vector3 scale) { }
@@ -97,17 +101,23 @@ namespace Dpr.SequenceEditor
 		// TODO
 		public void SetCameraAnimationRotateY_Deg(float rot) { }
 		
-		// TODO
-		public void SetCameraAnimationCheckGround(bool value) { }
+		public void SetCameraAnimationCheckGround(bool value)
+		{
+			this[0] = value & 1;
+		}
 		
 		// TODO
 		public bool GetCameraAnimationCheckGround() { return default; }
 		
-		// TODO
-		public void SetCameraPosOverCheck(bool value) { }
+		public void SetCameraPosOverCheck(bool value)
+		{
+			this._isPosOverCheck = value & 1;
+		}
 		
-		// TODO
-		public bool GetCameraPosOverCheck() { return default; }
+		public bool GetCameraPosOverCheck()
+		{
+			return this._isPosOverCheck;
+		}
 
 		public enum CameraStateType : int
 		{

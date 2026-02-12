@@ -207,8 +207,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public void StartWeather(BtlWeather weather, byte turn, byte turnUpCount, byte causePokeID) { }
 
-        // TODO
-        public void EndWeather() { }
+        public void EndWeather()
+        {
+        	this.Length.Length.EndWeather();
+        }
 
         // TODO
         public BtlWeather TurnCheckWeather() { return BtlWeather.BTL_WEATHER_TURBULENCE; }
@@ -291,11 +293,15 @@ namespace Dpr.Battle.Logic
         // TODO
         public void IncGModeTurnCount(byte pokeID) { }
 
-        // TODO
-        public void IncGGauge(BTL_CLIENT_ID clientID) { }
+        public void IncGGauge(BTL_CLIENT_ID clientID)
+        {
+        	GGauge.IncValue(this.Length.GetGGauge(clientID),0);
+        }
 
-        // TODO
-        public void EmptyGGauge(BTL_CLIENT_ID clientID) { }
+        public void EmptyGGauge(BTL_CLIENT_ID clientID)
+        {
+        	GGauge.SetEmpty(this.Length.GetGGauge(clientID),0);
+        }
 
         // TODO
         public bool TransferGRights(BtlSide side) { return false; }

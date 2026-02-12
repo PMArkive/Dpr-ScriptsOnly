@@ -14,10 +14,14 @@ namespace Dpr.Battle.Logic
 		// TODO
 		public static WazaNo GetGWaza(PokeType wazaType) { return default; }
 		
-		// TODO
-		public static WazaDamageType GetDamageType(WazaNo srcWaza) { return default; }
+		public static WazaDamageType GetDamageType(WazaNo srcWaza)
+		{
+			WAZADATA.GetDamageType(srcWaza);
+		}
 		
-		// TODO
-		public static byte GetPower(WazaNo srcWaza) { return default; }
+		public static byte GetPower(WazaNo srcWaza)
+		{
+			WAZADATA.GetGPower(srcWaza);
+		}
 	}
 }

@@ -49,11 +49,30 @@
         // TODO
         public static int GetTeamPokeBoxPos(int team, int pos) { return 0; }
 
-        // TODO
-        public static bool IsTeam(int team) { return false; }
+        public static bool IsTeam(int team)
+        {
+        	var iVar1 = Box_BoxWork.GetTeamPokeBoxTray(team);
+        	if ((iVar1 < 0x28) &&
+        	   (iVar1 = Box_BoxWork.GetTeamPokeBoxPos(team & 0xffffffff), iVar1 < 0x1e)) {
+        	  return true;
+        	}
+        	return false;
+        }
 
-        // TODO
-        public static bool IsTeamPos(int team, int pos) { return false; }
+        public static bool IsTeamPos(int team, int pos)
+        {
+        	if ((team < 6) || (pos < 6)) {
+        	  var iVar1 = Box_BoxWork.GetTeamPokeBoxTray(team,pos);
+        	  if ((iVar1 < 0x28) &&
+        	     (iVar1 = Box_BoxWork.GetTeamPokeBoxPos(team,pos), iVar1 < 0x1e)) {
+        	    return true;
+        	  }
+        	}
+        	else {
+        	  GFL.ASSERT(0);
+        	}
+        	return false;
+        }
 
         // TODO
         public static bool IsPokeTeam(int tray, int pos) { return false; }

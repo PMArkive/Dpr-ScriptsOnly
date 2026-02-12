@@ -56,17 +56,25 @@ namespace Dpr.Field.Walking
         // TODO
         public void WalkUpdate(float deltaDistance) { }
 
-        // TODO
-        private void DebugTimeSave() { }
+        private void DebugTimeSave()
+        {
+        	FlagWork.SetWork(0x1a0,this.DebugTime);
+        }
 
         // TODO
         private int GetTimeAndCount() { return 0; }
 
-        // TODO
-        private int GetMonohiroiCount() { return 0; }
+        private int GetMonohiroiCount()
+        {
+        	var iVar1 = FlagWork.GetWork(0x1a0);
+        	return iVar1 % 10;
+        }
 
-        // TODO
-        private void AddMonohiroiCount() { }
+        private void AddMonohiroiCount()
+        {
+        	var iVar1 = Walking_FieldPokeTalkModel.GetTimeAndCount();
+        	FlagWork.SetWork(0x1a0,iVar1 + 1);
+        }
 
         // TODO
         private int[] GetTimeAndCountArray() { return null; }
@@ -102,14 +110,23 @@ namespace Dpr.Field.Walking
         // TODO
         private int AnimNameToID(string animName) { return 0; }
 
-        // TODO
-        private void CheckState() { }
+        private void CheckState()
+        {
+        	this.friendship = this.param.GetFriendship();
+        	this.HPRate = ((float)this.param.GetHp() / (float)CoreParam.GetMaxHp(this.param)) * 100.0;
+        	this.sick = this.param.GetSick();
+        	this.type = this.param.GetType1();
+        }
 
-        // TODO
-        private int GetVoiceID() { return 0; }
+        private int GetVoiceID()
+        {
+        	return 0;
+        }
 
-        // TODO
-        private int GetAnimID() { return 0; }
+        private int GetAnimID()
+        {
+        	return 0;
+        }
 
         // TODO
         public bool IsMonohiroi() { return false; }
@@ -123,8 +140,10 @@ namespace Dpr.Field.Walking
         // TODO
         private int LotteryItem(int tableID) { return 0; }
 
-        // TODO
-        public void ResetItem() { }
+        public void ResetItem()
+        {
+        	this[0] = 0xffffffff;
+        }
 
         // TODO
         private void LotteryTalkMessage() { }

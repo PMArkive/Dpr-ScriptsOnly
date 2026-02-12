@@ -16,10 +16,15 @@ namespace Dpr.UI
 		// TODO
 		public void Set(int sealId) { }
 		
-		// TODO
-		public void Clear() { }
+		public void Clear()
+		{
+			UI_Image.set_sprite(this.Length,0);
+		}
 		
-		// TODO
-		public void SetEnable(bool isEnable) { }
+		public void SetEnable(bool isEnable)
+		{
+			this.Length.enabled = isEnable & 1;
+			Behaviour.set_enabled(this[0],isEnable & 1);
+		}
 	}
 }

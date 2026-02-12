@@ -80,11 +80,24 @@ namespace Dpr.UI
 		// TODO
 		private bool SetSelectIndex(int selectIndex) { return default; }
 		
-		// TODO
-		private void SelectComplete(bool complete) { }
+		private void SelectComplete(bool complete)
+		{
+			ExtensionMethods.SetActive(this._decide,complete & 1);
+			if ((complete) &&
+			   (this._requiredNumMax <= this._joinIndexList.Length)) {
+			  this._currentIndex = this._maxIndex + 1;
+			  this._pokemonParty.ResetSelectIndex();
+			  this._cursor.SetActive(1);
+			}
+		}
 		
-		// TODO
-		private void SetCursorDecide(bool decide) { }
+		private void SetCursorDecide(bool decide)
+		{
+			if (decide) {
+			  this._cursor.SetActive(1);
+			}
+			GameObject.SetActive(this._cursor.gameObject,0,0);
+		}
 		
 		// TODO
 		private void OpenContextMenu() { }

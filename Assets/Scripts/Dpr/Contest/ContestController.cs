@@ -38,8 +38,10 @@ namespace Dpr.Contest
 		// TODO
 		private void InitMultiMode() { }
 		
-		// TODO
-		private void StartNetworkContest() { }
+		private void StartNetworkContest()
+		{
+			this.bIsStartMultiContest = true;
+		}
 		
 		// TODO
 		private void SetupNetwork() { }
@@ -71,17 +73,38 @@ namespace Dpr.Contest
 		// TODO
 		private void OnReceiveNotice(NoticeNetData noticeData) { }
 		
-		// TODO
-		private void OnSessionEvent(SessionEventData result) { }
+		private void OnSessionEvent(SessionEventData result)
+		{
+			switch((int)((ulong)result >> 0x20)) {
+			case 3:
+			  Contest_ContestController.OnChangeHostMine();
+			default:
+			case 6:
+			  Contest_ContestController.OnLeaveOtherPlayer();
+			case 7:
+			case 8:
+			  Contest_ContestController.OnSessionError();
+			case 9:
+			  Contest_ContestMatchingNetwork.ReleaseNetworkCallback(this[0]);
+			  Contest_ContestController.OnSessionError();
+			}
+		}
 		
 		// TODO
 		private void OnLeaveOtherPlayer(int stationIndex) { }
 		
-		// TODO
-		private bool IsGaming() { return default; }
+		private bool IsGaming()
+		{
+			return (int)this.currentSectionID < 3;
+		}
 		
-		// TODO
-		private void ChangeAllOtherPlayerToNPC() { }
+		private void ChangeAllOtherPlayerToNPC()
+		{
+			Contest_DanceSection.OnLeaveOtherPlayer(this.danceSection,0);
+			Contest_DanceSection.OnLeaveOtherPlayer(this.danceSection,1);
+			Contest_DanceSection.OnLeaveOtherPlayer(this.danceSection,2);
+			Contest_DanceSection.OnLeaveOtherPlayer(this.danceSection,3);
+		}
 		
 		// TODO
 		private void OnChangeHostMine() { }
@@ -150,8 +173,11 @@ namespace Dpr.Contest
 		// TODO
 		private void OnDestroy() { }
 		
-		// TODO
-		private void StartContest() { }
+		private void StartContest()
+		{
+			this.bIsStartMultiContest = true;
+			Contest_ContestController.ChangeSectionOpening();
+		}
 		
 		// TODO
 		private void OnUpdate(float deltaTime) { }
@@ -161,20 +187,73 @@ namespace Dpr.Contest
 		// TODO
 		private void FinishedContest() { }
 		
-		// TODO
-		private void UpdateSection(float deltaTime, float elapsedTime) { }
+		private void UpdateSection(float deltaTime, float elapsedTime)
+		{
+			switch(this.currentSectionID) {
+			case 0:
+			  if (((((Contest_OpeningSection.UpdateSection(this.openingSection) & 1) == 0) &&
+			       (Contest_OpeningSection.UpdateSection(this.openingSection) = Contest_DanceSection.IsReady(this.danceSection),
+			       (Contest_OpeningSection.UpdateSection(this.openingSection) & 1) != 0)) && (this.wazaViewSystem.ready != 0)) &&
+			     ((this.contestViewSystem.ready != 0 &&
+			      (Contest_OpeningSection.UpdateSection(this.openingSection) = Contest_SceneObjectManager.get_IsReady(this.objectManagerPtr),
+			      (Contest_OpeningSection.UpdateSection(this.openingSection) & 1) != 0)))) {
+			    Contest_ContestController.RequestChangeSectionId(1);
+			  }
+			  break;
+			case 1:
+			  if ((Contest_VisualSection.UpdateSection(this.visualSection) & 1) == 0) {
+			    Contest_ContestController.RequestChangeSectionId(2);
+			  }
+			  break;
+			case 2:
+			  Contest_ContestController.UpdateDanceSection();
+			case 4:
+			  Contest_ContestController.UpdateWaitAsync();
+			case 5:
+			  if ((Contest_ResultSection.UpdateSection(this.resultSection) & 1) == 0) {
+			    if (this.resultSection.restartContest != 0) {
+			      Contest_ContestController.RequestChangeSectionId(6);
+			    }
+			    Contest_ContestController.RequestChangeSectionId(8);
+			  }
+			  break;
+			case 7:
+			  Contest_ContestController.UpdateNetworkError();
+			}
+		}
 		
-		// TODO
-		private void UpdateOpeningSection() { }
+		private void UpdateOpeningSection()
+		{
+			if (((((Contest_OpeningSection.UpdateSection(this.openingSection) & 1) == 0) &&
+			     (Contest_OpeningSection.UpdateSection(this.openingSection) = Contest_DanceSection.IsReady(this.danceSection),
+			     (Contest_OpeningSection.UpdateSection(this.openingSection) & 1) != 0)) && (this.wazaViewSystem.ready != 0)) &&
+			   ((this.contestViewSystem.ready != 0 &&
+			    (Contest_OpeningSection.UpdateSection(this.openingSection) = Contest_SceneObjectManager.get_IsReady(this.objectManagerPtr),
+			    (Contest_OpeningSection.UpdateSection(this.openingSection) & 1) != 0)))) {
+			  Contest_ContestController.RequestChangeSectionId(1);
+			}
+		}
 		
-		// TODO
-		private void UpdateVisualSection() { }
+		private void UpdateVisualSection()
+		{
+			if ((Contest_VisualSection.UpdateSection(this.visualSection) & 1) != 0) {
+			}
+			Contest_ContestController.RequestChangeSectionId(2);
+		}
 		
 		// TODO
 		private void UpdateDanceSection(float deltaTime, float elapsedTime) { }
 		
-		// TODO
-		private void UpdateResultSection(float deltaTime) { }
+		private void UpdateResultSection(float deltaTime)
+		{
+			if ((Contest_ResultSection.UpdateSection(this.resultSection) & 1) != 0) {
+			}
+			var uVar2 = 8;
+			if (this.resultSection.restartContest != 0) {
+			  uVar2 = 6;
+			}
+			Contest_ContestController.RequestChangeSectionId(uVar2);
+		}
 		
 		// TODO
 		private IEnumerator IE_LoadResultResource() { return default; }
@@ -185,8 +264,12 @@ namespace Dpr.Contest
 		// TODO
 		private void DoNextSection() { }
 		
-		// TODO
-		private void LateUpdateSection() { }
+		private void LateUpdateSection()
+		{
+			if ((int)this.currentSectionID == 2) {
+			  Contest_DanceSection.OnLateUpdate(this.danceSection);
+			}
+		}
 		
 		// TODO
 		private void ChangeSectionOpening() { }
@@ -197,8 +280,10 @@ namespace Dpr.Contest
 		// TODO
 		private void OnFindCommand(CommandNo commandNo, ContestViewSystem viewSystem) { }
 		
-		// TODO
-		private void LoadMigawariModel() { }
+		private void LoadMigawariModel()
+		{
+			Contest_SceneResourceLoader.LoadMigawariModel(this.resourceLoader,0);
+		}
 		
 		// TODO
 		private void OnPerformedCommand(CommandNo commandNo, ContestViewSystem viewSystem, Macro macro) { }

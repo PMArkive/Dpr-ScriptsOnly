@@ -35,8 +35,14 @@ namespace Dpr.Contest
 		// TODO
 		public void ResetParam() { }
 		
-		// TODO
-		public void OnFinalize() { }
+		public void OnFinalize()
+		{
+			Contest_ResultPersonalPerformance.CloseKeyguid();
+			Contest_ContestInput.Remove(this.input);
+			this.Length = 0;
+			this.waitCameraAnim = null;
+			this.waitDelayMoveFrame = null;
+		}
 		
 		// TODO
 		public void Setup(ResultDataModel resultDataModel) { }
@@ -83,8 +89,14 @@ namespace Dpr.Contest
 		// TODO
 		private void ChangeState(State nextState) { }
 		
-		// TODO
-		public bool OnUpdate() { return default; }
+		public bool OnUpdate()
+		{
+			Contest_ResultPersonalPerformance.UpdatePokeMotion();
+			if ((int)this.currentState == 1) {
+			  Contest_ResultPersonalPerformance.UpdateKeywait();
+			}
+			return this.bRunning;
+		}
 		
 		// TODO
 		private void UpdateKeywait() { }

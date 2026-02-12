@@ -40,20 +40,34 @@ namespace Dpr.UI
 		// TODO
 		private void OnUnSelectItemScrollViewItem(IUIButton button) { }
 		
-		// TODO
-		public bool MoveIndex(int value) { return default; }
+		public bool MoveIndex(int value)
+		{
+			this.wazaScrollView.MoveSelect(value);
+		}
 		
-		// TODO
-		public void ResumeMoveIndex() { }
+		public void ResumeMoveIndex()
+		{
+			this.wazaScrollView.ResumeMoveSelect();
+		}
 		
-		// TODO
-		public void SetCursorActive(bool isActive) { }
+		public void SetCursorActive(bool isActive)
+		{
+			this.cursor.SetActive(isActive & 1);
+		}
 		
-		// TODO
-		public int GetSelectedIndex() { return default; }
+		public int GetSelectedIndex()
+		{
+			return this.selectIndex;
+		}
 		
-		// TODO
-		public WazaNo GetSelectedWazaNo() { return default; }
+		public WazaNo GetSelectedWazaNo()
+		{
+			if (this.selectIndex < this.detailWazaNos.Length) {
+			  return *(uint *)
+			          (this.detailWazaNos + (int)this.selectIndex * 4 + 0x20);
+			}
+			return (WazaNo)0;
+		}
 		
 		// TODO
 		private void SetupDetail(WazaNo wazaNo) { }

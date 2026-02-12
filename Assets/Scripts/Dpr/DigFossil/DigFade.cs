@@ -15,14 +15,20 @@ namespace Dpr.DigFossil
 		private Action onEndCallback;
 		private RawImage currentImage;
 		
-		// TODO
-		private void Start() { }
+		private void Start()
+		{
+			GameObject.SetActive(this.Length.gameObject,0,0);
+			GameObject.SetActive(Component.get_gameObject(this[0]),0,0);
+		}
 		
 		// TODO
 		public void FadeStart(Type type, Color startColor, Color endColor, float duration, Action onEndCallback) { }
 		
-		// TODO
-		public void Close() { }
+		public void Close()
+		{
+			GameObject.SetActive(this.Length.gameObject,0,0);
+			GameObject.SetActive(Component.get_gameObject(this[0]),0,0);
+		}
 		
 		// TODO
 		private IEnumerator Idle(float duration) { return default; }

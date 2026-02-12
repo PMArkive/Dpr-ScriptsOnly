@@ -37,8 +37,10 @@ namespace Dpr.Contest
 		// TODO
 		private bool IsButtonOn(int assignValue) { return default; }
 		
-		// TODO
-		private bool IsButtonRelease(int assignValue) { return default; }
+		private bool IsButtonRelease(int assignValue)
+		{
+			return (assignValue & (this.localInput.Length ^ 0xffffffff)) == 0;
+		}
 
 		private enum KeyAssignId : int
 		{

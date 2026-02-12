@@ -41,8 +41,13 @@ namespace Dpr.UI
 		// TODO
 		public void Initialize(ContestMatchingUI contestMatchingUI, ContestMatchingNetwork network, Action<ContestMatching.FinishPattern> onFinish) { }
 		
-		// TODO
-		public void OnFinalize() { }
+		public void OnFinalize()
+		{
+			if (this.wazaViewSystem != null) {
+			  Contest_ContestViewSystem.OnFinalize(this.wazaViewSystem);
+			}
+			this.onFinish = null;
+		}
 		
 		// TODO
 		private void Reset() { }
@@ -62,8 +67,12 @@ namespace Dpr.UI
 		// TODO
 		private void UpdateWaitAllMemberPreparation(float deltaTime) { }
 		
-		// TODO
-		private void UpdateLoadingWazaSquence(float deltaTime) { }
+		private void UpdateLoadingWazaSquence(float deltaTime)
+		{
+			if ((Contest_ContestViewSystem.get_IsLoaded(this.wazaViewSystem) & 1) != 0) {
+			  ChangeState(4);
+			}
+		}
 		
 		// TODO
 		private void UpdateWaitReceivePlayerDatas(float deltaTime) { }
@@ -89,8 +98,17 @@ namespace Dpr.UI
 		// TODO
 		private void OnChangeStateConfirm() { }
 		
-		// TODO
-		private void OnChangeStateWaitAllMemberPreparation() { }
+		private void OnChangeStateWaitAllMemberPreparation()
+		{
+			this.bIsAlreadyChangeFinishPreparation = true;
+			var uVar1 = StringLiteral_11295;
+			if (this.nowOpenWindow != null) {
+			  ForceCloseUIWindow();
+			}
+			var uVar2 = String.Concat(StringLiteral_11377,uVar1,StringLiteral_423);
+			Contest_ContestUtils.EmitLog(uVar2,3);
+			SubContents_ShowMessageWindow.ShowMessage(this.contestMatchingUIPtr.msgWindow,uVar1,0,1,0);
+		}
 		
 		// TODO
 		private void OnChangeStateLoadingWazaSeq() { }
@@ -119,8 +137,13 @@ namespace Dpr.UI
 		// TODO
 		private void ShowGoContestSceneMessage() { }
 		
-		// TODO
-		private void OnChangeStateWaitAllMemberReady() { }
+		private void OnChangeStateWaitAllMemberReady()
+		{
+			if ((Contest_ContestMatchingNetwork.IsHost(this.networkPtr) & 1) != 0) {
+			}
+			Contest_ContestMatchingNetwork.ResetTimer(this.networkPtr);
+			Contest_ContestMatchingNetwork.SendNoticeData(this.networkPtr,0);
+		}
 		
 		// TODO
 		private void OnChangeStateFinish() { }
@@ -161,8 +184,10 @@ namespace Dpr.UI
 		// TODO
 		public void Deactivate() { }
 		
-		// TODO
-		public bool IsFinishPreparation() { return default; }
+		public bool IsFinishPreparation()
+		{
+			return (int)this.currentState == 0xb;
+		}
 		
 		// TODO
 		public void OnReceiveCountDownData(CountDownNetData timeData) { }
@@ -173,8 +198,10 @@ namespace Dpr.UI
 		// TODO
 		public void OnReceiveEntryNPCData(ContestEntryNPCNetData entryNPCData) { }
 		
-		// TODO
-		public void OnReceiveEntryPlayerData(int stationIndex) { }
+		public void OnReceiveEntryPlayerData(int stationIndex)
+		{
+			Contest_ContestMatchingNetwork.SetMainFlag(this.networkPtr,stationIndex,1);
+		}
 		
 		// TODO
 		public void OnReceiveContestInfoData(ContestInfoNetData contestData) { }

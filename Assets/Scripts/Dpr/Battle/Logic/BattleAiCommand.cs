@@ -235,8 +235,10 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IFN_CONTFLG(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WEATHER(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WEATHER(AiScriptCommandHandler handle, long[] args)
+        {
+        	return BattleSimulator.GetWeather(this[0]);
+        }
 
         // TODO
         private static long CMDFUNC_IF_SIDEEFF(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -265,20 +267,36 @@ namespace Dpr.Battle.Logic
         // TODO
         private static bool IsWazaUsable(BTL_CLIENT attackClient, BTL_POKEPARAM attackPoke, WazaNo wazano) { return false; }
 
-        // TODO
-        private static long CMDFUNC_CHECK_DAMAGE_WAZA(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_DAMAGE_WAZA(AiScriptCommandHandler handle, long[] args)
+        {
+        	if (args.Length != 0) {
+        	  var uVar1 = WAZADATA.IsDamage(args[0]);
+        	  return uVar1 & 1;
+        	}
+        }
 
-        // TODO
-        private static long CMDFUNC_CHECK_IRYOKU(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_IRYOKU(AiScriptCommandHandler handle, long[] args)
+        {
+        	var uVar2 = handle.GetCurrentWazaNo();
+        	var uVar1 = WAZADATA.GetPower(uVar2);
+        	return uVar1;
+        }
 
         // TODO
         private static long CMDFUNC_COMP_POWER(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_GET_CURRENT_WAZANO(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_GET_CURRENT_WAZANO(AiScriptCommandHandler handle, long[] args)
+        {
+        	var iVar1 = handle.GetCurrentWazaNo();
+        	return (long)iVar1;
+        }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WAZASEQNO(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WAZASEQNO(AiScriptCommandHandler handle, long[] args)
+        {
+        	var uVar2 = handle.GetCurrentWazaNo();
+        	var iVar1 = WAZADATA.GetAISeqNo(uVar2);
+        	return (long)iVar1;
+        }
 
         // TODO
         private static long CMDFUNC_CHECK_WAZA_AISYOU(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -346,8 +364,11 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IFN_BENCH_COND(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static int get_poke_param(AiScriptCommandHandler handle, int ai_side, BTL_POKEPARAM.ValueID valueID) { return 0; }
+        private static int get_poke_param(AiScriptCommandHandler handle, int ai_side, BTL_POKEPARAM.ValueID valueID)
+        {
+        	var uVar1 = handle.GetBppByAISide(ai_side);
+        	uVar1.GetValue(valueID);
+        }
 
         // TODO
         private static long CMDFUNC_IF_PARA_UNDER(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -370,8 +391,11 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IFN_HAVE_WAZA_SEQNO(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_ESCAPE(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_ESCAPE(AiScriptCommandHandler handle, long[] args)
+        {
+        	handle.NotifyEscapeByAI();
+        	return 0;
+        }
 
         // TODO
         private static long CMDFUNC_CHECK_SOUBI_ITEM(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -397,14 +421,26 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_CHECK_RECYCLE_ITEM(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WORKWAZA_TYPE(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WORKWAZA_TYPE(AiScriptCommandHandler handle, long[] args)
+        {
+        	var uVar2 = handle.GetCurrentWazaNo();
+        	var uVar1 = WAZADATA.GetType(uVar2);
+        	return uVar1;
+        }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WORKWAZA_POW(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WORKWAZA_POW(AiScriptCommandHandler handle, long[] args)
+        {
+        	var uVar2 = handle.GetCurrentWazaNo();
+        	var uVar1 = WAZADATA.GetPower(uVar2);
+        	return uVar1;
+        }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WORKWAZA_SEQNO(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WORKWAZA_SEQNO(AiScriptCommandHandler handle, long[] args)
+        {
+        	var uVar2 = handle.GetCurrentWazaNo();
+        	var iVar1 = WAZADATA.GetAISeqNo(uVar2);
+        	return (long)iVar1;
+        }
 
         // TODO
         private static long CMDFUNC_CHECK_MAMORU_COUNT(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -454,8 +490,12 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_TOTTEOKI(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WAZA_KIND(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WAZA_KIND(AiScriptCommandHandler handle, long[] args)
+        {
+        	var uVar2 = handle.GetCurrentWazaNo();
+        	var iVar1 = WAZADATA.GetDamageType(uVar2);
+        	return (long)iVar1;
+        }
 
         // TODO
         private static long CMDFUNC_CHECK_LAST_WAZA_KIND(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -538,8 +578,16 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_TYPE_EX(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_IF_EXIST_GROUND(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_EXIST_GROUND(AiScriptCommandHandler handle, long[] args)
+        {
+        	if (this.Length.Length != 0) {
+        	  if (handle.Length == 0) {
+        	  }
+        	  this.Length.Length = this.Length.Length.CheckEffect(8,handle[0]);
+        	  this.Length.Length = this.Length.Length & 1;
+        	}
+        	return this.Length.Length;
+        }
 
         // TODO
         private static long CMDFUNC_GET_WEIGHT(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -547,11 +595,15 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_MULTI(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_IF_MEGAEVOLVED(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_MEGAEVOLVED(AiScriptCommandHandler handle, long[] args)
+        {
+        	return 0;
+        }
 
-        // TODO
-        private static long CMDFUNC_IF_CAN_MEGAEVOLVE(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_CAN_MEGAEVOLVE(AiScriptCommandHandler handle, long[] args)
+        {
+        	return 0;
+        }
 
         // TODO
         private static long CMDFUNC_IF_WAZAHIDE(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -568,8 +620,11 @@ namespace Dpr.Battle.Logic
         // TODO
         private static uint GetMaxWazaPowerIncludeAffinity(in BattleEnv battleEnv, BattleSimulator pSimulator, BTL_POKEPARAM attackPoke, BTL_POKEPARAM defensePoke) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_GET_CURRENT_ITEMNO(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_GET_CURRENT_ITEMNO(AiScriptCommandHandler handle, long[] args)
+        {
+        	var uVar1 = handle.GetCurrentItemNo();
+        	return uVar1;
+        }
 
         // TODO
         private static long CMDFUNC_IF_ZIDANDA_POWERUP(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -589,8 +644,10 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_GWALL_EXIST(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_IF_JK3_LEGEND(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_JK3_LEGEND(AiScriptCommandHandler handle, long[] args)
+        {
+        	return 0;
+        }
 
         // TODO
         private static long CMDFUNC_IF_CAN_G(AiScriptCommandHandler handle, long[] args) { return 0; }

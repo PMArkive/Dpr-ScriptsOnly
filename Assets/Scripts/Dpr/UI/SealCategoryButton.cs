@@ -17,8 +17,11 @@ namespace Dpr.UI
 		// TODO
 		public void Set(SealCategoryButton button) { }
 		
-		// TODO
-		public void SetNone() { }
+		public void SetNone()
+		{
+			this[0] = 0;
+			this.Length.SetCategoryIcon(0);
+		}
 		
 		// TODO
 		public void SetEnable(bool isEnable) { }

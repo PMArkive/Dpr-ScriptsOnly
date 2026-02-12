@@ -57,8 +57,18 @@ namespace Dpr.Contest
 		// TODO
 		public void ResetParam(DanceSectionData danceSectionData) { }
 		
-		// TODO
-		public void CreateGameParameterFromContestDataModel(ContestDataModel contestDataModel) { }
+		public void CreateGameParameterFromContestDataModel(ContestDataModel contestDataModel)
+		{
+			var uVar1 = Contest_ContestDataModel.GetScoreDataArray(contestDataModel);
+			Contest_DanceSectionDataModel.CreateTapScoreTable(uVar1);
+			uVar1 = Contest_ContestDataModel.GetTapTimingDataArray(contestDataModel);
+			Contest_DanceSectionDataModel.CreateTapTimingData(uVar1);
+			uVar1 = Contest_ContestDataModel.GetScoreDataArray(contestDataModel);
+			Contest_DanceSectionDataModel.CreateChangeTensionDataTable(uVar1);
+			uVar1 = Contest_ContestDataModel.GetComboBonusDataArray(contestDataModel);
+			var uVar2 = new Contest_ComboBonusDataModel(uVar1);
+			this.comboBonus = uVar2;
+		}
 		
 		// TODO
 		private void CreateTapScoreTable(ContestConfigDatas.SheetTapScoreData[] scoreDataArray) { }
@@ -69,8 +79,11 @@ namespace Dpr.Contest
 		// TODO
 		private void CreateChangeTensionDataTable(ContestConfigDatas.SheetTapScoreData[] scoreDataArray) { }
 		
-		// TODO
-		private void CreateComboBonusData(ContestConfigDatas.SheetComboBonusData[] bonusDataArray) { }
+		private void CreateComboBonusData(ContestConfigDatas.SheetComboBonusData[] bonusDataArray)
+		{
+			var uVar1 = new Contest_ComboBonusDataModel(bonusDataArray);
+			this.comboBonus = uVar1;
+		}
 		
 		// TODO
 		public PlayerDanceDataModel GetUserDanceData() { return default; }
@@ -150,8 +163,11 @@ namespace Dpr.Contest
 		// TODO
 		public TapResultData OnReleaseHold(int playerIndex, NoteTapTimingID holdTimingID) { return default; }
 		
-		// TODO
-		public void FinishLongTap() { }
+		public void FinishLongTap()
+		{
+			this.longStartNote = null;
+			this.totalSec = 0;
+		}
 		
 		// TODO
 		public TapResultData OnNPCReleaseHold(int playerIndex, NoteTapTimingID holdTimingID) { return default; }
@@ -175,16 +191,29 @@ namespace Dpr.Contest
 			return default;
 		}
 		
-		// TODO
-		public float CalcTotalRatio() { return default; }
+		public float CalcTotalRatio()
+		{
+			var fVar1 = (float)(this.totalScore + this.totalVisualScore) /
+			        (float)this.maxScore;
+			if (1.0 < fVar1) {
+			  fVar1 = 1.0;
+			}
+			return fVar1;
+		}
 		
 		public bool CanUpdateAcceptChain { get => canUpdateChain; }
 		public int ChainCount { get => chainCount; }
 		public int LastUsePlayerIndex { get => lastUsePlayerIndex; }
 		public float DownVolumePersent { get => downVolumePersent; }
 		
-		// TODO
-		public bool IsShowChainCount() { return default; }
+		public bool IsShowChainCount()
+		{
+			if (this.objManager.userIndex < this.comboBonusDataArray.Length) {
+			  return *(byte *)
+			          (this.comboBonusDataArray + (int)this.objManager.userIndex * 8[0] + 0x10);
+			}
+			return false;
+		}
 		
 		// TODO
 		public void LaunchSkill(double elapsedTime, int playerIndex, bool isPrevSameWazaType) { }

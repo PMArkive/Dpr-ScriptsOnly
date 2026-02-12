@@ -14,7 +14,12 @@ namespace Dpr.SubContents
 		// TODO
 		public void OnNotify(Playable origin, INotification notification, object context) { }
 		
-		// TODO
-		private void OnDestroy() { }
+		private void OnDestroy()
+		{
+			this.Length = 0;
+			this[0] = 0;
+			this.OnToBattleScale = null;
+			this.OnToMenuScale = null;
+		}
 	}
 }

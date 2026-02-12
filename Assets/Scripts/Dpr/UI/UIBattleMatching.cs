@@ -104,8 +104,11 @@ namespace Dpr.UI
 		// TODO
 		public void OpenVSWait() { }
 		
-		// TODO
-		public void CloseVSWait() { }
+		public void CloseVSWait()
+		{
+			ExtensionMethods.SetActive(this._playerVS,0);
+			CloseKeyGuide();
+		}
 		
 		// TODO
 		public void ShowPreparationIconReady(int index) { }
@@ -131,8 +134,10 @@ namespace Dpr.UI
 		// TODO
 		public int GetNowViewModelCount { get; }
 		
-		// TODO
-		public bool HasViewModelByIndex(int index) { return default; }
+		public bool HasViewModelByIndex(int index)
+		{
+			this._modelView.HasViewModelByIndex(index);
+		}
 		
 		// TODO
 		public void LoadCharacterModel(int index, Action<GameObject> onComplete) { }
@@ -140,17 +145,35 @@ namespace Dpr.UI
 		// TODO
 		public void LoadCharacterModel(int index, TrainerType trainerType, int colorID, string modelPath, Action<GameObject> onComplete) { }
 		
-		// TODO
-		public void DestroyAllCahracterModel() { }
+		public void DestroyAllCahracterModel()
+		{
+			if (0 < this._modelView.TotalModelViewCount) {
+			  this._modelView.TotalModelViewCount = 0;
+			  do {
+			    DestroyCharacterModel(this._modelView.TotalModelViewCount);
+			    this._modelView.TotalModelViewCount = MultiModelView.get_TotalModelViewCount(this._modelView) + 1;
+			  } while (this._modelView.TotalModelViewCount < MultiModelView.get_TotalModelViewCount(this._modelView));
+			}
+		}
 		
 		// TODO
 		public void DestroyCharacterModel(int index) { }
 		
-		// TODO
-		public void ChangeAllModelMotion(int motionIndex) { }
+		public void ChangeAllModelMotion(int motionIndex)
+		{
+			if (0 < this._modelView.TotalModelViewCount) {
+			  this._modelView.TotalModelViewCount = 0;
+			  do {
+			    this._modelView.ChangeModelMotion(MultiModelView.get_TotalModelViewCount(this._modelView),motionIndex,0);
+			    this._modelView.TotalModelViewCount = MultiModelView.get_TotalModelViewCount(this._modelView) + 1;
+			  } while (this._modelView.TotalModelViewCount < MultiModelView.get_TotalModelViewCount(this._modelView));
+			}
+		}
 		
-		// TODO
-		public void ChangeModelMotion(int index, int motionIndex) { }
+		public void ChangeModelMotion(int index, int motionIndex)
+		{
+			this._modelView.ChangeModelMotion(index,motionIndex);
+		}
 		
 		// TODO
 		public void SetTimerMessage(string label) { }
@@ -158,35 +181,56 @@ namespace Dpr.UI
 		// TODO
 		public void SetTimerMessage(string msbt, string label) { }
 		
-		// TODO
-		public void SetActiveTimer(bool active) { }
+		public void SetActiveTimer(bool active)
+		{
+			this._timer.SetActive(active & 1);
+		}
 		
 		// TODO
 		public void SetActiveRemainingText(bool active) { }
 		
-		// TODO
-		public void RemainingWarningText(bool warning = true) { }
+		public void RemainingWarningText(bool warning = true)
+		{
+			this._timer.RemainingWarningText(warning & 1);
+		}
 		
-		// TODO
-		public void UpdateUITimeText(string minutes, string seconds) { }
+		public void UpdateUITimeText(string minutes, string seconds)
+		{
+			this._timer.SetTimer(minutes,seconds);
+		}
 		
 		// TODO
 		public void OpenRuleWindow() { }
 		
-		// TODO
-		public void CloseRuleWindow() { }
+		public void CloseRuleWindow()
+		{
+			ExtensionMethods.SetActive(this._rule,0);
+			CloseKeyGuide();
+		}
 		
-		// TODO
-		public void OpenSelectRuleWindow() { }
+		public void OpenSelectRuleWindow()
+		{
+			ExtensionMethods.SetActive(this._player,0);
+			ExtensionMethods.SetActive(this._playerVS,0);
+			this._objBgVS.SetActive(1);
+			this._rule.OpenSelectRuleWindow();
+			OpenKeyguide(1,0,1);
+		}
 		
-		// TODO
-		public void OnRuleMoveX(bool left) { }
+		public void OnRuleMoveX(bool left)
+		{
+			this._rule.OnMoveX(left & 1);
+		}
 		
-		// TODO
-		public void OnRuleMoveY(bool up) { }
+		public void OnRuleMoveY(bool up)
+		{
+			this._rule.OnMoveY(up & 1);
+		}
 		
-		// TODO
-		public bool OnRuleDecide() { return default; }
+		public bool OnRuleDecide()
+		{
+			this._rule.OnDecide();
+		}
 		
 		// TODO
 		public void ShowVS(Action onEnd) { }
@@ -197,11 +241,15 @@ namespace Dpr.UI
 		// TODO
 		public void OpenResult() { }
 		
-		// TODO
-		public void CloseResult() { }
+		public void CloseResult()
+		{
+			this._objResult.SetActive(0);
+		}
 		
-		// TODO
-		public bool IsWindowOpen() { return default; }
+		public bool IsWindowOpen()
+		{
+			SubContents_ShowMessageWindow.get_IsOpen(this._msgWindow);
+		}
 		
 		// TODO
 		public void SetShowMsgTime(float time) { }
@@ -227,8 +275,12 @@ namespace Dpr.UI
 		// TODO
 		public void ShowInputCloseMessageWindow(string label, [Optional] Action onClosed) { }
 		
-		// TODO
-		public void CloseMessageWindow() { }
+		public void CloseMessageWindow()
+		{
+			if ((SubContents_ShowMessageWindow.get_IsOpen(this._msgWindow) & 1) != 0) {
+			  SubContents_ShowMessageWindow.CloseMsgWindow(this._msgWindow);
+			}
+		}
 		
 		// TODO
 		public void OpenContextMenu(string[] contextLabels, Action<int> onSelect) { }

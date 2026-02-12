@@ -77,14 +77,18 @@ namespace Dpr.UI
 		// TODO
 		private void OnFinishSellProcess() { }
 		
-		// TODO
-		private bool IsItemEmpty() { return default; }
+		private bool IsItemEmpty()
+		{
+			return this.itemInfoList.Length < 1;
+		}
 		
 		// TODO
 		private bool CheckIsEmptySelectItem() { return default; }
 		
-		// TODO
-		private bool CheckIsEmptySellItemData() { return default; }
+		private bool CheckIsEmptySellItemData()
+		{
+			return this.sellItemData == null;
+		}
 		
 		// TODO
 		private void OnRequiredItemData(IUIButton button) { }

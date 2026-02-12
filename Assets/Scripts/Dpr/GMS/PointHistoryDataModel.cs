@@ -8,32 +8,46 @@ namespace Dpr.GMS
 		
 		public int DataIndex { get => dataIndex; }
 		
-		// TODO
-		public void SetDataIndex(int dataIndex) { }
+		public void SetDataIndex(int dataIndex)
+		{
+			this.dataIndex = dataIndex;
+		}
 		
 		// TODO
 		public string GetMonsNickname() { return default; }
 		
-		// TODO
-		public void SetMonsNickname(string nickName) { }
+		public void SetMonsNickname(string nickName)
+		{
+			Text_StringBuilder.Clear(this.receiveMonsNicknameSb);
+			Text_StringBuilder.Append(this.receiveMonsNicknameSb,nickName);
+		}
 		
 		// TODO
 		public string GetMonsName() { return default; }
 		
-		// TODO
-		public void SetMonsName(string monsName) { }
+		public void SetMonsName(string monsName)
+		{
+			Text_StringBuilder.Clear(this.receiveMonsNameSb);
+			Text_StringBuilder.Append(this.receiveMonsNameSb,monsName);
+		}
 		
 		// TODO
 		public string GetParentName() { return default; }
 		
-		// TODO
-		public void SetParentName(string parentName) { }
+		public void SetParentName(string parentName)
+		{
+			Text_StringBuilder.Clear(this.receiveMonsParentNameSb);
+			Text_StringBuilder.Append(this.receiveMonsParentNameSb,parentName);
+		}
 		
 		// TODO
 		public string GetDateTimeStr() { return default; }
 		
-		// TODO
-		public void SetDateTimeStr(string dateTimeStr) { }
+		public void SetDateTimeStr(string dateTimeStr)
+		{
+			Text_StringBuilder.Clear(this.dateTimeSb);
+			Text_StringBuilder.Append(this.dateTimeSb,dateTimeStr);
+		}
 		
 		public bool IsNew { get => bIsNew; }
 		
@@ -44,10 +58,32 @@ namespace Dpr.GMS
 		public MonsNo ReceiveMonsNo { get => currentPointData?.receiveMonsNo ?? MonsNo.NULL; }
 		public uint ReceiveFormNo { get => currentPointData?.receiveMonsFormNo ?? 0; }
 		
-		// TODO
-		public void SetPointData(IntermediatePointData pointData) { }
+		public void SetPointData(IntermediatePointData pointData)
+		{
+			this.currentPointData = pointData;
+		}
 		
-		// TODO
-		public void ClearData() { }
+		public void ClearData()
+		{
+			this.dataIndex = 0xffffffff;
+			this.currentPointData = 0;
+			this.sendMonsIconSpr = 0;
+			this.Length = 0;
+			this[0] = 0;
+			this.receiveMonsLangIconSpr = 0;
+			this.receiveMonsParentLangIconSpr = 0;
+			if (this.receiveMonsNameSb != 0) {
+			  Text_StringBuilder.Clear(this.receiveMonsNameSb);
+			}
+			if (this.receiveMonsNicknameSb != 0) {
+			  Text_StringBuilder.Clear(this.receiveMonsNicknameSb);
+			}
+			if (this.receiveMonsParentNameSb != 0) {
+			  Text_StringBuilder.Clear(this.receiveMonsParentNameSb);
+			}
+			if (this.dateTimeSb != 0) {
+			  Text_StringBuilder.Clear(this.dateTimeSb);
+			}
+		}
 	}
 }

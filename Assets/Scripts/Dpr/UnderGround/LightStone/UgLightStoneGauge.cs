@@ -12,11 +12,21 @@ namespace Dpr.UnderGround.LightStone
 		[SerializeField]
 		private Animator rainbowEffectAnim;
 		
-		// TODO
-		private void Start() { }
+		private void Start()
+		{
+			this.Length.Initialize();
+			this.Length.SetDenominato(0x28);
+			this.Length.SetNumerator(0);
+			UI_Image.set_fillAmount(0,this[0]);
+		}
 		
-		// TODO
-		public void Initialize() { }
+		public void Initialize()
+		{
+			this.Length.Initialize();
+			this.Length.SetDenominato(0x28);
+			this.Length.SetNumerator(0);
+			UI_Image.set_fillAmount(0,this[0]);
+		}
 		
 		// TODO
 		public void UpdateStoneNum() { }

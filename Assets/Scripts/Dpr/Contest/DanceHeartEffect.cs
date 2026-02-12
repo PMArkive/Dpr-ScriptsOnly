@@ -29,23 +29,57 @@ namespace Dpr.Contest
 		// TODO
 		public void Initialize() { }
 		
-		// TODO
-		public void SetNormalHeartFxData(EffectData fxData) { }
+		public void SetNormalHeartFxData(EffectData fxData)
+		{
+			this[0] = fxData;
+		}
 		
-		// TODO
-		public void SetLargeHeartFxData(EffectData fxData) { }
+		public void SetLargeHeartFxData(EffectData fxData)
+		{
+			this[0] = fxData;
+		}
 		
 		// TODO
 		public void OnFinalize() { }
 		
-		// TODO
-		public void Create() { }
+		public void Create()
+		{
+			var uVar1 = Contest_DanceHeartEffect.CheckHeartFxInst();
+			if (this.fxInst == null) {
+			  if (this.onComplete != null) {
+			    this.onComplete.Invoke();
+			  }
+			}
+			else {
+			  var uVar2 = Component.gameObject;
+			  var uVar3 = uVar2.activeSelf;
+			  if ((uVar3 & 1) == 0) {
+			    ExtensionMethods.SetActive(1);
+			  }
+			  if (this.fxInst != null) {
+			    uVar2 = UnityEngine_Component__get_gameObject
+			                      (this.fxInst.Length,0);
+			    uVar3 = uVar2.activeSelf;
+			    if ((uVar3 & 1) == 0) {
+			      uVar2.SetActive(1);
+			    }
+			  }
+			  if (!uVar1) {
+			    this.fxInst.Play(0);
+			  }
+			}
+		}
 		
 		// TODO
 		private bool CheckHeartFxInst() { return default; }
 		
-		// TODO
-		public void OnUpdate(float deltaTime) { }
+		public void OnUpdate(float deltaTime)
+		{
+			if (this.isPlayerHeart) {
+			  Contest_DanceHeartEffect.OnPlayerHeartUpdate();
+			}
+			Contest_DanceHeartEffect.OnNPCHeartUpdate();
+		}
 		
 		// TODO
 		public void PerformEmitPlayerHeart(float duration, Ease easeType, Action onComplete, Vector3[] points) { }
@@ -68,7 +102,16 @@ namespace Dpr.Contest
 		// TODO
 		public void Stop() { }
 		
-		// TODO
-		private void SetGoActive(bool active) { }
+		private void SetGoActive(bool active)
+		{
+			if (this.fxInst != null) {
+			  var uVar2 = UnityEngine_Component__get_gameObject
+			                    (this.fxInst.Length,0);
+			  var uVar1 = uVar2.activeSelf;
+			  if (((uVar1 ^ active) & 1) != 0) {
+			    uVar2.SetActive(active & 1);
+			  }
+			}
+		}
 	}
 }

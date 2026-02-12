@@ -17,8 +17,12 @@ namespace Dpr.UI
 		// TODO
 		public void Initialize(Vector3 sealScale, float offsetPositionZ) { }
 		
-		// TODO
-		public void SetActive(bool isActive) { }
+		public void SetActive(bool isActive)
+		{
+			var uVar1 = Component.gameObject;
+			uVar1.SetActive(isActive & 1);
+			this[0] = isActive & 1;
+		}
 		
 		// TODO
 		public void SetSeal(int sealId, Sprite sprite, int affixSealId = -1) { }
@@ -26,14 +30,24 @@ namespace Dpr.UI
 		// TODO
 		public void SetPositionAndRotation(Vector3 position, Vector3 up) { }
 		
-		// TODO
-		public Vector3 GetPosition() { return default; }
+		public Vector3 GetPosition()
+		{
+			this.rootTransform.position;
+		}
 		
-		// TODO
-		public Vector3 GetSealPosition() { return default; }
+		public Vector3 GetSealPosition()
+		{
+			return this.sealPosition;
+		}
 		
-		// TODO
-		public void Clear() { }
+		public void Clear()
+		{
+			this.Length = 0xffffffff00000000;
+			this.sealMaterial.mainTexture = 0;
+			var uVar1 = Component.gameObject;
+			uVar1.SetActive(0);
+			this[0] = 0;
+		}
 		
 		// TODO
 		public bool EqualCollider(Collider collider) { return default; }

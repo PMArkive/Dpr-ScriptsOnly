@@ -107,8 +107,13 @@ namespace Dpr.UI
 		// TODO
 		public void StopBadgeConditionEffects() { }
 		
-		// TODO
-		public void PlayAnimationBadgeGet(string animeName) { }
+		public void PlayAnimationBadgeGet(string animeName)
+		{
+			this.badgeCaseAnimator.Play(animeName,0);
+			0x3f800000.speed = this.badgeCaseAnimator;
+			this.badgeAnimator.Play(animeName,0);
+			0x3f800000.speed = this.badgeAnimator;
+		}
 		
 		// TODO
 		public IEnumerator LoadBadgeGetAnimation() { return default; }

@@ -48,8 +48,13 @@ namespace Dpr.UI
 		// TODO
 		private void OnUpdateStateSelectItem() { }
 		
-		// TODO
-		private void HideWazaDescription() { }
+		private void HideWazaDescription()
+		{
+			if ((0 < this._itemParams.Length) && (this._wazaItemDescriptionType != 0)) {
+			  this._wazaItemDescriptionType = 0;
+			  this._itemDescriptionPanel.SetWazaDescriptionType(0);
+			}
+		}
 		
 		// TODO
 		private bool OnUpdateInput() { return default; }
@@ -60,8 +65,11 @@ namespace Dpr.UI
 		// TODO
 		private bool CheckCanBuyItem() { return default; }
 		
-		// TODO
-		private void OnDecideAmount(int amount) { }
+		private void OnDecideAmount(int amount)
+		{
+			this.state = (MenuState)3;
+			this.nowAmount = this.buyItemData[0] * amount;
+		}
 		
 		// TODO
 		private void OnUpdateStateSelectAmount() { }
@@ -75,11 +83,15 @@ namespace Dpr.UI
 		// TODO
 		private void UpdateUserItemData() { }
 		
-		// TODO
-		private void OnFinishSellProcess() { }
+		private void OnFinishSellProcess()
+		{
+			this.state = (MenuState)1;
+		}
 		
-		// TODO
-		private bool CheckIsEmptySelectItem() { return default; }
+		private bool CheckIsEmptySelectItem()
+		{
+			return this._itemParams.Length < 1;
+		}
 		
 		// TODO
 		private void OnRequiredItemData(IUIButton button) { }

@@ -28,8 +28,10 @@ namespace Dpr.Field.Walking
 			text = FureaiDebugManager.CreateText("");
 		}
 		
-		// TODO
-		public void Cancel() { }
+		public void Cancel()
+		{
+			Walking_CorSystem.Cancel(this.corSys);
+		}
 		
 		// TODO
 		public void SubCancel(string s) { }
@@ -40,11 +42,19 @@ namespace Dpr.Field.Walking
 		// TODO
 		public void SubCancel(int no) { }
 		
-		// TODO
-		public void Pause() { }
+		public void Pause()
+		{
+			Walking_CorSystem.Pause(this.corSys);
+		}
 		
-		// TODO
-		public Coroutine Restart() { return default; }
+		public Coroutine Restart()
+		{
+			if (this.corSys.isPause != 0) {
+			  var uVar1 = Walking_CorSystem.Restart();
+			  return uVar1;
+			}
+			return 0;
+		}
 		
 		// TODO
 		public CorSystem AddSub(float duration, corDelegate ienum, string name = "") { return default; }

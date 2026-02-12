@@ -22,11 +22,18 @@ namespace Dpr.UI
 		// TODO
 		public void Initialize(ContestMatchingUI contestMatchingUI, ContestMatchingNetwork network, Action onFinishState, Action<ContestMatching.FinishPattern> onFinishMatching) { }
 		
-		// TODO
-		public void OnFinalize() { }
+		public void OnFinalize()
+		{
+			this.onFinishState = null;
+			this.onFinish = null;
+		}
 		
-		// TODO
-		private void Reset() { }
+		private void Reset()
+		{
+			this.bLockPlayerAction = false;
+			this.bIsActive = false;
+			this.currentState = (RecruitmentState)0;
+		}
 		
 		// TODO
 		public void StartProcess(int stationIndex, float startCountDown) { }
@@ -34,8 +41,21 @@ namespace Dpr.UI
 		// TODO
 		private void CheckModelLoadCompleted() { }
 		
-		// TODO
-		public void OnUpdate(float deltaTime) { }
+		public void OnUpdate(float deltaTime)
+		{
+			if (this.bIsActive) {
+			  if ((int)this.currentState == 2) {
+			    UpdateWaitSkip();
+			  }
+			  if ((int)this.currentState == 1) {
+			    UpdateWaitAllReady();
+			  }
+			  if ((int)this.currentState == 0) {
+			    UpdateWaitJoinMember();
+			    UpdateInput();
+			  }
+			}
+		}
 		
 		// TODO
 		private void UpdateWaitJoinMember(float deltaTime) { }
@@ -76,8 +96,11 @@ namespace Dpr.UI
 		// TODO
 		private void SetSkipFlag(int stationIndex, bool flag) { }
 		
-		// TODO
-		private void ChangeState_WaitAllReady() { }
+		private void ChangeState_WaitAllReady()
+		{
+			Contest_ContestUtils.EmitLog(StringLiteral_11358,3);
+			this.currentState = (RecruitmentState)1;
+		}
 		
 		// TODO
 		public void OnJoinOtherPlayer(int stationIndex) { }
@@ -94,8 +117,10 @@ namespace Dpr.UI
 		// TODO
 		public void OnChangeHostOtherPlayer() { }
 		
-		// TODO
-		public void Deactivate() { }
+		public void Deactivate()
+		{
+			this.bIsActive = false;
+		}
 		
 		// TODO
 		public void OnReceiveCountDownData(CountDownNetData timeData) { }

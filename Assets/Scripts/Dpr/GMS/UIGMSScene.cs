@@ -48,14 +48,21 @@ namespace Dpr.GMS
 		
 		public bool IsPlayLaunchAnim { get => bIsPlayLaunchAnim; }
 		
-		// TODO
-		public void Setup(int maxPutNum) { }
+		public void Setup(int maxPutNum)
+		{
+			GMS_UIGMSScene_PutPointObj.Setup(this.putCompObj);
+			GMS_UIGMSScene_PutPointObj.Setup(this.putCompAnimObj,maxPutNum);
+		}
 		
-		// TODO
-		public void SetSceneBGTexture(Texture2D bgTexture) { }
+		public void SetSceneBGTexture(Texture2D bgTexture)
+		{
+			UI_RawImage.set_texture(this.sceneBGRawImage,bgTexture);
+		}
 		
-		// TODO
-		public void SetRenderTexture(RenderTexture rt) { }
+		public void SetRenderTexture(RenderTexture rt)
+		{
+			UI_RawImage.set_texture(this.rtRawImage,rt);
+		}
 		
 		// TODO
 		public void SetTitleLogoSpr(Sprite titleLogoSpr, Sprite preTitleLogoSpr) { }
@@ -66,23 +73,52 @@ namespace Dpr.GMS
 		// TODO
 		public void HideHeader() { }
 		
-		// TODO
-		public void ShowPutNumText(int putNum, bool isComp) { }
+		public void ShowPutNumText(int putNum, bool isComp)
+		{
+			GMS_UIGMSScene_PutPointObj.Show(this.putCompObj,putNum,isComp & 1);
+		}
 		
-		// TODO
-		public void HidePutNumText() { }
+		public void HidePutNumText()
+		{
+			var uVar1 = this.putCompObj.putPointContent.activeSelf;
+			if (uVar1) {
+			  this.putCompObj.putPointContent.SetActive(0);
+			}
+			uVar1 = GameObject.get_activeSelf(this.putCompObj[0]);
+			if (uVar1) {
+			  GameObject.SetActive(this.putCompObj[0],0);
+			}
+		}
 		
-		// TODO
-		public void SetSubkeyguideActive(bool active) { }
+		public void SetSubkeyguideActive(bool active)
+		{
+			if (((this.subkeyguideObj.isShow == 0 ^ active) & 1) != 0) {
+			}
+			active = active & 1;
+			this.subkeyguideObj.isShow = active;
+			this.subkeyguideObj.bgImg.enabled = active;
+			this.subkeyguideObj.Length.enabled = active;
+			Behaviour.set_enabled(this.subkeyguideObj[0],active);
+		}
 		
-		// TODO
-		public void StartSceneAnim(int putNum, bool isComp) { }
+		public void StartSceneAnim(int putNum, bool isComp)
+		{
+			this.launchAnimCanvas.enabled = 1;
+			this.animState = (AnimState)0;
+			GMS_UIGMSScene_PutPointObj.Show(this.putCompAnimObj,putNum,isComp & 1);
+			this.launchAnimator.enabled = 1;
+			this.launchAnimator.Play(this.Length);
+			this.bIsPlayLaunchAnim = true;
+		}
 		
 		// TODO
 		public void StartOnBackTopAnim(int putNum, bool isComp) { }
 		
-		// TODO
-		public void PlayEndAnim() { }
+		public void PlayEndAnim()
+		{
+			this.animState = (AnimState)1;
+			this.launchAnimCanvas.enabled = 0;
+		}
 		
 		// TODO
 		public void OnUpdate() { }
@@ -107,8 +143,16 @@ namespace Dpr.GMS
 			public UIText text;
 			private bool isShow = true;
 			
-			// TODO
-			public void SetComponentEnabled(bool enabled) { }
+			public void SetComponentEnabled(bool enabled)
+			{
+				if (((!this.isShow ^ enabled) & 1) != 0) {
+				}
+				enabled = enabled & 1;
+				this.isShow = enabled;
+				this.bgImg.enabled = enabled;
+				this.Length.enabled = enabled;
+				Behaviour.set_enabled(this[0],enabled);
+			}
 		}
 
 		[Serializable]
@@ -120,14 +164,24 @@ namespace Dpr.GMS
 			public UIText putPointCompNumText;
 			private int currentPutPointNum = -1;
 			
-			// TODO
-			public void Setup(int maxPutNum) { }
+			public void Setup(int maxPutNum)
+			{
+				GMS_UIGMSScene_PutPointObj.Setup(this.putCompObj);
+				GMS_UIGMSScene_PutPointObj.Setup(this.putCompAnimObj,maxPutNum);
+			}
 			
 			// TODO
 			public void Show(int putNum, bool isComp) { }
 			
-			// TODO
-			public void Hide() { }
+			public void Hide()
+			{
+				if ((this.putPointContent.activeSelf & 1) != 0) {
+				  this.putPointContent.SetActive(0);
+				}
+				if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
+				  GameObject.SetActive(this[0],0);
+				}
+			}
 			
 			// TODO
 			private void ShowNormalUI(int putNum) { }
@@ -135,20 +189,40 @@ namespace Dpr.GMS
 			// TODO
 			private void SetPutPointNumText(int putNum) { }
 			
-			// TODO
-			private void HideNormalUI() { }
+			private void HideNormalUI()
+			{
+				if ((this.putPointContent.activeSelf & 1) != 0) {
+				  this.putPointContent.SetActive(0);
+				}
+			}
 			
-			// TODO
-			private void SetNormalUIActive(bool active) { }
+			private void SetNormalUIActive(bool active)
+			{
+				if (((this.putPointContent.activeSelf ^ active) & 1) != 0) {
+				  this.putPointContent.SetActive(active & 1);
+				}
+			}
 			
-			// TODO
-			private void ShowCompleteUI() { }
+			private void ShowCompleteUI()
+			{
+				if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
+				}
+				GameObject.SetActive(this[0],1);
+			}
 			
-			// TODO
-			private void HideCompleteUI() { }
+			private void HideCompleteUI()
+			{
+				if ((GameObject.get_activeSelf(this[0]) & 1) != 0) {
+				  GameObject.SetActive(this[0],0);
+				}
+			}
 			
-			// TODO
-			private void SetCompleteUIActive(bool active) { }
+			private void SetCompleteUIActive(bool active)
+			{
+				if (((GameObject.get_activeSelf(this[0]) ^ active) & 1) != 0) {
+				  GameObject.SetActive(this[0],active & 1);
+				}
+			}
 		}
 
 		private enum AnimState : int

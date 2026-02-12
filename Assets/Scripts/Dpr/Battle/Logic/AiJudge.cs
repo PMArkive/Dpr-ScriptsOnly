@@ -31,14 +31,20 @@
         // TODO
         protected byte GetMyClientID() { return 0; }
 
-        // TODO
-        public void ChangeAiBit(uint targetScriptBit) { }
+        public void ChangeAiBit(uint targetScriptBit)
+        {
+        	this.m_targetScriptBit = targetScriptBit;
+        }
 
-        // TODO
-        public uint GetAiBit() { return 0; }
+        public uint GetAiBit()
+        {
+        	return this.m_targetScriptBit;
+        }
 
-        // TODO
-        protected BtlAiScriptNo GetCurrentScriptNo() { return BtlAiScriptNo.BTL_AISCRIPT_NO_WAZA_MIN; }
+        protected BtlAiScriptNo GetCurrentScriptNo()
+        {
+        	return this.Length;
+        }
 
         // TODO
         protected void ResetScriptNo() { }
@@ -46,10 +52,22 @@
         // TODO
         protected void UpdateScriptNo() { }
 
-        // TODO
-        private BtlAiScriptNo GetNextScriptNo(BtlAiScriptNo minScriptNo, BtlAiScriptNo maxScriptNo) { return BtlAiScriptNo.BTL_AISCRIPT_NO_WAZA_MIN; }
+        private BtlAiScriptNo GetNextScriptNo(BtlAiScriptNo minScriptNo, BtlAiScriptNo maxScriptNo)
+        {
+        	if (minScriptNo <= maxScriptNo) {
+        	  do {
+        	    if ((this.m_targetScriptBit & 1 << (ulong)(minScriptNo & 0x1f)) != 0) {
+        	      return minScriptNo;
+        	    }
+        	    minScriptNo = minScriptNo + 1;
+        	  } while (minScriptNo <= maxScriptNo);
+        	}
+        	return (BtlAiScriptNo)8;
+        }
 
-        // TODO
-        protected bool IsAllScriptFinished() { return false; }
+        protected bool IsAllScriptFinished()
+        {
+        	return this.m_maxScriptNo < this.Length;
+        }
     }
 }

@@ -24,8 +24,21 @@ namespace Dpr
         // TODO
         public static void SetupBattleWild(BATTLE_SETUP_PARAM battleSetupParam, PokeParty iPtrEnemyParty, ArenaID arenaID, MapAttributeEx mapAttrib, SYS_WEATHER weatherType, [Optional, DefaultParameterValue(false)] bool isSwim, [Optional, DefaultParameterValue(false)] bool isFishing, [Optional, DefaultParameterValue(TrainerID.NONE)] TrainerID partnerID, [Optional, DefaultParameterValue(false)] bool isCaptureDemo, [Optional, DefaultParameterValue(-1)] int safariBallNum, [Optional, DefaultParameterValue(false)] bool isSymbol, [Optional, DefaultParameterValue(false)] bool isMitu, [Optional] string overlapBgm, BattleSetupEffectId overlapSetupEffectId = BattleSetupEffectId.DEFAULT, bool isCantUseBall = false) { }
 
-        // TODO
-        private static bool IsUseSetupEffectVariation(PokeParty party) { return false; }
+        private static bool IsUseSetupEffectVariation(PokeParty party)
+        {
+        	if (this.Length != 0) {
+        	  var iVar4 = 0;
+        	  do {
+        	    var uVar3 = iVar4.GetMemberPointerConst();
+        	    var uVar2 = uVar3.GetTalentPowerMaxNum();
+        	    if (1 < uVar2) {
+        	      return true;
+        	    }
+        	    iVar4 = iVar4 + 1;
+        	  } while (this.Length != iVar4);
+        	}
+        	return false;
+        }
 
         // TODO
         public static void SetupBattleTrainer(BATTLE_SETUP_PARAM battleSetupParam, ArenaID arenaID, MapAttributeEx mapAttrib, SYS_WEATHER weatherType, BtlRule rule, TrainerID enemyID0, TrainerID enemyID1 = TrainerID.NONE, TrainerID partnerID = TrainerID.NONE) { }
@@ -66,8 +79,13 @@ namespace Dpr
         // TODO
         private static void ReflectTokuseiMonohiroiMitsuatsume(PokeParty pMyParty) { }
 
-        // TODO
-        private static bool isEvolveCheckTarget(PokeParty playerParty, byte memberIdx, BtlResult result, bool isLevelUp) { return false; }
+        private static bool isEvolveCheckTarget(PokeParty playerParty, byte memberIdx, BtlResult result, bool isLevelUp)
+        {
+        	var uVar1 = playerParty.GetMemberPointerConst(memberIdx);
+        	uVar1.GetMonsNo();
+        	uVar1.GetFormNo();
+        	return isLevelUp & 1;
+        }
 
         // TODO
         public static void GetAttEff(MapAttributeEx mapAttributeEx, ArenaID arenaID, BattleSetupEffectLot lot, out BattleSetupEffectId setupEffectId, out EffectBattleID effectBattleID, out string soundEventNama)
@@ -80,8 +98,29 @@ namespace Dpr
         // TODO
         public static BattleSetupEffectLot GetBattleSetupEffectLot(BtlRule rule, BtlCompetitor competitor = 0, BtlMultiMode multiMode = 0, TrainerID trainerID0 = TrainerID.MAX, TrainerID trainerID1 = TrainerID.MAX) { return BattleSetupEffectLot.WILD_SINGLE; }
 
-        // TODO
-        public static TrainerID GetDemoCaptureTrainer(bool isPlayerMale, DefaultPokeType defaultPokeType) { return TrainerID.INVALID; }
+        public static TrainerID GetDemoCaptureTrainer(bool isPlayerMale, DefaultPokeType defaultPokeType)
+        {
+        	uint uVar1;
+        	if ((int)defaultPokeType == 10) {
+        	  uVar1 = 0x1eb;
+        	  if (!isPlayerMale) {
+        	    uVar1 = 0x1e8;
+        	  }
+        	  return uVar1;
+        	}
+        	if ((int)defaultPokeType == 0xb) {
+        	  uVar1 = 0x1ec;
+        	  if (!isPlayerMale) {
+        	    uVar1 = 0x1e9;
+        	  }
+        	  return uVar1;
+        	}
+        	uVar1 = 0x1ea;
+        	if (!isPlayerMale) {
+        	  uVar1 = 0x1e7;
+        	}
+        	return uVar1;
+        }
 
         // TODO
         public static PokeParty CreateDemoCapturePokeParty(TrainerID trainerID) { return null; }

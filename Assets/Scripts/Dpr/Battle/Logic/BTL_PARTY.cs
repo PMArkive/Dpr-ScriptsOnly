@@ -30,8 +30,10 @@
         // TODO
         public void MoveLastMember(byte idx) { }
 
-        // TODO
-        public byte GetMemberCount() { return 0; }
+        public byte GetMemberCount()
+        {
+        	return this.Length;
+        }
 
         // TODO
         public byte GetAliveMemberCount() { return 0; }
@@ -42,8 +44,10 @@
         // TODO
         public byte GetDeadMemberCount() { return 0; }
 
-        // TODO
-        public bool IsFull() { return false; }
+        public bool IsFull()
+        {
+        	return 5 < this.Length;
+        }
 
         // TODO
         public BTL_POKEPARAM GetMemberData(byte idx) { return null; }

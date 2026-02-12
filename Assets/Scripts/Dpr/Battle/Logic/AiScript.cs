@@ -21,20 +21,31 @@
         // TODO
         public static void ReleaseAiScriptCache() { }
 
-        // TODO
-        public bool WaitLoadScript() { return false; }
+        public bool WaitLoadScript()
+        {
+        	return this.Length != 0;
+        }
 
         // TODO
         public void SetExecParameter(AiScriptCommandHandler commandHandler) { }
 
-        // TODO
-        public bool Execute() { return false; }
+        public bool Execute()
+        {
+        	if (this.Length != 0) {
+        	  this.Length.Execute();
+        	}
+        	return true;
+        }
 
-        // TODO
-        public void GetResult(Result dest) { }
+        public void GetResult(Result dest)
+        {
+        	this.Length.GetResult(dest);
+        }
 
-        // TODO
-        public void UnLoadScript() { }
+        public void UnLoadScript()
+        {
+        	this.Length = 0;
+        }
 
         public class Result
         {

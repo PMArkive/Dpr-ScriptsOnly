@@ -21,8 +21,13 @@ namespace Dpr.Contest
 		// TODO
 		public void MovePosition(float moveX, Camera camera) { }
 		
-		// TODO
-		public void SetAudienceUpdateFlag(bool flag) { }
+		public void SetAudienceUpdateFlag(bool flag)
+		{
+			if (flag) {
+			  Contest_AudienceGenerator.Play(this.Length);
+			}
+			Contest_AudienceGenerator.Stop(this.Length);
+		}
 		
 		// TODO
 		public void Dispose() { }

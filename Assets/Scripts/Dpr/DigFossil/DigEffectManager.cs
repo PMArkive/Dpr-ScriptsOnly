@@ -52,17 +52,25 @@ namespace Dpr.DigFossil
 		// TODO
 		public void PlayOneShotToCursor(EffectId id, int cursorNum) { }
 		
-		// TODO
-		public void PlayOneShot(EffectId id, Vector3 pos) { }
+		public void PlayOneShot(EffectId id, Vector3 pos)
+		{
+			DigFossil_DigEffectManager.Play(id,pos,1);
+		}
 		
 		// TODO
 		public void PlayToCrumbling(int x, float delay = 0.0f) { }
 		
-		// TODO
-		public EffectInstance PlayToCollapse() { return default; }
+		public EffectInstance PlayToCollapse()
+		{
+			this.pos_collapse.position;
+			DigFossil_DigEffectManager.Play(7,1);
+		}
 		
-		// TODO
-		public EffectInstance PlayToAllDigouted() { return default; }
+		public EffectInstance PlayToAllDigouted()
+		{
+			this.pos_collapse.position;
+			DigFossil_DigEffectManager.Play(10,1);
+		}
 		
 		// TODO
 		public EffectInstance PlayToCrack(float t) { return default; }

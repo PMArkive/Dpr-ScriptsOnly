@@ -107,20 +107,28 @@ namespace Dpr.Battle.Logic
 		// TODO
 		public bool IsNeedSummarize() { return default; }
 		
-		// TODO
-		public ActionDesc GetActionDesc() { return default; }
+		public ActionDesc GetActionDesc()
+		{
+			return this.m_pActionDesc;
+		}
 		
-		// TODO
-		public WazaParam GetWazaParam() { return default; }
+		public WazaParam GetWazaParam()
+		{
+			return this.m_pWazaParam;
+		}
 		
 		// TODO
 		public BTL_POKEPARAM GetAttacker() { return default; }
 		
-		// TODO
-		public BTL_POKEPARAM GetDefender() { return default; }
+		public BTL_POKEPARAM GetDefender()
+		{
+			return this.m_pDefender;
+		}
 		
-		// TODO
-		public GShock.Effect GetGShockEffect() { return default; }
+		public GShock.Effect GetGShockEffect()
+		{
+			return this.m_gShockEffect;
+		}
 		
 		// TODO
 		public ushort GetEffectNo(BtlPokePos pos) { return default; }
@@ -152,8 +160,15 @@ namespace Dpr.Battle.Logic
 		// TODO
 		public void SetEffected_Sick(BtlPokePos pos, WazaSick sick) { }
 		
-		// TODO
-		public void SetEffected_CureSick(BtlPokePos pos, Sick sick) { }
+		public void SetEffected_CureSick(BtlPokePos pos, Sick sick)
+		{
+			if ((int)sick == 0) {
+			}
+			if ((uint)(byte)pos < this.m_posData.Length) {
+			  this.m_posData + (pos & 0xff) * 8[0].Length = sick;
+			  SetEffected(pos,0x33);
+			}
+		}
 
 		public class SetupParam
 		{

@@ -171,8 +171,12 @@ namespace Dpr.SecretBase
 			// TODO
 			private void Start() { }
 			
-			// TODO
-			private void Update() { }
+			private void Update()
+			{
+				if (this.isPlaying) {
+				  SecretBase_PlacementData_NGMotionMono.PlayUpdate();
+				}
+			}
 		}
 
 		private class NGMotionMono : MonoBehaviour
@@ -189,8 +193,12 @@ namespace Dpr.SecretBase
 			// TODO
 			public void Stop() { }
 			
-			// TODO
-			private void Update() { }
+			private void Update()
+			{
+				if (this.isPlaying) {
+				  SecretBase_PlacementData_NGMotionMono.PlayUpdate();
+				}
+			}
 			
 			// TODO
 			private void PlayUpdate() { }

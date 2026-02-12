@@ -18,8 +18,36 @@ namespace Dpr.Battle.Logic
         // TODO
         public void Init() { }
 
-        // TODO
-        public void Add(WazaNo waza, uint turn, byte pokeID) { }
+        public void Add(WazaNo waza, uint turn, byte pokeID)
+        {
+        	if (this.m_ptr < this.Length.Length) {
+        	  *(uint *)
+        	   (this.Length + (ulong)this.m_ptr * 8[0] + 0x14) =
+        	       waza;
+        	  if (this.m_ptr < this.Length.Length) {
+        	    *(uint *)
+        	     (this.Length + (ulong)this.m_ptr * 8[0] + 0x10) =
+        	         turn;
+        	    if (this.m_ptr < this.Length.Length) {
+        	      *(byte *)
+        	       (this.Length + (ulong)this.m_ptr * 8[0] + 0x18)
+        	           = pokeID;
+        	      if (this.m_ptr < this.Length.Length) {
+        	        *(byte *)
+        	         (this.Length + (ulong)this.m_ptr * 8[0] +
+        	         0x19) = 0;
+        	        var uVar1 = this.m_ptr + 1;
+        	        this.m_ptr = uVar1;
+        	        var iVar2 = 0;
+        	        if ((long)(ulong)uVar1 < (long)this.Length.Length) {
+        	          iVar2 = this.m_ptr + 1;
+        	        }
+        	        this.m_ptr = iVar2;
+        	      }
+        	    }
+        	  }
+        	}
+        }
 
         // TODO
         public void SetEffectiveLast() { }

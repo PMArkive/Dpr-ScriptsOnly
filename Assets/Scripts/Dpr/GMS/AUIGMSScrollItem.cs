@@ -20,8 +20,10 @@ namespace Dpr.GMS
 		// TODO
 		public void SetActive(bool isActive) { }
 		
-		// TODO
-		public void SetIndex(int index) { }
+		public void SetIndex(int index)
+		{
+			this[0] = index;
+		}
 		
 		// TODO
 		public void Select() { }

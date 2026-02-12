@@ -18,10 +18,18 @@ namespace Dpr.Contest
 		// TODO
 		public void Setup(string name) { }
 		
-		// TODO
-		public void SetGaugeRatio(float ratio) { }
+		public void SetGaugeRatio(float ratio)
+		{
+			UI_Image.fillAmount = this.gaugeImage;
+		}
 		
-		// TODO
-		public void ShowMedal(Sprite medalSpr, int animHash) { }
+		public void ShowMedal(Sprite medalSpr, int animHash)
+		{
+			this.medalAnimator.enabled = 1;
+			this.medalAnimator.enabled = 1;
+			this.medalAnimator.Play(animHash);
+			UI_Image.set_sprite(this.medalImage,medalSpr);
+			this.medalImage.enabled = 1;
+		}
 	}
 }

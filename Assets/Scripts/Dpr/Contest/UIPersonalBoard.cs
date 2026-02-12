@@ -20,8 +20,25 @@ namespace Dpr.Contest
 		// TODO
 		public void Initialize() { }
 		
-		// TODO
-		private void SetTextComponents() { }
+		private void SetTextComponents()
+		{
+			var uVar1 = ComponentExtensions.FindDeep(StringLiteral_8986,1);
+			uVar1 = UnityEngine_GameObject__GetComponent<object>
+			                  (uVar1);
+			this.Length = uVar1;
+			uVar1 = ComponentExtensions.FindDeep(StringLiteral_8987,1);
+			uVar1 = UnityEngine_GameObject__GetComponent<object>
+			                  (uVar1);
+			this[0] = uVar1;
+			uVar1 = ComponentExtensions.FindDeep(StringLiteral_8988,1);
+			uVar1 = UnityEngine_GameObject__GetComponent<object>
+			                  (uVar1);
+			this.niceCntText = uVar1;
+			uVar1 = ComponentExtensions.FindDeep(StringLiteral_8989,1);
+			uVar1 = UnityEngine_GameObject__GetComponent<object>
+			                  (uVar1);
+			this.missCntText = uVar1;
+		}
 		
 		// TODO
 		private void SetText() { }
@@ -35,10 +52,16 @@ namespace Dpr.Contest
 		// TODO
 		public void SetGaugeRatio(float visualRatio, float danceRatio, float wazaRatio) { }
 		
-		// TODO
-		public void SetTitleSpr(Sprite contestTitleSpr, Sprite rankTitleSpr) { }
+		public void SetTitleSpr(Sprite contestTitleSpr, Sprite rankTitleSpr)
+		{
+			UI_Image.set_sprite(this.contestTitleImage,contestTitleSpr);
+			UI_Image.set_sprite(this.rankTitleImage,rankTitleSpr);
+		}
 		
-		// TODO
-		public void SetMedalSpr(Sprite medalSpr) { }
+		public void SetMedalSpr(Sprite medalSpr)
+		{
+			UI_Image.set_sprite(this.medalImage,medalSpr);
+			this.medalImage.enabled = 1;
+		}
 	}
 }

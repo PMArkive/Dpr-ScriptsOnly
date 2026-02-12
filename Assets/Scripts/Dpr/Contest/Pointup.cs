@@ -2,8 +2,10 @@ namespace Dpr.Contest
 {
 	public class Pointup : AContestSkillBase
 	{
-		// TODO
-		public override int CalcAppealPoint() { return default; }
+		public override int CalcAppealPoint()
+		{
+			return this.skillData.Length;
+		}
 		
 		// TODO
 		protected override void OnLaunchSkillEffect(SkillBonusParam bonusParam) { }

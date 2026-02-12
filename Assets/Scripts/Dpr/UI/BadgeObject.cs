@@ -39,8 +39,10 @@ namespace Dpr.UI
 		// TODO
 		public Transform GetTransform() { return default; }
 		
-		// TODO
-		public void SetActive(bool isActive) { }
+		public void SetActive(bool isActive)
+		{
+			this.Length.SetActive(isActive & 1);
+		}
 		
 		// TODO
 		public void Polish() { }
@@ -48,17 +50,25 @@ namespace Dpr.UI
 		// TODO
 		public void Hit() { }
 		
-		// TODO
-		public Vector3 GetPosition() { return default; }
+		public Vector3 GetPosition()
+		{
+			Transform.get_position(this[0]);
+		}
 		
-		// TODO
-		public void SetPosition(Vector3 pos) { }
+		public void SetPosition(Vector3 pos)
+		{
+			Transform.position = this[0];
+		}
 		
-		// TODO
-		public Quaternion GetRotation() { return default; }
+		public Quaternion GetRotation()
+		{
+			Transform.get_rotation(this[0]);
+		}
 		
-		// TODO
-		public void SetRotation(Quaternion quaternion) { }
+		public void SetRotation(Quaternion quaternion)
+		{
+			Transform.rotation = this[0];
+		}
 		
 		// TODO
 		public void RotateY(float value) { }
@@ -69,8 +79,12 @@ namespace Dpr.UI
 		// TODO
 		public void StopAutoRotate() { }
 		
-		// TODO
-		public void PlayConditionEffect() { }
+		public void PlayConditionEffect()
+		{
+			if (this.conditionEffect != null) {
+			}
+			UpdateCondition(1);
+		}
 		
 		// TODO
 		public void StopConditionEffect() { }

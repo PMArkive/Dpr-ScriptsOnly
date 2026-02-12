@@ -15,19 +15,37 @@ namespace Dpr.Contest
 		// TODO
 		public void SetupWazaSequence() { }
 		
-		// TODO
-		public void ResetParam() { }
+		public void ResetParam()
+		{
+			this.seqState = (WazaSeqState)0;
+		}
 		
 		public bool IsRunning { get => seqState == WazaSeqState.Active || seqState == WazaSeqState.Playing; }
 		
 		// TODO
 		private void ActivateWazaCamera() { }
 		
-		// TODO
-		private void DeactivateWazaCamera() { }
+		private void DeactivateWazaCamera()
+		{
+			var uVar1 = Dpr_SequenceEditor_SequenceCameraObject__get_PostProcess
+			                  (this[0],0);
+			uVar1.Reset();
+			uVar1.enabled = 0;
+			uVar1 = Dpr_SequenceEditor_SequenceCameraObject__get_PostProcess
+			                  (this[0],0);
+			uVar1.enabled = 0;
+			SequenceEditor_SequenceCameraObject.set_IsEnabled(this[0],0);
+			uVar1 = Dpr_SequenceEditor_SequenceCameraObject__get_PostProcess
+			                  (this.Length,0);
+			uVar1.enabled = 1;
+		}
 		
-		// TODO
-		public void PlayWazaSequence(int userIndex) { }
+		public void PlayWazaSequence(int userIndex)
+		{
+			this.seqState = (WazaSeqState)2;
+			this.userIndex = userIndex;
+			this.hasRequestPlaySequence = true;
+		}
 		
 		// TODO
 		public void OnUpdate() { }

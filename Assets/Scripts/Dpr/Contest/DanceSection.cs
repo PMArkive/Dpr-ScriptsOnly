@@ -37,8 +37,10 @@ namespace Dpr.Contest
 		private bool isBlockLockSkill;
 		private bool isFinishDance;
 		
-		// TODO
-		public void SetScriptableObject(DanceSettings danceSettingData) { }
+		public void SetScriptableObject(DanceSettings danceSettingData)
+		{
+			this.Length = danceSettingData;
+		}
 		
 		// TODO
 		public void Initialize() { }
@@ -58,14 +60,23 @@ namespace Dpr.Contest
 		// TODO
 		private float CalcSkillAnimDuration(float skillAnimDuration, int restNoteNum) { return default; }
 		
-		// TODO
-		public void SetProgressIconSpr(Sprite iconSpr) { }
+		public void SetProgressIconSpr(Sprite iconSpr)
+		{
+			Contest_UIMusicProgressBar.SetIconSpr(this.uiMusicProgress,iconSpr);
+		}
 		
 		// TODO
 		public void SetupNetwork(ContestMatchingNetwork network, float syncScoreSpan) { }
 		
-		// TODO
-		public bool IsReady() { return default; }
+		public bool IsReady()
+		{
+			if (((Contest_UIPlayerStatus.IsReady(this[0]) & 1) != 0) &&
+			   (Contest_UIPlayerStatus.IsReady(this[0]) = Contest_NotesLane.IsReady(this.notesLane), (Contest_UIPlayerStatus.IsReady(this[0]) & 1) != 0))
+			{
+			  return Contest_UIContestSkillInfo.IsReady(this.uiSkillInfo);
+			}
+			return false;
+		}
 		
 		public bool IsActive { get => active; }
 		
@@ -132,11 +143,17 @@ namespace Dpr.Contest
 		// TODO
 		private void PlayerTapActionResult(int playerIndex, PlayerType playerType, NoteTapTimingID timingID) { }
 		
-		// TODO
-		private void ShowUITimingGrade(NoteTapTimingID timingID) { }
+		private void ShowUITimingGrade(NoteTapTimingID timingID)
+		{
+			if ((Contest_WazaSequencePlayer.get_IsRunning(this.wazaSeqPlayer) & 1) != 0) {
+			}
+			Contest_NotesLane.ShowTimingGrade(this.notesLane,timingID);
+		}
 		
-		// TODO
-		private void UpdateContestWaza() { }
+		private void UpdateContestWaza()
+		{
+			Contest_WazaSequencePlayer.OnUpdate(this.wazaSeqPlayer);
+		}
 		
 		// TODO
 		public void ForceLaunchContestWazaFromSeq() { }
@@ -180,8 +197,10 @@ namespace Dpr.Contest
 		// TODO
 		private void UpdateHeartEffect() { }
 		
-		// TODO
-		public void OnLateUpdate() { }
+		public void OnLateUpdate()
+		{
+			Contest_WazaSequencePlayer.OnLateUpdate(this.wazaSeqPlayer);
+		}
 		
 		// TODO
 		private void DoPlayAllTween(bool forward) { }

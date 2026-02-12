@@ -38,8 +38,10 @@ namespace Dpr.UI
 		// TODO
 		private int GetPlateType(int index) { return default; }
 		
-		// TODO
-		private int GetMemberCount() { return default; }
+		private int GetMemberCount()
+		{
+			return this._pokemonParams.Length;
+		}
 		
 		// TODO
 		private void OnUpdate(float deltaTime) { }
@@ -53,8 +55,11 @@ namespace Dpr.UI
 		// TODO
 		private void OnSelectChangedPartyItem(PokemonPartyItem partyItem, int selectIndex) { }
 		
-		// TODO
-		private void OnClickPartyItem(PokemonPartyItem partyItem, int selectIndex) { }
+		private void OnClickPartyItem(PokemonPartyItem partyItem, int selectIndex)
+		{
+			this._party.SetActive(0,0);
+			OpenContextMenu(partyItem,selectIndex);
+		}
 		
 		// TODO
 		private void OpenContextMenu(PokemonPartyItem partyItem, int selectIndex) { }
@@ -65,8 +70,13 @@ namespace Dpr.UI
 		// TODO
 		private void PokemonSwap(BTL_POKEPARAM pokeParam, PositionType posType = PositionType.None) { }
 		
-		// TODO
-		private int GetSwapPokmeonNum() { return default; }
+		private int GetSwapPokmeonNum()
+		{
+			if ((this._selParam != null) && (this._param.isPokeList == 0)) {
+			  return this._selParam[0];
+			}
+			return 1;
+		}
 		
 		// TODO
 		private int GetSelectedPokemonNum() { return default; }
@@ -86,11 +96,41 @@ namespace Dpr.UI
 		// TODO
 		private List<ContextMenuItem.Param> GetContextMenuItems(BTL_POKEPARAM pokeParam, PokemonPartyItem partyItem) { return default; }
 		
-		// TODO
-		private bool IsRecovery(BTL_POKEPARAM pokeParam) { return default; }
+		private bool IsRecovery(BTL_POKEPARAM pokeParam)
+		{
+			if ((((this._param.isBattleTower == 0) && (this._param.isNet == 0)) &&
+			    (this._param.isCancel != 0)) && (this._param.isSwapRuleSwap == 0)) {
+			  var uVar2 = pokeParam.GetSrcData();
+			  var uVar1 = uVar2.IsEgg(2);
+			  return (uVar1 ^ 1) & 1;
+			}
+			return false;
+		}
 		
-		// TODO
-		private bool IsSwapWaitPokemon(BTL_POKEPARAM param) { return default; }
+		private bool IsSwapWaitPokemon(BTL_POKEPARAM param)
+		{
+			if (param == null) {
+			  return false;
+			}
+			if (this._param.isPokeList == 0) {
+			  if ((this._selParam == null) || (this._selParam[0] != '\x02'))
+			  {
+			    return false;
+			  }
+			  var lVar3 = GetSelectedPokeParam();
+			  if (lVar3 == null) {
+			    return false;
+			  }
+			}
+			else {
+			  if (this._param.swapWaitPokemon == 0) {
+			    return false;
+			  }
+			}
+			var cVar1 = this._param.swapWaitPokemon.GetID();
+			var cVar2 = param.GetID();
+			return cVar1 == cVar2;
+		}
 
 		private enum SelectType : int
 		{
