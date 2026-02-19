@@ -215,19 +215,9 @@ namespace Dpr.Message
             MessageEnumData.QtyID qty;
 
             if (refTagData == null)
-            {
-                var partyCount = PlayerWork.playerParty.GetMemberCount();
-                if (partyCount == 0)
-                    qty = langID == MessageEnumData.MsgLangId.FRA ? MessageEnumData.QtyID.Singular : MessageEnumData.QtyID.Plural;
-                else if (partyCount == 1)
-                    qty = MessageEnumData.QtyID.Singular;
-                else
-                    qty = MessageEnumData.QtyID.Plural;
-            }
+                qty = MessageHelper.CheckQtyIdByCount((int)PlayerWork.playerParty.GetMemberCount(), langID);
             else
-            {
                 qty = refTagData.GetQtyId();
-            }
 
             if ((int)qty >= words.Length)
                 return string.Empty;

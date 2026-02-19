@@ -87,8 +87,10 @@ namespace Dpr.UnderGround
         private UgNetworkManager.UgOnlinePlayerData nowBasePlayerData;
         public UgSecretBase EffectiveBase;
 
-        // TODO
-        public UgFieldDataManager GetDataMng() { return default; }
+        public UgFieldDataManager GetDataMng()
+        {
+            return dataMng;
+        }
 
         public UgNetworkManager.UgOnlinePlayerData nowBasePlayerInfo { get => nowBasePlayerIndex == -1 ? null : nowBasePlayerData; }
         public bool isOtherBase { get => nowBasePlayerInfo != null; }

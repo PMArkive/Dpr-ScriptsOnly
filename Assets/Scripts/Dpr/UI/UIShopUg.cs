@@ -1,6 +1,9 @@
+using AK;
+using Audio;
 using Dpr.Message;
 using Dpr.SubContents;
 using Pml.UgFather;
+using SmartPoint.AssetAssistant;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,14 +33,61 @@ namespace Dpr.UI
 		private int tardeUgItemCount;
 		private bool isPrevSelectWazaMachine;
 		
-		// TODO
-		public override void OnCreate() { }
+		public override void OnCreate()
+		{
+			base.OnCreate();
+
+			dataManagerPtr = UgFatherDataManager.Instance;
+
+			ugItemPanel.Initialize();
+			selectUgItemAmount.Hide();
+
+			state = MenuState.Wait;
+
+			shopMsgFile = MessageManager.Instance.GetMsgFile("ss_fld_shop");
+
+			_itemListScrollView.Initialize(OnRequiredItemData, OnSelectItemScrollViewItem, OnUnSelectItemScrollViewItem);
+
+			msgWindow.Setup(UgFatherDataManager.UNDER_GROUND_MSBT_NAME, PlayerWork.config.msg_speed);
+		}
 		
-		// TODO
-		public void Open(UgShopParam param, UIWindowID prevWindowId = WINDOWID_PARENT) { }
+		public void Open(UgShopParam param, UIWindowID prevWindowId = WINDOWID_PARENT)
+		{
+			_param = param;
+			Sequencer.Start(OpOpen(prevWindowId));
+		}
 		
-		// TODO
-		private IEnumerator OpOpen(UIWindowID prevWindowId) { return default; }
+		private IEnumerator OpOpen(UIWindowID prevWindowId)
+		{
+			OnOpen(prevWindowId);
+
+			keyguide.Open(SubContentsPatternID.ShopUg, transform);
+
+			AudioManager.Instance.SetBgmEvent(EVENTS.DUCKON_BGM);
+
+			_cursor.transform.SetParent(transform);
+			_cursor.SetActive(false);
+
+			_selectShopUgItem = null;
+
+			dataManagerPtr.SetupUgShopItems(_param.shopType, _param.randomSheed, _param.dayOfWeek, _itemParams);
+			CreateBuyItemDataTable();
+
+			_itemListScrollView.Setup(_itemParams.Count);
+
+			_wazaItemDescriptionType = 0;
+			_itemDescriptionPanel.SetWazaDescriptionType(_wazaItemDescriptionType);
+
+			yield return OpPlayOpenWindowAnimation(_prevWindowId, null);
+
+			Sequencer.update -= OnUpdate;
+			Sequencer.update += OnUpdate;
+
+			state = MenuState.SelectItem;
+			_input.inputEnabled = true;
+
+			_cursor.SetActive(true);
+        }
 		
 		// TODO
 		private void CreateBuyItemDataTable() { }
@@ -48,8 +98,14 @@ namespace Dpr.UI
 		// TODO
 		private void OnUpdateStateSelectItem() { }
 		
-		// TODO
-		private void HideWazaDescription() { }
+		private void HideWazaDescription()
+		{
+			if (_itemParams.Count > 0 && _wazaItemDescriptionType != 0)
+			{
+				_wazaItemDescriptionType = 0;
+				_itemDescriptionPanel.SetWazaDescriptionType(0);
+			}
+		}
 		
 		// TODO
 		private bool OnUpdateInput() { return default; }
@@ -75,11 +131,16 @@ namespace Dpr.UI
 		// TODO
 		private void UpdateUserItemData() { }
 		
-		// TODO
-		private void OnFinishSellProcess() { }
+		private void OnFinishSellProcess()
+		{
+			state = MenuState.SelectItem;
+			nowAmount = 0;
+		}
 		
-		// TODO
-		private bool CheckIsEmptySelectItem() { return default; }
+		private bool CheckIsEmptySelectItem()
+		{
+			return _itemParams.Count < 1;
+		}
 		
 		// TODO
 		private void OnRequiredItemData(IUIButton button) { }
@@ -87,8 +148,38 @@ namespace Dpr.UI
 		// TODO
 		private void OnSelectItemScrollViewItem(IUIButton button) { }
 		
-		// TODO
-		private void UpdateItemUI() { }
+		private void UpdateItemUI()
+		{
+			_itemDescriptionPanel.Set(ShopType.Underground, _selectShopUgItem);
+
+			if (_selectShopUgItem.IsUnderGroundItem())
+			{
+				_itemDescriptionPanel.SetWazaDescriptionType(_wazaItemDescriptionType);
+				if (isPrevSelectWazaMachine)
+				{
+					keyguide.ReplaceKeyguid(SubContentsPatternID.ShopUg);
+					isPrevSelectWazaMachine = false;
+				}
+			}
+			else if (_selectShopUgItem.GetItemInfo().IsWazaMachine())
+            {
+                if (!isPrevSelectWazaMachine)
+                {
+                    keyguide.ReplaceKeyguid(SubContentsPatternID.ShopUg_WazaMachine);
+                    isPrevSelectWazaMachine = true;
+                }
+            }
+			else
+			{
+                if (isPrevSelectWazaMachine)
+                {
+                    keyguide.ReplaceKeyguid(SubContentsPatternID.ShopUg);
+                    isPrevSelectWazaMachine = false;
+                }
+            }
+
+			ugItemPanel.ShowSellItemPanel(buyItemDataTable[_selectShopUgItem.param.ugItemID]);
+		}
 		
 		// TODO
 		private void OnUnSelectItemScrollViewItem(IUIButton button) { }
