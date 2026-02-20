@@ -1,5 +1,4 @@
-﻿using Dpr.Battle.Logic.Handler;
-using Pml;
+﻿using Pml;
 using Pml.WazaData;
 using System;
 
@@ -38,7 +37,7 @@ namespace Dpr.Battle.Logic
 			{
 				var waza = CurrentWazaNo();
 
-				// Not Horn Drill nor Fissure
+				// Move is not Horn Drill nor Fissure
 				if (waza != WazaNo.TUNODORIRU && waza != WazaNo.ZIWARE)
 				{
 					var dmg = Call(CMD_CHECK_DAMAGE_WAZA, new long[] { (long)CurrentWazaNo() });
@@ -58,7 +57,7 @@ namespace Dpr.Battle.Logic
 		{
 			var waza = CurrentWazaNo();
 
-			// Not a powder move
+			// Move is not a powder move
 			if (waza != WazaNo.DOKUNOKONA &&
 				waza != WazaNo.SIBIREGONA &&
 				waza != WazaNo.NEMURIGONA &&
@@ -441,7 +440,6 @@ namespace Dpr.Battle.Logic
             return HAVE_NO;
         }
 		
-		// TODO
 		private void Calc_BasicAll()
 		{
 			if (Bouon_Check() == HAVE_YES || Boudan_Check() == HAVE_YES)
@@ -455,6 +453,7 @@ namespace Dpr.Battle.Logic
 			switch (seqNo)
 			{
 				case 1:
+				case 187:
 					BaciAI_Seq_001(); break;
 
 				case 7:
@@ -465,24 +464,725 @@ namespace Dpr.Battle.Logic
 
 				case 10:
 				case 50:
+				case 277:
+				case 308:
+				case 312:
+				case 316:
+				case 322:
+				case 327:
 					BaciAI_Seq_010(); break;
 
 				case 11:
 				case 51:
-					BaciAI_Seq_011(); break;
+                case 156:
+                case 328:
+                    BaciAI_Seq_011(); break;
 
-					// TODO: more
+				case 12:
+				case 52:
+				case 284:
+					BaciAI_Seq_012(); break;
+
+				case 13:
+				case 53:
+				case 290:
+				case 321:
+				case 365:
+					BaciAI_Seq_013(); break;
+
+				case 14:
+				case 54:
+					BaciAI_Seq_014(); break;
+
+				case 15:
+				case 55:
+					BaciAI_Seq_015(); break;
+
+				case 16:
+				case 56:
+				case 108:
+					BaciAI_Seq_016(); break;
+
+				case 18:
+				case 58:
+                case 343:
+                case 346:
+                case 356:
+                case 364:
+                case 411:
+                    BaciAI_Seq_018(); break;
+
+				case 19:
+				case 59:
+                    BaciAI_Seq_019(); break;
+
+				case 20:
+				case 60:
+                    BaciAI_Seq_020(); break;
+
+				case 21:
+				case 61:
+				case 357:
+                    BaciAI_Seq_021(); break;
+
+				case 22:
+				case 62:
+                    BaciAI_Seq_022(); break;
+
+				case 23:
+				case 63:
+                    BaciAI_Seq_023(); break;
+
+				case 24:
+				case 64:
+                    BaciAI_Seq_024(); break;
+
+				case 25:
+                case 143:
+                    BaciAI_Seq_025(); break;
+
+                case 28:
+                    BaciAI_Seq_028(); break;
+
+                case 32:
+                case 381:
+                    BaciAI_Seq_032(); break;
+
+                case 33:
+                case 66:
+                    BaciAI_Seq_033(); break;
+
+                case 35:
+                    BaciAI_Seq_035(); break;
+
+                case 37:
+                    BaciAI_Seq_037(); break;
+
+                case 38:
+                    BaciAI_Seq_038(); break;
+
+                case 46:
+                    BaciAI_Seq_046(); break;
+
+                case 47:
+                    BaciAI_Seq_047(); break;
+
+                case 49:
+                case 118:
+                case 166:
+                case 199:
+                    BaciAI_Seq_049(); break;
+
+                case 65:
+                    BaciAI_Seq_065(); break;
+
+                case 67:
+                    BaciAI_Seq_067(); break;
+
+                case 79:
+                    BaciAI_Seq_079(); break;
+
+                case 84:
+                    BaciAI_Seq_084(); break;
+
+                case 86:
+                    BaciAI_Seq_086(); break;
+
+                case 90:
+                    BaciAI_Seq_090(); break;
+
+                case 92:
+                case 97:
+                    BaciAI_Seq_092(); break;
+
+                case 94:
+                    BaciAI_Seq_094(); break;
+
+                case 102:
+                    BaciAI_Seq_102(); break;
+
+                case 106:
+                    BaciAI_Seq_106(); break;
+
+                case 107:
+                    BaciAI_Seq_107(); break;
+
+                case 109:
+                    BaciAI_Seq_109(); break;
+
+                case 112:
+                    BaciAI_Seq_112(); break;
+
+                case 113:
+                    BaciAI_Seq_113(); break;
+
+                case 114:
+                    BaciAI_Seq_114(); break;
+
+                case 115:
+                    BaciAI_Seq_115(); break;
+
+                case 120:
+                    BaciAI_Seq_120(); break;
+
+                case 124:
+                    BaciAI_Seq_124(); break;
+
+                case 127:
+                    BaciAI_Seq_127(); break;
+
+                case 132:
+                case 133:
+                case 134:
+                case 157:
+                    BaciAI_Seq_132(); break;
+
+                case 136:
+                    BaciAI_Seq_136(); break;
+
+                case 137:
+                    BaciAI_Seq_137(); break;
+
+                case 142:
+                    BaciAI_Seq_142(); break;
+
+                case 148:
+                    BaciAI_Seq_148(); break;
+
+                case 158:
+                case 376:
+                case 382:
+                    BaciAI_Seq_158(); break;
+
+                case 160:
+                    BaciAI_Seq_160(); break;
+
+                case 161:
+                case 162:
+                    BaciAI_Seq_161(); break;
+
+                case 164:
+                    BaciAI_Seq_164(); break;
+
+                case 165:
+                    BaciAI_Seq_165(); break;
+
+                case 167:
+                    BaciAI_Seq_167(); break;
+
+                case 168:
+                    BaciAI_Seq_168(); break;
+
+                case 172:
+                    BaciAI_Seq_172(); break;
+
+                case 175:
+                    BaciAI_Seq_175(); break;
+
+                case 176:
+                    BaciAI_Seq_176(); break;
+
+                case 177:
+                    BaciAI_Seq_177(); break;
+
+                case 178:
+                    BaciAI_Seq_178(); break;
+
+                case 179:
+                    BaciAI_Seq_179(); break;
+
+                case 181:
+                    BaciAI_Seq_181(); break;
+
+                case 184:
+                    BaciAI_Seq_184(); break;
+
+                case 188:
+                    BaciAI_Seq_188(); break;
+
+                case 191:
+                    BaciAI_Seq_191(); break;
+
+                case 192:
+                    BaciAI_Seq_192(); break;
+
+                case 193:
+                    BaciAI_Seq_193(); break;
+
+                case 205:
+                    BaciAI_Seq_205(); break;
+
+                case 206:
+                    BaciAI_Seq_206(); break;
+
+                case 208:
+                    BaciAI_Seq_208(); break;
+
+                case 211:
+                    BaciAI_Seq_211(); break;
+
+                case 212:
+                    BaciAI_Seq_212(); break;
+
+                case 215:
+                    BaciAI_Seq_215(); break;
+
+                case 216:
+                    BaciAI_Seq_216(); break;
+
+                case 220:
+                    BaciAI_Seq_220(); break;
+
+                case 222:
+                    BaciAI_Seq_222(); break;
+
+                case 225:
+                    BaciAI_Seq_225(); break;
+
+				case 226:
+                    BaciAI_Seq_226(); break;
+
+				case 227:
+                    BaciAI_Seq_227(); break;
+
+				case 232:
+                    BaciAI_Seq_232(); break;
+
+				case 233:
+                    BaciAI_Seq_233(); break;
+
+				case 234:
+                    BaciAI_Seq_234(); break;
+
+				case 236:
+                    BaciAI_Seq_236(); break;
+
+				case 238:
+                    BaciAI_Seq_238(); break;
+
+				case 239:
+                    BaciAI_Seq_239(); break;
+
+				case 241:
+                    BaciAI_Seq_241(); break;
+
+				case 242:
+                    BaciAI_Seq_242(); break;
+
+				case 243:
+                    BaciAI_Seq_243(); break;
+
+				case 244:
+                    BaciAI_Seq_244(); break;
+
+				case 246:
+                    BaciAI_Seq_246(); break;
+
+				case 247:
+                    BaciAI_Seq_247(); break;
+
+				case 249:
+                    BaciAI_Seq_249(); break;
+
+				case 251:
+                    BaciAI_Seq_251(); break;
+
+				case 252:
+                    BaciAI_Seq_252(); break;
+
+				case 258:
+                    BaciAI_Seq_258(); break;
+
+				case 259:
+                    BaciAI_Seq_259(); break;
+
+				case 265:
+                    BaciAI_Seq_265(); break;
+
+				case 266:
+                    BaciAI_Seq_266(); break;
+
+				case 270:
+                    BaciAI_Seq_270(); break;
+
+				case 278:
+                    BaciAI_Seq_278(); break;
+
+				case 281:
+                    BaciAI_Seq_281(); break;
+
+				case 285:
+                    BaciAI_Seq_285(); break;
+
+				case 286:
+                    BaciAI_Seq_286(); break;
+
+				case 292:
+                    BaciAI_Seq_292(); break;
+
+				case 294:
+                    BaciAI_Seq_294(); break;
+
+				case 298:
+                    BaciAI_Seq_298(); break;
+
+				case 299:
+                    BaciAI_Seq_299(); break;
+
+				case 300:
+                    BaciAI_Seq_300(); break;
+
+				case 301:
+                    BaciAI_Seq_301(); break;
+
+				case 307:
+                    BaciAI_Seq_307(); break;
+
+				case 309:
+				case 386:
+                    BaciAI_Seq_309(); break;
+
+				case 311:
+                    BaciAI_Seq_311(); break;
+
+				case 315:
+                    BaciAI_Seq_315(); break;
+
+				case 318:
+                    BaciAI_Seq_318(); break;
+
+				case 320:
+                    BaciAI_Seq_320(); break;
+
+				case 323:
+                    BaciAI_Seq_323(); break;
+
+				case 338:
+                    BaciAI_Seq_338(); break;
+
+				case 339:
+                    BaciAI_Seq_339(); break;
+
+				case 340:
+                    BaciAI_Seq_340(); break;
+
+				case 342:
+                    BaciAI_Seq_342(); break;
+
+				case 349:
+                    BaciAI_Seq_349(); break;
+
+				case 350:
+                    BaciAI_Seq_350(); break;
+
+				case 351:
+                    BaciAI_Seq_351(); break;
+
+				case 352:
+                    BaciAI_Seq_352(); break;
+
+				case 354:
+                    BaciAI_Seq_354(); break;
+
+				case 362:
+                    BaciAI_Seq_362(); break;
+
+				case 363:
+                    BaciAI_Seq_363(); break;
+
+				case 366:
+                    BaciAI_Seq_366(); break;
+
+				case 368:
+                    BaciAI_Seq_368(); break;
+
+				case 370:
+                    BaciAI_Seq_370(); break;
+
+				case 375:
+                    BaciAI_Seq_375(); break;
+
+				case 387:
+                    BaciAI_Seq_387(); break;
+
+				case 388:
+                    BaciAI_Seq_388(); break;
+
+				case 389:
+                    BaciAI_Seq_389(); break;
+
+				case 391:
+                    BaciAI_Seq_391(); break;
+
+				case 394:
+                    BaciAI_Seq_394(); break;
+
+				case 397:
+                    BaciAI_Seq_397(); break;
+
+				case 399:
+                    BaciAI_Seq_399(); break;
+
+				case 406:
+                    BaciAI_Seq_406(); break;
+
+				case 419:
+                    BaciAI_Seq_419(); break;
+
+				case 420:
+                    BaciAI_Seq_423(); break;
+
+				case 425:
+                    BaciAI_Seq_425(); break;
+
+				case 426:
+                    BaciAI_Seq_426(); break;
+
+				case 428:
+                    BaciAI_Seq_428(); break;
+
+				case 429:
+                    BaciAI_Seq_429(); break;
+
+				case 431:
+                    BaciAI_Seq_431(); break;
+
+				case 432:
+                    BaciAI_Seq_432(); break;
+
+				case 434:
+                    BaciAI_Seq_434(); break;
             }
         }
 		
-		// TODO
-		private int Bouon_Check() { return default; }
+		private int Bouon_Check()
+        {
+            // Defensive ability is Soundproof
+            if ((TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_DEFENCE }) == TokuseiNo.BOUON)
+            {
+                var tokusei = (TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_ATTACK });
+
+                // Offensive ability is not Mold Breaker, Turboblaze, nor Teravolt
+                if (tokusei != TokuseiNo.KATAYABURI &&
+                    tokusei != TokuseiNo.TAABOBUREIZU &&
+                    tokusei != TokuseiNo.TERABORUTEEZI)
+                {
+                    switch (CurrentWazaNo())
+                    {
+                        // Move is:
+                        // Growl,       Roar,        Sing,            Supersonic,
+                        // Screech,     Snore,       Perish Song,     Uproar,
+                        // Hyper Voice, Metal Sound, Grass Whistle,   Bug Buzz,
+                        // Chatter,     Round,       Echoed Voice,    Relic Song,
+                        // Snarl,       Noble Roar,  Disarming Voice, Parting Shot,
+                        // Boomburst,   Confide,     Sparkling Aria,  Clanging Scales,
+                        // Overdrive
+                        case WazaNo.NAKIGOE:
+                        case WazaNo.HOERU:
+                        case WazaNo.UTAU:
+                        case WazaNo.TYOUONPA:
+                        case WazaNo.IYANAOTO:
+                        case WazaNo.IBIKI:
+                        case WazaNo.HOROBINOUTA:
+                        case WazaNo.SAWAGU:
+                        case WazaNo.HAIPAABOISU:
+                        case WazaNo.KINZOKUON:
+                        case WazaNo.KUSABUE:
+                        case WazaNo.MUSINOSAZAMEKI:
+                        case WazaNo.OSYABERI:
+                        case WazaNo.RINSYOU:
+                        case WazaNo.EKOOBOISU:
+                        case WazaNo.INISIENOUTA:
+                        case WazaNo.BAAKUAUTO:
+                        case WazaNo.OTAKEBI:
+                        case WazaNo.TYAAMUBOISU:
+                        case WazaNo.SUTEZERIHU:
+                        case WazaNo.BAKUONPA:
+                        case WazaNo.NAISYOBANASI:
+                        case WazaNo.UTAKATANOARIA:
+                        case WazaNo.SUKEIRUNOIZU:
+                        case WazaNo.OOBAADORAIBU:
+                            ScoreCtrl(-10);
+                            return HAVE_YES;
+
+                        default:
+                            return HAVE_NO;
+                    }
+                }
+            }
+
+            return HAVE_NO;
+        }
 		
-		// TODO
-		private int Boudan_Check() { return default; }
-		
-		// TODO
-		private void BaciAI_Seq_001() { }
+		private int Boudan_Check()
+		{
+            // Defensive ability is Bulletproof
+            if ((TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_DEFENCE }) == TokuseiNo.BOUDAN)
+            {
+                var tokusei = (TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_ATTACK });
+
+                // Offensive ability is not Mold Breaker, Turboblaze, nor Teravolt
+                if (tokusei != TokuseiNo.KATAYABURI &&
+                    tokusei != TokuseiNo.TAABOBUREIZU &&
+                    tokusei != TokuseiNo.TERABORUTEEZI)
+                {
+                    switch (CurrentWazaNo())
+                    {
+                        // Move is:
+                        // Egg Bomb,     Barrage,     Sludge Bomb,  Octazooka,
+                        // Zap Cannon,   Shadow Ball, Mist Ball,    Ice Ball,
+                        // Weather Ball, Bullet Seed, Gyro Ball,    Aura Sphere,
+                        // Seed Bomb,    Focus Blast, Energy Ball,  Mud Bomb,
+                        // Rock Wrecker, Magnet Bomb, Electro Ball, Acid Spray,
+                        // Searing Shot
+                        case WazaNo.TAMAGOBAKUDAN:
+                        case WazaNo.TAMANAGE:
+                        case WazaNo.HEDOROBAKUDAN:
+                        case WazaNo.OKUTANHOU:
+                        case WazaNo.DENZIHOU:
+                        case WazaNo.SYADOOBOORU:
+                        case WazaNo.MISUTOBOORU:
+                        case WazaNo.AISUBOORU:
+                        case WazaNo.WHEZAABOORU:
+                        case WazaNo.TANEMASINGAN:
+                        case WazaNo.ZYAIROBOORU:
+                        case WazaNo.HADOUDAN:
+                        case WazaNo.TANEBAKUDAN:
+                        case WazaNo.KIAIDAMA:
+                        case WazaNo.ENAZIIBOORU:
+                        case WazaNo.DOROBAKUDAN:
+                        case WazaNo.GANSEKIHOU:
+                        case WazaNo.MAGUNETTOBOMU:
+                        case WazaNo.EREKIBOORU:
+                        case WazaNo.ASIDDOBOMU:
+                        case WazaNo.KAENDAN:
+                            ScoreCtrl(-10);
+                            return HAVE_YES;
+
+                        default:
+                            return HAVE_NO;
+                    }
+                }
+            }
+
+            return HAVE_NO;
+        }
+
+        // 1   - Induces Sleep
+		// 187 - Induces Drowsy
+        private void BaciAI_Seq_001()
+		{
+			// Defensive Pokémon has a status effect
+			if (Call(CMD_IF_POKESICK, new long[] { CHECK_DEFENCE }) != HAVE_NO)
+			{
+                ScoreCtrl(-10);
+				return;
+            }
+
+            // Defensive side has Safeguard active
+            if (Call(CMD_IF_SIDEEFF, new long[] { CHECK_DEFENCE, BTL_SIDEEFF_SINPINOMAMORI }) != HAVE_NO)
+            {
+                ScoreCtrl(-10);
+                return;
+            }
+
+			var atkTokusei = (TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_ATTACK });
+
+            // Offensive ability is not Infiltrator and Defensive Pokémon has a Substitute up
+            if (atkTokusei != TokuseiNo.SURINUKE && Call(CMD_IF_MIGAWARI, new long[] { CHECK_DEFENCE }) != HAVE_NO)
+            {
+                ScoreCtrl(-10);
+                return;
+            }
+
+            var defTokusei = (TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_DEFENCE });
+            var defType1 = (PokeType)Call(CMD_CHECK_TYPE, new long[] { CHECK_DEFENCE_TYPE1 });
+            var defType2 = (PokeType)Call(CMD_CHECK_TYPE, new long[] { CHECK_DEFENCE_TYPE2 });
+
+            // Electric Terrain is active and Defensive Pokémon is grounded
+            if (defTokusei != TokuseiNo.HUYUU &&
+				defType1 != PokeType.HIKOU &&
+				defType2 != PokeType.HIKOU &&
+                Call(CMD_IF_EXIST_GROUND, new long[] { BTL_GROUND_ELEKI }) != HAVE_NO)
+            {
+                ScoreCtrl(-10);
+                return;
+            }
+
+            // Misty Terrain is active and Defensive Pokémon is grounded
+            if (defTokusei != TokuseiNo.HUYUU &&
+                defType1 != PokeType.HIKOU &&
+                defType2 != PokeType.HIKOU &&
+				Call(CMD_IF_EXIST_GROUND, new long[] { BTL_GROUND_MIST }) != HAVE_NO)
+            {
+                ScoreCtrl(-10);
+                return;
+            }
+
+            var rule = (BtlRule)Call(CMD_CHECK_BTL_RULE, Array.Empty<long>());
+
+			// Offensive ability is Mold Breaker, Turboblaze, or Teravolt
+			if (atkTokusei == TokuseiNo.KATAYABURI ||
+				atkTokusei == TokuseiNo.TAABOBUREIZU ||
+				atkTokusei == TokuseiNo.TERABORUTEEZI)
+				return;
+
+            // Defensive ability is Insomnia, Vital Spirit, Magic Bounce
+            if (defTokusei == TokuseiNo.HUMIN ||
+                defTokusei == TokuseiNo.YARUKI ||
+                defTokusei == TokuseiNo.MAZIKKUMIRAA)
+            {
+                ScoreCtrl(-10);
+                return;
+            }
+
+            // Defensive type is Grass
+            if (defType1 == PokeType.KUSA ||
+                defType2 == PokeType.KUSA)
+            {
+                // Defensive ability is Flower Veil
+                if (defTokusei == TokuseiNo.HURAWAABEERU)
+				{
+                    ScoreCtrl(-10);
+                    return;
+                }
+
+                // Double Battle, and ally's ability is Flower Veil
+                if (rule == BtlRule.BTL_RULE_DOUBLE &&
+                    (TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_DEFENCE_FRIEND }) == TokuseiNo.HURAWAABEERU)
+                {
+                    ScoreCtrl(-10);
+                    return;
+                }
+            }
+            // Defensive ability is Shields Down
+            else if (defTokusei == TokuseiNo.RIMITTOSIIRUDO)
+            {
+				// Defensive Pokémon's HP is over 51%
+				if (Call(CMD_IF_HP_OVER, new long[] { CHECK_DEFENCE, 51 }) != HAVE_NO)
+				{
+                    ScoreCtrl(-10);
+                    return;
+                }
+            }
+            else
+			{
+                // Defensive ability is Sweet Veil
+                if (defTokusei == TokuseiNo.SUIITOBEERU)
+                {
+                    ScoreCtrl(-10);
+                    return;
+                }
+
+                // Double Battle, and ally's ability is Sweet Veil
+                if (rule == BtlRule.BTL_RULE_DOUBLE &&
+                    (TokuseiNo)Call(CMD_CHECK_TOKUSEI, new long[] { CHECK_DEFENCE_FRIEND }) == TokuseiNo.SUIITOBEERU)
+                {
+                    ScoreCtrl(-10);
+                    return;
+                }
+            }
+        }
 		
 		// TODO
 		private void BaciAI_Seq_007() { }
@@ -721,8 +1421,10 @@ namespace Dpr.Battle.Logic
 		// TODO
 		private void BaciAI_Seq_225() { }
 		
-		// TODO
-		private void BaciAI_Seq_226() { }
+		private void BaciAI_Seq_226()
+		{
+			// Empty
+		}
 		
 		// TODO
 		private void BaciAI_Seq_227() { }
@@ -778,8 +1480,10 @@ namespace Dpr.Battle.Logic
 		// TODO
 		private void BaciAI_Seq_258() { }
 		
-		// TODO
-		private void BaciAI_Seq_259() { }
+		private void BaciAI_Seq_259()
+		{
+			// Empty
+		}
 		
 		// TODO
 		private void BaciAI_Seq_265() { }
@@ -817,8 +1521,10 @@ namespace Dpr.Battle.Logic
 		// TODO
 		private void BaciAI_Seq_300() { }
 		
-		// TODO
-		private void BaciAI_Seq_301() { }
+		private void BaciAI_Seq_301()
+		{
+			// Empty
+		}
 		
 		// TODO
 		private void BaciAI_Seq_307() { }
