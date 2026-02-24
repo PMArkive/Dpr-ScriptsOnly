@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 using XLSXContent;
+using System;
 
 namespace Dpr.UnderGround
 {
@@ -46,5 +47,20 @@ namespace Dpr.UnderGround
 
             return 30;
         }
+
+        // TODO
+        public void UpdateStatueParam() { }
+        // TODO
+        public void UpdateIcons() { }
+        // TODO
+        public void ClearIcons() { }
+        // TODO
+        public void GetStatues() { }
+        // TODO
+        public void ClearSecBase() { }
+        // TODO
+        private void CalcStatueData() { }
+        // TODO
+        public void OnDestroy() { }
     }
 }
