@@ -109,8 +109,16 @@ namespace Dpr.Battle.Logic.Handler
 		// TODO
 		public static void Remove(EventSystem pEventSystem, EffectType effect) { }
 		
-		// TODO
-		public static EventFactor.EventHandlerTable[] ADD_Fld_Weather(byte sub_param) { return default; }
+		public static EventFactor.EventHandlerTable[] ADD_Fld_Weather(byte sub_param)
+		{
+			switch ((BtlWeather)sub_param)
+			{
+				case BtlWeather.BTL_WEATHER_STORM: return HandlerTable_Ooame;
+				case BtlWeather.BTL_WEATHER_DAY: return HandlerTable_Oohideri;
+				case BtlWeather.BTL_WEATHER_TURBULENCE: return HandlerTable_Rankiryuu;
+				default: return DammyHandlerTable;
+			}
+		}
 		
 		// TODO
 		public static void handler_fld_Weather(in EventFactor.EventHandlerArgs args, byte subParam) { }

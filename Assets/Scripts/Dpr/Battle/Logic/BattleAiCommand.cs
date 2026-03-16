@@ -655,11 +655,15 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_MULTI(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_IF_MEGAEVOLVED(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_MEGAEVOLVED(AiScriptCommandHandler handle, long[] args)
+        {
+            return CELL_FALSE;
+        }
 
-        // TODO
-        private static long CMDFUNC_IF_CAN_MEGAEVOLVE(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_CAN_MEGAEVOLVE(AiScriptCommandHandler handle, long[] args)
+        {
+            return CELL_FALSE;
+        }
 
         // TODO
         private static long CMDFUNC_IF_WAZAHIDE(AiScriptCommandHandler handle, long[] args) { return 0; }

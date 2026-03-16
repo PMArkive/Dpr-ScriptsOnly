@@ -127,11 +127,32 @@ namespace Dpr.Battle.Logic
         // TODO
         public void Event_WazaExeEnd_Common(byte pokeID, WazaNo waza, in ActionDesc actionDesc, EventID eventID) { }
 
-        // TODO
         public void Event_GetWazaRankEffectValue(WazaNo waza, uint waza_effect_index, BTL_POKEPARAM attacker, BTL_POKEPARAM target, out WazaRankEffect effect, out int volume)
         {
-            effect = WazaRankEffect.NONE;
-            volume = 0;
+            effect = WAZADATA.GetRankEffect(waza, waza_effect_index, out volume);
+
+            m_pEventSystem.EVENTVAR_Push();
+
+            m_pEventSystem.EVENTVAR_SetConstValue(EventVar.Label.POKEID_ATK, attacker.GetID());
+            m_pEventSystem.EVENTVAR_SetConstValue(EventVar.Label.POKEID_DEF, target.GetID());
+
+            m_pEventSystem.EVENTVAR_SetValue(EventVar.Label.STATUS_TYPE, (int)effect);
+            m_pEventSystem.EVENTVAR_SetValue(EventVar.Label.VOLUME, volume);
+            m_pEventSystem.EVENTVAR_SetValue(EventVar.Label.RATIO, 1);
+
+            m_pEventSystem.CallEvent(EventID.GET_RANKEFF_VALUE);
+
+            effect = (WazaRankEffect)m_pEventSystem.EVENTVAR_GetValue(EventVar.Label.STATUS_TYPE);
+            volume = m_pEventSystem.EVENTVAR_GetValue(EventVar.Label.VOLUME);
+            var ratio = m_pEventSystem.EVENTVAR_GetValue(EventVar.Label.RATIO);
+
+            if ((ratio & 0xFF) > 1)
+                volume *= ratio & 0xFF;
+
+            m_pEventSystem.EVENTVAR_Pop();
+
+            if (effect == WazaRankEffect.SP)
+                effect = WazaRankEffect.NONE;
         }
 
         // TODO
@@ -380,8 +401,31 @@ namespace Dpr.Battle.Logic
         // TODO
         public void Event_TokuseiDisabled(BTL_POKEPARAM target) { }
 
-        // TODO
-        public bool Event_CheckAddRankEffectOccur(WazaParam wazaParam, BTL_POKEPARAM attacker, BTL_POKEPARAM target) { return false; }
+        public bool Event_CheckAddRankEffectOccur(WazaParam wazaParam, BTL_POKEPARAM attacker, BTL_POKEPARAM target)
+        {
+            var per = WAZADATA.GetRankEffectPer(wazaParam.wazaID, 0);
+
+            m_pEventSystem.EVENTVAR_Push();
+
+            m_pEventSystem.EVENTVAR_SetConstValue(EventVar.Label.POKEID_ATK, attacker.GetID());
+            m_pEventSystem.EVENTVAR_SetConstValue(EventVar.Label.POKEID_DEF, target.GetID());
+
+            m_pEventSystem.EVENTVAR_SetConstValue(EventVar.Label.WAZAID, (int)wazaParam.wazaID);
+            m_pEventSystem.EVENTVAR_SetRewriteOnceValue(EventVar.Label.FAIL_FLAG, FALSE);
+            m_pEventSystem.EVENTVAR_SetValue(EventVar.Label.ADD_PER, per & 0xFF);
+
+            m_pEventSystem.CallEvent(EventID.ADD_RANK_TARGET);
+
+            var failFlag = m_pEventSystem.EVENTVAR_GetValue(EventVar.Label.FAIL_FLAG);
+            var newPer = m_pEventSystem.EVENTVAR_GetValue(EventVar.Label.ADD_PER);
+
+            m_pEventSystem.EVENTVAR_Pop();
+
+            if ((failFlag & 0xFF) == FALSE && (calc.GetRand(100) & 0xFF) < (newPer & 0xFF))
+                return true;
+
+            return false;
+        }
 
         // TODO
         public ushort Event_CheckPushOutEffectNo(BTL_POKEPARAM attacker, WazaNo waza) { return 0; }
