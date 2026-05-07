@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,27 +12,96 @@ namespace Effect
 		private ParticleSystem[] _particleSystems;
 		private MaterialController[] _materialControllers;
 		private StopStateBits _stopStateBits;
+
+		public StopStateBits stopStateBits => _stopStateBits;
 		
-		// TODO
-		public StopStateBits stopStateBits { get; }
+		public void Setup(ParticleSystem particleSystem, UnityAction<object> onFinished, object reference)
+		{
+			_materialControllers = particleSystem.transform.GetComponentsInChildren<MaterialController>(true);
+			_particleSystem = GetComponent<ParticleSystem>();
+            _particleSystems = _materialControllers.Select(x => x.GetParticleSystem()).ToArray();
+			_onFinished = onFinished;
+			_reference = reference;
+
+			_stopStateBits = StopStateBits.None;
+		}
 		
-		// TODO
-		public void Setup(ParticleSystem particleSystem, UnityAction<object> onFinished, object reference) { }
+		public void Stop(bool isForce)
+		{
+			OnParticleSystemStopped();
+
+            _stopStateBits |= StopStateBits.Manual;
+
+			if (isForce)
+				Finish();
+        }
 		
-		// TODO
-		public void Stop(bool isForce) { }
+		public void OnParticleSystemStopped()
+        {
+            if (!_stopStateBits.HasFlag(StopStateBits.Stopped))
+                _stopStateBits |= StopStateBits.Stopped;
+        }
 		
-		// TODO
-		public void OnParticleSystemStopped() { }
+		public bool OnUpdate(float deltaTime)
+		{
+			if (_stopStateBits.HasFlag(StopStateBits.Stopped))
+				return false;
+
+			if (!_stopStateBits.HasFlag(StopStateBits.Stopping))
+				return true;
+
+            if (_stopStateBits.HasFlag(StopStateBits.Manual))
+			{
+				for (int i=0; i<_particleSystems.Length; i++)
+				{
+					var system = _particleSystems[i];
+
+					if (system == null)
+						break;
+
+					if (system.main.startLifetime.mode == ParticleSystemCurveMode.Constant)
+					{
+						if (!float.IsInfinity(system.main.startLifetime.constant) && system.IsAlive(false))
+							return true;
+					}
+					else
+					{
+						if (system.IsAlive(false))
+                            return true;
+                    }
+				}
+			}
+			else
+			{
+				if (_particleSystem != null && _particleSystem.IsAlive(true))
+					return true;
+			}
+
+			Finish();
+			return false;
+        }
 		
-		// TODO
-		public bool OnUpdate(float deltaTime) { return default; }
+		private void Finish()
+		{
+			_stopStateBits |= StopStateBits.Stopped;
+
+			_onFinished?.Invoke(_reference);
+			_onFinished = null;
+
+			_reference = null;
+			_particleSystem = null;
+			_particleSystems = null;
+			_materialControllers = null;
+		}
 		
-		// TODO
-		private void Finish() { }
-		
-		// TODO
-		public void SetMultiplyColor(Color color) { }
+		public void SetMultiplyColor(Color color)
+		{
+			if (_materialControllers.IsNullOrEmpty())
+				return;
+
+			for (int i=0; i<_materialControllers.Length; i++)
+				_materialControllers[i]?.SetMultiplyColor(color);
+		}
 
 		public enum StopStateBits : int
 		{

@@ -1,7 +1,6 @@
 ﻿using Pml;
 using Pml.WazaData;
 using System;
-using System.Data;
 
 namespace Dpr.Battle.Logic
 {

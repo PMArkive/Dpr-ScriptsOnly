@@ -12,29 +12,31 @@
 		private void main_proc()
 		{
 			// Move does 0 damage
-			if (Call(CMD_CHECK_DAMAGE_WAZA, new long[] { (ushort)CurrentWazaNo() }) == HAVE_NO)
+			if (Call(CMD_CHECK_DAMAGE_WAZA, new long[] { (ushort)CurrentWazaNo() }) == 0)
 				return;
 
-			// Attacker not affected by Fake Out
-            if (Call(CMD_CHECK_NEKODAMASI, new long[] { CHECK_ATTACK }) == HAVE_NO)
+			// User is not afflicted by Fake Out
+            if (Call(CMD_CHECK_NEKODAMASI, new long[] { CHECK_ATTACK }) == 0)
 			{
 				ScoreCtrl(1);
 				return;
 			}
 
-			// If HP is under 20%, 220/256 chance (85.94%) for -1 score
-			if (Call(CMD_IF_HP_UNDER, new long[] { CHECK_DEFENCE, 20 }) != HAVE_NO)
+			// Target's HP is under 20%
+			if (Call(CMD_IF_HP_UNDER, new long[] { CHECK_DEFENCE, 20 }) != 0)
 			{
-				if (Call(CMD_IF_RND_UNDER, new long[] { 220 }) != HAVE_NO)
+                // 220/256 chance (85.94%)
+                if (Call(CMD_IF_RND_UNDER, new long[] { 220 }) != 0)
 				{
                     ScoreCtrl(-1);
                     return;
                 }
             }
-            // If HP is under 40%, 150/256 chance (58.59%) for -1 score
-            else if (Call(CMD_IF_HP_UNDER, new long[] { CHECK_DEFENCE, 40 }) != HAVE_NO)
+            // Target's HP is under 40%
+            else if (Call(CMD_IF_HP_UNDER, new long[] { CHECK_DEFENCE, 40 }) != 0)
 			{
-                if (Call(CMD_IF_RND_UNDER, new long[] { 150 }) != HAVE_NO)
+                // 150/256 chance (58.59%)
+                if (Call(CMD_IF_RND_UNDER, new long[] { 150 }) != 0)
                 {
                     ScoreCtrl(-1);
                     return;

@@ -176,8 +176,10 @@ public sealed class BattlePokemonEntity : BattleObjectEntity
     // TODO
     private void CreateShadowCastSystem() { }
 
-    // TODO
-    public SimpleParam GetSimpleParam() { return default(SimpleParam); }
+    public SimpleParam GetSimpleParam()
+    {
+        return _simpleParam;
+    }
 
     public void ResetAnimation()
     {
@@ -206,8 +208,10 @@ public sealed class BattlePokemonEntity : BattleObjectEntity
     // TODO
     public float GetAnimationSpeed() { return 0.0f; }
 
-    // TODO
-    public void SetBlinkEnabled(bool value) { }
+    public void SetBlinkEnabled(bool value)
+    {
+        _blinkProcess?.SetBlinkEnabled(value);
+    }
 
     // TODO
     public void SetBlinkIntParameter(CharaAutomaticBlinkProcess.BlinkIntParameter param) { }

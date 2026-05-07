@@ -6,6 +6,7 @@ using Dpr.Trainer;
 using Pml;
 using Pml.PokePara;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using XLSXContent;
@@ -86,11 +87,21 @@ namespace Dpr.Battle.View
         // TODO
         public static string GetBattleConstantString(this BattleDataTable self, BattleConstantKey key) { return null; }
 
-        // TODO
-        public static BattleDataTable.SheetMotionTimingData GetMotionTimingData(this BattleDataTable self, MonsNo monsNo, int formNo, Sex sex) { return null; }
+        public static BattleDataTable.SheetMotionTimingData GetMotionTimingData(this BattleDataTable self, MonsNo monsNo, int formNo, Sex sex)
+        {
+            return self.MotionTimingData.FirstOrDefault(x => x.MonsNo == (int)monsNo && x.FormNo == formNo && x.Sex == (int)sex);
+        }
 
-        // TODO
-        public static BattleDataTable.SheetMotionReplaceData GetMotionReplaceData(this BattleDataTable self, int uniqueId) { return null; }
+        public static BattleDataTable.SheetMotionReplaceData GetMotionReplaceData(this BattleDataTable self, int uniqueId)
+        {
+            for (int i=0; i<self.MotionReplaceData.Length; i++)
+            {
+                if (self.MotionReplaceData[i].UniqueID == uniqueId)
+                    return self.MotionReplaceData[i];
+            }
+
+            return null;
+        }
 
         // TODO
         public static BattleDataTable.SheetPokemonEntryMotionData GetPokemonEntryMotionData(this BattleDataTable self, int index) { return null; }
@@ -106,11 +117,27 @@ namespace Dpr.Battle.View
             return null;
         }
 
-        // TODO
-        public static BattleDataTable.SheetDisableBlinkPokemon GetDisableBlinkPokemon(this BattleDataTable self, MonsNo no) { return null; }
+        public static BattleDataTable.SheetDisableBlinkPokemon GetDisableBlinkPokemon(this BattleDataTable self, MonsNo no)
+        {
+            for (int i=0; i<self.DisableBlinkPokemon.Length; i++)
+            {
+                if (self.DisableBlinkPokemon[i].MonsNo == no)
+                    return self.DisableBlinkPokemon[i];
+            }
 
-        // TODO
-        public static BattleDataTable.SheetPokemonMotionBlendTime GetPokemonMotionBlendTime(this BattleDataTable self, MonsNo no) { return null; }
+            return null;
+        }
+
+        public static BattleDataTable.SheetPokemonMotionBlendTime GetPokemonMotionBlendTime(this BattleDataTable self, MonsNo no)
+        {
+            for (int i=0; i<self.PokemonMotionBlendTime.Length; i++)
+            {
+                if (self.PokemonMotionBlendTime[i].MonsNo == no)
+                    return self.PokemonMotionBlendTime[i];
+            }
+
+            return null;
+        }
 
         // TODO
         public static BattleDataTable.SheetInterpolationSequence GetInterpolationSequence(this BattleDataTable self, string seqName) { return null; }

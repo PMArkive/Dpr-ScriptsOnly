@@ -258,7 +258,7 @@ namespace Dpr.Battle.Logic
             {
                 var dmg = m_pBattleSimulator.CalcDamage(atkPokeID, defPokeID, atkPoke.WAZA_GetID(i), true, loss_flag);
                 if (dmg > maxDmg)
-                    dmg = maxDmg;
+                    maxDmg = dmg;
             }
 
             return maxDmg;
