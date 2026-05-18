@@ -2,6 +2,7 @@ using Dpr.FureaiHiroba;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,44 +29,135 @@ namespace Dpr.Field.Walking
 			text = FureaiDebugManager.CreateText("");
 		}
 		
-		// TODO
-		public void Cancel() { }
+		public void Cancel()
+		{
+			corSys.Cancel();
+		}
 		
-		// TODO
-		public void SubCancel(string s) { }
+		public void SubCancel(string s)
+        {
+            SubCancel(SubList.FindIndex(x => x.CorName == s));
+        }
 		
-		// TODO
-		public void SubCancel(CorSystem corSys) { }
+		public void SubCancel(CorSystem corSys)
+		{
+			SubCancel(SubList.FindIndex(x => corSys == x));
+		}
 		
-		// TODO
-		public void SubCancel(int no) { }
+		public void SubCancel(int no)
+		{
+			if (SubList.Count < no)
+				return;
+
+			var sub = SubList[no];
+
+			if (!sub.isPlaying)
+				sub.PrePlayCancel();
+			else
+				sub.Cancel();
+
+			SubList.RemoveAt(no);
+		}
 		
-		// TODO
-		public void Pause() { }
+		public void Pause()
+		{
+			corSys.Pause();
+		}
 		
-		// TODO
-		public Coroutine Restart() { return default; }
+		public Coroutine Restart()
+		{
+			if (corSys.isPause)
+				return corSys.Restart();
+			else
+				return null;
+		}
 		
-		// TODO
-		public CorSystem AddSub(float duration, corDelegate ienum, string name = "") { return default; }
+		public CorSystem AddSub(float duration, corDelegate ienum, string name = "")
+		{
+			this.duration += duration;
+
+            var sub = corSys.AddSub(name);
+            sub.duration = duration;
+
+			SubList.Add(sub);
+			AddSubList(sub, ienum.Invoke(sub));
+
+			return sub;
+        }
 		
-		// TODO
-		public CorSystem AddSub(float duration, IEnumerator ienum, string name = "") { return default; }
+		public CorSystem AddSub(float duration, IEnumerator ienum, string name = "")
+        {
+            this.duration += duration;
+
+            var sub = corSys.AddSub(name);
+            SubList.Add(sub);
+
+            return sub;
+        }
 		
-		// TODO
-		private void AddSubList(CorSystem sub, IEnumerator ienum) { }
+		private void AddSubList(CorSystem sub, IEnumerator ienum)
+		{
+            SubList.Add(sub);
+        }
 		
-		// TODO
-		public CorSystem AddWait(float duration, Action<CorSystem> OnUpdate, string Name) { return default; }
+		public CorSystem AddWait(float duration, Action<CorSystem> OnUpdate, string Name)
+		{
+			count++;
+
+			var sub = corSys.AddSub(Name);
+			sub.duration = duration;
+			this.duration += duration;
+
+			sub.SetIEnum(sub.Wait(OnUpdate));
+            SubList.Add(sub);
+
+			return sub;
+		}
 		
-		// TODO
-		public void Play() { }
+		public void Play()
+		{
+			elapsedTime = 0.0f;
+			duration = SubList.Sum(x => x.duration);
+
+			corSys.onPauseStart += () => TimeCorSys.Pause();
+			corSys.onPauseEnd += () => TimeCorSys.Restart();
+			corSys.onFinished += () => SubList.Clear();
+
+			corSys.Play(Main());
+		}
 		
-		// TODO
-		private IEnumerator TimeCount() { return default; }
+		private IEnumerator TimeCount()
+		{
+			while (elapsedTime < duration)
+			{
+				elapsedTime += DeltaTime.deltaTime;
+				yield return null;
+			}
+		}
 		
-		// TODO
-		private IEnumerator Main() { return default; }
+		private IEnumerator Main()
+		{
+			nowSubNo = 0;
+
+			while (SubList.Count > 0)
+			{
+				text.text = nowSubNo.ToString();
+
+				var sub = SubList[0];
+				sub.Play();
+
+				var isfinish = false;
+
+				sub.onFinished += () => isfinish = true;
+
+				while (!isFinished)
+					yield return new WaitForEndOfFrame();
+
+				nowSubNo++;
+
+				SubList.RemoveAll(x => x.isFinished);
+			}
+		}
 
 		public delegate IEnumerator corDelegate(CorSystem corSystem);
 	}

@@ -19,6 +19,7 @@ namespace Dpr.Field.Walking
         public bool isKwWait;
         private float AnimDuration;
         public float defaultDuration = 0.2f;
+
         public static readonly int[] WaitAnimIDs = new int[4]
         {
             FieldPokemonEntity.Animation.FieldWait1, FieldPokemonEntity.Animation.FieldWait2,

@@ -1,7 +1,7 @@
-﻿using Pml;
+﻿using Dpr.Field.Walking;
+using Pml;
 using Pml.PokePara;
 using System;
-using Ug;
 using UnityEngine;
 
 namespace XLSXContent

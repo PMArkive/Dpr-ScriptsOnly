@@ -161,8 +161,15 @@ namespace Dpr.SubContents
         // TODO
         public static int GetUISortingOrderMax() { return 0; }
 
-        // TODO
-        public static int KinomiID_to_ItemID(int kinomiID) { return 0; }
+        public static int KinomiID_to_ItemID(int kinomiID)
+        {
+            // BUG: Not sure what 1307 is refering to here...
+            // This method is supposed to convert from Berry ID to Item ID
+            if (kinomiID == (int)ItemNo.ROZERUNOMI)
+                return 1307;
+            else
+                return 148 + kinomiID;
+        }
 
         // TODO
         public static IEnumerator ZukanTouroku(PokemonParam p, DemoSceneManager manager) { return null; }
