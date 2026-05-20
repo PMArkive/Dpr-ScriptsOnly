@@ -7,7 +7,9 @@ namespace Dpr.Field.Walking
             // Empty
         }
 
-        // TODO
-        protected override void StateUpdate() { }
+        protected override void StateUpdate()
+        {
+            base.StateUpdate();
+        }
 	}
 }

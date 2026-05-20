@@ -232,7 +232,7 @@ namespace Dpr.Field.Walking
                         Controller.view.AnimPlay(kobetuWait, 0.5f, 0.0f);
                         Controller.model.isForceAnimation = true;
 
-                        DOVirtual.DelayedCall(1.0f, TalkMain);
+                        DOVirtual.DelayedCall(1.0f, () => TalkMain());
                     }
                 }
                 else

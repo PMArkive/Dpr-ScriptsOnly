@@ -24,7 +24,7 @@ namespace Dpr.FureaiHiroba
         public PokeSanpoModel sanpoModel { get; private set; }
         public uint TemotiNo { get => PlayerWork.playerParty.GetMemberIndex(pokeParam); }
         public uint nakayoshi { get => pokeParam.GetFriendship(); }
-        public uint pokeID { get => pokePara.GetID(); }
+        public uint pokeID { get => pokeParam.GetID(); }
         public MonsNo monsNo { get => pokeParam.GetMonsNo(); }
         public Seikaku seikaku { get => pokeParam.GetSeikaku(); }
         public string NickName { get => pokeParam.GetNickName(); }
