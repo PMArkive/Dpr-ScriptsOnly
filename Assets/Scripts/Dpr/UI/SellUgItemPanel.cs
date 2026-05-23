@@ -18,16 +18,37 @@ namespace Dpr.UI
 
 		private MessageMsgFile msgFile;
 		
-		// TODO
-		public void Initialize() { }
+		public void Initialize()
+		{
+			msgFile = MessageManager.Instance.GetMsgFile("ss_fld_shop");
+			SetPanelActive(false);
+		}
 		
-		// TODO
-		public void ShowSellItemPanel(UgFatherDataManager.SellItemData data) { }
+		public void ShowSellItemPanel(UgFatherDataManager.SellItemData data)
+		{
+			itemIconImage.sprite = data.iconSpr;
+
+			MessageWordSetHelper.SetUgItemNameWord(0, data.ugItemID);
+			itemNameText.text = msgFile.GetFormattedMessage("SS_fld_shop_299");
+
+            MessageWordSetHelper.SetDigitWord(0, data.price);
+			tradeInfoText.text = msgFile.GetFormattedMessage("SS_fld_shop_319");
+
+            MessageWordSetHelper.SetDigitWord(0, data.haveCount);
+			haveCountText.text = msgFile.GetFormattedMessage("SS_fld_shop_302");
+
+            SetPanelActive(true);
+        }
 		
-		// TODO
-		public void HideSellItemPanel() { }
+		public void HideSellItemPanel()
+		{
+            SetPanelActive(false);
+        }
 		
-		// TODO
-		private void SetPanelActive(bool active) { }
+		private void SetPanelActive(bool active)
+		{
+			if (gameObject.activeSelf != active)
+				gameObject.SetActive(active);
+		}
 	}
 }

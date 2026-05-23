@@ -30,8 +30,10 @@
         // TODO
         public void MoveLastMember(byte idx) { }
 
-        // TODO
-        public byte GetMemberCount() { return 0; }
+        public byte GetMemberCount()
+        {
+            return m_memberCount;
+        }
 
         // TODO
         public byte GetAliveMemberCount() { return 0; }
@@ -45,11 +47,21 @@
         // TODO
         public bool IsFull() { return false; }
 
-        // TODO
-        public BTL_POKEPARAM GetMemberData(byte idx) { return null; }
+        public BTL_POKEPARAM GetMemberData(byte idx)
+        {
+            if (m_memberCount <= idx)
+                return null;
 
-        // TODO
-        public BTL_POKEPARAM GetMemberDataConst(byte idx) { return null; }
+            return m_pMember[idx];
+        }
+
+        public BTL_POKEPARAM GetMemberDataConst(byte idx)
+        {
+            if (m_memberCount <= idx)
+                return null;
+
+            return m_pMember[idx];
+        }
 
         // TODO
         public void SwapMembers(byte idx1, byte idx2) { }

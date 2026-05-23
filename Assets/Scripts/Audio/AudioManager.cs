@@ -306,7 +306,7 @@ namespace Audio
         {
             AudioInstance audioInstance = _objectPool.Create((PoolType)listenerType, false);
             _audioInstances.Add(audioInstance);
-            audioInstance._Setup(ListenerType.Voice, playEventId, stopEventId, position, rotation, attachedTransform);
+            audioInstance._Setup(listenerType, playEventId, stopEventId, position, rotation, attachedTransform);
             return audioInstance;
         }
 

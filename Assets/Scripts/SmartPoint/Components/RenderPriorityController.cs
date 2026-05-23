@@ -1,5 +1,4 @@
 ﻿using SmartPoint.Mathematics;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,23 +9,48 @@ namespace SmartPoint.Components
     public class RenderPriorityController : MonoBehaviour
     {
         private Camera _camera;
-        private static Dictionary<Transform, List<ValueTuple<Transform, SkinnedMeshRenderer[]>>> _clusterAndTransforms = new Dictionary<Transform, List<(Transform, SkinnedMeshRenderer[])>>();
+        private static Dictionary<Transform, List<(Transform, SkinnedMeshRenderer[])>> _clusterAndTransforms = new Dictionary<Transform, List<(Transform, SkinnedMeshRenderer[])>>();
 
         private void Awake()
         {
             _camera = GetComponent<Camera>();
         }
 
-        // TODO
-        public static void Register(Transform root, SkinnedMeshRendererCluster[] clusters) { }
+        public static void Register(Transform root, SkinnedMeshRendererCluster[] clusters)
+        {
+            for (int i=0; i<clusters.Length; i++)
+                Register(root, clusters[i].node, clusters[i].renderers);
+        }
 
-        // TODO
-        public static void Register(Transform root, Transform group, SkinnedMeshRenderer[] prioritySortedRenderers) { }
+        public static void Register(Transform root, Transform group, SkinnedMeshRenderer[] prioritySortedRenderers)
+        {
+            if (prioritySortedRenderers == null)
+                return;
 
-        // TODO
-        public static void Unregister(Transform root) { }
+            if (prioritySortedRenderers.Length == 0)
+                return;
 
-        // TODO
+            // Result ignored
+            _ = prioritySortedRenderers[0].rootBone;
+
+            if (group == null)
+                group = prioritySortedRenderers[0].transform.parent;
+
+            if (!_clusterAndTransforms.TryGetValue(root, out List<(Transform, SkinnedMeshRenderer[])> value))
+            {
+                value = new List<(Transform, SkinnedMeshRenderer[])>();
+                _clusterAndTransforms.Add(root, value);
+            }
+
+            value.Add((group, prioritySortedRenderers));
+        }
+
+        public static void Unregister(Transform root)
+        {
+            _clusterAndTransforms.Remove(root);
+        }
+
+        // TODO: There are some weird assignments in the foreach, double-check those
         private void OnPreCull()
         {
             var bounds = new Bounds();
@@ -40,7 +64,20 @@ namespace SmartPoint.Components
 
                 if (0 < list.Count - 1)
                 {
+                    for (int i=0; i<list.Count-1; i++)
+                    {
+                        var pos = list[i].Item1.position;
+                        var nextPos = list[i+1].Item1.position;
 
+                        if (pos.FastDistanceSq(cameraPos) < nextPos.FastDistanceSq(cameraPos))
+                        {
+                            var nextTf = list[i+1].Item1;
+                            var nextRenderers = list[i+1].Item2;
+
+                            list[i+1] = (list[i].Item1, list[i].Item2);
+                            list[i] = (nextTf, nextRenderers);
+                        }
+                    }
                 }
 
                 var targetPos = list[0].Item1.transform.position;

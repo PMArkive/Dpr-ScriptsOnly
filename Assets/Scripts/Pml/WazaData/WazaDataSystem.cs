@@ -96,11 +96,38 @@ namespace Pml.WazaData
         // TODO
         public static byte GetRankEffectCount(WazaNo id) { return 0; }
 
-        // TODO
         public static WazaRankEffect GetRankEffect(WazaNo id, uint idx, out int volume)
         {
+            if (idx >= 3)
+            {
+                GFL.ASSERT(false);
+                volume = 0;
+                return WazaRankEffect.NONE;
+            }
+
+            var waza = s_wazaTable.Waza[(int)id];
+
+            WazaRankEffect type;
+            switch (idx)
+            {
+                case 0: type = (WazaRankEffect)waza.rankEffType1; break;
+                case 1: type = (WazaRankEffect)waza.rankEffType2; break;
+                case 2: type = (WazaRankEffect)waza.rankEffType3; break;
+                default: type = WazaRankEffect.NONE; break;
+            }
+
             volume = 0;
-            return WazaRankEffect.NONE;
+            if (type == WazaRankEffect.NONE)
+                return WazaRankEffect.NONE;
+
+            switch (idx)
+            {
+                case 0: volume = waza.rankEffValue1; break;
+                case 1: volume = waza.rankEffValue2; break;
+                case 2: volume = waza.rankEffValue3; break;
+            }
+
+            return type;
         }
 
         // TODO

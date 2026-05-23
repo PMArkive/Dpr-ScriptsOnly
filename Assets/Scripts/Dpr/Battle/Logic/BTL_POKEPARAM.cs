@@ -60,8 +60,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public static void WAZADMG_REC_Setup(WAZADMG_REC rec, byte pokeID, BtlPokePos pokePos, ushort wazaID, byte wazaType, ushort damage, WazaDamageType damageType) { }
 
-        // TODO
-        public byte GetFormNo() { return 0; }
+        public byte GetFormNo()
+        {
+            return m_formNo;
+        }
 
         // TODO
         public byte GetFriendship() { return 0; }
@@ -129,11 +131,15 @@ namespace Dpr.Battle.Logic
         // TODO
         private void CORE_PARAM_Copy(CORE_PARAM dest, in CORE_PARAM src) { }
 
-        // TODO
-        public byte GetID() { return 0; }
+        public byte GetID()
+        {
+            return m_coreParam.myID;
+        }
 
-        // TODO
-        public ushort GetMonsNo() { return 0; }
+        public ushort GetMonsNo()
+        {
+            return m_coreParam.monsno;
+        }
 
         // TODO
         public Seikaku GetSeikaku() { return Seikaku.GANBARIYA; }
@@ -219,11 +225,57 @@ namespace Dpr.Battle.Logic
         // TODO
         public byte Confront_GetPokeID(byte idx) { return 0; }
 
-        // TODO
-        public int GetValue(ValueID vid) { return 0; }
+        public int GetValue(ValueID vid)
+        {
+            vid = convertValueID(vid);
 
-        // TODO
-        public int GetValue_Base(ValueID vid) { return 0; }
+            switch (vid)
+            {
+                case ValueID.BPP_ATTACK_RANK:       return m_varyParam.attack;
+                case ValueID.BPP_DEFENCE_RANK:      return m_varyParam.defence;
+                case ValueID.BPP_SP_ATTACK_RANK:    return m_varyParam.sp_attack;
+                case ValueID.BPP_SP_DEFENCE_RANK:   return m_varyParam.sp_defence;
+                case ValueID.BPP_AGILITY_RANK:      return m_varyParam.agility;
+                case ValueID.BPP_HIT_RATIO:         return m_varyParam.hit;
+                case ValueID.BPP_AVOID_RATIO:       return m_varyParam.avoid;
+                case ValueID.BPP_ATTACK:            return calc.StatusRank((ushort)GetValue_Base(ValueID.BPP_ATTACK), (byte)m_varyParam.attack);
+                case ValueID.BPP_DEFENCE:           return calc.StatusRank((ushort)GetValue_Base(ValueID.BPP_DEFENCE), (byte)m_varyParam.defence);
+                case ValueID.BPP_SP_ATTACK:         return calc.StatusRank((ushort)GetValue_Base(ValueID.BPP_SP_ATTACK), (byte)m_varyParam.sp_attack);
+                case ValueID.BPP_SP_DEFENCE:        return calc.StatusRank((ushort)GetValue_Base(ValueID.BPP_SP_DEFENCE), (byte)m_varyParam.sp_defence);
+                case ValueID.BPP_AGILITY:           return calc.StatusRank((ushort)GetValue_Base(ValueID.BPP_AGILITY), (byte)m_varyParam.agility);
+                case ValueID.BPP_HP:                return m_coreParam.hp;
+                case ValueID.BPP_HP_BEFORE_G:       return (ushort)getHPBeforeG();
+                case ValueID.BPP_MAX_HP:            return m_coreParam.hpMax;
+                case ValueID.BPP_MAX_HP_BEFORE_G:   return (ushort)m_coreParam.ppSrc.GetPower_NotG(PowerID.HP);
+                case ValueID.BPP_LEVEL:             return m_coreParam.level;
+                case ValueID.BPP_TOKUSEI:           return m_tokusei;
+                case ValueID.BPP_TOKUSEI_EFFECTIVE: return (CheckSick(WazaSick.WAZASICK_IEKI) || IsTokuseiDisabledByKagakuHenkaGas()) ? (int)TokuseiNo.NULL : m_tokusei;
+                case ValueID.BPP_SEX:               return m_baseParam.sex;
+                case ValueID.BPP_SEIKAKU:           return m_coreParam.seikaku;
+                case ValueID.BPP_PERSONAL_RAND:     return (int)m_coreParam.personalRand;
+                case ValueID.BPP_EXP:               return (int)m_coreParam.exp;
+                case ValueID.BPP_MONS_POW:          return m_coreParam.mons_pow;
+                case ValueID.BPP_MONS_AGILITY:
+                default:                            return m_coreParam.mons_agility;
+            }
+        }
+
+        public int GetValue_Base(ValueID vid)
+        {
+            vid = convertValueID(vid);
+
+            switch (vid)
+            {
+                case ValueID.BPP_HIT_RATIO:   return DefineConstants.BTL_CALC_HITRATIO_MID;
+                case ValueID.BPP_AVOID_RATIO: return DefineConstants.BTL_CALC_HITRATIO_MID;
+                case ValueID.BPP_ATTACK:      return m_baseParam.attack;
+                case ValueID.BPP_DEFENCE:     return m_baseParam.defence;
+                case ValueID.BPP_SP_ATTACK:   return m_baseParam.sp_attack;
+                case ValueID.BPP_SP_DEFENCE:  return m_baseParam.sp_defence;
+                case ValueID.BPP_AGILITY:     return m_baseParam.agility;
+                default:                      return GetValue(vid);
+            }
+        }
 
         // TODO
         public byte GetEffortValue(PowerID powerID) { return 0; }
@@ -234,8 +286,30 @@ namespace Dpr.Battle.Logic
         // TODO
         public byte GetNativeTalentPower(PowerID powerID) { return 0; }
 
-        // TODO
-        private ValueID convertValueID(ValueID vid) { return ValueID.BPP_VALUE_NULL; }
+        private ValueID convertValueID(ValueID vid)
+        {
+            if (m_fldSim == null)
+                return vid;
+
+            if (vid == ValueID.BPP_SP_DEFENCE)
+            {
+                if (m_fldSim.CheckEffect(EffectType.EFF_WONDERROOM))
+                    return ValueID.BPP_DEFENCE;
+                else
+                    return ValueID.BPP_SP_DEFENCE;
+            }
+            else if (vid == ValueID.BPP_DEFENCE)
+            {
+                if (m_fldSim.CheckEffect(EffectType.EFF_WONDERROOM))
+                    return ValueID.BPP_SP_DEFENCE;
+                else
+                    return ValueID.BPP_DEFENCE;
+            }
+            else
+            {
+                return vid;
+            }
+        }
 
         // TODO
         public bool IsHPFull() { return false; }
@@ -246,8 +320,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public bool IsFightEnable() { return false; }
 
-        // TODO
-        public bool CheckSick(WazaSick sickType) { return false; }
+        public bool CheckSick(WazaSick sickType)
+        {
+            return m_coreParam.sickCont[(int)sickType].turn_type_turn != 0;
+        }
 
         // TODO
         public bool CheckNemuri(NemuriCheckMode checkMode) { return false; }
@@ -267,8 +343,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public ushort GetSickParam(WazaSick sick) { return 0; }
 
-        // TODO
-        public BTL_SICKCONT GetSickCont(WazaSick sick) { return default(BTL_SICKCONT); }
+        public BTL_SICKCONT GetSickCont(WazaSick sick)
+        {
+            return m_coreParam.sickCont[(int)sick];
+        }
 
         // TODO
         public byte GetSickTurnCount(WazaSick sick) { return 0; }
@@ -303,8 +381,10 @@ namespace Dpr.Battle.Logic
         // TODO
         private void clearCounter() { }
 
-        // TODO
-        public byte WAZA_GetCount() { return 0; }
+        public byte WAZA_GetCount()
+        {
+            return m_wazaCnt;
+        }
 
         // TODO
         public byte WAZA_GetCount_Org() { return 0; }
@@ -318,8 +398,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public byte WAZA_GetUsableCount() { return 0; }
 
-        // TODO
-        public WazaNo WAZA_GetID(byte idx) { return WazaNo.NULL; }
+        public WazaNo WAZA_GetID(byte idx)
+        {
+            return m_waza[idx].surface.number;
+        }
 
         // TODO
         public WazaNo WAZA_GetID_Org(byte idx) { return WazaNo.NULL; }
@@ -396,8 +478,16 @@ namespace Dpr.Battle.Logic
         // TODO
         public void WAZA_UpdateID(byte wazaIdx, WazaNo waza, byte ppMax, bool fPermenent) { }
 
-        // TODO
-        public bool WAZA_IsUsable(WazaNo waza) { return false; }
+        public bool WAZA_IsUsable(WazaNo waza)
+        {
+            for (byte i=0; i<m_waza.Length; i++)
+            {
+                if (m_waza[i].surface.number == waza)
+                    return true;
+            }
+
+            return false;
+        }
 
         // TODO
         public byte WAZA_SearchIdx(WazaNo waza) { return 0; }
@@ -650,8 +740,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public uint GetWazaContCounter() { return 0; }
 
-        // TODO
-        public WazaNo GetPrevWazaID() { return WazaNo.NULL; }
+        public WazaNo GetPrevWazaID()
+        {
+            return m_prevActWazaID;
+        }
 
         // TODO
         public byte GetPrevWazaType() { return 0; }

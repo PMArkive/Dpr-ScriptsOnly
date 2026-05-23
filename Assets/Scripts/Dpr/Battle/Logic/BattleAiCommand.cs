@@ -1,5 +1,6 @@
 ﻿using Pml.Battle;
 using Pml;
+using Pml.WazaData;
 
 namespace Dpr.Battle.Logic
 {
@@ -8,7 +9,7 @@ namespace Dpr.Battle.Logic
         private const long CELL_FALSE = 0;
         private const long CELL_TRUE = 1;
 
-        private static AiScriptCommandHandler[] s_pCommandHandler = new AiScriptCommandHandler[5]; // TODO: Is this client count?
+        private static AiScriptCommandHandler[] s_pCommandHandler = new AiScriptCommandHandler[(int)BTL_CLIENT_ID.BTL_CLIENT_NUM];
         private static readonly BTL_AICMD_FUNC[] BTL_AICMD_FUNC_TABLE = new BTL_AICMD_FUNC[]
         {
             CMDFUNC_IF_RND_UNDER,
@@ -169,14 +170,29 @@ namespace Dpr.Battle.Logic
             }),
         };
 
-        // TODO
-        public static void SetCommandHandler(byte clientID, AiScriptCommandHandler pCommandHandler) { }
+        public static void SetCommandHandler(byte clientID, AiScriptCommandHandler pCommandHandler)
+        {
+            if (clientID >= s_pCommandHandler.Length)
+                return;
 
-        // TODO
-        public static void ClearCommandHandlers() { }
+            s_pCommandHandler[clientID] = pCommandHandler;
+        }
 
-        // TODO
-        public static long AI_CMD(byte clientID, AICmd cmd, long[] args) { return 0; }
+        public static void ClearCommandHandlers()
+        {
+            for (int i=0; i<s_pCommandHandler.Length; i++)
+                s_pCommandHandler[i] = null;
+        }
+
+        public static long AI_CMD(byte clientID, AICmd cmd, long[] args)
+        {
+            var handler = s_pCommandHandler[clientID];
+
+            if ((int)cmd < BTL_AICMD_FUNC_TABLE.Length)
+                return BTL_AICMD_FUNC_TABLE[(int)cmd]?.Invoke(handler, args) ?? 0;
+            else
+                return 0;
+        }
 
         // TODO
         private static long CMDFUNC_IF_RND_UNDER(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -244,8 +260,19 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IFN_SIDEEFF(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static bool check_have_damage_waza(AiScriptCommandHandler handle, BTL_POKEPARAM bpp) { return false; }
+        private static bool check_have_damage_waza(AiScriptCommandHandler handle, BTL_POKEPARAM bpp)
+        {
+            if (bpp == null)
+                return false;
+
+            for (byte i=0; i!=bpp.WAZA_GetCount(); i++)
+            {
+                if (WAZADATA.GetPower(bpp.WAZA_GetID(i)) != 0)
+                    return true;
+            }
+
+            return false;
+        }
 
         // TODO
         private static long CMDFUNC_IF_HAVE_DAMAGE_WAZA(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -274,14 +301,33 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_COMP_POWER(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_GET_CURRENT_WAZANO(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_GET_CURRENT_WAZANO(AiScriptCommandHandler handle, long[] args)
+        {
+            return (long)handle.GetCurrentWazaNo();
+        }
 
         // TODO
         private static long CMDFUNC_CHECK_WAZASEQNO(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_CHECK_WAZA_AISYOU(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_WAZA_AISYOU(AiScriptCommandHandler handle, long[] args)
+        {
+            var atkBpp = handle.GetBppByAISide((uint)args[0]);
+            var defBpp = handle.GetBppByAISide((uint)args[1]);
+            var wazano = (WazaNo)args[2];
+            var targetAff = (TypeAffinity.AffinityID)args[3];
+
+            var aff = CalcTypeAffinity(handle.GetBattleEnv(), handle.GetBattleSimulator(), atkBpp, defBpp, wazano);
+
+            if (aff == TypeAffinity.AffinityID.TYPEAFF_NULL)
+                return CELL_FALSE;
+
+            if (targetAff == TypeAffinity.AffinityID.TYPEAFF_4)
+                return (aff > TypeAffinity.AffinityID.TYPEAFF_2) ? CELL_TRUE : CELL_FALSE;
+            else if (targetAff == TypeAffinity.AffinityID.TYPEAFF_4)
+                return (aff < TypeAffinity.AffinityID.TYPEAFF_1_2) ? CELL_TRUE : CELL_FALSE;
+            else
+                return (aff == targetAff) ? CELL_TRUE : CELL_FALSE;
+        }
 
         // TODO
         private static long CMDFUNC_GET_WAZA_AISYOU(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -292,20 +338,48 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_HAVE_WAZA_AISYOU_EQUAL(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static TypeAffinity.AffinityID CalcTypeAffinity(in BattleEnv battleEnv, BattleSimulator pSimulator, BTL_POKEPARAM attackPoke, BTL_POKEPARAM defensePoke, WazaNo wazano) { return TypeAffinity.AffinityID.TYPEAFF_0; }
+        private static TypeAffinity.AffinityID CalcTypeAffinity(in BattleEnv battleEnv, BattleSimulator pSimulator, BTL_POKEPARAM attackPoke, BTL_POKEPARAM defensePoke, WazaNo wazano)
+        {
+            if (pSimulator != null && attackPoke != null && defensePoke != null && WAZADATA.IsDamage(wazano))
+                return pSimulator.CalcTypeAffinity(attackPoke.GetID(), defensePoke.GetID(), wazano, false);
+            else
+                return TypeAffinity.AffinityID.TYPEAFF_NULL;
+        }
 
-        // TODO
-        private static TypeAffinity.AffinityID CalcTypeAffinityCanBench(in BattleEnv battleEnv, BattleSimulator pSimulator, BTL_POKEPARAM attackPoke, BTL_POKEPARAM defensePoke, WazaNo wazano) { return TypeAffinity.AffinityID.TYPEAFF_0; }
+        private static TypeAffinity.AffinityID CalcTypeAffinityCanBench(in BattleEnv battleEnv, BattleSimulator pSimulator, BTL_POKEPARAM attackPoke, BTL_POKEPARAM defensePoke, WazaNo wazano)
+        {
+            if (pSimulator != null && attackPoke != null && defensePoke != null && WAZADATA.IsDamage(wazano))
+                return pSimulator.CalcTypeAffinity(attackPoke.GetID(), defensePoke.GetID(), wazano, false);
+            else
+                return TypeAffinity.AffinityID.TYPEAFF_NULL;
+        }
 
         // TODO
         private static long CMDFUNC_CHECK_WAZA_NO_EFFECT_BY_TOKUSEI(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static TokuseiNo CheckPokeTokusei(in MainModule mainModule, byte myClientId, BTL_POKEPARAM targetPoke) { return TokuseiNo.NULL; }
+        private static TokuseiNo CheckPokeTokusei(in MainModule mainModule, byte myClientId, BTL_POKEPARAM targetPoke)
+        {
+            var effectiveTokusei = (TokuseiNo)targetPoke.GetValue(BTL_POKEPARAM.ValueID.BPP_TOKUSEI_EFFECTIVE);
 
-        // TODO
-        private static bool check_current_waza_hinsi(AiScriptCommandHandler handle, int loss_flag) { return false; }
+            if (mainModule.IsFriendClientID(myClientId, MainModule.PokeIDtoClientID(targetPoke.GetID())))
+                return effectiveTokusei;
+
+            if (BattleAiSystem.IsTokuseiOpened(targetPoke.GetID()))
+                return effectiveTokusei;
+
+            return TokuseiNo.NULL;
+        }
+
+        private static bool check_current_waza_hinsi(AiScriptCommandHandler handle, int loss_flag)
+        {
+            var attBpp = handle.GetAttackPokeParam();
+            var defBpp = handle.GetDefensePokeParam();
+
+            if (attBpp == null || defBpp == null)
+                return false;
+
+            return handle.GetDefensePokeParam().GetValue(BTL_POKEPARAM.ValueID.BPP_HP) <= handle.GetBattleSimulator().CalcDamage(attBpp.GetID(), defBpp.GetID(), handle.GetCurrentWazaNo(), true, false);
+        }
 
         // TODO
         private static long CMDFUNC_IF_WAZA_HINSHI(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -316,11 +390,23 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_CHECK_LAST_WAZA(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_CHECK_TOKUSEI(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_CHECK_TOKUSEI(AiScriptCommandHandler handle, long[] args)
+        {
+            return (long)handle.CheckTokuseiByAISide((int)args[0]);
+        }
 
-        // TODO
-        private static bool check_have_waza(AiScriptCommandHandler handle, int ai_side, WazaNo waza_no) { return false; }
+        private static bool check_have_waza(AiScriptCommandHandler handle, int ai_side, WazaNo waza_no)
+        {
+            var bpp = handle.GetBppByAISide((uint)ai_side);
+
+            if (bpp.GetValue(BTL_POKEPARAM.ValueID.BPP_HP) == 0)
+                return false;
+
+            if (ai_side == (int)AIStatusFlag.CHECK_ATTACK || ai_side == (int)AIStatusFlag.CHECK_ATTACK_FRIEND)
+                return bpp.WAZA_IsUsable(waza_no);
+            else
+                return handle.CheckWazaStored(bpp, waza_no);
+        }
 
         // TODO
         private static long CMDFUNC_IF_HAVE_WAZA(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -337,8 +423,28 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_CHECK_BENCH_COUNT(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static bool check_pokesick_in_bench(AiScriptCommandHandler handle, int ai_side) { return false; }
+        private static bool check_pokesick_in_bench(AiScriptCommandHandler handle, int ai_side)
+        {
+            var clientID = handle.AISideToClientID((uint)ai_side);
+            var party = handle.GetPokeCon().GetPartyDataConst(clientID);
+            var frontCount = handle.GetMainModule().GetClientFrontPosCount(clientID);
+            var memberCount = party.GetMemberCount();
+
+            if (frontCount < memberCount)
+            {
+                for (byte i=frontCount; i!=memberCount; i++)
+                {
+                    if (party.GetMemberDataConst(i).GetSickCont(WazaSick.WAZASICK_MAHI).turn_type_turn != 0 ||
+                        party.GetMemberDataConst(i).GetSickCont(WazaSick.WAZASICK_NEMURI).turn_type_turn != 0 ||
+                        party.GetMemberDataConst(i).GetSickCont(WazaSick.WAZASICK_KOORI).turn_type_turn != 0 ||
+                        party.GetMemberDataConst(i).GetSickCont(WazaSick.WAZASICK_YAKEDO).turn_type_turn != 0 ||
+                        party.GetMemberDataConst(i).GetSickCont(WazaSick.WAZASICK_DOKU).turn_type_turn != 0)
+                        return true;
+                }
+            }
+
+            return false;
+        }
 
         // TODO
         private static long CMDFUNC_IF_BENCH_COND(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -346,8 +452,10 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IFN_BENCH_COND(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static int get_poke_param(AiScriptCommandHandler handle, int ai_side, BTL_POKEPARAM.ValueID valueID) { return 0; }
+        private static int get_poke_param(AiScriptCommandHandler handle, int ai_side, BTL_POKEPARAM.ValueID valueID)
+        {
+            return handle.GetBppByAISide((uint)ai_side).GetValue(valueID);
+        }
 
         // TODO
         private static long CMDFUNC_IF_PARA_UNDER(AiScriptCommandHandler handle, long[] args) { return 0; }
@@ -547,11 +655,15 @@ namespace Dpr.Battle.Logic
         // TODO
         private static long CMDFUNC_IF_MULTI(AiScriptCommandHandler handle, long[] args) { return 0; }
 
-        // TODO
-        private static long CMDFUNC_IF_MEGAEVOLVED(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_MEGAEVOLVED(AiScriptCommandHandler handle, long[] args)
+        {
+            return CELL_FALSE;
+        }
 
-        // TODO
-        private static long CMDFUNC_IF_CAN_MEGAEVOLVE(AiScriptCommandHandler handle, long[] args) { return 0; }
+        private static long CMDFUNC_IF_CAN_MEGAEVOLVE(AiScriptCommandHandler handle, long[] args)
+        {
+            return CELL_FALSE;
+        }
 
         // TODO
         private static long CMDFUNC_IF_WAZAHIDE(AiScriptCommandHandler handle, long[] args) { return 0; }

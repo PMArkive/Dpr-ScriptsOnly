@@ -1,23 +1,43 @@
+using Dpr.Message;
 using Dpr.MsgWindow;
+using Pml.UgFather;
 using System;
 
 namespace Dpr.UnderGround.UgFather
 {
 	public static class UgFatherMessage
 	{
-		// TODO
-		public static void ShowHealingChoices(Action onFinishedShowAllMessage, Action onFinishedCloseWindow) { }
+		public static void ShowHealingChoices(Action onFinishedShowAllMessage, Action onFinishedCloseWindow)
+        {
+            MsgWindowManager.OpenMsg(CreateParam("DLP_underground_533", onFinishedShowAllMessage, onFinishedCloseWindow));
+        }
 		
-		// TODO
-		public static void ShowHealingBegin(Action onFinishedShowAllMessage, Action onFinishedCloseWindow) { }
+		public static void ShowHealingBegin(Action onFinishedShowAllMessage, Action onFinishedCloseWindow)
+		{
+			MessageWordSetHelper.SetPlayerNickNameWord(0);
+			MsgWindowManager.OpenMsg(CreateParam("DLP_underground_535", onFinishedShowAllMessage, onFinishedCloseWindow));
+		}
 		
-		// TODO
-		public static void ShowHealingEnd(Action onFinishedShowAllMessage, Action onFinishedCloseWindow) { }
+		public static void ShowHealingEnd(Action onFinishedShowAllMessage, Action onFinishedCloseWindow)
+		{
+            MessageWordSetHelper.SetPlayerNickNameWord(0);
+            MsgWindowManager.OpenMsg(CreateParam("DLP_underground_536", onFinishedShowAllMessage, onFinishedCloseWindow));
+        }
 		
-		// TODO
-		public static void Close() { }
+		public static void Close()
+		{
+			MsgWindowManager.CloseMsg();
+		}
 		
-		// TODO
-		private static MsgWindowParam CreateParam(string labelName, Action onFinishedShowAllMessage, Action onFinishedCloseWindow) { return default; }
+		private static MsgWindowParam CreateParam(string labelName, Action onFinishedShowAllMessage, Action onFinishedCloseWindow)
+		{
+			return new MsgWindowParam()
+            {
+                useMsgFile = MessageManager.Instance.GetMsgFile(UgFatherDataManager.UNDER_GROUND_MSBT_NAME),
+				labelName = labelName,
+                onFinishedShowAllMessage = onFinishedShowAllMessage,
+                onFinishedCloseWindow = onFinishedCloseWindow,
+            };
+        }
 	}
 }

@@ -50,8 +50,14 @@ namespace Dpr.UI
         // TODO
         private void Awake() { }
 
-        // TODO
-        public void Initialize(Action<IUIButton> onRequiedItemData, Action<IUIButton> onSelectItem, Action<IUIButton> onUnSelectItem) { }
+        public void Initialize(Action<IUIButton> onRequiedItemData, Action<IUIButton> onSelectItem, Action<IUIButton> onUnSelectItem)
+        {
+            this.onRequiedItemData = onRequiedItemData;
+            this.onSelectItem = onSelectItem;
+            this.onUnSelectItem = onUnSelectItem;
+
+            isActive = true;
+        }
 
         // TODO
         public void Setup(int itemCount, int selectIndex = 0, float scrollPos = 0.0f, bool isForceScroll = false) { }

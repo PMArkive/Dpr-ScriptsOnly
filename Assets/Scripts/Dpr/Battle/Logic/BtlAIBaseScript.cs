@@ -1,4 +1,5 @@
 ﻿using Pml;
+using System;
 
 namespace Dpr.Battle.Logic
 {
@@ -622,31 +623,52 @@ namespace Dpr.Battle.Logic
         protected int p_Score;
         protected int MyClientID;
 
-        // TODO
-        protected long Call(byte cmd, long[] args) { return 0; }
+        protected long Call(byte cmd, long[] args)
+        {
+            return BattleAiCommand.AI_CMD((byte)MyClientID, (AICmd)cmd, args);
+        }
 
-        // TODO
-        protected void ScoreCtrl(int value) { }
+        protected void ScoreCtrl(int value)
+        {
+            p_Score += value;
+        }
 
-        // TODO
-        protected void SetPokeChangeEnable() { }
+        protected void SetPokeChangeEnable()
+        {
+            p_PokeChangeEnable = 1;
+        }
 
-        // TODO
-        protected WazaNo CurrentWazaNo() { return WazaNo.NULL; }
+        protected WazaNo CurrentWazaNo()
+        {
+            return (WazaNo)Call(CMD_GET_CURRENT_WAZANO, Array.Empty<long>());
+        }
 
-        // TODO
-        protected void PRINTF(string s) { }
+        protected void PRINTF(string s)
+        {
+            // Empty
+        }
 
-        // TODO
-        public void SetGlobalParameters(int clientID, int score, int pokeChangeEnable) { }
+        public void SetGlobalParameters(int clientID, int score, int pokeChangeEnable)
+        {
+            p_Score = score;
+            MyClientID = clientID;
+            p_PokeChangeEnable = pokeChangeEnable;
+        }
 
-        // TODO
-        protected virtual void main() { }
+        protected virtual void main()
+        {
+            // Empty
+        }
 
-        // TODO
-        public void Execute() { }
+        public void Execute()
+        {
+            main();
+        }
 
-        // TODO
-        public void GetResult(AiScript.Result result) { }
+        public void GetResult(AiScript.Result result)
+        {
+            result.score = p_Score;
+            result.isPokeChangeEnable = p_PokeChangeEnable != 0;
+        }
     }
 }

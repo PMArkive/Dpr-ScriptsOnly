@@ -41,11 +41,9 @@ namespace Dpr.Battle.Logic
         // TODO
         public static SickContParam GetSickCont(WazaNo id) { return default; }
 
-        // TODO
         public static WazaRankEffect GetRankEffect(WazaNo id, uint idx, out int volume)
         {
-            volume = 0;
-            return WazaRankEffect.NONE;
+            return WazaDataSystem.GetRankEffect(id, idx, out volume);
         }
 
         // TODO

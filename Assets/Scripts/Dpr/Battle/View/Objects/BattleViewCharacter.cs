@@ -20,8 +20,12 @@ namespace Dpr.Battle.View.Objects
 		public bool IsGJoker { get => false; }
 		public bool IsVisible { get => gameObject.activeSelf; set => gameObject.SetActive(value); }
 		
-		// TODO
-		public virtual void Initialize(BtlvPos vPos) { }
+		public virtual void Initialize(BtlvPos vPos)
+		{
+			InitializeMember();
+			m_vPos = vPos;
+			_isEnableWaitB = false;
+		}
 		
 		// TODO
 		protected override void InitializeMember() { }

@@ -1,29 +1,129 @@
+using Dpr.MsgWindow;
 using Dpr.UI;
+using SmartPoint.Components;
+using UnityEngine;
 
 namespace Dpr.UnderGround.UgFather
 {
 	public class UgFatherHealing : UgFatherBase
 	{
 		private float waitTime;
-		private const float HealingWaitTime = 1;
+
+		private const float HealingWaitTime = 1.0f;
+
 		private ContextMenuItem selectedItem;
 		private State state;
 		private ContextMenuID[] contextMenuIds = new ContextMenuID[] { ContextMenuID.UNDERGROUND_REST, ContextMenuID.UNDERGROUND_CANCEL };
 		
-		// TODO
-		public override void OnTalkEvent() { }
+		public override void OnTalkEvent()
+		{
+			base.OnTalkEvent();
+			ChangeState(State.ChoicesMessage);
+		}
 		
-		// TODO
-		public override void OnUpdate(float deltaTime) { }
+		public override void OnUpdate(float deltaTime)
+		{
+			switch (state)
+			{
+				case State.BeginMessageWait:
+				case State.EndMessageWait:
+					if (UgFatherInput.Decide)
+						MsgWindowManager.CloseMsg();
+					break;
+
+				case State.HealingFadOut:
+					if (!Fader.isBusy)
+                        ChangeState(State.HealingWait);
+					break;
+
+				case State.HealingWait:
+					waitTime += deltaTime;
+					if (waitTime >= HealingWaitTime)
+                        ChangeState(State.HealingFadIn);
+					break;
+
+                case State.HealingFadIn:
+                    if (!Fader.isBusy)
+                        ChangeState(State.EndMessage);
+                    break;
+            }
+		}
 		
-		// TODO
-		private void ShowPcContextMenu() { }
+		private void ShowPcContextMenu()
+		{
+			var param = new ContextMenuWindow.Param();
+			param.itemParams = new ContextMenuItem.Param[contextMenuIds.Length];
+
+			for (int i = 0; i < contextMenuIds.Length; i++)
+				param.itemParams[i] = new ContextMenuItem.Param { menuId = contextMenuIds[i] };
+
+			param.position = new Vector2(1050.0f, 300.0f);
+			param.pivot = new Vector2(1.0f, 1.0f);
+			param.useLoopAndRepeat = false;
+
+			var window = UIManager.Instance.CreateUIWindow<ContextMenuWindow>(UIWindowID.CONTEXTMENU);
+
+			selectedItem = null;
+
+			window.onClicked = item => selectedItem = item;
+			window.onClosed = __ =>
+			{
+				if (selectedItem == null || selectedItem.param.menuId == ContextMenuID.UNDERGROUND_CANCEL)
+				{
+					MsgWindowManager.CloseMsg();
+					EventEnd();
+                }
+				else if (selectedItem.param.menuId == ContextMenuID.UNDERGROUND_REST)
+				{
+					PlayerWork.playerParty.RecoverAll();
+                    MsgWindowManager.CloseMsg();
+                }
+
+				selectedItem = null;
+			};
+        }
 		
-		// TODO
-		private void ChangeState(State state) { }
+		private void ChangeState(State state)
+		{
+			this.state = state;
+
+			switch (state)
+			{
+				case State.ChoicesMessage:
+					UgFatherMessage.ShowHealingChoices(() => ShowPcContextMenu(), () =>
+					{
+						if (state == State.ChoicesMessage)
+							ChangeState(State.BeginMessage);
+					});
+					break;
+
+				case State.BeginMessage:
+					UgFatherMessage.ShowHealingBegin(() => ChangeState(State.BeginMessageWait), () => ChangeState(State.HealingFadOut));
+					break;
+
+				case State.HealingFadOut:
+                    Fader.FadeOut();
+					break;
+
+				case State.HealingWait:
+					waitTime = 0.0f;
+					break;
+
+				case State.HealingFadIn:
+					Fader.FadeIn();
+					break;
+
+				case State.EndMessage:
+                    UgFatherMessage.ShowHealingEnd(() => ChangeState(State.EndMessageWait), () => EventEnd());
+					break;
+            }
+		}
 		
-		// TODO
-		private void EventEnd() { }
+		private void EventEnd()
+		{
+			ChangeState(State.None);
+			onEventEndCallback?.Invoke();
+		}
 
 		private enum State : int
 		{

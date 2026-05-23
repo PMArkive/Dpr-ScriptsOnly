@@ -14,17 +14,67 @@
             m_script = null;
             m_commandHandler = null;
             m_scriptNo = BtlAiScriptNo.BTL_AISCRIPT_NO_NULL;
-            m_seq = 0;
+            m_seq = (uint)SeqWaitScript.SEQ_LOAD_START;
         }
 
-        // TODO
-        public void StartScript(ScriptStartParam startParam) { }
+        public void StartScript(ScriptStartParam startParam)
+        {
+            m_script = startParam.script;
+            m_scriptNo = startParam.scriptNo;
+            m_commandHandler = startParam.commandHandler;
+            m_commandParam.CopyFrom(startParam.commandParam);
 
-        // TODO
-        public bool WaitScript() { return false; }
+            m_seq = (uint)SeqWaitScript.SEQ_LOAD_START;
+        }
 
-        // TODO
-        public AiScript.Result GetScriptResult() { return null; }
+        public bool WaitScript()
+        {
+            if (m_seq == (uint)SeqWaitScript.SEQ_LOAD_START)
+            {
+                if (!m_script.StartLoadScript(m_scriptNo))
+                    return false;
+
+                m_seq++;
+            }
+
+            if (m_seq == (uint)SeqWaitScript.SEQ_LOAD_WAIT)
+            {
+                if (!m_script.WaitLoadScript())
+                    return false;
+
+                m_seq++;
+            }
+
+            if (m_seq == (uint)SeqWaitScript.SEQ_EXEC_START)
+            {
+                m_commandHandler.GetCommandParam().CopyFrom(m_commandParam);
+                m_script.SetExecParameter(m_commandHandler);
+
+                m_seq++;
+            }
+
+            if (m_seq == (uint)SeqWaitScript.SEQ_EXEC_WAIT)
+            {
+                if (!m_script.Execute())
+                    return false;
+
+                m_script.GetResult(m_result);
+
+                m_seq++;
+            }
+
+            if (m_seq == (uint)SeqWaitScript.SEQ_END)
+            {
+                m_script = null;
+            }
+
+            return true;
+        }
+
+        public AiScript.Result GetScriptResult()
+        {
+            return m_result;
+        }
 
         public class ScriptStartParam
         {

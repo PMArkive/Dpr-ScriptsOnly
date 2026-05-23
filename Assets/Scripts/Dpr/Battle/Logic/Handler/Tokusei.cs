@@ -8,8 +8,6 @@ namespace Dpr.Battle.Logic.Handler
 {
 	public static class Tokusei
 	{
-        // TODO: cctor
-
         private const int TRUE = 1;
 		private const int FALSE = 0;
 
@@ -21,253 +19,1419 @@ namespace Dpr.Battle.Logic.Handler
 		private const int WIDX_REMOVE_GUARD = 4;
 		private const int NUM_WIDX = 5;
 
-		private static readonly GET_FUNC_TABLE_ELEM[] GET_FUNC_TABLE;
+		private static readonly GET_FUNC_TABLE_ELEM[] GET_FUNC_TABLE = new GET_FUNC_TABLE_ELEM[]
+		{
+            new GET_FUNC_TABLE_ELEM(TokuseiNo.IKAKU, ADD_Ikaku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KURIABODHI, ADD_ClearBody),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SIROIKEMURI, ADD_ClearBody),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SEISINRYOKU, ADD_Seisinryoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUKUTUNOKOKORO, ADD_Fukutsuno),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ATUISIBOU, ADD_AtuiSibou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KAIRIKIBASAMI, ADD_KairikiBasami),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TIKARAMOTI, ADD_Tikaramoti),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YOGAPAWAA, ADD_Tikaramoti),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.IROMEGANE, ADD_Iromegane),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KASOKU, ADD_Kasoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MOUKA, ADD_Mouka),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.GEKIRYUU, ADD_Gekiryu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SINRYOKU, ADD_Sinryoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MUSINOSIRASE, ADD_MusinoSirase),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KONZYOU, ADD_Konjou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUKIRURINKU, ADD_SkillLink),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SURUDOIME, ADD_Surudoime),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TANZYUN, ADD_Tanjun),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HAADOROKKU, ADD_HardRock),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.FIRUTAA, ADD_HardRock),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUSIGINAUROKO, ADD_FusiginaUroko),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TOUSOUSIN, ADD_Tousousin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.RIIHUGAADO, ADD_LeafGuard),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.PASUTERUBEERU, ADD_PastelVeil),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.AMEHURASI, ADD_Amefurasi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HIDERI, ADD_Hideri),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUNAOKOSI, ADD_Sunaokosi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUNAHAKI, ADD_Sunahaki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YUKIHURASI, ADD_Yukifurasi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.EAROKKU, ADD_AirLock),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NOOTENKI, ADD_AirLock),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TEKUNISYAN, ADD_Technician),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DONKAN, ADD_Donkan),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.URUOIBODHI, ADD_UruoiBody),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.POIZUNHIIRU, ADD_PoisonHeal),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.AISUBODHI, ADD_IcoBody),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.AMEUKEZARA, ADD_AmeukeZara),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.RINPUN, ADD_Rinpun),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TEKIOURYOKU, ADD_Tekiouryoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TENNOMEGUMI, ADD_TennoMegumi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SANPAWAA, ADD_SunPower),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUISUI, ADD_Suisui),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YOURYOKUSO, ADD_Youryokuso),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DAPPI, ADD_Dappi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TIDORIASI, ADD_Tidoriasi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HAYAASI, ADD_Hayaasi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HARIKIRI, ADD_Harikiri),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KABUTOAAMAA, ADD_KabutoArmor),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SHERUAAMAA, ADD_KabutoArmor),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KYOUUN, ADD_Kyouun),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.IKARINOTUBO, ADD_IkarinoTubo),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUNAIPAA, ADD_Sniper),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TETUNOKOBUSI, ADD_TetunoKobusi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUKUGAN, ADD_Fukugan),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ISIATAMA, ADD_Isiatama),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUTEMI, ADD_Sutemi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SEIDENKI, ADD_Seidenki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DOKUNOTOGE, ADD_DokunoToge),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HONOONOKARADA, ADD_HonoNoKarada),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HOUSI, ADD_Housi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.PURASU, ADD_Plus),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MAINASU, ADD_Plus),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MEROMEROBODHI, ADD_MeromeroBody),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUNAGAKURE, ADD_Sunagakure),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YUKIGAKURE, ADD_Yukigakure),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TOREESU, ADD_Trace),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NOOMARUSUKIN, ADD_NormalSkin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SAMEHADA, ADD_Samehada),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SIZENKAIHUKU, ADD_SizenKaifuku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SINKURO, ADD_Syncro),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DAUNROODO, ADD_DownLoad),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.GANZYOU, ADD_Ganjou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TAINETU, ADD_Tainetu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TENNEN, ADD_Tennen),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KANSOUHADA, ADD_Kansouhada),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.PANKUROKKU, ADD_PunkRock),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TIKUDEN, ADD_Tikuden),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TYOSUI, ADD_Tyosui),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DENKIENZIN, ADD_DenkiEngine),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZYUUNAN, ADD_Juunan),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUMIN, ADD_Fumin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YARUKI, ADD_Fumin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MAIPEESU, ADD_MyPace),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MAGUMANOYOROI, ADD_MagumaNoYoroi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MIZUNOBEERU, ADD_MizuNoBale),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MENEKI, ADD_Meneki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KIMOTTAMA, ADD_Kimottama),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BOUON, ADD_Bouon),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUYUU, ADD_Fuyuu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HURAWAAGIHUTO, ADD_FlowerGift),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MORAIBI, ADD_Moraibi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YOTIMU, ADD_Yotimu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KIKENYOTI, ADD_KikenYoti),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.OMITOOSI, ADD_Omitoosi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YUUBAKU, ADD_Yuubaku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HOROBINOBODHI, ADD_HorobiNoSango),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NIGEASI, ADD_Nigeasi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HENSYOKU, ADD_Hensyoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KATAYABURI, ADD_Katayaburi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NAMAKE, ADD_Namake),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HIRAISIN, ADD_Hiraisin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YOBIMIZU, ADD_Yobimizu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUROOSUTAATO, ADD_SlowStart),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SIMERIKE, ADD_Simerike),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUSIGINAMAMORI, ADD_FusiginaMamori),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ATODASI, ADD_Atodasi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TENKIYA, ADD_Tenkiya),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KYUUBAN, ADD_Kyuuban),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HEDOROEKI, ADD_HedoroEki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BUKIYOU, ADD_Bukiyou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NENTYAKU, ADD_Nenchaku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.PURESSYAA, ADD_Pressure),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MAZIKKUGAADO, ADD_MagicGuard),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NAITOMEA, ADD_Nightmare),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MONOHIROI, ADD_Monohiroi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TAMAHIROI, ADD_TamaHiroi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KARUWAZA, ADD_Karuwaza),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.AKUSYUU, ADD_Akusyuu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KAGEHUMI, ADD_Kagefumi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ARIZIGOKU, ADD_Arijigoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZIRYOKU, ADD_Jiryoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.WARUITEGUSE, ADD_WaruiTeguse),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TIKARAZUKU, ADD_Tikarazuku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MAKENKI, ADD_Makenki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YOWAKI, ADD_Yowaki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MARUTISUKEIRU, ADD_MultiScale),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HEVHIMETARU, ADD_HeavyMetal),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.RAITOMETARU, ADD_LightMetal),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.AMANOZYAKU, ADD_Amanojaku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KINTYOUKAN, ADD_Kinchoukan),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KAGAKUHENKAGASU, ADD_KagakuHenkaGas),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZYUKUSEI, ADD_Jukusei),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NOROWAREBODHI, ADD_NorowareBody),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.IYASINOKOKORO, ADD_IyasiNoKokoro),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HURENDOGAADO, ADD_FriendGuard),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KUDAKERUYOROI, ADD_KudakeruYoroi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DOKUBOUSOU, ADD_Dokubousou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NETUBOUSOU, ADD_Netubousou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SYUUKAKU, ADD_Syuukaku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TEREPASII, ADD_Telepassy),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MURAKKE, ADD_Murakke),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BOUZIN, ADD_Boujin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DOKUSYU, ADD_Dokusyu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SAISEIRYOKU, ADD_SaiseiRyoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HATOMUNE, ADD_Hatomune),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUNAKAKI, ADD_Sunakaki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MIRAKURUSUKIN, ADD_MilacreSkin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ANARAIZU, ADD_Analyze),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.IRYUUZYON, ADD_Illusion),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KAWARIMONO, ADD_Kawarimono),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SURINUKE, ADD_Surinuke),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BARIAHURII, ADD_BarrierFree),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MIIRA, ADD_Miira),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SAMAYOUTAMASII, ADD_SamayouTamasii),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZISINKAZYOU, ADD_JisinKajou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SEIGINOKOKORO, ADD_SeiginoKokoro),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BIBIRI, ADD_Bibiri),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZYOUKIKIKAN, ADD_JyoukiKikan),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.WATAGE, ADD_Watage),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MAZIKKUMIRAA, ADD_MagicMirror),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SOUSYOKU, ADD_Sousyoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ITAZURAGOKORO, ADD_ItazuraGokoro),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUNANOTIKARA, ADD_SunanoTikara),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TETUNOTOGE, ADD_Samehada),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SYOURINOHOSI, ADD_GoodLuck),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TAABOBUREIZU, ADD_Katayaburi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TERABORUTEEZI, ADD_Katayaburi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.AROMABEERU, ADD_MentalVeil),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HURAWAABEERU, ADD_FlowerVeil),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HOOBUKURO, ADD_HooBukuro),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HENGENZIZAI, ADD_HengenZizai),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.OORABUREIKU, ADD_AuraBreak),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DAAKUOORA, ADD_DarkAura),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.FEARIIOORA, ADD_FairyAura),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.GANZYOUAGO, ADD_GanjouAgo),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.GORIMUTYUU, ADD_Gorimuchu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.FAAKOOTO, ADD_FurCoat),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KUSANOKEGAWA, ADD_KusaNoKegawa),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NUMENUME, ADD_NumeNume),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KATAITUME, ADD_KataiTume),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUKAISUKIN, ADD_SkySkin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.FEARIISUKIN, ADD_FairySkin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HURIIZUSUKIN, ADD_FreezSkin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MEGARANTYAA, ADD_MegaLauncher),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HAYATENOTUBASA, ADD_HayateNoTsubasa),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUIITOBEERU, ADD_SweetVeil),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MIRAAAAMAA, ADD_MirrorArmor),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KATIKI, ADD_Katiki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BOUDAN, ADD_Boudan),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.OYAKOAI, ADD_OyakoAi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MAZISYAN, ADD_Magician),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KYOUSEI, ADD_Kyousei),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HAZIMARINOUMI, ADD_Hajimarinoumi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.OWARINODAITI, ADD_Owarinodaiti),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.DERUTASUTORIIMU, ADD_DeltaStream),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZIKYUURYOKU, ADD_Zikyuuryoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MIZUGATAME, ADD_Mizugatame),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUIHOU, ADD_Suihou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.YUKIKAKI, ADD_Yukikaki),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HAGANETUKAI, ADD_Haganetukai),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HAGANENOSEISIN, ADD_HaganeNoSeisin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.URUOIBOISU, ADD_UruoiVoice),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HIIRINGUSIHUTO, ADD_HealingShift),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.EREKISUKIN, ADD_ElecSkin),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SAAHUTEERU, ADD_SurfTail),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HITODENASI, ADD_Hitodenasi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ENKAKU, ADD_Enkaku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZYOOUNOIGEN, ADD_Zyoounoigen),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BIBIDDOBODHI, ADD_Zyoounoigen),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MOHUMOHU, ADD_MohuMohu),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KOORINORINPUN, ADD_KooriNoRinpun),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KAARIIHEAA, ADD_NumeNume),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BATTERII, ADD_Battery),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.PAWAASUPOTTO, ADD_PowerSpot),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.RESIIBAA, ADD_Receiver),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KAGAKUNOTIKARA, ADD_Receiver),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.RIBERO, ADD_HengenZizai),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.TOBIDASUNAKAMI, ADD_TobidasuNakami),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.GYAKUZYOU, ADD_Gyakuzyou),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SOURUHAATO, ADD_SoulHeart),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ODORIKO, ADD_Odoriko),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUSYOKU, ADD_Husyoku),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.EREKIMEIKAA, ADD_ElecMaker),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SAIKOMEIKAA, ADD_PhychoMaker),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.MISUTOMEIKAA, ADD_MistMaker),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.GURASUMEIKAA, ADD_GrassMaker),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.GITAI, ADD_Gitai),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.NIGEGOSI, ADD_Nigegosi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.KIKIKAIHI, ADD_Nigegosi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BIISUTOBUUSUTO, ADD_UltraForce),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HARIKOMI, ADD_Harikomi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.ZETTAINEMURI, ADD_ZettaiNemuri),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.METARUPUROTEKUTO, ADD_ClearBody),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.FANTOMUGAADO, ADD_MultiScale),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.PURIZUMUAAMAA, ADD_HardRock),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.BUREINFOOSU, ADD_BrainPrism),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUTOUNOTURUGI, ADD_HutouNoTurugi),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.HUKUTUNOTATE, ADD_HukutuNoTate),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUKURYUUOBIRE, ADD_ScrewObire),
+			new GET_FUNC_TABLE_ELEM(TokuseiNo.SUZIGANEIRI, ADD_ScrewObire),
+        };
 
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Ikaku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Seisinryoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fukutsuno;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_AtuiSibou;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tikaramoti;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Suisui;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Youryokuso;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hayaasi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tidoriasi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Harikiri;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Atodasi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SlowStart;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fukugan;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunagakure;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yukigakure;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Iromegane;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HardRock;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sniper;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kasoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tekiouryoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Mouka;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gekiryu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sinryoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MusinoSirase;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Konjou;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Plus;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FlowerGift;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tousousin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Technician;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_TetunoKobusi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Stemi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FusiginaUroko;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SkillLink;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KairikiBasami;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Surudoime;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_ClearBody;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tanjun;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_LeafGuard;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Juunan;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fumin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MagumaNoYoroi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Meneki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MizuNoBale;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MyPace;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Donkan;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_PastelVeil;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Amefurasi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hideri;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunaokosi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunahaki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yukifurasi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hajimarinoumi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Owarinodaiti;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_DeltaStream;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_AirLock;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_IcoBody;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_AmeukeZara;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SunPower;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Rinpun;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_TennoMegumi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_UruoiBody;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Dappi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_PoisonHeal;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KabutoArmor;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kyouun;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_IkarinoTubo;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_DokunoToge;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Seidenki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HonoNoKarada;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MeromeroBody;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Housi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Samehada;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yuubaku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HorobiNoSango;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hensyoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Syncro;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Isiatama;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_NormalSkin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Trace;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SizenKaifuku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_DownLoad;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yotimu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KikenYoti;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Omitoosi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Ganjou;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tennen;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tainetu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kansouhada;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_PunkRock;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tyosui;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tikuden;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_DenkiEngine;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kimottama;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Bouon;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fuyuu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FusiginaMamori;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Namake;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Simerike;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Moraibi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nightmare;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nigeasi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Katayaburi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tenkiya;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yobimizu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hiraisin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kyuuban;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HedoroEki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Bukiyou;
+		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Ikaku = new EventFactor.EventHandlerTable[]
+		{
+			new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Ikaku_MemberIn),
+			new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Ikaku_MemberIn),
+		};
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Seisinryoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.SHRINK_CHECK, handler_Seisinryoku),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_Seisinryoku_RankEffectLastCheck),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_Seisinryoku_RankEffectFailed),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fukutsuno = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_FAIL, handler_FukutsunoKokoro),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_AtuiSibou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_AtuiSibou),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tikaramoti = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Tikaramoti),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Suisui = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_Suisui),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Youryokuso = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_Youryokuso),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hayaasi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_Hayaasi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tidoriasi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RATIO, handler_Tidoriasi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Harikiri = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RATIO, handler_Harikiri_HitRatio),
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Harikiri_AtkPower),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Atodasi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CHECK_SP_PRIORITY, handler_Atodasi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SlowStart = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_SlowStart_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_SlowStart_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_SlowStart_Agility),
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_SlowStart_AtkPower),
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_END, handler_SlowStart_TurnCheck),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fukugan = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RATIO, handler_Fukugan),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunagakure = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RATIO, handler_Sunagakure),
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_Sunagakure_Weather),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yukigakure = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RATIO, handler_Yukigakure),
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_Yukigakure_Weather),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Iromegane = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_Iromegane),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HardRock = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_HardRock),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sniper = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_Sniper),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kasoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_END, handler_Kasoku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tekiouryoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TYPEMATCH_RATIO, handler_Tekiouryoku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Mouka = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Mouka),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gekiryu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Gekiryu),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sinryoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Sinryoku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MusinoSirase = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_MusinoSirase),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Konjou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Konjou),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Plus = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_PlusMinus),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FlowerGift = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN_COMP, handler_FlowerGift_MemberInComp),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_FlowerGift_GotTok),
+            new EventFactor.EventHandlerTable(EventID.WEATHER_CHANGE_AFTER, handler_FlowerGift_Weather),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_FlowerGift_TokOff),
+            new EventFactor.EventHandlerTable(EventID.NOTIFY_AIRLOCK, handler_FlowerGift_AirLock),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_FlowerGift_Weather),
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_DONE, handler_FlowerGift_Weather),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_FlowerGift_TokChange),
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_FlowerGift_Power),
+            new EventFactor.EventHandlerTable(EventID.DEFENDER_GUARD, handler_FlowerGift_Guard),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tousousin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Tousousin),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Technician = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Technician),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_TetunoKobusi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_TetunoKobusi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Stemi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Sutemi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FusiginaUroko = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DEFENDER_GUARD, handler_FusiginaUroko),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SkillLink = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_COUNT, handler_SkillLink),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KairikiBasami = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_KairikiBasami_Check),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_KairikiBasami_Guard),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Surudoime = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_Surudoime_Check),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_Surudoime_Guard),
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RANK, handler_Surudoime_HitRank),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_ClearBody = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_ClearBody_Check),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_ClearBody_Guard),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tanjun = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKVALUE_CHANGE, handler_Tanjun),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_LeafGuard = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_LeafGuard),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHECK_INEMURI, handler_LeafGuard_InemuriCheck),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Juunan = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_Juunan_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Juunan_Wake),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Juunan_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_Juunan_ActEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fumin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_Fumin_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.CHECK_INEMURI, handler_Fumin_InemuriCheck),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Fumin_Wake),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Fumin_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_Fumin_ActEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MagumaNoYoroi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_MagumaNoYoroi_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_MagumaNoYoroi_Wake),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_MagumaNoYoroi_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_MagumaNoYoroi_ActEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Meneki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_Meneki_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Meneki_Wake),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Meneki_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_Meneki_ActEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MizuNoBale = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_MizuNoBale_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_MizuNoBale_Wake),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_MizuNoBale_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_MizuNoBale_ActEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MyPace = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_MyPace_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_MyPace_AddSickFailed),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_MyPace_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_MyPace_ActEnd),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_MyPace_RankEffectLastCheck),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_MyPace_RankEffectFailed),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Donkan = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_Donkan),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Donkan_Wake),
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Donkan_NoEffCheck),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_Donkan_ActEnd),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_Donkan_RankEffectLastCheck),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_Donkan_RankEffectFailed),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_PastelVeil = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_Pastelveil_SickFail),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_Pastelveil_SickFailed),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_PastelVeil_Wake),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_PastelVeil_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_PastelVeil_ActEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Amefurasi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Amefurasi),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Amefurasi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hideri = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Hideri),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Hideri),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunaokosi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Sunaokosi),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Sunaokosi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunahaki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Sunahaki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yukifurasi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Yukifurasi),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Yukifurasi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hajimarinoumi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Hajimarinoumi),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Hajimarinoumi),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_OUT_FIXED, handler_Hajimarinoumi_stop),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_Hajimarinoumi_stop),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_POKE_BEFORE, handler_Hajimarinoumi_stop),
+            new EventFactor.EventHandlerTable(EventID.NOTIFY_DEAD, handler_Hajimarinoumi_stop),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Hajimarinoumi_stop),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Owarinodaiti = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Owarinodaichi),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Owarinodaichi),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_OUT_FIXED, handler_Owarinodaichi_stop),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_Owarinodaichi_stop),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_POKE_BEFORE, handler_Owarinodaichi_stop),
+            new EventFactor.EventHandlerTable(EventID.NOTIFY_DEAD, handler_Owarinodaichi_stop),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Owarinodaichi_stop),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_DeltaStream = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_DeltaStream),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_DeltaStream),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_OUT_FIXED, handler_DeltaStream_stop),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_DeltaStream_stop),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_POKE_BEFORE, handler_DeltaStream_stop),
+            new EventFactor.EventHandlerTable(EventID.NOTIFY_DEAD, handler_DeltaStream_stop),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_DeltaStream_stop),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_AirLock = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_AirLock_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.WEATHER_CHECK, handler_AirLock_ChangeWeather),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_IcoBody = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_IceBody),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_AmeukeZara = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_AmeukeZara),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SunPower = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_SunPower_Weather),
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_SunPower_AtkPower),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Rinpun = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADD_SICK, handler_Rinpun_Sick),
+            new EventFactor.EventHandlerTable(EventID.ADD_RANK_TARGET, handler_Rinpun_Rank),
+            new EventFactor.EventHandlerTable(EventID.SHRINK_CHECK, handler_Rinpun_Shrink),
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION_PREV, handler_Rinpun_Guard),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_PREV, handler_Rinpun_GuardHitEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_TennoMegumi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADD_SICK, handler_TennoMegumi),
+            new EventFactor.EventHandlerTable(EventID.ADD_RANK_TARGET, handler_TennoMegumi),
+            new EventFactor.EventHandlerTable(EventID.SP_ADDITIONAL_PER, handler_TennoMegumi),
+            new EventFactor.EventHandlerTable(EventID.WAZA_SHRINK_PER, handler_TennoMegumi_Shrink),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_UruoiBody = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_BEGIN, handler_UruoiBody),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Dappi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_BEGIN, handler_Dappi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_PoisonHeal = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.SICK_DAMAGE, handler_PoisonHeal),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KabutoArmor = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CRITICAL_CHECK, handler_KabutoArmor),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kyouun = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CRITICAL_CHECK, handler_Kyouun),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_IkarinoTubo = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_IkarinoTubo),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_DokunoToge = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_DokunoToge),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Seidenki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Seidenki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HonoNoKarada = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_HonoNoKarada),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MeromeroBody = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_MeromeroBody),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Housi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Housi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Samehada = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Samehada),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yuubaku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Yuubaku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HorobiNoSango = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_HorobiNoSango),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hensyoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_REAL, handler_Hensyoku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Syncro = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.POKESICK_FIXED, handler_Syncro),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Isiatama = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_KICKBACK, handler_Isiatama),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_NormalSkin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_NormalSkin),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_NormalSkin_Pow),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_G_WAZA, handler_NormalSkin_ChangeGWaza),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Trace = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Trace),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Trace),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SizenKaifuku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_OUT_FIXED, handler_SizenKaifuku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_DownLoad = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Download),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Download),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yotimu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Yotimu),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Yotimu),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KikenYoti = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_KikenYoti),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_KikenYoti),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Omitoosi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Omitoosi),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Omitoosi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Ganjou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ICHIGEKI_CHECK, handler_Ganjou_Ichigeki),
+            new EventFactor.EventHandlerTable(EventID.KORAERU_CHECK, handler_Ganjou_KoraeCheck),
+            new EventFactor.EventHandlerTable(EventID.KORAERU_EXE, handler_Ganjou_KoraeExe),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tennen = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RANK, handler_Tennen_hitRank),
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER_PREV, handler_Tennen_AtkRank),
+            new EventFactor.EventHandlerTable(EventID.DEFENDER_GUARD_PREV, handler_Tennen_DefRank),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tainetu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Tainetsu_WazaPow),
+            new EventFactor.EventHandlerTable(EventID.SICK_DAMAGE, handler_Tainetsu_SickDmg),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kansouhada = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_Kansouhada_Weather),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Kansouhada_WazaPow),
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Kansouhada_Check),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_PunkRock = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_PunkRock_power),
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_PunkRock_damage),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tyosui = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Tyosui_Check),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tikuden = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Tikuden_CheckEx),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_DenkiEngine = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_DenkiEngine_CheckEx),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kimottama = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CHECK_AFFINITY, handler_Kimottama),
+            new EventFactor.EventHandlerTable(EventID.CHECK_AFFINITY_ONLY_ATTACKER, handler_Kimottama),
+            new EventFactor.EventHandlerTable(EventID.KILL_HANDLER, handler_Kimottama_kill),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_END, handler_Kimottama_check),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_Kimottama_RankEffectLastCheck),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_Kimottama_RankEffectFailed),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Bouon = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Bouon),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Fuyuu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CHECK_FLYING, handler_Fuyuu),
+            new EventFactor.EventHandlerTable(EventID.WAZA_NOEFF_BY_FLYING, handler_Fuyuu_Disp),
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_BEGIN, handler_Fuyuu_TurnCheck),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FusiginaMamori = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_FusiginaMamori),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Namake = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_CHECK_1ST, handler_Namake),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Namake_Get),
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_FAIL, handler_Nameke_Failed),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_Nameke_EndAct),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Nameke_Reset),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Simerike = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_CHECK_3RD, handler_Simerike),
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_FAIL, handler_Simerike_Effective),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_START, handler_Simerike_StartSeq),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_END, handler_Simerike_EndSeq),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Simerike_Ieki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Moraibi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Moraibi_CheckNoEffect),
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Moraibi_AtkPower),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_Moraibi_Remove),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nightmare = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_END, handler_Nightmare),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nigeasi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.SKIP_NIGERU_CALC, handler_Nigeasi),
+            new EventFactor.EventHandlerTable(EventID.NIGERU_EXMSG, handler_Nigeasi_Msg),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Katayaburi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Katayaburi_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Katayaburi_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_START, handler_Katayaburi_Start),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_END, handler_Katayaburi_End),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Katayaburi_Ieki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tenkiya = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN_COMP, handler_Tenkiya_MemberInComp),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Tenkiya_GetTok),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_Tenkiya_ChangeTok),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Tenkiya_TokOff),
+            new EventFactor.EventHandlerTable(EventID.NOTIFY_AIRLOCK, handler_Tenkiya_AirLock),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_Tenkiya_Weather),
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_DONE, handler_Tenkiya_Weather),
+            new EventFactor.EventHandlerTable(EventID.WEATHER_CHANGE_AFTER, handler_Tenkiya_Weather),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yobimizu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TEMPT_TARGET, handler_Yobimizu),
+            new EventFactor.EventHandlerTable(EventID.TEMPT_TARGET_END, handler_Yobimizu_TemptTargetEnd),
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXE_START, handler_Hiraisin_WazaExeStart),
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Yobimizu_CheckNoEffect),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hiraisin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TEMPT_TARGET, handler_Hiraisin),
+            new EventFactor.EventHandlerTable(EventID.TEMPT_TARGET_END, handler_Hiraisin_TemptTargetEnd),
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXE_START, handler_Hiraisin_WazaExeStart),
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Hiraisin_CheckNoEffect),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kyuuban = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CHECK_PUSHOUT, handler_Kyuuban),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HedoroEki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_DRAIN_END, handler_HedoroEki),
+            new EventFactor.EventHandlerTable(EventID.NOTIFY_DEAD, handler_HedoroEki_Dead),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Bukiyou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN_PREV2, handler_Bukiyou_MemberInPrev),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Bukiyou_MemberInPrev),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_Bukiyou_PreChange),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Bukiyou_IekiFixed),
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_CHECK_3RD, handler_Bukiyou_ExeCheck),
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_FAIL, handler_Bukiyou_ExeFail),
+        };
 
-		private static readonly ushort[] IgnoreItems_Bukiyou;
+		private static readonly ushort[] IgnoreItems_Bukiyou = new ushort[]
+		{
+            (ushort)ItemNo.KYOUSEIGIPUSU, (ushort)ItemNo.GAKUSYUUSOUTI, (ushort)ItemNo.OMAMORIKOBAN,
+            (ushort)ItemNo.KOUUNNOOKOU,   (ushort)ItemNo.KIYOMENOOHUDA, (ushort)ItemNo.KAWARAZUNOISI,
+            (ushort)ItemNo.SIAWASETAMAGO, (ushort)ItemNo.PAWAARISUTO,   (ushort)ItemNo.PAWAABERUTO,
+            (ushort)ItemNo.PAWAARENZU,    (ushort)ItemNo.PAWAABANDO,    (ushort)ItemNo.PAWAAANKURU,
+            (ushort)ItemNo.PAWAAUEITO,
+        };
 
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nenchaku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Pressure;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MagicGuard;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Akusyuu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kagefumi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Arijigoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Jiryoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Karuwaza;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Monohiroi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_TamaHiroi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_WaruiTeguse;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_NorowareBody;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KudakeruYoroi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tikarazuku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Makenki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Katiki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yowaki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MultiScale;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FriendGuard;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_IyasiNoKokoro;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Dokubousou;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Netubousou;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Telepassy;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Murakke;
+		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nenchaku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Nenchaku_NoEff),
+            new EventFactor.EventHandlerTable(EventID.ITEMSET_CHECK, handler_Nenchaku),
+            new EventFactor.EventHandlerTable(EventID.ITEMSET_FAILED, handler_Nenchaku_Reaction),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Pressure = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Pressure_MemberIN),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Pressure_MemberIN),
+            new EventFactor.EventHandlerTable(EventID.DECREMENT_PP, handler_Pressure),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MagicGuard = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.SIMPLE_DAMAGE_ENABLE, handler_MagicGuard),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Akusyuu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_SHRINK_PER, handler_Akusyuu),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kagefumi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NIGERU_FORBID, handler_Kagefumi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Arijigoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NIGERU_FORBID, handler_Arijigoku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Jiryoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NIGERU_FORBID, handler_Jiryoku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Karuwaza = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ITEMSET_DECIDE, handler_Karuwaza_BeforeItemSet),
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_Karuwaza_Agility),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Monohiroi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_END, handler_Monohiroi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_TamaHiroi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_END, handler_TamaHiroi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_WaruiTeguse = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_L5, handler_WaruiTeguse),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_NorowareBody = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_NorowareBody),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KudakeruYoroi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_KudakeruYoroi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Tikarazuku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Tikarazuku_WazaPow),
+            new EventFactor.EventHandlerTable(EventID.ADD_SICK, handler_Tikarazuku_CheckFail),
+            new EventFactor.EventHandlerTable(EventID.ADD_RANK_TARGET, handler_Tikarazuku_CheckFail),
+            new EventFactor.EventHandlerTable(EventID.WAZA_SHRINK_PER, handler_Tikarazuku_ShrinkCheck),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_PREV, handler_Tikarazuku_HitChk),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Makenki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FIXED, handler_Makenki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Katiki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FIXED, handler_Katiki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yowaki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Yowaki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MultiScale = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_MultiScale),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FriendGuard = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_NakamaIsiki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_IyasiNoKokoro = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_BEGIN, handler_IyasiNoKokoro),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Dokubousou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Dokubousou),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Netubousou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Netubousou),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Telepassy = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_AunNoIki),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Murakke = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_END, handler_Murakke),
+        };
 
-		private const int MURAKKE_RANK_MAX = 5;
+        private const int MURAKKE_RANK_MAX = 5;
 		private const int MURAKKE_PATTERN_MAX = 20;
 
-		private static readonly WazaRankEffect[] handler_MurakkeTable;
+		private static readonly WazaRankEffect[] handler_MurakkeTable = new WazaRankEffect[]
+		{
+			WazaRankEffect.ATTACK,     WazaRankEffect.DEFENCE, WazaRankEffect.SP_ATTACK,
+			WazaRankEffect.SP_DEFENCE, WazaRankEffect.AGILITY,
+		};
 
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Boujin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Dokusyu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SaiseiRyoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hatomune;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunakaki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MilacreSkin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Analyze;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SunanoTikara;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Surinuke;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_BarrierFree;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_JisinKajou;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_UltraForce;
+		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Boujin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_Boujin_CalcDamage),
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Boujin_WazaNoEffect),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Dokusyu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Dokusyu),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SaiseiRyoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_OUT_FIXED, handler_SaiseiRyoku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hatomune = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_Hatomune_Check),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_Hatomune_Guard),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sunakaki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_Sunakaki),
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_Sunagakure_Weather),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MilacreSkin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RATIO, handler_MilacreSkin),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Analyze = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Sinuti),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SunanoTikara = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_SunanoTikara),
+            new EventFactor.EventHandlerTable(EventID.WEATHER_REACTION, handler_Sunagakure_Weather),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Surinuke = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_START, handler_Surinuke_Start),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_END, handler_Surinuke_End),
+            new EventFactor.EventHandlerTable(EventID.MIGAWARI_THREW, handler_Surinuke_MigawariThrew),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_BarrierFree = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_BarrierFree),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_BarrierFree),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_JisinKajou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_REAL, handler_JisinKajou),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_UltraForce = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_REAL, handler_UltraForce),
+        };
 
-		private static readonly ultraForce_GetEffectRankTypeTableElem[] RANK_VALUE_TABLE;
+		private static readonly ultraForce_GetEffectRankTypeTableElem[] RANK_VALUE_TABLE = new ultraForce_GetEffectRankTypeTableElem[]
+		{
+			new ultraForce_GetEffectRankTypeTableElem(WazaRankEffect.ATTACK,     BTL_POKEPARAM.ValueID.BPP_ATTACK),
+			new ultraForce_GetEffectRankTypeTableElem(WazaRankEffect.DEFENCE,    BTL_POKEPARAM.ValueID.BPP_DEFENCE),
+			new ultraForce_GetEffectRankTypeTableElem(WazaRankEffect.SP_ATTACK,  BTL_POKEPARAM.ValueID.BPP_SP_ATTACK),
+			new ultraForce_GetEffectRankTypeTableElem(WazaRankEffect.SP_DEFENCE, BTL_POKEPARAM.ValueID.BPP_SP_DEFENCE),
+			new ultraForce_GetEffectRankTypeTableElem(WazaRankEffect.AGILITY,    BTL_POKEPARAM.ValueID.BPP_AGILITY),
+		};
 
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SeiginoKokoro;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Bibiri;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_JyoukiKikan;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Watage;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Miira;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SamayouTamasii;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sousyoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_ItazuraGokoro;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MagicMirror;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Syuukaku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HeavyMetal;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_LightMetal;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Amanojaku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kinchoukan;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KagakuHenkaGas;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Jukusei;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kawarimono;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Illusion;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_GoodLuck;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MentalVeil;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FlowerVeil;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SweetVeil;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MirrorArmor;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HooBukuro;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HengenZizai;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_DarkAura;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FairyAura;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_AuraBreak;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_GanjouAgo;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gorimuchu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FurCoat;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KusaNoKegawa;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_NumeNume;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KataiTume;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SkySkin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FairySkin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_FreezSkin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MegaLauncher;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HayateNoTsubasa;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Boudan;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_OyakoAi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Magician;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kyousei;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Zikyuuryoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Mizugatame;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Suihou;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yukikaki;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Haganetukai;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HaganeNoSeisin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_UruoiVoice;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HealingShift;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_ElecSkin;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SurfTail;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hitodenasi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Enkaku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Zyoounoigen;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MohuMohu;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_KooriNoRinpun;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Battery;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_PowerSpot;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Receiver;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_TobidasuNakami;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gyakuzyou;
+		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SeiginoKokoro = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_SeiginoKokoro),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Bibiri = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Bibiri),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_Bibiri_RankEffectLastCheck),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FIXED, handler_Bibiri_RankEffectFixed),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_JyoukiKikan = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_JyoukiKikan),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Watage = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Watage),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Miira = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Miira),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SamayouTamasii = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_SamayouTamasii),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Sousyoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_Sousyoku_CheckNoEffect),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_ItazuraGokoro = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.GET_WAZA_PRI, handler_ItazuraGokoro),
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_ItazuraGokoro_WazaParam),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_ItazuraGokoro_Reset),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MagicMirror = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_CHECK_3RD, handler_MagicMirror_ExeCheck),
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_TOKUSEI, handler_MagicMirror_Wait),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_REFRECT, handler_MagicMirror_Reflect),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Syuukaku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.TURNCHECK_END, handler_Syuukaku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HeavyMetal = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WEIGHT_RATIO, handler_HeavyMetal),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_LightMetal = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WEIGHT_RATIO, handler_LightMetal),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Amanojaku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKVALUE_CHANGE, handler_Amanojaku),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kinchoukan = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN_PREV2, handler_Kinchoukan_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Kinchoukan_MemberIn),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KagakuHenkaGas = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN_PREV1, handler_KagakuHenkaGas_Start),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_KagakuHenkaGas_End),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE_FORCE, handler_KagakuHenkaGas_End),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Jukusei = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CHECK_KINOMI_EFFECT_UP, handler_Jukusei_KinomiCheck),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kawarimono = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_Hensin),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Illusion = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Illusion_Damage),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Illusion_Ieki),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_Illusion_ChangeTok),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_GoodLuck = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_RATIO, handler_GoodLuck),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MentalVeil = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_MentalVeil_Check),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_MentalVeil_Failed),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FlowerVeil = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_LAST_CHECK, handler_FlowerVeil_Check),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_FAILED, handler_FlowerVeil_Guard),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_FlowerVeil_SickCheck),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_FlowerVeil_SickFailed),
+            new EventFactor.EventHandlerTable(EventID.CHECK_INEMURI, handler_FlowerVeil_CheckInemuri),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SweetVeil = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_SweetVeil_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_SweetVeil_PokeSickFailed),
+            new EventFactor.EventHandlerTable(EventID.CHECK_INEMURI, handler_SweetVeil_Inemuri),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MirrorArmor = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_REFLECT_CHECK, handler_MirroArmor_Check),
+            new EventFactor.EventHandlerTable(EventID.RANKEFF_REFLECT_FIXED, handler_MirroArmor_Reflect),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HooBukuro = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.AFTER_ITEMEQUIP, handler_Hoobukuro),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HengenZizai = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXE_DECIDE, handler_HengenZizai),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_DarkAura = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_DarkAura_MemberIN),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_DarkAura_MemberIN),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_DarkAura),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FairyAura = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_FairyAura_MemberIN),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_FairyAura_MemberIN),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_FairyAura),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_AuraBreak = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_AuraBreak_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_AuraBreak_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER_BASE, handler_AuraBreak),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_GanjouAgo = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_GanjouAgo),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gorimuchu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_CALL_DECIDE, handler_Gorimuchu_Waza),
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Gorimuchu_Power),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_BEFORE, handler_Gorimuchu_Change),
+            new EventFactor.EventHandlerTable(EventID.CHECK_KODAWARI_FACTOR, handler_Gorimuchu_Check),
+            new EventFactor.EventHandlerTable(EventID.TOKUSEI_DISABLE, handler_Gorimuchu_Change),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FurCoat = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DEFENDER_GUARD, handler_FurCoat),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KusaNoKegawa = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DEFENDER_GUARD, handler_KusaNoKegawa),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_NumeNume = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_NumeNume),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KataiTume = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_KataiTume),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SkySkin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_SkySkin),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_SkySkin_Pow),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END, handler_SkinEndCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_G_WAZA, handler_SkySkin_ChangeGWaza),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FairySkin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_FairySkin),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_FairySkin_Pow),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END, handler_SkinEndCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_G_WAZA, handler_Fairykin_ChangeGWaza),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_FreezSkin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_FreezSkin),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_FreezSkin_Pow),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END, handler_SkinEndCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_G_WAZA, handler_FreezSkin_ChangeGWaza),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MegaLauncher = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_MegaLauncher_Pow),
+            new EventFactor.EventHandlerTable(EventID.RECOVER_HP_RATIO, handler_MegaLauncher_Recover),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HayateNoTsubasa = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.GET_WAZA_PRI, handler_HayateNoTsubasa),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Boudan = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.NOEFFECT_CHECK_L2, handler_Boudan),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_OyakoAi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_HIT_COUNT, handler_OyakoAi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Magician = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_START, handler_magician_Start),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_REAL, handler_magician),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Kyousei = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_START, handler_kyousei_wazaSeqStart),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_END, handler_kyousei_wazaSeqEnd),
+            new EventFactor.EventHandlerTable(EventID.AFTER_ITEMEQUIP, handler_kyousei),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Zikyuuryoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Zikyuuryoku_WazaDamageReaction),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Mizugatame = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_Mizugatame_WazaDamageReaction),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Suihou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Suihou_AttackerPower),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_MizuNoBale_PokeSick),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_MizuNoBale_Wake),
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_MizuNoBale_Wake),
+            new EventFactor.EventHandlerTable(EventID.ACTPROC_END, handler_MizuNoBale_ActEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Yukikaki = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_Yukikaki_CalcAgility),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Haganetukai = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Haganetukai_AttackerPower),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HaganeNoSeisin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_HaganeNoSeisin),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_UruoiVoice = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_UruoiVoice_WazaParam),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HealingShift = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.GET_WAZA_PRI, handler_HealingShift_GetWazaPriority),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_ElecSkin = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_ElecSkinWazaParam),
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_ElecSkin_Pow),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END, handler_SkinEndCommon),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_G_WAZA, handler_ElecSkin_ChangeGWaza),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SurfTail = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CALC_AGILITY, handler_SurfTail_CalcAgility),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Hitodenasi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CRITICAL_CHECK, handler_Hitodenasi_CriticalCheck),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Enkaku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_PARAM, handler_Enkaku_WazaParam),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Zyoounoigen = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_CHECK_3RD, handler_Zyoounoigen_WazaExeCheck),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MohuMohu = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_MohuMohu),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_KooriNoRinpun = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_KooriNoRinpun),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Battery = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_Battery_WazaPower),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_PowerSpot = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_POWER, handler_PowerSpot),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Receiver = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DEAD_ACTION_AFTER, handler_Receiver_DeadAfter),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_TobidasuNakami = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_START, handler_TobidasuNakami_DamageProcStart),
+            new EventFactor.EventHandlerTable(EventID.ICHIGEKI_GUARD, handler_TobidasuNakami_IchigekiGuard),
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_REACTION, handler_TobidasuNakami_WazaDamageReaction),
+            new EventFactor.EventHandlerTable(EventID.ICHIGEKI_SUCCEED, handler_TobidasuNakami_WazaDamageReaction),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gyakuzyou = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_START, handler_Gyakuzyou_DamegeProcStart),
+            new EventFactor.EventHandlerTable(EventID.ICHIGEKI_CHECK, handler_Gyakuzyou_IchigekiCheck),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_REAL, handler_Gyakuzyou_EndHitReal),
+        };
 
-		private const int WIDX_NIGEGOSI_FULFILL_ENOUGH_HP = 0;
+        private const int WIDX_NIGEGOSI_FULFILL_ENOUGH_HP = 0;
 		private const int WIDX_NIGEGOSI_ATTACKER_DMG_STATUS = 1;
 
 		private const int NIGEGOSI_ATTACKER_DMG_STATUS_NONE = 0;
 		private const int NIGEGOSI_ATTACKER_DMG_STATUS_MYATTACK = 1;
 		private const int NIGEGOSI_ATTACKER_DMG_STATUS_FULFILL_ITEM_EFFECT = 2;
 
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nigegosi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_SoulHeart;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Odoriko;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Husyoku;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_ElecMaker;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_PhychoMaker;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_MistMaker;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_GrassMaker;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gitai;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Harikomi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_ZettaiNemuri;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_BrainPrism;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HutouNoTurugi;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_HukutuNoTate;
-		private static readonly EventFactor.EventHandlerTable[] HandlerTable_ScrewObire;
-		
-		// TODO
-		public static uint numHandlersWithHandlerPri(ushort pri, ushort numHandlers) { return default; }
+		private static readonly EventFactor.EventHandlerTable[] HandlerTable_Nigegosi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_START, handler_Nigegosi_DamegeProcStart),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END, handler_Nigegosi_DamegeProcEnd),
+            new EventFactor.EventHandlerTable(EventID.DAMAGEPROC_END_HIT_L3, handler_Nigegosi_EndHit),
+            new EventFactor.EventHandlerTable(EventID.ICHIGEKI_GUARD, handler_Nigegosi_BeforeIchigeki),
+            new EventFactor.EventHandlerTable(EventID.SIMPLE_DAMAGE_BEFORE, handler_Nigegosi_SimpleDamageBefore),
+            new EventFactor.EventHandlerTable(EventID.SIMPLE_DAMAGE_AFTER, handler_Nigegosi_SimpleDamageAfter),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_SoulHeart = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.DEAD_AFTER, handler_SoulHeart_DeadAfter),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Odoriko = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_START, handler_Odoriko_WazaSeqStart),
+            new EventFactor.EventHandlerTable(EventID.WAZA_EXECUTE_EFFECTIVE, handler_Odoriko_ExecuteEffective),
+            new EventFactor.EventHandlerTable(EventID.WAZASEQ_END, handler_Odoriko_WazaSeqEnd),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Husyoku = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CHECK_ADDSICK_FAIL_STD_SKIP, handler_Husyoku_CheckAddSickFailStdSkip),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_ElecMaker = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_ElecMaker_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_ElecMaker_MemberIn),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_PhychoMaker = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_PhychoMaker_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_PhychoMaker_MemberIn),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_MistMaker = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_MistMaker_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_MistMaker_MemberIn),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_GrassMaker = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_GrassMaker_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_GrassMaker_MemberIn),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Gitai = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN_EVO, handler_Gitai_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_Gitai_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_GROUND_AFTER, handler_Gitai_Change),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_Harikomi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.ATTACKER_POWER, handler_Harikomi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_ZettaiNemuri = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_ZettaiNemuri_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_ZettaiNemuri_MemberIn),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_CHECKFAIL, handler_ZettaiNemuri_AddSickCheckFail),
+            new EventFactor.EventHandlerTable(EventID.CHECK_INEMURI, handler_Fumin_InemuriCheck),
+            new EventFactor.EventHandlerTable(EventID.ADDSICK_FAILED, handler_AddSickFailCommon),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_BrainPrism = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.WAZA_DMG_PROC3, handler_BrainPrism),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HutouNoTurugi = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_HutouNoTurugi),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_HutouNoTurugi),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_HukutuNoTate = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.MEMBER_IN, handler_HukutuNoTate),
+            new EventFactor.EventHandlerTable(EventID.CHANGE_TOKUSEI_AFTER, handler_HukutuNoTate),
+        };
+        private static readonly EventFactor.EventHandlerTable[] HandlerTable_ScrewObire = new EventFactor.EventHandlerTable[]
+        {
+            new EventFactor.EventHandlerTable(EventID.CHECK_TEMPT_TARGET_ENABLE, handler_ScrewObire_Tempt),
+            new EventFactor.EventHandlerTable(EventID.CHECK_AIM_TARGET_ENABLE, handler_ScrewObire_Aim),
+        };
+
+        // TODO
+        public static uint numHandlersWithHandlerPri(ushort pri, ushort numHandlers) { return default; }
 		
 		// TODO
 		public static ushort calcTokHandlerSubPriority(BTL_POKEPARAM bpp) { return default; }

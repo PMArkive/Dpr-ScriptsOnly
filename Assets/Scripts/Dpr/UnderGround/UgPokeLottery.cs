@@ -27,7 +27,7 @@ namespace Dpr.UnderGround
             // Returns all the enabled mons from the relevant UgEncount file and adds them to MonsDataIndexs
             UgEncount.Sheettable[] origList = GetEnablePokes(GetVersionNo(), GetStoryNo());
 
-            // Number from 0-30 based on amount of statues?
+            // Number from 0-30 based on amount of tiles taken up by statues
             int statueBoost = UgFieldManager.Instance.statueBuff.GetPlusSlotNum();
 
             // Roll for if we have the minimum amount of slots or maximum
@@ -84,8 +84,10 @@ namespace Dpr.UnderGround
                 return MonsNo.NULL;
 
             List<PokeRate> rates = new List<PokeRate>();
-            foreach (var rare in allRares)
+            for (int i=0; i<allRares.Length; i++)
             {
+                var rare = allRares[i];
+
                 if (versionID == 0)
                     rates.Add(new PokeRate(rare.monsno, rare.Dspecialrate));
                 else
@@ -343,6 +345,7 @@ namespace Dpr.UnderGround
             log = sb.ToString();
             Debug.Log(log);
 
+            // Initialize all the size slots
             List<MonsSize> sizes = new List<MonsSize>();
             for (int i = 0; i < randMarkData.smax; i++)
             {
@@ -361,13 +364,14 @@ namespace Dpr.UnderGround
                 sizes.Add(MonsSize.LL);
             }
 
-            for (int i = 0; i < Num; i++)
+            for (int i = Num; i != 0; i--)
             {
                 TypeRate rolledTypeRate = RandomWithWeight.Lotto(typeWeights);
                 List<KeyValuePair<TypeAndSize, int>> foundAll = MonsDataIndexs.FindAll(x => x.Key.type == rolledTypeRate.type);
 
                 List<MonsSize> existSizeList = new List<MonsSize>();
 
+                // Find all the sizes of the available mons and put them in a list
                 foundAll.ForEach(x => {
                     if (!existSizeList.Exists(s => x.Key.size == s))
                     {
@@ -375,8 +379,12 @@ namespace Dpr.UnderGround
                     }
                 });
 
+                // Remove all the size slots that hold a size for which there's an available mon of a different size
+                // NOTE: If there is more than one size of available mon, this will empty the list
+                // NOTE: The sizes list is also not reset between iterations of this loop
                 sizes.RemoveAll(s => existSizeList.Exists(x => s != x));
 
+                // Because of how the above RemoveAll works, the size will always effectively be a uniform distribution
                 MonsSize randomSize = GetRandomSize(sizes, existSizeList);
                 finalList.Add(new PokeSlot(rolledTypeRate.type, randomSize));
             }

@@ -37,14 +37,55 @@ namespace Dpr.Battle.View.Objects
 		public GState IsGChange { get => GState.NONE; }
 		public bool IsDisp { get => m_isVisible && IsVisibleTame; }
 		
-		// TODO
-		public void Initialize(BtlvPos vPos, PokemonParam param) { }
+		public void Initialize(BtlvPos vPos, PokemonParam param)
+		{
+			Initialize(vPos);
+
+			_param = param;
+			m_type = ModelType.Pokemon;
+			_isSickSpeedSuspend = false;
+			IsVisibleMigawari = false;
+			IsVisibleTame = true;
+			_iPtrMigawariObject = null;
+			_lastPlayAnimationState = BattlePokemonEntity.AnimationState.Max;
+
+			var motionTiming = BattleDataTableManager.Instance.BattleDataTable.GetMotionTimingData(param.GetMonsNo(), param.GetFormNo(), param.GetSex());
+			if (motionTiming == null)
+				_motionTimingData = MotionTimingData.Factory();
+			else
+				_motionTimingData = new MotionTimingData(motionTiming);
+
+			if (BattleDataTableManager.Instance.BattleDataTable.GetDisableBlinkPokemon(param.GetMonsNo()) != null)
+				Entity.GetAutomaticBlinkProcess().SetConstantBlink(false);
+
+			Entity.PokemonMotionBlendTimeData = BattleDataTableManager.Instance.BattleDataTable.GetPokemonMotionBlendTime(param.GetMonsNo());
+			_motionReplaceData = BattleDataTableManager.Instance.BattleDataTable.GetMotionReplaceData(GetUniqueID(param.GetMonsNo(), param.GetFormNo()));
+
+			Entity.SetPatcheelPattern(param.GetPersonalRnd());
+			Entity.isZIBAKOIRU = param.GetMonsNo() == MonsNo.ZIBAKOIRU;
+
+			SetupAdjustHeight();
+        }
 		
-		// TODO
-		private static int GetUniqueID(MonsNo monsNo, int formNo) { return default; }
+		private static int GetUniqueID(MonsNo monsNo, int formNo)
+		{
+			return formNo + (int)monsNo * 100;
+		}
 		
-		// TODO
-		private void SetupAdjustHeight() { }
+		private void SetupAdjustHeight()
+		{
+			if (Entity != null)
+			{
+				var adjustHeight = (Entity.GetSimpleParam().adjustHeight * 0.01f - 1.0f) * 0.5f + 1.0f;
+				m_cameraAdjustHeight = adjustHeight;
+				m_adjustHeight = adjustHeight;
+            }
+			else
+            {
+                m_cameraAdjustHeight = DEFAULT_ADJUST_HEIGHT;
+                m_adjustHeight = DEFAULT_ADJUST_HEIGHT;
+            }
+		}
 		
 		// TODO
 		public override void StartDelete() { }
@@ -55,26 +96,40 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		protected override void UpdateVisible() { }
 		
-		// TODO
-		public Size GetSize() { return default; }
+		public Size GetSize()
+        {
+            return Entity.Size;
+        }
 		
-		// TODO
-		public LandingType GetPokeLandingType() { return default; }
+		public LandingType GetPokeLandingType()
+        {
+            return Entity.LandingType;
+        }
 		
-		// TODO
-		public LandingType GetPokeLandingEXType() { return default; }
+		public LandingType GetPokeLandingEXType()
+		{
+			return Entity.LandingType;
+        }
 		
-		// TODO
-		public MotionTimingData GetMotionTimingData() { return default; }
+		public MotionTimingData GetMotionTimingData()
+		{
+			return _motionTimingData;
+		}
 		
-		// TODO
-		public void SetMotionTimingData(MotionTimingData data) { }
+		public void SetMotionTimingData(MotionTimingData data)
+		{
+			_motionTimingData = data;
+		}
 		
-		// TODO
-		public float GetCamAdjustHeight() { return default; }
+		public float GetCamAdjustHeight()
+		{
+			return m_cameraAdjustHeight;
+		}
 		
-		// TODO
-		public float GetAdjustHeight() { return default; }
+		public float GetAdjustHeight()
+		{
+			return m_adjustHeight;
+		}
 		
 		// TODO
 		public PokeEffWeight CheckPokemonEffectWeight() { return default; }
@@ -94,8 +149,10 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public Transform GetNodeTransformSequence(SEQ_DEF_NODE node) { return default; }
 		
-		// TODO
-		public BattlePokemonEntity.AnimationState GetLastPlayAnim() { return default; }
+		public BattlePokemonEntity.AnimationState GetLastPlayAnim()
+		{
+			return _lastPlayAnimationState;
+		}
 		
 		public BattlePokemonEntity.AnimationState CurrentAnimationState { get => Entity.CurrentAnimationState; }
 		public float CurrentRemaingTime { get => Entity.GetAnimationPlayer().currentRemaingTime; }
@@ -121,14 +178,19 @@ namespace Dpr.Battle.View.Objects
 		// TODO
 		public PokeVoiceParameter GetPokeVoiceParams(string voiceName, VOICE_TYPE voiceType) { return default; }
 		
-		// TODO
-		public bool GetRTPC_IsPlayPinchSound() { return default; }
+		public bool GetRTPC_IsPlayPinchSound()
+        {
+            return m_isPlayPinchSoundRTPC;
+        }
 		
 		// TODO
 		public void SetRTPC_IsPlayPinchSound(bool value) { }
 		
 		// TODO
-		public bool GetIsPlayPinchSound() { return default; }
+		public bool GetIsPlayPinchSound()
+		{
+			return m_isPlayPinchSound;
+		}
 		
 		// TODO
 		public void SetIsPlayPinchSound(bool value) { }

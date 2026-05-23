@@ -10,10 +10,8 @@
         private uint m_targetScriptBit;
         private byte m_myClientID;
 
-        // TODO
         public abstract void UpdateJudge();
 
-        // TODO
         public abstract bool IsJudgeFinished();
 
         public AiJudge(byte myClientID, BtlAiScriptNo minScriptNo, BtlAiScriptNo maxScriptNo, uint targetScriptBit)
@@ -25,31 +23,56 @@
             m_targetScriptBit = targetScriptBit;
         }
 
-        // TODO
-        public virtual void Dispose() { }
+        public virtual void Dispose()
+        {
+            // Empty
+        }
 
-        // TODO
-        protected byte GetMyClientID() { return 0; }
+        protected byte GetMyClientID()
+        {
+            return m_myClientID;
+        }
 
-        // TODO
-        public void ChangeAiBit(uint targetScriptBit) { }
+        public void ChangeAiBit(uint targetScriptBit)
+        {
+            m_targetScriptBit = targetScriptBit;
+        }
 
-        // TODO
-        public uint GetAiBit() { return 0; }
+        public uint GetAiBit()
+        {
+            return m_targetScriptBit;
+        }
 
-        // TODO
-        protected BtlAiScriptNo GetCurrentScriptNo() { return BtlAiScriptNo.BTL_AISCRIPT_NO_WAZA_MIN; }
+        protected BtlAiScriptNo GetCurrentScriptNo()
+        {
+            return m_currentScriptNo;
+        }
 
-        // TODO
-        protected void ResetScriptNo() { }
+        protected void ResetScriptNo()
+        {
+            m_currentScriptNo = GetNextScriptNo(m_minScriptNo, m_maxScriptNo);
+        }
 
-        // TODO
-        protected void UpdateScriptNo() { }
+        protected void UpdateScriptNo()
+        {
+            m_currentScriptNo++;
+            m_currentScriptNo = GetNextScriptNo(m_currentScriptNo, m_maxScriptNo);
+        }
 
-        // TODO
-        private BtlAiScriptNo GetNextScriptNo(BtlAiScriptNo minScriptNo, BtlAiScriptNo maxScriptNo) { return BtlAiScriptNo.BTL_AISCRIPT_NO_WAZA_MIN; }
+        private BtlAiScriptNo GetNextScriptNo(BtlAiScriptNo minScriptNo, BtlAiScriptNo maxScriptNo)
+        {
+            for (var i=minScriptNo; i<=maxScriptNo; i++)
+            {
+                if ((m_targetScriptBit & (1 << (int)i)) != 0)
+                    return i;
+            }
 
-        // TODO
-        protected bool IsAllScriptFinished() { return false; }
+            return BtlAiScriptNo.BTL_AISCRIPT_NO_NULL;
+        }
+
+        protected bool IsAllScriptFinished()
+        {
+            return m_currentScriptNo > m_maxScriptNo;
+        }
     }
 }
