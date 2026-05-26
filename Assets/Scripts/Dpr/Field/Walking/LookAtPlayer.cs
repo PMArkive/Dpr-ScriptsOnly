@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SmartPoint.AssetAssistant;
+using System.Collections;
 
 namespace Dpr.Field.Walking
 {
@@ -13,7 +14,15 @@ namespace Dpr.Field.Walking
             this.speed = speed;
         }
 
-        // TODO
-        public override IEnumerator DoAction(AIModel model) { return null; }
+        public override IEnumerator DoAction(AIModel model)
+        {
+            var player = EntityManager.activeFieldPlayer.transform;
+
+            yield return model.Loop(() => duration > 0.0f, () =>
+            {
+                duration -= Sequencer.elapsedTime;
+                model.walkData.LookAtTarget(player.position, Sequencer.elapsedTime, speed);
+            });
+        }
     }
 }

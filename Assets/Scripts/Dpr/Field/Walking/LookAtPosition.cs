@@ -1,3 +1,4 @@
+using SmartPoint.AssetAssistant;
 using System.Collections;
 using UnityEngine;
 
@@ -16,7 +17,16 @@ namespace Dpr.Field.Walking
 			this.duration = duration;
 		}
 		
-		// TODO
-		public override IEnumerator DoAction(AIModel model) { return default; }
+		public override IEnumerator DoAction(AIModel model)
+		{
+			var time = 0.0f;
+
+            yield return model.Loop(() => time < duration, () =>
+            {
+                var deltaTime = Sequencer.elapsedTime;
+                model.walkData.LookAtTarget(model.transform.position + offset, deltaTime, speed);
+                time += deltaTime;
+            });
+        }
 	}
 }

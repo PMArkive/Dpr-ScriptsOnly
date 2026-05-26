@@ -1,3 +1,4 @@
+﻿using Dpr.FureaiHiroba;
 using Dpr.SubContents;
 using UnityEngine;
 
@@ -24,25 +25,53 @@ namespace Dpr.Field.Walking
 		[SerializeField]
 		private int SubNo;
 		
-		// TODO
-		private void Awake() { }
+		private void Awake()
+		{
+			corSys?.Cancel();
+
+			container = new CorSystemContainer("メイン"); // Main
+			corSys = container;
+		}
 		
-		// TODO
-		private void Test() { }
+		private void Test()
+		{
+			var strs = new string[] { "A", "B", "C", "D", "E" };
+			var fullStr = "攻撃" + strs[Random.Range(0, 5)];
+			var text = FureaiDebugManager.CreateText(fullStr);
+
+			var sub = container.AddWait(5.0f, corSys => text.text = corSys.CorName + ":" + corSys.duration.ToString(), fullStr);
+			sub.onFinished += () => Destroy(text.gameObject);
+
+			if (!container.isPlaying)
+				container.Play();
+        }
 		
-		// TODO
-		private void Cancel() { }
+		private void Cancel()
+		{
+			corSys.Cancel();
+		}
 		
-		// TODO
-		private void Pause() { }
+		private void Pause()
+		{
+			corSys.Pause();
+		}
 		
-		// TODO
-		private void Restart() { }
+		private void Restart()
+		{
+			corSys.Restart();
+		}
 		
-		// TODO
-		private void DeltaTimePause() { }
+		private void DeltaTimePause()
+		{
+			if (DeltaTime.isPause)
+				DeltaTime.UnPause();
+			else
+				DeltaTime.Pause();
+		}
 		
-		// TODO
-		private void SubCancel() { }
+		private void SubCancel()
+		{
+			container.SubCancel(SubNo);
+		}
 	}
 }

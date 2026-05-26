@@ -35,13 +35,17 @@ namespace Dpr.Field.Walking
         public float targetDistance;
         public float targetDistanceOffset;
         public GameObject DebugBodySizeView;
+
         [Button("ChangePositionNPC", "ChangePositionNPC", new object[0])]
         public int Button05;
+
         public int DebugAnimIndex = 1;
+
         [Button("TestAnim", "TestAnim", new object[0])]
         public int Button06;
         [Button("InitAnimationPlayer", "InitAnimationPlayer", new object[0])]
         public int Button07;
+
         public ActionState actionState;
         public ActionState nextActionState;
         public ActionState nextTalkState;
@@ -51,6 +55,7 @@ namespace Dpr.Field.Walking
         public AnimeState talkAnimeState;
         public AnimeState prevAnimeState;
         public PokemonInfo.SheetTrearuki trearukiAnimeInfo;
+
         private const float MotionWait = 0.033333335f;
 
         public WalkData walkModel { get => model.walkData; }
@@ -278,6 +283,7 @@ namespace Dpr.Field.Walking
             model.entity.enabled = true;
 
             view.GetAnimPlayer().Play(view.GetAnimPlayer().currentIndex, 0.0f, view.GetAnimPlayer().currentPlayingTime);
+            InitializeTrearukiData();
         }
 
         private void InitializeTrearukiData()
@@ -332,91 +338,7 @@ namespace Dpr.Field.Walking
 
             view.DebugAnimeState();
 
-            if (actionState != nextActionState)
-            {
-                switch (nextActionState)
-                {
-                    case ActionState.Stay:
-                        switch (actionState)
-                        {
-                            case ActionState.MoveWalk:
-                                ChangeAnimeState(AnimeState.WalkEndWait);
-                                break;
-
-                            case ActionState.MoveRun:
-                                ChangeAnimeState(AnimeState.RunEndWait);
-                                break;
-                        }
-                        break;
-
-                    case ActionState.MoveWalk:
-                        switch (animeState)
-                        {
-                            case AnimeState.Run:
-                                ChangeAnimeState(AnimeState.Walk);
-                                break;
-
-                            default:
-                                ChangeAnimeState(AnimeState.WalkStart);
-                                break;
-                        }
-                        break;
-
-                    case ActionState.MoveRun:
-                        switch (animeState)
-                        {
-                            case AnimeState.Walk:
-                                ChangeAnimeState(AnimeState.Run);
-                                break;
-
-                            default:
-                                ChangeAnimeState(AnimeState.RunStart);
-                                break;
-                        }
-                        break;
-
-                    case ActionState.TalkStayWait:
-                        switch (actionState)
-                        {
-                            case ActionState.MoveWalk:
-                                ChangeAnimeState(AnimeState.WalkEndWait);
-                                break;
-
-                            case ActionState.MoveRun:
-                                ChangeAnimeState(AnimeState.RunEndWait);
-                                break;
-                        }
-                        ChangeTalkState(ActionState.TalkStayWait);
-                        break;
-
-                    case ActionState.Happy:
-                        ChangeAnimeState(AnimeState.Happy);
-                        break;
-
-                    case ActionState.Hate:
-                        ChangeAnimeState(AnimeState.Hate);
-                        break;
-
-                    case ActionState.DrowSe:
-                        ChangeAnimeState(AnimeState.DrowSeA01);
-                        break;
-
-                    case ActionState.Roar:
-                        ChangeAnimeState(AnimeState.Roar);
-                        break;
-
-                    case ActionState.Tokusyu:
-                        ChangeAnimeState(AnimeState.Tokusyu);
-                        break;
-
-                    case ActionState.Buturi:
-                        ChangeAnimeState(AnimeState.Buturi);
-                        break;
-                }
-
-                actionState = nextActionState;
-            }
-
+            NextActionState();
             NextAnimeState();
             UpdateActionState(deltatime);
             UpdateAnimeState(deltatime);

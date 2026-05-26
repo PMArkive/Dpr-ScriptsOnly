@@ -1,4 +1,5 @@
 ﻿using Dpr.FureaiHiroba;
+using SmartPoint.AssetAssistant;
 using System;
 
 namespace Dpr.Field.Walking
@@ -17,7 +18,22 @@ namespace Dpr.Field.Walking
             // Empty
         }
 
-        // TODO
-        protected override void StateUpdate() { }
+        protected override void StateUpdate()
+        {
+            time += Sequencer.elapsedTime;
+
+            var walkData = model.walkData;
+
+            // Result ignored
+            _ = model.route;
+
+            model.walkData.isNeedRun = true;
+
+            walkData.Move(deltaTime, 20.0f);
+            walkData.LookAtTarget(EntityManager.activeFieldPlayer.transform.position, deltaTime, 10.0f);
+
+            if (playerDistance < 3.5f || time > 2.5f)
+                OnPlayerNear?.Invoke();
+        }
     }
 }

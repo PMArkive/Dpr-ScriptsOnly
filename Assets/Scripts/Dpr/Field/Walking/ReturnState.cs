@@ -1,4 +1,5 @@
 ﻿using Dpr.FureaiHiroba;
+using Dpr.SubContents;
 
 namespace Dpr.Field.Walking
 {
@@ -20,14 +21,37 @@ namespace Dpr.Field.Walking
             // Empty
         }
 
-        // TODO
         public override void CommonUpdate()
         {
             base.CommonUpdate();
+
+            var playerTf = EntityManager.activeFieldPlayer.transform;
+
+            sanpoModel.Update(deltaTime, playerTf, model.transform);
+            model.walkData.LookAtTarget(EntityManager.activeFieldPlayer.transform.position, deltaTime, 3.0f);
+
+            if (model.charaModel.CollidedCount > 10)
+                AICommon.Warp(model, false);
         }
 
-        // TODO
-        protected override void StateUpdate() { }
+        protected override void StateUpdate()
+        {
+            var walkData = model.walkData;
+
+            // Result ignored
+            _ = model.route;
+
+            if (fureaiModel.sanpoModel.isAddWalking && !isNearPlayer)
+            {
+                var animID = Utils.GetExistAnim(walkData.entity, Happys);
+                Play(new PlayAnim(animID), () => isNearPlayer = true);
+            }
+
+            if (isNearPlayer)
+                model.OnPlayerNear.Invoke();
+            else
+                walkData.Move(deltaTime, 10.0f);
+        }
 
         public override void Enter()
         {

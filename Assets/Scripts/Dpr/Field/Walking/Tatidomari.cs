@@ -4,7 +4,14 @@ namespace Dpr.Field.Walking
 {
 	public class Tatidomari : ActionModel
 	{
-		// TODO
-		public override IEnumerator DoAction(AIModel model) { return default; }
+		public override IEnumerator DoAction(AIModel model)
+		{
+			yield return model.walkData.actionModel.corSystem.AddSub()
+				.Play(new SpeedDownStop().DoAction(model));
+
+			yield return new MyWaitForSeconds(3.0f);
+
+			model.AI.ChangeState(typeof(ReturnState));
+		}
 	}
 }
