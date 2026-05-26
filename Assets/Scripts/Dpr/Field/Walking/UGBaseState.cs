@@ -22,7 +22,6 @@ namespace Dpr.Field.Walking
             rotSpeed = Random.Range(0.5f, 1.0f);
         }
 		
-		// TODO: holy jumps
 		protected override void StateUpdate()
 		{
 			if (!model.transform.gameObject.activeInHierarchy)
@@ -49,13 +48,35 @@ namespace Dpr.Field.Walking
 			if (CheckArrive())
 			{
 				changeTargetTime = 0.0f;
-                // goto LAB_7101ce3b78;
+
+                waitTime = Random.Range(1.0f, 8.0f);
+				colideStopCount++;
+
+                if (collisionCount < 2)
+				{
+					NextMovePoint = GetRandomPoint(model.moveType);
+
+                    if (waitTime < 0.0f)
+                    {
+                        walkData.isNeedRun = false;
+                        Move(2.0f);
+                    }
+					else
+					{
+                        walkData.nowSpeed = 0.0f;
+                    }
+                }
+                else
+				{
+					NextMovePoint = model.transform.position - model.transform.forward;
+                    walkData.nowSpeed = 0.0f;
+                }
             }
             else
 			{
 				if (oldChangeTargetTime > 10.0f || collisionCount > 1)
 				{
-					if (oldChangeTargetTime > 10.0f)
+					if (oldChangeTargetTime > 10.0f || (collisionCount < 2 && Random.Range(0, 2) != 0))
 					{
 						if (waitTime < 0.0f)
 						{
@@ -66,79 +87,57 @@ namespace Dpr.Field.Walking
 							NextMovePoint = GetRandomPoint(model.moveType);
 						}
 
-                        // goto LAB_7101ce3d88;
-                    }
-                    else
-					{
-						if (collisionCount < 2)
-						{
-							if (Random.Range(0, 2) != 0)
-							{
-                                if (waitTime < 0.0f)
-                                {
-                                    rotSpeed = Random.Range(1.0f, 2.0f);
-                                    colideStopCount = 0;
-                                    waitTime = -1.0f;
-                                    changeTargetTime = 0.0f;
-                                    NextMovePoint = GetRandomPoint(model.moveType);
-                                }
-
-                                // goto LAB_7101ce3d88;
-
-
-                            }
-                        }
-
-						// LAB_7101ce3b78
-
-						waitTime = Random.Range(1.0f, 8.0f);
-						colideStopCount++;
-
-						var ugModel = model;
-						if (collisionCount < 2)
-						{
-							NextMovePoint = GetRandomPoint(ugModel.moveType);
-
-                            // goto joined_r0x007101ce3e00;
-                            if (waitTime < 0.0f)
-							{
-								walkData.isNeedRun = false;
-								Move(2.0f);
-
-								if (waitTime < 4.0f)
-									LookAtTarget(NextMovePoint, rotSpeed);
-							}
-						}
-						else
-						{
-                            NextMovePoint = ugModel.transform.position - model.transform.forward;
-						}
-                    }
-
-					walkData.nowSpeed = 0.0f;
-
-                    if (waitTime < 4.0f)
-                        LookAtTarget(NextMovePoint, rotSpeed);
-                }
-				else
-				{
-                    if (collisionCount < 2)
-                    {
-                        if (waitTime < 0.0f)
+                        if (collisionCount < 2 && waitTime < 0.0f)
                         {
                             walkData.isNeedRun = false;
                             Move(2.0f);
                         }
+                        else
+                        {
+                            walkData.nowSpeed = 0.0f;
+                        }
+                    }
+					else
+					{
+						waitTime = Random.Range(1.0f, 8.0f);
+						colideStopCount++;
+
+                        if (collisionCount < 2)
+						{
+							NextMovePoint = GetRandomPoint(model.moveType);
+							if (waitTime < 0.0f)
+							{
+                                walkData.isNeedRun = false;
+                                Move(2.0f);
+                            }
+							else
+							{
+                                walkData.nowSpeed = 0.0f;
+                            }
+                        }
 						else
 						{
-							walkData.nowSpeed = 0.0f;
-						}
-
-                        if (waitTime < 4.0f)
-                            LookAtTarget(NextMovePoint, rotSpeed);
+							NextMovePoint = model.transform.position - model.transform.forward;
+                            walkData.nowSpeed = 0.0f;
+                        }
+                    }
+                }
+				else
+				{
+                    if (collisionCount < 2 && waitTime < 0.0f)
+                    {
+                        walkData.isNeedRun = false;
+                        Move(2.0f);                        
+                    }
+					else
+					{
+                        walkData.nowSpeed = 0.0f;
                     }
                 }
 			}
+
+            if (waitTime < 4.0f)
+                LookAtTarget(NextMovePoint, rotSpeed);
         }
 		
 		protected void Move(float speed, float otherDist = 0.0f)
