@@ -16,6 +16,10 @@ using Dpr.UI;
 using Dpr.EvScript;
 using Dpr.Field.Walking;
 using System.Runtime.InteropServices;
+using GameData;
+using Pml.Item;
+using Dpr.Battle.View;
+using AK;
 
 namespace Dpr.SubContents
 {
@@ -133,17 +137,39 @@ namespace Dpr.SubContents
             return "pokemons/battle/" + AssetBundleName;
         }
 
-        // TODO
-        public static string GetAssetNamebyPath(string AssetBundlePath) { return ""; }
+        public static string GetAssetNamebyPath(string AssetBundlePath)
+        {
+            var split = AssetBundlePath.Split(new char[] { '/' });
+            return split[split.Length - 1];
+        }
 
-        // TODO
-        public static PokemonInfo.SheetCatalog GetPokemonCatalog(PokemonParam p) { return null; }
+        public static PokemonInfo.SheetCatalog GetPokemonCatalog(PokemonParam p)
+        {
+            return DataManager.GetPokemonCatalog(p.GetMonsNo(), p.GetFormNo(), p.GetSex(), p.IsRare(), p.IsEgg(EggCheckType.BOTH_EGG));
+        }
 
-        // TODO
-        public static string GetBallModelPath(BallId ballId) { return ""; }
+        public static string GetBallModelPath(BallId ballId)
+        {
+            var str = BattleViewDefine.Path.GetBallPath(ItemManager.IsStrangeBall(ballId) ? (BallId)99 : ballId);
 
-        // TODO
-        public static void DrawMessage(MsgWindowParam param, ref MsgWindow.MsgWindow window) { }
+            if (string.IsNullOrEmpty(str))
+                return BattleViewDefine.Path.GetBallPath(BallId.MONSUTAABOORU);
+            else
+                return str;
+        }
+
+        public static void DrawMessage(MsgWindowParam param, ref MsgWindow.MsgWindow window)
+        {
+            if (window == null)
+            {
+                window = MsgWindowManager.OpenMsg(param);
+            }
+            else
+            {
+                param.playTextFeedSe = true;
+                window.ReplaceMessage(param);
+            }
+        }
 
         public static MsgWindowParam CreateMsgWindowParam(string msgFileName, string labelName, bool inputClose = false, bool inputEnable = false)
         {
@@ -158,8 +184,20 @@ namespace Dpr.SubContents
             return param;
         }
 
-        // TODO
-        public static int GetUISortingOrderMax() { return 0; }
+        public static int GetUISortingOrderMax()
+        {
+            var windowCount = UIManager.Instance.GetUIWindowCount();
+            var maxSortingOrder = 100;
+
+            for (int i=0; i!=windowCount; i++)
+            {
+                var newSortingOrder = UIManager.Instance.GetUIWindowByIndex(i).canvas.sortingOrder;
+                if (newSortingOrder <= maxSortingOrder)
+                    maxSortingOrder = newSortingOrder;
+            }
+
+            return maxSortingOrder;
+        }
 
         public static int KinomiID_to_ItemID(int kinomiID)
         {
@@ -171,32 +209,78 @@ namespace Dpr.SubContents
                 return 148 + kinomiID;
         }
 
-        // TODO
-        public static IEnumerator ZukanTouroku(PokemonParam p, DemoSceneManager manager) { return null; }
+        public static IEnumerator ZukanTouroku(PokemonParam p, DemoSceneManager manager)
+        {
+            yield return ZukanTouroku(p, manager, ZukanWork.IsGet((uint)p.GetMonsNo()));
+        }
 
-        // TODO
-        public static IEnumerator ZukanTouroku(PokemonParam p, DemoSceneManager manager, bool isGetMons) { return null; }
+        public static IEnumerator ZukanTouroku(PokemonParam p, DemoSceneManager manager, bool isGetMons)
+        {
+            if (p.IsEgg(EggCheckType.BOTH_EGG))
+                yield break;
 
-        // TODO
-        public static AudioInstance PlayVoice(MonsNo monsNo, int formNo, int voiceNo, [Optional] UnityAction<AudioInstance> onFinished) { return null; }
+            var sinnohIndex = Array.IndexOf(ZukanWork.ShinouZukanNos, p.GetMonsNo());
+            var isNatDex = ZukanWork.GetZenkokuFlag();
 
-        // TODO
-        public static AudioInstance PlayVoiceEV(MonsNo monsNo, int formNo, int voiceNo, [Optional] UnityAction<AudioInstance> onFinished, [Optional] Transform t) { return null; }
+            ZukanWork.SetPoke(p, DPData.GET_STATUS.GET);
 
-        // TODO
-        public static AudioInstance PlayVoice(MonsNo monsNo, int formNo, int voiceNo, VoicePlayerAmbient voicePlayer) { return null; }
+            if (sinnohIndex == -1 && !isNatDex)
+                yield break;
 
-        // TODO
-        public static void StopVoice() { }
+            if (isGetMons)
+                yield break;
 
-        // TODO
-        public static string GetVoiceID_EV(MonsNo monsNo, int formNo, int voiceNo) { return ""; }
+            var window = UIManager.Instance.CreateUIWindow<UIZukanRegister>(UIWindowID.ZUKAN_REGISTER);
 
-        // TODO
-        public static string GetVoiceID(MonsNo monsNo, int formNo, int voiceNo) { return ""; }
+            UIManager.Instance.SetupSortOrder(window);
+            manager.UICanvas.sortingOrder = window.canvas.sortingOrder - 1;
 
-        // TODO
-        public static bool IsPikaV(MonsNo monsNo) { return false; }
+            var isOpen = true;
+
+            window.onClosed = __ => isOpen = false;
+            window.OpenRegisterOnly(p);
+
+            while (isOpen)
+                yield return null;
+        }
+
+        public static AudioInstance PlayVoice(MonsNo monsNo, int formNo, int voiceNo, [Optional] UnityAction<AudioInstance> onFinished)
+        {
+            var eventID = AudioManager.Instance.GetIdByName(GetVoiceID(monsNo, formNo, voiceNo));
+            return AudioManager.Instance.PlayVoice(eventID, 0, onFinished);
+        }
+
+        public static AudioInstance PlayVoiceEV(MonsNo monsNo, int formNo, int voiceNo, [Optional] UnityAction<AudioInstance> onFinished, [Optional] Transform t)
+        {
+            var eventID = AudioManager.Instance.GetIdByName(GetVoiceID_EV(monsNo, formNo, voiceNo));
+            return AudioManager.Instance.PlayVoice(eventID, EVENTS.STOP_VOICE, t, onFinished);
+        }
+
+        public static AudioInstance PlayVoice(MonsNo monsNo, int formNo, int voiceNo, VoicePlayerAmbient voicePlayer)
+        {
+            voicePlayer.PlayVoice(monsNo, formNo, voiceNo);
+            return null;
+        }
+
+        public static void StopVoice()
+        {
+            AudioManager.Instance.PostEvent(EVENTS.STOP_VOICE);
+        }
+
+        public static string GetVoiceID_EV(MonsNo monsNo, int formNo, int voiceNo)
+        {
+            return string.Format("PLAY_PV_EV_{0:d3}_{1:d2}_{2:d2}", (int)monsNo, formNo, voiceNo);
+        }
+
+        public static string GetVoiceID(MonsNo monsNo, int formNo, int voiceNo)
+        {
+            return string.Format("PLAY_PV_{0:d3}_{1:d2}_{2:d2}", (int)monsNo, formNo, voiceNo);
+        }
+
+        public static bool IsPikaV(MonsNo monsNo)
+        {
+            return monsNo == MonsNo.PIKATYUU || monsNo == MonsNo.IIBUI;
+        }
 
         // TODO
         public static void PlayVoicePikaBui_NakayoshiRank(MonsNo monsNo, int FriendRank, VoicePlayerAmbient voicePlayer) { }

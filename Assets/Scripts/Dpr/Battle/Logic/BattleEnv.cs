@@ -101,8 +101,10 @@
             return m_eventFactorContainer;
         }
 
-        // TODO
-        public PosPoke GetPosPoke() { return null; }
+        public PosPoke GetPosPoke()
+        {
+            return m_posPoke;
+        }
 
         // TODO
         public DeadRec GetDeadRec() { return null; }

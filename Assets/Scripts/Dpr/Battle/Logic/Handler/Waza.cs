@@ -1919,17 +1919,82 @@ namespace Dpr.Battle.Logic.Handler
 		// TODO
 		public static EventFactor.EventHandlerTable[] ADD_Makituku() { return default; }
 		
-		// TODO
-		public static void handler_Makituku(in EventFactor.EventHandlerArgs args, byte pokeID) { }
+		public static void handler_Makituku(in EventFactor.EventHandlerArgs args, byte pokeID)
+		{
+            var atkPokeID = Common.GetEventVar(args, EventVar.Label.POKEID_ATK);
+
+            if (atkPokeID == pokeID)
+            {
+                var sickContObj = Common.GetEventVarAddress(args, EventVar.Label.SICK_CONT_ADRS) as BTL_SICKCONTOBJ;
+                var subID = Common.GetSubID(args);
+
+				SICKCONT.AddParam(ref sickContObj.value, subID);
+            }
+        }
 		
-		// TODO
-		public static void handler_Makituku_Str(in EventFactor.EventHandlerArgs args, byte pokeID) { }
+		public static void handler_Makituku_Str(in EventFactor.EventHandlerArgs args, byte pokeID)
+		{
+			var atkPokeID = Common.GetEventVar(args, EventVar.Label.POKEID_ATK);
+
+            if (atkPokeID == pokeID && (WazaSick)Common.GetEventVar(args, EventVar.Label.SICKID) == WazaSick.WAZASICK_BIND)
+			{
+                var subID = (WazaNo)Common.GetSubID(args);
+				var defPokeID = Common.GetEventVar(args, EventVar.Label.POKEID_DEF);
+
+				if (makituku_GetStr(out ushort pStrID, subID))
+				{
+					var strParam = Common.GetEventVarAddress(args, EventVar.Label.WORK_ADRS) as StrParam;
+					strParam.Setup(BtlStrType.BTL_STRTYPE_SET, pStrID);
+					strParam.AddArg(defPokeID);
+					strParam.AddArg(atkPokeID);
+				}
+            }
+		}
 		
-		// TODO
 		public static bool makituku_GetStr(out ushort pStrID, WazaNo wazano)
 		{
-			pStrID = default;
-			return default;
+			switch (wazano)
+			{
+				case WazaNo.SIMETUKERU:
+					pStrID = BTL_STRID_SET.Simetukeru_Start;
+					return true;
+
+				case WazaNo.MAKITUKU:
+					pStrID = BTL_STRID_SET.Makituku_Start;
+					return true;
+
+				case WazaNo.HONOONOUZU:
+					pStrID = BTL_STRID_SET.HonoNoUzu_Start;
+					return true;
+
+				case WazaNo.KARADEHASAMU:
+					pStrID = BTL_STRID_SET.KaradeHasamu_Start;
+					return true;
+
+				case WazaNo.UZUSIO:
+					pStrID = BTL_STRID_SET.Uzusio_Start;
+					return true;
+
+				case WazaNo.SUNAZIGOKU:
+					pStrID = BTL_STRID_SET.Sunajigoku_Start;
+					return true;
+
+				case WazaNo.MAGUMASUTOOMU:
+					pStrID = BTL_STRID_SET.MagmaStorm_Start;
+					return true;
+
+				case WazaNo.MATOWARITUKU:
+					pStrID = BTL_STRID_SET.Matowarituku_Start;
+					return true;
+
+				case WazaNo.TORABASAMI:
+					pStrID = BTL_STRID_SET.Torabasami;
+					return true;
+
+				default:
+                    pStrID = BTL_STRID_SET.Invalid;
+                    return false;
+            }
 		}
 		
 		// TODO

@@ -33,143 +33,238 @@ namespace Dpr.Battle.Logic
 			m_pSectionContainer = param.pSectionContainer;
 		}
 		
-		// TODO
-		protected MainModule GetMainModule() { return default; }
+		protected MainModule GetMainModule()
+		{
+			return m_pMainModule;
+		}
 		
-		// TODO
-		protected BattleEnv GetBattleEnv() { return default; }
+		protected BattleEnv GetBattleEnv()
+		{
+			return m_pBattleEnv;
+		}
 		
-		// TODO
-		protected ServerCommandQueue GetServerCommandQueue() { return default; }
+		protected ServerCommandQueue GetServerCommandQueue()
+		{
+			return m_pServerCmdQueue;
+		}
 		
-		// TODO
-		protected ServerCommandPutter GetServerCommandPutter() { return default; }
+		protected ServerCommandPutter GetServerCommandPutter()
+		{
+			return m_pServerCmdPutter;
+		}
 		
-		// TODO
-		protected WazaCommandPutter GetWazaCommandPutter() { return default; }
+		protected WazaCommandPutter GetWazaCommandPutter()
+		{
+			return m_pWazaCmdPutter;
+		}
 		
-		// TODO
-		protected EventSystem GetEventSystem() { return default; }
+		protected EventSystem GetEventSystem()
+		{
+			return m_pEventSystem;
+		}
 		
-		// TODO
-		protected EventLauncher GetEventLauncher() { return default; }
+		protected EventLauncher GetEventLauncher()
+		{
+			return m_pEventLauncher;
+		}
 		
-		// TODO
-		protected SectionSharedData GetSharedData() { return default; }
+		protected SectionSharedData GetSharedData()
+		{
+			return m_pSharedData;
+		}
 		
-		// TODO
-		protected ActionSharedData GetActionSharedData() { return default; }
+		protected ActionSharedData GetActionSharedData()
+		{
+			return m_pSharedData.GetActionSharedDataStack().GetCurrentData();
+		}
 		
-		// TODO
-		protected PokeActionContainer GetPokemonActionContainer() { return default; }
+		protected PokeActionContainer GetPokemonActionContainer()
+		{
+			return m_pPokemonActionContainer;
+		}
 		
-		// TODO
-		protected PokeChangeRequest GetPokeChangeRequest() { return default; }
+		protected PokeChangeRequest GetPokeChangeRequest()
+		{
+			return m_pPokeChangeRequest;
+		}
 		
-		// TODO
-		protected CaptureInfo GetCaptureInfo() { return default; }
+		protected CaptureInfo GetCaptureInfo()
+		{
+			return m_pCaptureInfo;
+		}
 		
-		// TODO
-		protected SectionContainer GetSectionContainer() { return default; }
+		protected SectionContainer GetSectionContainer()
+		{
+			return m_pSectionContainer;
+		}
 		
-		// TODO
-		protected byte GetPokeID(BtlPokePos pos) { return default; }
+		protected byte GetPokeID(BtlPokePos pos)
+		{
+			if (pos == BtlPokePos.POS_NULL)
+				return PokeID.INVALID;
+
+			return GetPokeParam(pos).GetID();
+		}
 		
-		// TODO
-		protected BTL_POKEPARAM GetPokeParam(byte pokeID) { return default; }
+		protected BTL_POKEPARAM GetPokeParam(byte pokeID)
+		{
+            return m_pBattleEnv.GetPokeCon().GetPokeParam(pokeID);
+        }
 		
-		// TODO
-		protected BTL_POKEPARAM GetPokeParam(BtlPokePos pos) { return default; }
+		protected BTL_POKEPARAM GetPokeParam(BtlPokePos pos)
+		{
+			return m_pBattleEnv.GetPokeCon().GetFrontPokeData(pos);
+        }
 		
-		// TODO
-		protected BTL_POKEPARAM GetPokeParam(byte clientID, byte posIdx) { return default; }
+		protected BTL_POKEPARAM GetPokeParam(byte clientID, byte posIdx)
+		{
+            return m_pBattleEnv.GetPokeCon().GetClientPokeData(clientID, posIdx);
+        }
 		
-		// TODO
-		protected BtlPokePos GetPokePos(BTL_POKEPARAM poke) { return default; }
+		protected BtlPokePos GetPokePos(BTL_POKEPARAM poke)
+		{
+			return m_pBattleEnv.GetPosPoke().GetPokeExistPos(poke.GetID());
+        }
 		
-		// TODO
-		protected BtlPokePos GetPokePos(byte pokeID) { return default; }
+		protected BtlPokePos GetPokePos(byte pokeID)
+		{
+            return m_pBattleEnv.GetPosPoke().GetPokeExistPos(pokeID);
+        }
 		
-		// TODO
-		protected BtlSide GetPokeSide(BTL_POKEPARAM poke) { return default; }
+		protected BtlSide GetPokeSide(BTL_POKEPARAM poke)
+		{
+			return GetMainModule().PokeIDtoSide(poke.GetID());
+		}
 		
-		// TODO
-		protected BtlSide GetPokeSide(byte pokeID) { return default; }
+		protected BtlSide GetPokeSide(byte pokeID)
+        {
+            return GetMainModule().PokeIDtoSide(pokeID);
+        }
 		
-		// TODO
-		protected BTL_PARTY GetPokeParty(byte clientID) { return default; }
+		protected BTL_PARTY GetPokeParty(byte clientID)
+		{
+			return GetBattleEnv().GetPokeCon().GetPartyData(clientID);
+		}
 		
-		// TODO
-		protected BtlRule GetRule() { return default; }
+		protected BtlRule GetRule()
+		{
+			return GetMainModule().GetRule();
+		}
 		
-		// TODO
-		protected BtlMultiMode GetMultiMode() { return default; }
+		protected BtlMultiMode GetMultiMode()
+		{
+			return GetMainModule().GetMultiMode();
+		}
 		
-		// TODO
-		protected BtlCompetitor GetCompetitor() { return default; }
+		protected BtlCompetitor GetCompetitor()
+		{
+			return GetMainModule().GetCompetitor();
+		}
 		
-		// TODO
-		protected bool CheckCommMode() { return default; }
+		protected bool CheckCommMode()
+		{
+			return GetMainModule().GetCommMode() != BtlCommMode.BTL_COMM_NONE;
+		}
 		
-		// TODO
-		protected bool CheckStatusFlag(BTL_STATUS_FLAG flag) { return default; }
+		protected bool CheckStatusFlag(BTL_STATUS_FLAG flag)
+		{
+			return GetMainModule().GetSetupStatusFlag(flag);
+		}
 		
-		// TODO
-		protected bool CheckFriendPoke(BTL_POKEPARAM poke1, BTL_POKEPARAM poke2) { return default; }
+		protected bool CheckFriendPoke(BTL_POKEPARAM poke1, BTL_POKEPARAM poke2)
+		{
+			return GetMainModule().IsFriendPokeID(poke1.GetID(), poke2.GetID());
+		}
 		
-		// TODO
-		protected bool CheckFriendPoke(byte pokeID1, byte pokeID2) { return default; }
+		protected bool CheckFriendPoke(byte pokeID1, byte pokeID2)
+		{
+            return GetMainModule().IsFriendPokeID(pokeID1, pokeID2);
+        }
 		
-		// TODO
-		protected bool CheckShowdown() { return default; }
+		protected bool CheckShowdown()
+		{
+			return SectionUtil.CheckShowdown(GetMainModule(), GetBattleEnv());
+		}
 		
-		// TODO
-		protected bool CheckAllDeadSide(BtlSide checkSide) { return default; }
+		protected bool CheckAllDeadSide(BtlSide checkSide)
+		{
+			return SectionUtil.CheckAllDeadSide(GetMainModule(), GetBattleEnv(), checkSide);
+		}
 		
-		// TODO
-		protected bool CheckSkipBattleAfterShowdown() { return default; }
+		protected bool CheckSkipBattleAfterShowdown()
+		{
+			return SectionUtil.CheckSkipBattleAfterShowdown(GetMainModule());
+        }
 		
-		// TODO
-		protected bool CheckTurnEnd(InterruptCode interruptCode) { return default; }
+		protected bool CheckTurnEnd(InterruptCode interruptCode)
+		{
+			return SectionUtil.CheckTurnEnd(interruptCode);
+        }
 		
-		// TODO
-		protected bool CheckPlayersClient(BTL_CLIENT_ID clientID) { return default; }
+		protected bool CheckPlayersClient(BTL_CLIENT_ID clientID)
+		{
+			return SectionUtil.CheckPlayersClient(GetMainModule(), clientID);
+		}
 		
-		// TODO
-		protected byte GetFriendship(BTL_POKEPARAM poke) { return default; }
+		protected byte GetFriendship(BTL_POKEPARAM poke)
+		{
+			return SectionUtil.GetFriendship(GetMainModule(), poke);
+		}
 		
-		// TODO
-		protected bool CheckPlayersPoke(BTL_POKEPARAM poke) { return default; }
+		protected bool CheckPlayersPoke(BTL_POKEPARAM poke)
+        {
+            return SectionUtil.CheckPlayersPoke(GetMainModule(), poke);
+		}
 		
-		// TODO
-		protected bool CheckPlayersPoke(byte pokeID) { return default; }
+		protected bool CheckPlayersPoke(byte pokeID)
+		{
+			return CheckPlayersPoke(GetBattleEnv().GetPokeCon().GetPokeParam(pokeID));
+		}
 		
-		// TODO
-		protected bool CheckPlayersFriendPoke(BTL_POKEPARAM poke) { return default; }
+		protected bool CheckPlayersFriendPoke(BTL_POKEPARAM poke)
+		{
+			return GetMainModule().IsFriendClientID(MainModule.PokeIDtoClientID(poke.GetID()), GetMainModule().GetPlayerClientID());
+		}
 		
-		// TODO
-		protected bool CheckPlayersFriendPoke(byte pokeID) { return default; }
+		protected bool CheckPlayersFriendPoke(byte pokeID)
+		{
+			return CheckPlayersFriendPoke(GetBattleEnv().GetPokeCon().GetPokeParam(pokeID));
+		}
 		
-		// TODO
-		protected bool CheckMustHit(BTL_POKEPARAM attacker, BTL_POKEPARAM target) { return default; }
+		protected bool CheckMustHit(BTL_POKEPARAM attacker, BTL_POKEPARAM target)
+		{
+			return SectionUtil.CheckMustHit(GetMainModule(), attacker, target, GetBattleEnv().GetPosPoke());
+		}
 		
-		// TODO
-		protected bool CheckInvalidWaza(WazaNo waza) { return default; }
+		protected bool CheckInvalidWaza(WazaNo waza)
+		{
+			return !WAZADATA.IsValid(waza);
+		}
 		
-		// TODO
-		protected bool CheckWazaEffectEnable() { return default; }
+		protected bool CheckWazaEffectEnable()
+		{
+			return GetMainModule().IsWazaEffectEnable();
+		}
 		
-		// TODO
-		protected bool CheckSkyBattleFailWaza(WazaNo waza) { return default; }
+		protected bool CheckSkyBattleFailWaza(WazaNo waza)
+		{
+			return SectionUtil.CheckSkyBattleFailWaza(GetMainModule(), waza);
+		}
 		
-		// TODO
-		protected WazaNo CheckEncoreWazaChange(PokeAction action) { return default; }
+		protected WazaNo CheckEncoreWazaChange(PokeAction action)
+		{
+			return SectionUtil.CheckEncoreWazaChange(action);
+		}
 		
-		// TODO
-		protected ulong GetCounter(BattleCounter.UniqueCounter counterID) { return default; }
+		protected ulong GetCounter(BattleCounter.UniqueCounter counterID)
+		{
+			return GetBattleEnv().GetBattleCounter().Get(counterID);
+		}
 		
-		// TODO
-		protected ulong GetCounter(BattleCounter.ClientCounter counterID, BTL_CLIENT_ID clientID) { return default; }
+		protected ulong GetCounter(BattleCounter.ClientCounter counterID, BTL_CLIENT_ID clientID)
+        {
+            return GetBattleEnv().GetBattleCounter().Get(counterID, clientID);
+        }
 
 		public class CommonParam
 		{

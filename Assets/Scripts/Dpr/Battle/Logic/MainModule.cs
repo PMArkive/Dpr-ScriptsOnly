@@ -343,8 +343,10 @@ namespace Dpr.Battle.Logic
             return m_rule;
         }
 
-        // TODO
-        public bool IsWazaEffectEnable() { return false; }
+        public bool IsWazaEffectEnable()
+        {
+            return m_fWazaEffectEnable;
+        }
 
         // TODO
         public byte GetMaxFollowPokeLevel() { return 0; }
@@ -558,8 +560,10 @@ namespace Dpr.Battle.Logic
         // TODO
         public BtlPokePos ViewPosToBtlPos(byte vpos) { return BtlPokePos.POS_1ST_0; }
 
-        // TODO
-        public byte GetPlayerClientID() { return 0; }
+        public byte GetPlayerClientID()
+        {
+            return m_myClientID;
+        }
 
         // TODO
         public byte GetPlayerFriendCleintID() { return 0; }

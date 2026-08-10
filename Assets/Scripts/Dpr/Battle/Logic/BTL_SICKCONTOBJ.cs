@@ -4,10 +4,14 @@
     {
         public BTL_SICKCONT value;
 
-        // TODO
-        public BTL_SICKCONTOBJ() { }
+        public BTL_SICKCONTOBJ()
+        {
+            value = SICKCONT.MakeNull();
+        }
 
-        // TODO
-        public BTL_SICKCONTOBJ(BTL_SICKCONT value) { }
+        public BTL_SICKCONTOBJ(BTL_SICKCONT value)
+        {
+            this.value = value;
+        }
     }
 }

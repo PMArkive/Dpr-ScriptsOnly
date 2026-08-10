@@ -29,12 +29,12 @@ namespace Dpr.Battle.Logic
 		{
 			public byte pokeID;
 			public WazaSickEx sick;
-			public byte[] targetPokeID;
+			public byte[] targetPokeID = new byte[DefineConstants.BTL_PARTY_MEMBER_MAX * (int)BTL_CLIENT_ID.BTL_CLIENT_NUM];
 			public byte targetPokeCount;
 			public ushort itemID;
 			public bool isDisplayTokuseiWindow;
 			public bool isStandardMessageDisable;
-			public StrParam successSpMessage;
+			public StrParam successSpMessage = new StrParam();
 			
 			public Description()
 			{

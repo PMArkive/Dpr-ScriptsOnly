@@ -19,8 +19,10 @@ namespace Dpr.Battle.Logic
 		// TODO
 		private static bool checkAllDeadClient(BattleEnv pBattleEnv, BTL_CLIENT_ID clientID) { return default; }
 		
-		// TODO
-		public static bool CheckSkipBattleAfterShowdown(MainModule mainModule) { return default; }
+		public static bool CheckSkipBattleAfterShowdown(MainModule mainModule)
+		{
+			return BattleRule.IsSkipBattleAfterShowdown(mainModule.GetRule());
+        }
 		
 		// TODO
 		public static bool CheckTurnEnd(InterruptCode interruptCode) { return default; }
@@ -28,14 +30,20 @@ namespace Dpr.Battle.Logic
 		// TODO
 		public static bool CheckPlayersClient(MainModule mainModule, BTL_CLIENT_ID clientID) { return default; }
 		
-		// TODO
-		public static byte GetFriendship(MainModule mainModule, BTL_POKEPARAM poke) { return default; }
+		public static byte GetFriendship(MainModule mainModule, BTL_POKEPARAM poke)
+		{
+            return mainModule.GetPokeFriendship(poke);
+        }
 		
-		// TODO
-		public static bool CheckPlayersPoke(MainModule mainModule, BTL_POKEPARAM poke) { return default; }
+		public static bool CheckPlayersPoke(MainModule mainModule, BTL_POKEPARAM poke)
+		{
+            return mainModule.IsPlayersPokeID(poke.GetID());
+        }
 		
-		// TODO
-		public static bool CheckPlayersFriendPoke(MainModule mainModule, BTL_POKEPARAM poke) { return default; }
+		public static bool CheckPlayersFriendPoke(MainModule mainModule, BTL_POKEPARAM poke)
+        {
+            return mainModule.IsFriendClientID(MainModule.PokeIDtoClientID(poke.GetID()), mainModule.GetPlayerClientID());
+        }
 		
 		// TODO
 		public static bool CheckMustHit(MainModule mainModule, BTL_POKEPARAM attacker, BTL_POKEPARAM target, in PosPoke posPoke) { return default; }
